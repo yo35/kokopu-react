@@ -1,8 +1,10 @@
 
-function component() {
-	const element = document.createElement('div');
-	element.innerHTML = 'TODO';
-	return element;
-}
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-document.body.appendChild(component());
+import Square from './square';
+
+const myElement = document.createElement('div');
+document.body.appendChild(myElement);
+
+ReactDOM.render(<Square value="TODO" />, myElement);
