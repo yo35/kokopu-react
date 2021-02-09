@@ -94,3 +94,21 @@
 
 .kokopu-lightSquare { background-color: #f0dec7; }
 .kokopu-darkSquare  { background-color: #b5876b; }
+
+/**
+ * Source: https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
+ * Authors: Cburnett <https://en.wikipedia.org/wiki/User:Cburnett>, Antonsusi <https://commons.wikimedia.org/wiki/User:Antonsusi>
+ * License: Creative Commons Attribution ShareAlike [CC-BY-SA]
+ */
+.kokopu-piece-bb { background-image: url(sprites/cburnett-bb.png); }
+.kokopu-piece-bk { background-image: url(sprites/cburnett-bk.png); }
+.kokopu-piece-bn { background-image: url(sprites/cburnett-bn.png); }
+.kokopu-piece-bp { background-image: url(sprites/cburnett-bp.png); }
+.kokopu-piece-bq { background-image: url(sprites/cburnett-bq.png); }
+.kokopu-piece-br { background-image: url(sprites/cburnett-br.png); }
+.kokopu-piece-wb { background-image: url(sprites/cburnett-wb.png); }
+.kokopu-piece-wk { background-image: url(sprites/cburnett-wk.png); }
+.kokopu-piece-wn { background-image: url(sprites/cburnett-wn.png); }
+.kokopu-piece-wp { background-image: url(sprites/cburnett-wp.png); }
+.kokopu-piece-wq { background-image: url(sprites/cburnett-wq.png); }
+.kokopu-piece-wr { background-image: url(sprites/cburnett-wr.png); }
