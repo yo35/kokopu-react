@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import './chessboard.css';
 import Square from './square';
 
 const myElement = document.createElement('div');
