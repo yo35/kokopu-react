@@ -3,9 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './chessboard.css';
-import Square from './square';
+import Board from './board';
 
 const myElement = document.createElement('div');
 document.body.appendChild(myElement);
 
-ReactDOM.render(<Square value="TODO" />, myElement);
+ReactDOM.render(<Board />, myElement);
