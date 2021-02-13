@@ -26,6 +26,8 @@ import kokopu from 'kokopu';
 import ErrorBox from './error_box';
 import Square from './square';
 
+import './chessboard.css';
+
 export default class extends React.Component {
 
 	render() {
@@ -41,12 +43,14 @@ export default class extends React.Component {
 		let sizeClassName = 'kokopu-size' + ('squareSize' in this.props ? this.props.squareSize : 40);
 		let coordinateVisibleClassName = ('coordinateVisible' in this.props && !this.props.coordinateVisible ? 'kokopu-hideCoordinates' : '');
 		return (
-			<div className={['kokopu-board', sizeClassName, coordinateVisibleClassName].join(' ')}>
-				{rows}
-				<div className="kokopu-boardRow kokopu-columnCoordinates">
-					<div className="kokopu-boardCell"></div>
-					{columnCoordinates}
-					<div className="kokopu-boardCell"></div>
+			<div className="kokopu-chessboard">
+				<div className={['kokopu-boardTable', sizeClassName, coordinateVisibleClassName].join(' ')}>
+					{rows}
+					<div className="kokopu-boardRow kokopu-columnCoordinates">
+						<div className="kokopu-boardCell"></div>
+						{columnCoordinates}
+						<div className="kokopu-boardCell"></div>
+					</div>
 				</div>
 			</div>
 		);

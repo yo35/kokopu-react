@@ -24,8 +24,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import kokopu from 'kokopu';
 
-import './chessboard.css';
-import Board from './board';
+import Chessboard from './chessboard';
 
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -81,7 +80,7 @@ class App extends React.Component {
 				</Grid>
 				<Grid item xs={8}>
 					<div>
-						<Board
+						<Chessboard
 							position={this.state.position}
 							isFlipped={this.state.isFlipped}
 							squareSize={this.state.squareSize}
