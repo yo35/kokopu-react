@@ -2,16 +2,18 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
+import ErrorBox from './error_box';
 import Square from './square';
 
 export default class extends React.Component {
 
 	render() {
-		let position = parsePosition(this.props.position);
-		if(position === null) {
-			return <></>;
+		let parseInfo = parsePosition(this.props.position);
+		if(parseInfo.error) {
+			return this.renderError(parseInfo.message);
 		}
 
+		let position = parseInfo.position;
 		let rows = this.getRowIds().map(r => this.renderRow(position, r));
 		let columnCoordinates = this.getColumnIds().map(c => this.renderColumnCoordinate(c));
 		return (
@@ -23,6 +25,10 @@ export default class extends React.Component {
 				</div>
 			</div>
 		);
+	}
+
+	renderError(message) {
+		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>
 	}
 
 	renderRow(position, r) {
@@ -57,27 +63,32 @@ export default class extends React.Component {
  * Try to interpret the given object as a chess position.
  *
  * @param {*} position
- * @returns {?kokopu.Position}
+ * @returns {({error:false, position:kokopu.Position}|{error:true, message:string})}
  */
 function parsePosition(position) {
 	if(position instanceof kokopu.Position) {
-		return position;
+		return {
+			error: false,
+			position: position
+		};
 	}
-	else if(typeof position === 'string') {
+	else {
 		try {
-			return new kokopu.Position(position);
+			return {
+				error: false,
+				position: new kokopu.Position(position)
+			};
 		}
 		catch(e) {
 			if(e instanceof kokopu.exception.InvalidFEN) {
-				// TODO handle error
-				return null;
+				return {
+					error: true,
+					message: e.message
+				};
 			}
 			else {
 				throw e;
 			}
 		}
-	}
-	else {
-		return null;
 	}
 }
