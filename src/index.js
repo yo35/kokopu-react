@@ -31,7 +31,9 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
 
 class App extends React.Component {
 
@@ -40,31 +42,51 @@ class App extends React.Component {
 		this.state = {
 			position: new kokopu.Position(),
 			isFlipped: false,
+			squareSize: 40,
+			coordinateVisible: true,
 		};
 	}
 
 	render() {
 		return (
-			<Grid container spacing={3}>
+			<Grid container spacing={10}>
 				<Grid item xs={4}>
-					<p>
+					<div>
 						<ButtonGroup color="primary">
 							<Button onClick={() => this.handlePositionClicked(new kokopu.Position('empty'))}>Empty position</Button>
 							<Button onClick={() => this.handlePositionClicked(new kokopu.Position())}>Start position</Button>
 							<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position</Button>
 							<Button onClick={() => this.handlePositionClicked('8/k1b/8/8/8/4k3/q7/4K3 b - - 0 1')}>Bad FEN</Button>
 						</ButtonGroup>
-					</p>
-					<p>
+					</div>
+					<div>
 						<FormControlLabel
 							control={<Switch checked={this.state.isFlipped} onChange={() => this.handleFlipClicked()} color="primary" />}
 							label="Flip"
 						/>
-					</p>
+						<FormControlLabel
+							control={<Switch checked={this.state.coordinateVisible} onChange={() => this.handleCoordinateVisibleClicked()} color="primary" />}
+							label="Show coordinates"
+						/>
+					</div>
+					<div>
+						<Typography gutterBottom>
+							Square size
+						</Typography>
+						<Slider
+							value={this.state.squareSize}  onChange={(_, newValue) => this.handleSquareSizeChanged(newValue)}
+							min={12} max={64} step={1} valueLabelDisplay="on" color="primary"
+						/>
+					</div>
 				</Grid>
 				<Grid item xs={8}>
 					<div>
-						<Board position={this.state.position} isFlipped={this.state.isFlipped} />
+						<Board
+							position={this.state.position}
+							isFlipped={this.state.isFlipped}
+							squareSize={this.state.squareSize}
+							coordinateVisible={this.state.coordinateVisible}
+						/>
 					</div>
 				</Grid>
 			</Grid>
@@ -83,6 +105,17 @@ class App extends React.Component {
 		this.setState(newState);
 	}
 
+	handleSquareSizeChanged(newSquareSize) {
+		let newState = {...this.state};
+		newState.squareSize = newSquareSize;
+		this.setState(newState);
+	}
+
+	handleCoordinateVisibleClicked() {
+		let newState = {...this.state};
+		newState.coordinateVisible = !this.state.coordinateVisible;
+		this.setState(newState);
+	}
 }
 
 const appRoot = document.createElement('div');

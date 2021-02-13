@@ -37,12 +37,16 @@ export default class extends React.Component {
 		let position = parseInfo.position;
 		let rows = this.getRowIds().map(r => this.renderRow(position, r));
 		let columnCoordinates = this.getColumnIds().map(c => this.renderColumnCoordinate(c));
+
+		let sizeClassName = 'kokopu-size' + ('squareSize' in this.props ? this.props.squareSize : 40);
+		let coordinateVisibleClassName = ('coordinateVisible' in this.props && !this.props.coordinateVisible ? 'kokopu-hideCoordinates' : '');
 		return (
-			<div className="kokopu-board kokopu-size42">
+			<div className={['kokopu-board', sizeClassName, coordinateVisibleClassName].join(' ')}>
 				{rows}
 				<div className="kokopu-boardRow kokopu-columnCoordinates">
 					<div className="kokopu-boardCell"></div>
 					{columnCoordinates}
+					<div className="kokopu-boardCell"></div>
 				</div>
 			</div>
 		);
@@ -54,10 +58,12 @@ export default class extends React.Component {
 
 	renderRow(position, r) {
 		let squares = this.getColumnIds().map(c => this.renderSquare(position, r, c));
+		let turnFlag = this.renderTurnFlag(position, r);
 		return (
 			<div key={r} className="kokopu-boardRow">
 				<div className="kokopu-boardCell kokopu-rowCoordinate">{r}</div>
 				{squares}
+				<div className="kokopu-boardCell">{turnFlag}</div>
 			</div>
 		);
 	}
@@ -65,6 +71,18 @@ export default class extends React.Component {
 	renderSquare(position, r, c) {
 		let sq = c + r;
 		return <Square key={sq} color={kokopu.squareColor(sq)} cp={position.square(sq)} />;
+	}
+
+	renderTurnFlag(position, r) {
+		if(r === '1' || r === '8') {
+			let color = r === '1' ? 'w' : 'b';
+			let colorClassName = 'kokopu-flag-' + color;
+			let visibilityClassName = position.turn() === color ? '' : 'kokopu-inactiveFlag';
+			return <div className={['kokopu-flag', 'kokopu-sized', colorClassName, visibilityClassName].join(' ')}></div>
+		}
+		else {
+			return <></>;
+		}
 	}
 
 	renderColumnCoordinate(c) {
