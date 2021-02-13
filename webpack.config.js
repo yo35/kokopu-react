@@ -7,6 +7,9 @@ module.exports = {
 	devtool: 'inline-source-map',
 	devServer: {
 		contentBase: './dist',
+		watchOptions: {
+			poll: true,
+		},
 	},
 	entry: {
 		index: './src/index.js',
