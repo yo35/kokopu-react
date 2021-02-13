@@ -21,10 +21,9 @@
 
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import kokopu from 'kokopu';
 
-import Chessboard from './chessboard';
+import Chessboard from '../src/chessboard';
 
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -34,7 +33,7 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-class App extends React.Component {
+export default class extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -116,8 +115,3 @@ class App extends React.Component {
 		this.setState(newState);
 	}
 }
-
-const appRoot = document.createElement('div');
-document.body.appendChild(appRoot);
-
-ReactDOM.render(<App />, appRoot);

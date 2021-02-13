@@ -34,7 +34,7 @@ module.exports = {
 		},
 	},
 	entry: {
-		index: './src/index.js',
+		index: './demo/index.js',
 	},
 	plugins: [
 		new CleanWebpackPlugin(),
