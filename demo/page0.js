@@ -33,85 +33,96 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
-export default class extends React.Component {
+export const initialState0 = {
+	position: new kokopu.Position(),
+	isFlipped: false,
+	squareSize: 40,
+	coordinateVisible: true,
+};
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			position: new kokopu.Position(),
-			isFlipped: false,
-			squareSize: 40,
-			coordinateVisible: true,
-		};
-	}
+export class Page0 extends React.Component {
 
 	render() {
 		return (
 			<Grid container spacing={10}>
 				<Grid item xs={4}>
-					<div>
-						<ButtonGroup color="primary">
-							<Button onClick={() => this.handlePositionClicked(new kokopu.Position('empty'))}>Empty position</Button>
-							<Button onClick={() => this.handlePositionClicked(new kokopu.Position())}>Start position</Button>
-							<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position</Button>
-							<Button onClick={() => this.handlePositionClicked('8/k1b/8/8/8/4k3/q7/4K3 b - - 0 1')}>Bad FEN</Button>
-						</ButtonGroup>
-					</div>
-					<div>
-						<FormControlLabel
-							control={<Switch checked={this.state.isFlipped} onChange={() => this.handleFlipClicked()} color="primary" />}
-							label="Flip"
-						/>
-						<FormControlLabel
-							control={<Switch checked={this.state.coordinateVisible} onChange={() => this.handleCoordinateVisibleClicked()} color="primary" />}
-							label="Show coordinates"
-						/>
-					</div>
-					<div>
-						<Typography gutterBottom>
-							Square size
-						</Typography>
-						<Slider
-							value={this.state.squareSize}  onChange={(_, newValue) => this.handleSquareSizeChanged(newValue)}
-							min={12} max={64} step={1} valueLabelDisplay="on" color="primary"
-						/>
-					</div>
+					{this.renderControls()}
 				</Grid>
 				<Grid item xs={8}>
-					<div>
-						<Chessboard
-							position={this.state.position}
-							isFlipped={this.state.isFlipped}
-							squareSize={this.state.squareSize}
-							coordinateVisible={this.state.coordinateVisible}
-						/>
-					</div>
+					{this.renderChessboard()}
 				</Grid>
 			</Grid>
 		);
 	}
 
-	handlePositionClicked(newPosition) {
-		let newState = {...this.state};
-		newState.position = newPosition;
-		this.setState(newState);
+	renderControls() {
+		let state = this.props.state;
+		return (<>
+			<div>
+				<ButtonGroup color="primary">
+					<Button onClick={() => this.handlePositionClicked(new kokopu.Position('empty'))}>Empty position</Button>
+					<Button onClick={() => this.handlePositionClicked(new kokopu.Position())}>Start position</Button>
+					<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position</Button>
+					<Button onClick={() => this.handlePositionClicked('8/k1b/8/8/8/4k3/q7/4K3 b - - 0 1')}>Bad FEN</Button>
+				</ButtonGroup>
+			</div>
+			<div>
+				<FormControlLabel
+					control={<Switch checked={state.isFlipped} onChange={() => this.handleFlipClicked(!state.isFlipped)} color="primary" />}
+					label="Flip"
+				/>
+				<FormControlLabel
+					control={<Switch checked={state.coordinateVisible} onChange={() => this.handleCoordinateVisibleClicked(!state.coordinateVisible)} color="primary" />}
+					label="Show coordinates"
+				/>
+			</div>
+			<div>
+				<Typography gutterBottom>
+					Square size
+				</Typography>
+				<Slider
+					value={state.squareSize}  onChange={(_, newValue) => this.handleSquareSizeChanged(newValue)}
+					min={12} max={64} step={1} valueLabelDisplay="on" color="primary"
+				/>
+			</div>
+		</>);
 	}
 
-	handleFlipClicked() {
-		let newState = {...this.state};
-		newState.isFlipped = !this.state.isFlipped;
-		this.setState(newState);
+	renderChessboard() {
+		let state = this.props.state;
+		return (
+			<div>
+				<Chessboard
+					position={state.position}
+					isFlipped={state.isFlipped}
+					squareSize={state.squareSize}
+					coordinateVisible={state.coordinateVisible}
+				/>
+			</div>
+		);
+	}
+
+	handlePositionClicked(newPosition) {
+		let newState = {...this.props.state};
+		newState.position = newPosition;
+		this.props.setState(newState);
+	}
+
+	handleFlipClicked(newIsFlipped) {
+		let newState = {...this.props.state};
+		newState.isFlipped = newIsFlipped;
+		this.props.setState(newState);
 	}
 
 	handleSquareSizeChanged(newSquareSize) {
-		let newState = {...this.state};
+		let newState = {...this.props.state};
 		newState.squareSize = newSquareSize;
-		this.setState(newState);
+		this.props.setState(newState);
 	}
 
-	handleCoordinateVisibleClicked() {
-		let newState = {...this.state};
-		newState.coordinateVisible = !this.state.coordinateVisible;
-		this.setState(newState);
+	handleCoordinateVisibleClicked(newCoordinateVisible) {
+		let newState = {...this.props.state};
+		newState.coordinateVisible = newCoordinateVisible;
+		this.props.setState(newState);
 	}
 }

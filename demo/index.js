@@ -23,7 +23,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import Page0 from './page0';
+import { initialState0, Page0 } from './page0';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -62,7 +62,8 @@ let useStyles = makeStyles(theme => ({
 let App = function() {
 	let classes = useStyles();
 	let [ pageId, setPageId ] = useState(0);
-	let page0 = { label: 'Simple chessboard', content: () => <Page0 /> };
+	let [ state0, setState0 ] = useState(initialState0);
+	let page0 = { label: 'Simple chessboard', content: () => <Page0 state={state0} setState={setState0} /> };
 	let page1 = { label: 'Interactive chessboard', content: () => <div>Page 1</div> };
 	let pages = [ page0, page1 ];
 	let pageButtons = pages.map((page, index) => {
