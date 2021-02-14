@@ -20,10 +20,9 @@
  ******************************************************************************/
 
 
-.kokopu-rankCoordinate,
-.kokopu-fileCoordinate {
-	font: normal 0.25px sans-serif;
-	text-anchor: middle;
-	dominant-baseline: central;
-	letter-spacing: 0px;
-}
+export default {
+	original: {
+		b: '#b5876b',
+		w: '#f0dec7',
+	},
+};

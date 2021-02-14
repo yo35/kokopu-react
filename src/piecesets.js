@@ -20,19 +20,41 @@
  ******************************************************************************/
 
 
-import React from 'react';
+/**
+ * Source: https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
+ * Authors: Cburnett <https://en.wikipedia.org/wiki/User:Cburnett>, Antonsusi <https://commons.wikimedia.org/wiki/User:Antonsusi>
+ * License: Creative Commons Attribution ShareAlike [CC-BY-SA]
+ */
+import cburnett_bb from './sprites/cburnett-bb.png';
+import cburnett_bk from './sprites/cburnett-bk.png';
+import cburnett_bn from './sprites/cburnett-bn.png';
+import cburnett_bp from './sprites/cburnett-bp.png';
+import cburnett_bq from './sprites/cburnett-bq.png';
+import cburnett_br from './sprites/cburnett-br.png';
+import cburnett_wb from './sprites/cburnett-wb.png';
+import cburnett_wk from './sprites/cburnett-wk.png';
+import cburnett_wn from './sprites/cburnett-wn.png';
+import cburnett_wp from './sprites/cburnett-wp.png';
+import cburnett_wq from './sprites/cburnett-wq.png';
+import cburnett_wr from './sprites/cburnett-wr.png';
+import cburnett_bx from './sprites/cburnett-bx.png';
+import cburnett_wx from './sprites/cburnett-wx.png';
 
-export default function(props) {
-	let colorClassName = props.color === 'w' ? 'kokopu-lightSquare' : 'kokopu-darkSquare';
-	let squareContent = props.cp === '-' ? <></> : renderColoredPiece(props.cp);
-	return (
-		<div className={['kokopu-boardCell', 'kokopu-square', 'kokopu-sized', colorClassName].join(' ')}>
-			{squareContent}
-		</div>
-	);
-}
-
-function renderColoredPiece(coloredPiece) {
-	let coloredPieceClassName = 'kokopu-piece-' + coloredPiece;
-	return <div className={['kokopu-piece', 'kokopu-sized', coloredPieceClassName].join(' ')}></div>;
-}
+export default {
+	cburnett: {
+		bb: cburnett_bb,
+		bk: cburnett_bk,
+		bn: cburnett_bn,
+		bp: cburnett_bp,
+		bq: cburnett_bq,
+		br: cburnett_br,
+		wb: cburnett_wb,
+		wk: cburnett_wk,
+		wn: cburnett_wn,
+		wp: cburnett_wp,
+		wq: cburnett_wq,
+		wr: cburnett_wr,
+		bx: cburnett_bx,
+		wx: cburnett_wx,
+	},
+};

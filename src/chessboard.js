@@ -24,35 +24,57 @@ import React from 'react';
 import kokopu from 'kokopu';
 
 import ErrorBox from './error_box';
-import Square from './square';
+import colorsets from './colorsets';
+import piecesets from './piecesets';
 
 import './chessboard.css';
+
+const TURN_FLAG_SPACING = 0.1;
+const RANK_COORDINATE_WIDTH = 0.25;
+const FILE_COORDINATE_HEIGHT = 0.35;
+
+const RANK_LABELS = '12345678';
+const FILE_LABELS = 'abcdefgh';
 
 export default class extends React.Component {
 
 	render() {
 		let parseInfo = parsePosition(this.props.position);
-		if(parseInfo.error) {
+		if (parseInfo.error) {
 			return this.renderError(parseInfo.message);
 		}
 
 		let position = parseInfo.position;
-		let rows = this.getRowIds().map(r => this.renderRow(position, r));
-		let columnCoordinates = this.getColumnIds().map(c => this.renderColumnCoordinate(c));
+		let squareSize = this.getSquareSize();
+		let colorset = this.getColorset();
+		let pieceset = this.getPieceset();
+		let xmin = this.props.coordinateVisible ? -RANK_COORDINATE_WIDTH : 0;
+		let ymin = 0;
+		let xmax = 9 + TURN_FLAG_SPACING;
+		let ymax = 8 + (this.props.coordinateVisible ? FILE_COORDINATE_HEIGHT : 0);
+		let viewBox = xmin + ' ' + ymin + ' ' + xmax + ' ' + ymax;
 
-		let sizeClassName = 'kokopu-size' + ('squareSize' in this.props ? this.props.squareSize : 40);
-		let coordinateVisibleClassName = ('coordinateVisible' in this.props && !this.props.coordinateVisible ? 'kokopu-hideCoordinates' : '');
+		let squares = [];
+		let pieces = [];
+		kokopu.forEachSquare(sq => this.renderSquare(position, colorset, pieceset, sq, squares, pieces));
+
+		let rankCoordinates = [];
+		let fileCoordinates = [];
+		if (this.props.coordinateVisible) {
+			for (let c = 0; c < 8; ++c) {
+				rankCoordinates.push(this.renderRankCoordinate(c));
+				fileCoordinates.push(this.renderFileCoordinate(c));
+			}
+		}
+
 		return (
-			<div className="kokopu-chessboard">
-				<div className={['kokopu-boardTable', sizeClassName, coordinateVisibleClassName].join(' ')}>
-					{rows}
-					<div className="kokopu-boardRow kokopu-columnCoordinates">
-						<div className="kokopu-boardCell"></div>
-						{columnCoordinates}
-						<div className="kokopu-boardCell"></div>
-					</div>
-				</div>
-			</div>
+			<svg className="kokopu-chessboard" viewBox={viewBox} width={squareSize * (xmax - xmin)} height={squareSize * (ymax - ymin)}>
+				{squares}
+				{pieces}
+				{this.renderTurnFlag(position, pieceset)}
+				{rankCoordinates}
+				{fileCoordinates}
+			</svg>
 		);
 	}
 
@@ -60,45 +82,58 @@ export default class extends React.Component {
 		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>
 	}
 
-	renderRow(position, r) {
-		let squares = this.getColumnIds().map(c => this.renderSquare(position, r, c));
-		let turnFlag = this.renderTurnFlag(position, r);
-		return (
-			<div key={r} className="kokopu-boardRow">
-				<div className="kokopu-boardCell kokopu-rowCoordinate">{r}</div>
-				{squares}
-				<div className="kokopu-boardCell">{turnFlag}</div>
-			</div>
-		);
-	}
-
-	renderSquare(position, r, c) {
-		let sq = c + r;
-		return <Square key={sq} color={kokopu.squareColor(sq)} cp={position.square(sq)} />;
-	}
-
-	renderTurnFlag(position, r) {
-		if(r === '1' || r === '8') {
-			let color = r === '1' ? 'w' : 'b';
-			let colorClassName = 'kokopu-flag-' + color;
-			let visibilityClassName = position.turn() === color ? '' : 'kokopu-inactiveFlag';
-			return <div className={['kokopu-flag', 'kokopu-sized', colorClassName, visibilityClassName].join(' ')}></div>
-		}
-		else {
-			return <></>;
+	renderSquare(position, colorset, pieceset, sq, squares, pieces) {
+		let { file, rank } = kokopu.squareToCoordinates(sq);
+		let x = this.props.isFlipped ? 7 - file : file;
+		let y = this.props.isFlipped ? rank : 7 - rank;
+		let cp = position.square(sq);
+		squares.push(<rect key={sq} x={x} y={y} width={1} height={1} fill={colorset[kokopu.squareColor(sq)]} />);
+		if (cp !== '-') {
+			pieces.push(<image key={'piece-' + sq} x={x} y={y} width={1} height={1} href={pieceset[cp]} />);
 		}
 	}
 
-	renderColumnCoordinate(c) {
-		return <div key={c} className="kokopu-boardCell kokopu-columnCoordinate">{c}</div>;
+	renderTurnFlag(position, pieceset) {
+		let turn = position.turn();
+		let x = 8 + TURN_FLAG_SPACING;
+		let y = (turn === 'w') === this.props.isFlipped ? 0 : 7;
+		return <image x={x} y={y} width={1} height={1} href={pieceset[turn + 'x']} />;
 	}
 
-	getRowIds() {
-		return [...(this.props.isFlipped ? '12345678' : '87654321')];
+	renderRankCoordinate(rank) {
+		let x = -RANK_COORDINATE_WIDTH / 2;
+		let y = this.props.isFlipped ? rank + 0.5 : 7.5 - rank;
+		let label = RANK_LABELS[rank];
+		return <text key={'rank-' + label} className="kokopu-rankCoordinate" x={x} y={y}>{label}</text>
 	}
 
-	getColumnIds() {
-		return [...(this.props.isFlipped ? 'hgfedcba' : 'abcdefgh')];
+	renderFileCoordinate(file) {
+		let x = this.props.isFlipped ? 7.5 - file : 0.5 + file;
+		let y = 8 + FILE_COORDINATE_HEIGHT / 2;
+		let label = FILE_LABELS[file];
+		return <text key={'file-' + label} className="kokopu-fileCoordinate" x={x} y={y}>{label}</text>
+	}
+
+	/**
+	 * Return the (sanitized) square size.
+	 */
+	getSquareSize() {
+		let value = Number(this.props.squareSize);
+		return isNaN(value) ? 40 : Math.min(Math.max(value, 12), 64);
+	}
+
+	/**
+	 * Return the (sanitized) colorset.
+	 */
+	getColorset() {
+		return colorsets['original']; // TODO plug colorset
+	}
+
+	/**
+	 * Return the (sanitized) pieceset.
+	 */
+	getPieceset() {
+		return piecesets['cburnett']; // TODO plug pieceset
 	}
 }
 
@@ -109,7 +144,7 @@ export default class extends React.Component {
  * @returns {({error:false, position:kokopu.Position}|{error:true, message:string})}
  */
 function parsePosition(position) {
-	if(position instanceof kokopu.Position) {
+	if (position instanceof kokopu.Position) {
 		return {
 			error: false,
 			position: position
@@ -122,8 +157,8 @@ function parsePosition(position) {
 				position: new kokopu.Position(position)
 			};
 		}
-		catch(e) {
-			if(e instanceof kokopu.exception.InvalidFEN) {
+		catch (e) {
+			if (e instanceof kokopu.exception.InvalidFEN) {
 				return {
 					error: true,
 					message: e.message
