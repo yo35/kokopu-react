@@ -29,13 +29,17 @@ import piecesets from './piecesets';
 
 import './chessboard.css';
 
-const TURN_FLAG_SPACING = 0.1;
+const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
 const FILE_COORDINATE_HEIGHT_FACTOR = 1.4;
 
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
 
+
+/**
+ * Chessboard diagram.
+ */
 export default class extends React.Component {
 
 	render() {
@@ -49,11 +53,11 @@ export default class extends React.Component {
 		let fontSize = computeCoordinateFontSize(squareSize);
 		let colorset = this.getColorset();
 		let pieceset = this.getPieceset();
-		let xmin = this.props.coordinateVisible ? -RANK_COORDINATE_WIDTH_FACTOR * fontSize : 0;
+		let xmin = this.props.coordinateVisible ? Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) : 0;
 		let ymin = 0;
-		let xmax = (9 + TURN_FLAG_SPACING) * squareSize;
-		let ymax = 8 * squareSize + (this.props.coordinateVisible ? FILE_COORDINATE_HEIGHT_FACTOR * fontSize : 0);
-		let viewBox = xmin + ' ' + ymin + ' ' + xmax + ' ' + ymax;
+		let xmax = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+		let ymax = 8 * squareSize + (this.props.coordinateVisible ? Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) : 0);
+		let viewBox = xmin + ' ' + ymin + ' ' + (xmax - xmin) + ' ' + (ymax - ymin);
 
 		let squares = [];
 		let pieces = [];
@@ -96,13 +100,13 @@ export default class extends React.Component {
 
 	renderTurnFlag(position, squareSize, pieceset) {
 		let turn = position.turn();
-		let x = (8 + TURN_FLAG_SPACING) * squareSize;
+		let x = 8 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
 		let y = (turn === 'w') === this.props.isFlipped ? 0 : 7 * squareSize;
 		return <image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} />;
 	}
 
 	renderRankCoordinate(squareSize, fontSize, rank) {
-		let x = -RANK_COORDINATE_WIDTH_FACTOR * fontSize / 2;
+		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
 		let y = (this.props.isFlipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
 		return <text key={'rank-' + label} className="kokopu-rankCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
@@ -110,7 +114,7 @@ export default class extends React.Component {
 
 	renderFileCoordinate(squareSize, fontSize, file) {
 		let x = (this.props.isFlipped ? 7.5 - file : 0.5 + file) * squareSize;
-		let y = 8 * squareSize + FILE_COORDINATE_HEIGHT_FACTOR * fontSize / 2;
+		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
 		return <text key={'file-' + label} className="kokopu-fileCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
 	}
@@ -120,7 +124,7 @@ export default class extends React.Component {
 	 */
 	getSquareSize() {
 		let value = Number(this.props.squareSize);
-		return isNaN(value) ? 40 : Math.min(Math.max(value, 12), 64);
+		return isNaN(value) ? 40 : Math.min(Math.max(Math.round(value), 12), 64);
 	}
 
 	/**
