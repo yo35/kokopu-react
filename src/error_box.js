@@ -24,8 +24,12 @@ import React from 'react';
 
 import './error_box.css';
 
+
+/**
+ * Display an error message.
+ */
 export default function(props) {
-	let message = 'message' in props ? <div className="kokopu-errorMessage">{props.message}</div> : <></>;
+	let message = 'message' in props ? <div className="kokopu-errorMessage">{props.message}</div> : undefined;
 	return (
 		<div className="kokopu-errorBox">
 			<div className="kokopu-errorTitle">{props.title}</div>
