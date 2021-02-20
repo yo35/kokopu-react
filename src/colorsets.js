@@ -24,5 +24,6 @@ export default {
 	original: {
 		b: '#b5876b',
 		w: '#f0dec7',
+		s: '#04f',
 	},
 };

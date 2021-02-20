@@ -21,6 +21,7 @@
 
 
 import React from 'react';
+import Draggable from 'react-draggable';
 import kokopu from 'kokopu';
 
 import ErrorBox from './error_box';
@@ -32,6 +33,7 @@ import './chessboard.css';
 const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
 const FILE_COORDINATE_HEIGHT_FACTOR = 1.4;
+const HOVER_MARKER_THICKNESS_FACTOR = 0.1;
 
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
@@ -41,6 +43,14 @@ const FILE_LABELS = 'abcdefgh';
  * Chessboard diagram.
  */
 export default class extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			draggedSquare: '-',
+			hoveredSquare: '-',
+		};
+	}
 
 	render() {
 		let parseInfo = parsePosition(this.props.position);
@@ -61,7 +71,10 @@ export default class extends React.Component {
 
 		let squares = [];
 		let pieces = [];
-		kokopu.forEachSquare(sq => this.renderSquare(position, squareSize, colorset, pieceset, sq, squares, pieces));
+		kokopu.forEachSquare(sq => {
+			squares.push(this.renderSquare(squareSize, colorset, sq));
+			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
+		});
 
 		let rankCoordinates = [];
 		let fileCoordinates = [];
@@ -75,8 +88,10 @@ export default class extends React.Component {
 		return (
 			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				{squares}
+				{this.renderHoveredSquare(squareSize, colorset)}
 				{pieces}
 				{this.renderTurnFlag(position, squareSize, pieceset)}
+				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{rankCoordinates}
 				{fileCoordinates}
 			</svg>
@@ -87,15 +102,46 @@ export default class extends React.Component {
 		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>
 	}
 
-	renderSquare(position, squareSize, colorset, pieceset, sq, squares, pieces) {
-		let { file, rank } = kokopu.squareToCoordinates(sq);
-		let x = this.props.isFlipped ? (7 - file) * squareSize : file * squareSize;
-		let y = this.props.isFlipped ? rank * squareSize : (7 - rank) * squareSize;
-		let cp = position.square(sq);
-		squares.push(<rect key={sq} x={x} y={y} width={squareSize} height={squareSize} fill={colorset[kokopu.squareColor(sq)]} />);
-		if (cp !== '-') {
-			pieces.push(<image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />);
+	renderSquare(squareSize, colorset, sq) {
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		return <rect key={sq} x={x} y={y} width={squareSize} height={squareSize} fill={colorset[kokopu.squareColor(sq)]} />;
+	}
+
+	renderHoveredSquare(squareSize, colorset) {
+		if (this.state.hoveredSquare === '-') {
+			return undefined;
 		}
+		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
+		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
+		let size = squareSize - thickness;
+		return <rect x={x + thickness/2} y={y + thickness/2} width={size} height={size} fill="transparent" stroke={colorset.s} strokeWidth={thickness} />;
+	}
+
+	renderPiece(position, squareSize,  pieceset, sq) {
+		let cp = position.square(sq);
+		if (cp === '-') {
+			return undefined;
+		}
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let bounds = { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y };
+		return (
+			<Draggable key={'piece-' + sq} position={this.getDragPosition(sq)} bounds={bounds}
+				onStart={event => this.handlePieceDragStart(sq, event)}
+				onDrag={(_, dragData) => this.handlePieceDrag(sq, dragData)}
+				onStop={() => this.handlePieceDragStop()}
+			>
+				<image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />
+			</Draggable>
+		);
+	}
+
+	renderDraggedPiece(position, squareSize, pieceset) {
+		if (this.state.draggedSquare === '-') {
+			return undefined;
+		}
+		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
+		let cp = position.square(this.state.draggedSquare);
+		return <image x={x + this.state.dragPosition.x} y={y + this.state.dragPosition.y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
 	renderTurnFlag(position, squareSize, pieceset) {
@@ -119,6 +165,35 @@ export default class extends React.Component {
 		return <text key={'file-' + label} className="kokopu-fileCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
 	}
 
+	handlePieceDragStart(sq, event) {
+		let squareBoundary = event.target.getBoundingClientRect();
+		this.setState({
+			draggedSquare: sq,
+			hoveredSquare: sq,
+			cursorOffset: { x: event.clientX - squareBoundary.left, y: event.clientY - squareBoundary.top },
+			dragPosition: { x: 0, y: 0 },
+		});
+	}
+
+	handlePieceDrag(sq, dragData) {
+		let squareSize = this.getSquareSize();
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
+		this.setState({
+			draggedSquare: sq,
+			hoveredSquare: targetSq,
+			cursorOffset: this.state.cursorOffset,
+			dragPosition: { x: dragData.x, y: dragData.y },
+		});
+	}
+
+	handlePieceDragStop() {
+		this.setState({
+			draggedSquare: '-',
+			hoveredSquare: '-',
+		});
+	}
+
 	/**
 	 * Return the (sanitized) square size.
 	 */
@@ -139,6 +214,32 @@ export default class extends React.Component {
 	 */
 	getPieceset() {
 		return piecesets['cburnett']; // TODO plug pieceset
+	}
+
+	/**
+	 * Return the (x,y) coordinates of the given square in the SVG canvas.
+	 */
+	getSquareCoordinates(squareSize, sq) {
+		let { file, rank } = kokopu.squareToCoordinates(sq);
+		let x = this.props.isFlipped ? (7 - file) * squareSize : file * squareSize;
+		let y = this.props.isFlipped ? rank * squareSize : (7 - rank) * squareSize;
+		return { x: x, y: y };
+	}
+
+	/**
+	 * Return the square at the given location.
+	 */
+	getSquareAt(squareSize, x, y) {
+		let file = this.props.isFlipped ? 7 - Math.floor(x / squareSize) : Math.floor(x / squareSize);
+		let rank = this.props.isFlipped ? Math.floor(y / squareSize) : 7 - Math.floor(y / squareSize);
+		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? kokopu.coordinatesToSquare(file, rank) : '-';
+	}
+
+	/**
+	 * Return the drag position of the piece in the given square.
+	 */
+	getDragPosition(sq) {
+		return this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
 	}
 }
 
