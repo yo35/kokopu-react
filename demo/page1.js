@@ -30,20 +30,20 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import Slider from '@material-ui/core/Slider';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
 
-export const initialState0 = {
+export const initialState1 = {
 	position: new kokopu.Position(),
 	isFlipped: false,
-	squareSize: 40,
-	coordinateVisible: true,
+	interactionMode: 'movePieces'
 };
 
 
-export class Page0 extends React.Component {
+export class Page1 extends React.Component {
 
 	render() {
 		return (
@@ -63,11 +63,10 @@ export class Page0 extends React.Component {
 		return (<>
 			<Box m={2}>
 				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.handlePositionClicked(new kokopu.Position('empty'))}>Empty position</Button>
-					<Button onClick={() => this.handlePositionClicked(new kokopu.Position())}>Start position</Button>
-					<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position 1</Button>
-					<Button onClick={() => this.handlePositionClicked('r3k3/1bn3nP/1P6/2n3n1/R4pP1/8/Q2P3R/8 w kq - 0 1')}>Custom position 2</Button>
-					<Button onClick={() => this.handlePositionClicked('8/k1b/8/8/8/4k3/q7/4K3 b - - 0 1')}>Bad FEN</Button>
+					<Button onClick={() => this.handlePositionChanged(new kokopu.Position('empty'))}>Empty position</Button>
+					<Button onClick={() => this.handlePositionChanged(new kokopu.Position())}>Start position</Button>
+					<Button onClick={() => this.handlePositionChanged('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position 1</Button>
+					<Button onClick={() => this.handlePositionChanged('r3k3/1bn3nP/1P6/2n3n1/R4pP1/8/Q2P3R/8 w kq - 0 1')}>Custom position 2</Button>
 				</ButtonGroup>
 			</Box>
 			<Box m={2}>
@@ -75,19 +74,16 @@ export class Page0 extends React.Component {
 					control={<Switch checked={state.isFlipped} onChange={() => this.handleFlipClicked(!state.isFlipped)} color="primary" />}
 					label="Flip"
 				/>
-				<FormControlLabel
-					control={<Switch checked={state.coordinateVisible} onChange={() => this.handleCoordinateVisibleClicked(!state.coordinateVisible)} color="primary" />}
-					label="Show coordinates"
-				/>
+				<Button color="primary" size="small" variant="outlined" onClick={() => this.handleTurnClicked(state.position.turn() === 'w' ? 'b' : 'w')}>Change turn</Button>
 			</Box>
 			<Box m={2}>
 				<Typography gutterBottom>
-					Square size
+					Interaction mode
 				</Typography>
-				<Slider
-					value={state.squareSize}  onChange={(_, newValue) => this.handleSquareSizeChanged(newValue)}
-					min={12} max={64} step={1} valueLabelDisplay="on" color="primary"
-				/>
+				<RadioGroup value={state.interactionMode} onChange={event => this.handleInteractionModeChanged(event.target.value)}>
+					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
+					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
+				</RadioGroup>
 			</Box>
 		</>);
 	}
@@ -99,14 +95,15 @@ export class Page0 extends React.Component {
 				<Chessboard
 					position={state.position}
 					isFlipped={state.isFlipped}
-					squareSize={state.squareSize}
-					coordinateVisible={state.coordinateVisible}
+					squareSize={56}
+					interactionMode={state.interactionMode}
+					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
 				/>
 			</div>
 		);
 	}
 
-	handlePositionClicked(newPosition) {
+	handlePositionChanged(newPosition) {
 		let newState = {...this.props.state};
 		newState.position = newPosition;
 		this.props.setState(newState);
@@ -118,15 +115,22 @@ export class Page0 extends React.Component {
 		this.props.setState(newState);
 	}
 
-	handleSquareSizeChanged(newSquareSize) {
+	handleTurnClicked(newTurn) {
+		let newPosition = new kokopu.Position(this.props.state.position);
+		newPosition.turn(newTurn);
+		this.handlePositionChanged(newPosition);
+	}
+
+	handleInteractionModeChanged(newInteractionMode) {
 		let newState = {...this.props.state};
-		newState.squareSize = newSquareSize;
+		newState.interactionMode = newInteractionMode;
 		this.props.setState(newState);
 	}
 
-	handleCoordinateVisibleClicked(newCoordinateVisible) {
-		let newState = {...this.props.state};
-		newState.coordinateVisible = newCoordinateVisible;
-		this.props.setState(newState);
+	handlePieceMoved(from, to) {
+		let newPosition = new kokopu.Position(this.props.state.position);
+		newPosition.square(to, newPosition.square(from));
+		newPosition.square(from, '-');
+		this.handlePositionChanged(newPosition);
 	}
 }

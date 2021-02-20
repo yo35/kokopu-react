@@ -24,6 +24,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import { initialState0, Page0 } from './page0';
+import { initialState1, Page1 } from './page1';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -63,8 +64,9 @@ let App = function() {
 	let classes = useStyles();
 	let [ pageId, setPageId ] = useState(0);
 	let [ state0, setState0 ] = useState(initialState0);
+	let [ state1, setState1 ] = useState(initialState1);
 	let page0 = { label: 'Simple chessboard', content: () => <Page0 state={state0} setState={setState0} /> };
-	let page1 = { label: 'Interactive chessboard', content: () => <div>Page 1</div> };
+	let page1 = { label: 'Interactive chessboard', content: () => <Page1 state={state1} setState={setState1} /> };
 	let pages = [ page0, page1 ];
 	let pageButtons = pages.map((page, index) => {
 		return pageId === index ?

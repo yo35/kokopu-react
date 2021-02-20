@@ -28,3 +28,11 @@
 	dominant-baseline: central;
 	letter-spacing: 0px;
 }
+
+.kokopu-draggable {
+	cursor: grab;
+}
+
+.kokopu-draggable.kokopu-dragging {
+	cursor: grabbing;
+}

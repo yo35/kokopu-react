@@ -60,14 +60,10 @@ export default class extends React.Component {
 
 		let position = parseInfo.position;
 		let squareSize = this.getSquareSize();
+		let coordinateVisible = this.isCoordinateVisible();
 		let fontSize = computeCoordinateFontSize(squareSize);
 		let colorset = this.getColorset();
 		let pieceset = this.getPieceset();
-		let xmin = this.props.coordinateVisible ? Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) : 0;
-		let ymin = 0;
-		let xmax = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
-		let ymax = 8 * squareSize + (this.props.coordinateVisible ? Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) : 0);
-		let viewBox = xmin + ' ' + ymin + ' ' + (xmax - xmin) + ' ' + (ymax - ymin);
 
 		let squares = [];
 		let pieces = [];
@@ -78,13 +74,18 @@ export default class extends React.Component {
 
 		let rankCoordinates = [];
 		let fileCoordinates = [];
-		if (this.props.coordinateVisible) {
+		if (coordinateVisible) {
 			for (let c = 0; c < 8; ++c) {
 				rankCoordinates.push(this.renderRankCoordinate(squareSize, fontSize, c));
 				fileCoordinates.push(this.renderFileCoordinate(squareSize, fontSize, c));
 			}
 		}
 
+		let xmin = coordinateVisible ? Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) : 0;
+		let ymin = 0;
+		let xmax = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+		let ymax = 8 * squareSize + (coordinateVisible ? Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) : 0);
+		let viewBox = xmin + ' ' + ymin + ' ' + (xmax - xmin) + ' ' + (ymax - ymin);
 		return (
 			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				{squares}
@@ -123,16 +124,22 @@ export default class extends React.Component {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		let bounds = { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y };
-		return (
-			<Draggable key={'piece-' + sq} position={this.getDragPosition(sq)} bounds={bounds}
-				onStart={event => this.handlePieceDragStart(sq, event)}
-				onDrag={(_, dragData) => this.handlePieceDrag(sq, dragData)}
-				onStop={() => this.handlePieceDragStop()}
-			>
-				<image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />
-			</Draggable>
-		);
+		if (this.props.interactionMode === 'movePieces') {
+			let bounds = { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y };
+			return (
+				<Draggable key={'piece-' + sq} position={this.getDragPosition(sq)} bounds={bounds}
+					defaultClassName="kokopu-draggable" defaultClassNameDragging="kokopu-dragging"
+					onStart={event => this.handlePieceDragStart(sq, event)}
+					onDrag={(_, dragData) => this.handlePieceDrag(sq, dragData)}
+					onStop={(_, dragData) => this.handlePieceDragStop(sq, dragData)}
+				>
+					<image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />
+				</Draggable>
+			);
+		}
+		else {
+			return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
+		}
 	}
 
 	renderDraggedPiece(position, squareSize, pieceset) {
@@ -141,7 +148,12 @@ export default class extends React.Component {
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
 		let cp = position.square(this.state.draggedSquare);
-		return <image x={x + this.state.dragPosition.x} y={y + this.state.dragPosition.y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
+		return (
+			<image
+				className="kokopu-draggable kokopu-dragging"
+				x={x + this.state.dragPosition.x} y={y + this.state.dragPosition.y} width={squareSize} height={squareSize} href={pieceset[cp]}
+			/>
+		);
 	}
 
 	renderTurnFlag(position, squareSize, pieceset) {
@@ -187,11 +199,17 @@ export default class extends React.Component {
 		});
 	}
 
-	handlePieceDragStop() {
+	handlePieceDragStop(sq, dragData) {
+		let squareSize = this.getSquareSize();
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
 		this.setState({
 			draggedSquare: '-',
 			hoveredSquare: '-',
 		});
+		if (sq !== targetSq && this.props.onPieceMoved) {
+			this.props.onPieceMoved(sq, targetSq);
+		}
 	}
 
 	/**
@@ -200,6 +218,13 @@ export default class extends React.Component {
 	getSquareSize() {
 		let value = Number(this.props.squareSize);
 		return isNaN(value) ? 40 : Math.min(Math.max(Math.round(value), 12), 64);
+	}
+
+	/**
+	 * Whether the file/rank coordinates are visible or not.
+	 */
+	isCoordinateVisible() {
+		return 'coordinateVisible' in this.props ? this.props.coordinateVisible : true;
 	}
 
 	/**
