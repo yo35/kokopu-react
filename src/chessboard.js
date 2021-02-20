@@ -30,8 +30,8 @@ import piecesets from './piecesets';
 import './chessboard.css';
 
 const TURN_FLAG_SPACING = 0.1;
-const RANK_COORDINATE_WIDTH = 0.25;
-const FILE_COORDINATE_HEIGHT = 0.35;
+const RANK_COORDINATE_WIDTH_FACTOR = 1;
+const FILE_COORDINATE_HEIGHT_FACTOR = 1.4;
 
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
@@ -46,32 +46,33 @@ export default class extends React.Component {
 
 		let position = parseInfo.position;
 		let squareSize = this.getSquareSize();
+		let fontSize = computeCoordinateFontSize(squareSize);
 		let colorset = this.getColorset();
 		let pieceset = this.getPieceset();
-		let xmin = this.props.coordinateVisible ? -RANK_COORDINATE_WIDTH : 0;
+		let xmin = this.props.coordinateVisible ? -RANK_COORDINATE_WIDTH_FACTOR * fontSize : 0;
 		let ymin = 0;
-		let xmax = 9 + TURN_FLAG_SPACING;
-		let ymax = 8 + (this.props.coordinateVisible ? FILE_COORDINATE_HEIGHT : 0);
+		let xmax = (9 + TURN_FLAG_SPACING) * squareSize;
+		let ymax = 8 * squareSize + (this.props.coordinateVisible ? FILE_COORDINATE_HEIGHT_FACTOR * fontSize : 0);
 		let viewBox = xmin + ' ' + ymin + ' ' + xmax + ' ' + ymax;
 
 		let squares = [];
 		let pieces = [];
-		kokopu.forEachSquare(sq => this.renderSquare(position, colorset, pieceset, sq, squares, pieces));
+		kokopu.forEachSquare(sq => this.renderSquare(position, squareSize, colorset, pieceset, sq, squares, pieces));
 
 		let rankCoordinates = [];
 		let fileCoordinates = [];
 		if (this.props.coordinateVisible) {
 			for (let c = 0; c < 8; ++c) {
-				rankCoordinates.push(this.renderRankCoordinate(c));
-				fileCoordinates.push(this.renderFileCoordinate(c));
+				rankCoordinates.push(this.renderRankCoordinate(squareSize, fontSize, c));
+				fileCoordinates.push(this.renderFileCoordinate(squareSize, fontSize, c));
 			}
 		}
 
 		return (
-			<svg className="kokopu-chessboard" viewBox={viewBox} width={squareSize * (xmax - xmin)} height={squareSize * (ymax - ymin)}>
+			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				{squares}
 				{pieces}
-				{this.renderTurnFlag(position, pieceset)}
+				{this.renderTurnFlag(position, squareSize, pieceset)}
 				{rankCoordinates}
 				{fileCoordinates}
 			</svg>
@@ -82,36 +83,36 @@ export default class extends React.Component {
 		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>
 	}
 
-	renderSquare(position, colorset, pieceset, sq, squares, pieces) {
+	renderSquare(position, squareSize, colorset, pieceset, sq, squares, pieces) {
 		let { file, rank } = kokopu.squareToCoordinates(sq);
-		let x = this.props.isFlipped ? 7 - file : file;
-		let y = this.props.isFlipped ? rank : 7 - rank;
+		let x = this.props.isFlipped ? (7 - file) * squareSize : file * squareSize;
+		let y = this.props.isFlipped ? rank * squareSize : (7 - rank) * squareSize;
 		let cp = position.square(sq);
-		squares.push(<rect key={sq} x={x} y={y} width={1} height={1} fill={colorset[kokopu.squareColor(sq)]} />);
+		squares.push(<rect key={sq} x={x} y={y} width={squareSize} height={squareSize} fill={colorset[kokopu.squareColor(sq)]} />);
 		if (cp !== '-') {
-			pieces.push(<image key={'piece-' + sq} x={x} y={y} width={1} height={1} href={pieceset[cp]} />);
+			pieces.push(<image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />);
 		}
 	}
 
-	renderTurnFlag(position, pieceset) {
+	renderTurnFlag(position, squareSize, pieceset) {
 		let turn = position.turn();
-		let x = 8 + TURN_FLAG_SPACING;
-		let y = (turn === 'w') === this.props.isFlipped ? 0 : 7;
-		return <image x={x} y={y} width={1} height={1} href={pieceset[turn + 'x']} />;
+		let x = (8 + TURN_FLAG_SPACING) * squareSize;
+		let y = (turn === 'w') === this.props.isFlipped ? 0 : 7 * squareSize;
+		return <image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} />;
 	}
 
-	renderRankCoordinate(rank) {
-		let x = -RANK_COORDINATE_WIDTH / 2;
-		let y = this.props.isFlipped ? rank + 0.5 : 7.5 - rank;
+	renderRankCoordinate(squareSize, fontSize, rank) {
+		let x = -RANK_COORDINATE_WIDTH_FACTOR * fontSize / 2;
+		let y = (this.props.isFlipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
-		return <text key={'rank-' + label} className="kokopu-rankCoordinate" x={x} y={y}>{label}</text>
+		return <text key={'rank-' + label} className="kokopu-rankCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
 	}
 
-	renderFileCoordinate(file) {
-		let x = this.props.isFlipped ? 7.5 - file : 0.5 + file;
-		let y = 8 + FILE_COORDINATE_HEIGHT / 2;
+	renderFileCoordinate(squareSize, fontSize, file) {
+		let x = (this.props.isFlipped ? 7.5 - file : 0.5 + file) * squareSize;
+		let y = 8 * squareSize + FILE_COORDINATE_HEIGHT_FACTOR * fontSize / 2;
 		let label = FILE_LABELS[file];
-		return <text key={'file-' + label} className="kokopu-fileCoordinate" x={x} y={y}>{label}</text>
+		return <text key={'file-' + label} className="kokopu-fileCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
 	}
 
 	/**
@@ -136,6 +137,18 @@ export default class extends React.Component {
 		return piecesets['cburnett']; // TODO plug pieceset
 	}
 }
+
+
+/**
+ * Return the font size to use for coordinates assuming the given square size.
+ *
+ * @param {number}
+ * @returns {number}
+ */
+function computeCoordinateFontSize(squareSize) {
+	return squareSize <= 32 ? 8 : 8 + (squareSize - 32) * 0.2;
+}
+
 
 /**
  * Try to interpret the given object as a chess position.

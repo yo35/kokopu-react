@@ -22,7 +22,8 @@
 
 .kokopu-rankCoordinate,
 .kokopu-fileCoordinate {
-	font: normal 0.25px sans-serif;
+	font-style: normal;
+	font-family: sans-serif;
 	text-anchor: middle;
 	dominant-baseline: central;
 	letter-spacing: 0px;
