@@ -67,9 +67,13 @@ export default class extends React.Component {
 
 		let squares = [];
 		let pieces = [];
+		let handles = [];
 		kokopu.forEachSquare(sq => {
 			squares.push(this.renderSquare(squareSize, colorset, sq));
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
+			if (this.props.interactionMode === 'movePieces' || this.props.interactionMode === 'clickSquares') {
+				handles.push(this.renderSquareHandle(squareSize, sq));
+			}
 		});
 
 		let rankCoordinates = [];
@@ -91,8 +95,9 @@ export default class extends React.Component {
 				{squares}
 				{this.renderHoveredSquare(squareSize, colorset)}
 				{pieces}
-				{this.renderTurnFlag(position, squareSize, pieceset)}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
+				{handles}
+				{this.renderTurnFlag(position, squareSize, pieceset)}
 				{rankCoordinates}
 				{fileCoordinates}
 			</svg>
@@ -115,31 +120,16 @@ export default class extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
-		return <rect x={x + thickness/2} y={y + thickness/2} width={size} height={size} fill="transparent" stroke={colorset.s} strokeWidth={thickness} />;
+		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.s} strokeWidth={thickness} />;
 	}
 
 	renderPiece(position, squareSize,  pieceset, sq) {
 		let cp = position.square(sq);
-		if (cp === '-') {
+		if (cp === '-' || this.state.draggedSquare === sq) {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		if (this.props.interactionMode === 'movePieces') {
-			let bounds = { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y };
-			return (
-				<Draggable key={'piece-' + sq} position={this.getDragPosition(sq)} bounds={bounds}
-					defaultClassName="kokopu-draggable" defaultClassNameDragging="kokopu-dragging"
-					onStart={event => this.handlePieceDragStart(sq, event)}
-					onDrag={(_, dragData) => this.handlePieceDrag(sq, dragData)}
-					onStop={(_, dragData) => this.handlePieceDragStop(sq, dragData)}
-				>
-					<image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />
-				</Draggable>
-			);
-		}
-		else {
-			return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
-		}
+		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
 	renderDraggedPiece(position, squareSize, pieceset) {
@@ -154,6 +144,33 @@ export default class extends React.Component {
 				x={x + this.state.dragPosition.x} y={y + this.state.dragPosition.y} width={squareSize} height={squareSize} href={pieceset[cp]}
 			/>
 		);
+	}
+
+	renderSquareHandle(squareSize, sq) {
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		if (this.props.interactionMode === 'movePieces') {
+			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
+			let bounds = { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y };
+			return (
+				<Draggable
+					key={'handle-' + sq} position={dragPosition} bounds={bounds}
+					defaultClassName="kokopu-draggable" defaultClassNameDragging="kokopu-dragging"
+					onStart={event => this.handlePieceDragStart(sq, event)}
+					onDrag={(_, dragData) => this.handlePieceDrag(sq, dragData)}
+					onStop={(_, dragData) => this.handlePieceDragStop(sq, dragData)}
+				>
+					<rect className="kokopu-handle" x={x} y={y} width={squareSize} height={squareSize} />
+				</Draggable>
+			);
+		}
+		else { // interactionMode === 'clickSquares'
+			return (
+				<rect
+					key={'handle-' + sq} className="kokopu-handle kokopu-clickable" x={x} y={y} width={squareSize} height={squareSize}
+					onClick={() => this.handleSquareClicked(sq)}
+				/>
+			);
+		}
 	}
 
 	renderTurnFlag(position, squareSize, pieceset) {
@@ -212,6 +229,12 @@ export default class extends React.Component {
 		}
 	}
 
+	handleSquareClicked(sq) {
+		if (this.props.onSquareClicked) {
+			this.props.onSquareClicked(sq);
+		}
+	}
+
 	/**
 	 * Return the (sanitized) square size.
 	 */
@@ -258,13 +281,6 @@ export default class extends React.Component {
 		let file = this.props.isFlipped ? 7 - Math.floor(x / squareSize) : Math.floor(x / squareSize);
 		let rank = this.props.isFlipped ? Math.floor(y / squareSize) : 7 - Math.floor(y / squareSize);
 		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? kokopu.coordinatesToSquare(file, rank) : '-';
-	}
-
-	/**
-	 * Return the drag position of the piece in the given square.
-	 */
-	getDragPosition(sq) {
-		return this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
 	}
 }
 

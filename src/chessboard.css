@@ -29,6 +29,15 @@
 	letter-spacing: 0px;
 }
 
+.kokopu-hoveredSquare,
+.kokopu-handle {
+	fill: transparent;
+}
+
+.kokopu-clickable {
+	cursor: pointer;
+}
+
 .kokopu-draggable {
 	cursor: grab;
 }

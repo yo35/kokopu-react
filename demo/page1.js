@@ -83,6 +83,7 @@ export class Page1 extends React.Component {
 				<RadioGroup value={state.interactionMode} onChange={event => this.handleInteractionModeChanged(event.target.value)}>
 					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
+					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add pieces" />
 				</RadioGroup>
 			</Box>
 		</>);
@@ -98,6 +99,7 @@ export class Page1 extends React.Component {
 					squareSize={56}
 					interactionMode={state.interactionMode}
 					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
+					onSquareClicked={sq => this.handleSquareClicked(sq)}
 				/>
 			</div>
 		);
@@ -132,5 +134,9 @@ export class Page1 extends React.Component {
 		newPosition.square(to, newPosition.square(from));
 		newPosition.square(from, '-');
 		this.handlePositionChanged(newPosition);
+	}
+
+	handleSquareClicked(sq) {
+		console.log(sq + ' clicked'); // TODO impl behavior
 	}
 }
