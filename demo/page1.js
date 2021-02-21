@@ -23,6 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
+import piecesets from '../src/piecesets';
 import Chessboard from '../src/chessboard';
 
 import Box from '@material-ui/core/Box';
@@ -33,13 +34,16 @@ import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Switch from '@material-ui/core/Switch';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
 
 
 export const initialState1 = {
 	position: new kokopu.Position(),
 	isFlipped: false,
-	interactionMode: 'movePieces'
+	interactionMode: 'movePieces',
+	clickMode: 'wp',
 };
 
 
@@ -60,6 +64,8 @@ export class Page1 extends React.Component {
 
 	renderControls() {
 		let state = this.props.state;
+		let pieceset = piecesets['cburnett'];
+		let disableClickMode = state.interactionMode !== 'clickSquares';
 		return (<>
 			<Box m={2}>
 				<ButtonGroup color="primary" size="small">
@@ -83,8 +89,28 @@ export class Page1 extends React.Component {
 				<RadioGroup value={state.interactionMode} onChange={event => this.handleInteractionModeChanged(event.target.value)}>
 					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
-					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add pieces" />
+					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add/remove pieces" />
 				</RadioGroup>
+				<Box m={0.5}>
+					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
+						<ToggleButton value="wk" disabled={disableClickMode}><img src={pieceset.wk} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wq" disabled={disableClickMode}><img src={pieceset.wq} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wr" disabled={disableClickMode}><img src={pieceset.wr} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wb" disabled={disableClickMode}><img src={pieceset.wb} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wn" disabled={disableClickMode}><img src={pieceset.wn} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wp" disabled={disableClickMode}><img src={pieceset.wp} width={24} height={24} /></ToggleButton>
+					</ToggleButtonGroup>
+				</Box>
+				<Box m={0.5}>
+					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
+						<ToggleButton value="bk" disabled={disableClickMode}><img src={pieceset.bk} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bq" disabled={disableClickMode}><img src={pieceset.bq} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="br" disabled={disableClickMode}><img src={pieceset.br} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bb" disabled={disableClickMode}><img src={pieceset.bb} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bn" disabled={disableClickMode}><img src={pieceset.bn} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bp" disabled={disableClickMode}><img src={pieceset.bp} width={24} height={24} /></ToggleButton>
+					</ToggleButtonGroup>
+				</Box>
 			</Box>
 		</>);
 	}
@@ -129,6 +155,15 @@ export class Page1 extends React.Component {
 		this.props.setState(newState);
 	}
 
+	handleClickModeChanged(newClickMode) {
+		if (newClickMode === null) {
+			return;
+		}
+		let newState = {...this.props.state};
+		newState.clickMode = newClickMode;
+		this.props.setState(newState);
+	}
+
 	handlePieceMoved(from, to) {
 		let newPosition = new kokopu.Position(this.props.state.position);
 		newPosition.square(to, newPosition.square(from));
@@ -137,6 +172,8 @@ export class Page1 extends React.Component {
 	}
 
 	handleSquareClicked(sq) {
-		console.log(sq + ' clicked'); // TODO impl behavior
+		let newPosition = new kokopu.Position(this.props.state.position);
+		newPosition.square(sq, newPosition.square(sq) === this.props.state.clickMode ? '-' : this.props.state.clickMode);
+		this.handlePositionChanged(newPosition);
 	}
 }
