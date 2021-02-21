@@ -1,5 +1,10 @@
 {
-	"private": true,
+	"name": "@yo35/test-kokopu-react",
+	"version": "0.10.0",
+	"main": "dist/lib/index.js",
+	"files": [
+		"dist/lib"
+	],
 	"dependencies": {
 		"kokopu": "~1.7.0",
 		"react": "~17.0.1",
@@ -7,13 +12,13 @@
 		"react-draggable": "~4.4.3"
 	},
 	"devDependencies": {
+		"@babel/cli": "~7.12.13",
 		"@babel/core": "~7.12.13",
 		"@babel/preset-env": "~7.12.13",
 		"@babel/preset-react": "~7.12.13",
 		"@material-ui/core": "~4.11.3",
 		"@material-ui/lab": "~4.0.0-alpha.57",
 		"babel-loader": "~8.2.2",
-		"clean-webpack-plugin": "~3.0.0",
 		"css-loader": "~5.0.2",
 		"html-webpack-plugin": "~5.0.0",
 		"style-loader": "~2.0.0",
@@ -23,7 +28,7 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "webpack",
+		"build": "babel --delete-dir-on-start --copy-files -d dist/lib src",
 		"start": "webpack serve --open"
 	}
 }

@@ -20,39 +20,6 @@
  ******************************************************************************/
 
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	devServer: {
-		contentBase: false,
-		watchOptions: {
-			poll: true,
-		},
-	},
-	entry: {
-		index: './demo/index.js',
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			title: 'KokopuReact demo',
-		}),
-	],
-	module: {
-		rules: [
-			{
-				test: /\.js$/i,
-				loader: 'babel-loader',
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
-			},
-			{
-				test: /\.png$/i,
-				type: 'asset/resource',
-			},
-		],
-	}
-};
+export { default as colorsets } from './colorsets';
+export { default as piecesets } from './piecesets';
+export { default as Chessboard } from './chessboard';
