@@ -93,7 +93,7 @@ export class Page1 extends React.Component {
 				<Typography gutterBottom>
 					Interaction mode
 				</Typography>
-				<RadioGroup value={state.interactionMode} onChange={event => this.handleInteractionModeChanged(event.target.value)}>
+				<RadioGroup value={state.interactionMode} onChange={evt => this.handleInteractionModeChanged(evt.target.value)}>
 					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
 					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add/remove pieces or edit annotations" />
@@ -131,8 +131,8 @@ export class Page1 extends React.Component {
 						<ToggleButton value="txtm-r" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'r', state.textMarkerMode)}</ToggleButton>
 						<ToggleButton value="txtm-y" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'y', state.textMarkerMode)}</ToggleButton>
 					</ToggleButtonGroup>
-					{" "}
-					<Select value={state.textMarkerMode} disabled={disableClickMode} onChange={event => this.handleTextMarkerModeChanged(event.target.value)}>
+					{' '}
+					<Select value={state.textMarkerMode} disabled={disableClickMode} onChange={evt => this.handleTextMarkerModeChanged(evt.target.value)}>
 						{[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'].map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
 					</Select>
 				</Box>
@@ -221,7 +221,6 @@ export class Page1 extends React.Component {
 			else {
 				newState.textMarkers[sq] = { color: color, text: text };
 			}
-			console.log(newState.textMarkers[sq]);
 			this.props.setState(newState);
 		}
 		else {

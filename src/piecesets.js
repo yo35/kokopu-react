@@ -20,6 +20,8 @@
  ******************************************************************************/
 
 
+/* eslint-disable camelcase */
+
 /*
  * Source: https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
  * Authors: Cburnett <https://en.wikipedia.org/wiki/User:Cburnett>, Antonsusi <https://commons.wikimedia.org/wiki/User:Antonsusi>

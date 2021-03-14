@@ -101,13 +101,13 @@ export class Page0 extends React.Component {
 			<Box display="flex" flexDirection="row">
 				<Box m={2}>
 					<Typography>Colorset</Typography>
-					<Select value={state.colorset} onChange={event => this.handleColorsetChanged(event.target.value)}>
+					<Select value={state.colorset} onChange={evt => this.handleColorsetChanged(evt.target.value)}>
 						{Object.keys(colorsets).map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
 					</Select>
 				</Box>
 				<Box m={2}>
 					<Typography>Pieceset</Typography>
-					<Select value={state.pieceset} onChange={event => this.handlePiecesetChanged(event.target.value)}>
+					<Select value={state.pieceset} onChange={evt => this.handlePiecesetChanged(evt.target.value)}>
 						{Object.keys(piecesets).map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
 					</Select>
 				</Box>

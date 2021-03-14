@@ -36,8 +36,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import '@material-ui/core/styles';
-
 const DRAWER_WIDTH = 240;
 
 let useStyles = makeStyles(theme => ({
@@ -95,7 +93,7 @@ let App = function() {
 			</main>
 		</div>
 	);
-}
+};
 
 const appAnchor = document.createElement('div');
 document.body.appendChild(appAnchor);

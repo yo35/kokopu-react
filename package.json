@@ -20,6 +20,8 @@
 		"@material-ui/lab": "~4.0.0-alpha.57",
 		"babel-loader": "~8.2.2",
 		"css-loader": "~5.0.2",
+		"eslint": "~7.22.0",
+		"eslint-plugin-react": "~7.22.0",
 		"html-webpack-plugin": "~5.0.0",
 		"style-loader": "~2.0.0",
 		"webpack": "~5.21.2",
@@ -27,6 +29,7 @@
 		"webpack-dev-server": "~3.11.2"
 	},
 	"scripts": {
+		"lint": "eslint demo src",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "babel --delete-dir-on-start --copy-files -d dist/lib src",
 		"start": "webpack serve --open"

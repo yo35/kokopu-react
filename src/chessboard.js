@@ -45,7 +45,7 @@ export const MAX_SQUARE_SIZE = 96;
 /**
  * Chessboard diagram.
  */
-export default class extends React.Component {
+export default class Chessboard extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -60,7 +60,7 @@ export default class extends React.Component {
 		// Compute the current position.
 		let parseInfo = parsePosition(this.props.position);
 		if (parseInfo.error) {
-			return this.renderError(parseInfo.message);
+			return Chessboard.renderError(parseInfo.message);
 		}
 		let position = parseInfo.position;
 
@@ -114,7 +114,7 @@ export default class extends React.Component {
 		let ymin = 0;
 		let xmax = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
 		let ymax = 8 * squareSize + (coordinateVisible ? Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) : 0);
-		let viewBox = xmin + ' ' + ymin + ' ' + (xmax - xmin) + ' ' + (ymax - ymin);
+		let viewBox = `${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`;
 		return (
 			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				{squares}
@@ -131,8 +131,8 @@ export default class extends React.Component {
 		);
 	}
 
-	renderError(message) {
-		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>
+	static renderError(message) {
+		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>;
 	}
 
 	renderSquare(squareSize, colorset, sq) {
@@ -182,7 +182,7 @@ export default class extends React.Component {
 				<Draggable
 					key={'handle-' + sq} position={dragPosition} bounds={bounds}
 					defaultClassName="kokopu-draggable" defaultClassNameDragging="kokopu-dragging"
-					onStart={event => this.handlePieceDragStart(sq, event)}
+					onStart={evt => this.handlePieceDragStart(sq, evt)}
 					onDrag={(_, dragData) => this.handlePieceDrag(sq, dragData)}
 					onStop={(_, dragData) => this.handlePieceDragStop(sq, dragData)}
 				>
@@ -243,22 +243,22 @@ export default class extends React.Component {
 		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
 		let y = (this.props.isFlipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
-		return <text key={'rank-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
+		return <text key={'rank-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
 	}
 
 	renderFileCoordinate(squareSize, fontSize, file) {
 		let x = (this.props.isFlipped ? 7.5 - file : 0.5 + file) * squareSize;
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
-		return <text key={'file-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
+		return <text key={'file-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
 	}
 
-	handlePieceDragStart(sq, event) {
-		let squareBoundary = event.target.getBoundingClientRect();
+	handlePieceDragStart(sq, evt) {
+		let squareBoundary = evt.target.getBoundingClientRect();
 		this.setState({
 			draggedSquare: sq,
 			hoveredSquare: sq,
-			cursorOffset: { x: event.clientX - squareBoundary.left, y: event.clientY - squareBoundary.top },
+			cursorOffset: { x: evt.clientX - squareBoundary.left, y: evt.clientY - squareBoundary.top },
 			dragPosition: { x: 0, y: 0 },
 		});
 	}

@@ -1,0 +1,76 @@
+env:
+  browser: true
+  es2021: true
+
+extends:
+  - 'eslint:recommended'
+  - 'plugin:react/recommended'
+
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 12
+  sourceType: module
+
+plugins:
+  - react
+
+rules:
+
+  # Style
+  indent:          [ error, tab, { SwitchCase: 1 }]
+  linebreak-style: [ error, unix ]
+  quotes:          [ error, single ]
+  semi:            [ error, always ]
+  camelcase:       [ error ]
+
+  # Additional rules (possible errors)
+  no-console: [ error ]
+
+  # Additional rules (best practices)
+  class-methods-use-this:       [ error ]
+  curly:                        [ error, all ]
+  eqeqeq:                       [ error, always ]
+  no-alert:                     [ error ]
+  no-constructor-return:        [ error ]
+  no-eval:                      [ error ]
+  no-extend-native:             [ error ]
+  no-floating-decimal:          [ error ]
+  no-implicit-coercion:         [ error ]
+  no-implied-eval:              [ error ]
+  no-invalid-this:              [ error ]
+  no-labels:                    [ error ]
+  no-lone-blocks:               [ error ]
+  no-loop-func:                 [ error ]
+  no-new:                       [ error ]
+  no-new-func:                  [ error ]
+  no-new-wrappers:              [ error ]
+  no-octal-escape:              [ error ]
+  no-return-assign:             [ error, always ]
+  no-script-url:                [ error ]
+  no-self-compare:              [ error ]
+  no-throw-literal:             [ error ]
+  no-unmodified-loop-condition: [ error ]
+  no-unused-expressions:        [ error ]
+  no-useless-concat:            [ error ]
+  no-useless-return:            [ error ]
+  no-warning-comments:          [ warn, { location: anywhere, terms: [ TODO ] }]
+  prefer-regex-literals:        [ error ]
+
+  # Additional rules (variables)
+  no-shadow: [ error, { builtinGlobals: true }]
+
+  # Additional rules (ES6)
+  no-confusing-arrow:      [ error ]
+  no-duplicate-imports:    [ error ]
+  no-useless-computed-key: [ error ]
+  no-useless-constructor:  [ error ]
+  no-useless-rename:       [ error ]
+  no-var:                  [ error ]
+  prefer-arrow-callback:   [ error ]
+  prefer-rest-params:      [ error ]
+  rest-spread-spacing:     [ error ]
+
+  # Relaxed rules
+  no-constant-condition: [ error, { checkLoops: false }]
+
