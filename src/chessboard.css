@@ -20,8 +20,7 @@
  ******************************************************************************/
 
 
-.kokopu-rankCoordinate,
-.kokopu-fileCoordinate {
+.kokopu-label {
 	font-style: normal;
 	font-family: sans-serif;
 	text-anchor: middle;

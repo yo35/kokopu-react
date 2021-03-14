@@ -32,8 +32,10 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -45,7 +47,9 @@ export const initialState1 = {
 	isFlipped: false,
 	interactionMode: 'movePieces',
 	clickMode: 'wp',
-	squareMarkers: {}
+	squareMarkers: {},
+	textMarkers: {},
+	textMarkerMode: 'A',
 };
 
 
@@ -121,6 +125,17 @@ export class Page1 extends React.Component {
 						<ToggleButton value="sqm-y" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'y')}</ToggleButton>
 					</ToggleButtonGroup>
 				</Box>
+				<Box m={0.5}>
+					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
+						<ToggleButton value="txtm-g" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'g', state.textMarkerMode)}</ToggleButton>
+						<ToggleButton value="txtm-r" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'r', state.textMarkerMode)}</ToggleButton>
+						<ToggleButton value="txtm-y" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'y', state.textMarkerMode)}</ToggleButton>
+					</ToggleButtonGroup>
+					{" "}
+					<Select value={state.textMarkerMode} disabled={disableClickMode} onChange={event => this.handleTextMarkerModeChanged(event.target.value)}>
+						{[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'].map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
+					</Select>
+				</Box>
 			</Box>
 		</>);
 	}
@@ -134,6 +149,7 @@ export class Page1 extends React.Component {
 					isFlipped={state.isFlipped}
 					squareSize={56}
 					squareMarkers={state.squareMarkers}
+					textMarkers={state.textMarkers}
 					interactionMode={state.interactionMode}
 					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
 					onSquareClicked={sq => this.handleSquareClicked(sq)}
@@ -175,6 +191,12 @@ export class Page1 extends React.Component {
 		this.props.setState(newState);
 	}
 
+	handleTextMarkerModeChanged(newTextMarkerMode) {
+		let newState = {...this.props.state};
+		newState.textMarkerMode = newTextMarkerMode;
+		this.props.setState(newState);
+	}
+
 	handlePieceMoved(from, to) {
 		let newPosition = new kokopu.Position(this.props.state.position);
 		newPosition.square(to, newPosition.square(from));
@@ -189,6 +211,19 @@ export class Page1 extends React.Component {
 			newState.squareMarkers[sq] = newState.squareMarkers[sq] === color ? '' : color;
 			this.props.setState(newState);
 		}
+		else if(this.props.state.clickMode.startsWith('txtm-')) {
+			let color = this.props.state.clickMode.substring(5);
+			let text = this.props.state.textMarkerMode;
+			let newState = {...this.props.state};
+			if (newState.textMarkers[sq] && newState.textMarkers[sq].color === color && newState.textMarkers[sq].text === text) {
+				delete newState.textMarkers[sq];
+			}
+			else {
+				newState.textMarkers[sq] = { color: color, text: text };
+			}
+			console.log(newState.textMarkers[sq]);
+			this.props.setState(newState);
+		}
 		else {
 			let newPosition = new kokopu.Position(this.props.state.position);
 			newPosition.square(sq, newPosition.square(sq) === this.props.state.clickMode ? '-' : this.props.state.clickMode);
@@ -198,9 +233,9 @@ export class Page1 extends React.Component {
 }
 
 function squareMarkerButtonLabel(colorset, color) {
-	return (
-		<svg width={24} height={24}>
-			<circle cx={12} cy={12} r={12} fill={colorset[color]} />
-		</svg>
-	);
+	return <svg width={24} height={24}><circle cx={12} cy={12} r={12} fill={colorset[color]} /></svg>;
+}
+
+function textMarkerButtonLabel(colorset, color, textMarkerMode) {
+	return <svg width={24} height={24}><text className="kokopu-label" x={12} y={12} style={{ fontSize: 24 }} fill={colorset[color]}>{textMarkerMode}</text></svg>;
 }

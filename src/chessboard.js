@@ -53,13 +53,27 @@ export default class extends React.Component {
 	}
 
 	render() {
+
+		// Compute the current position.
 		let parseInfo = parsePosition(this.props.position);
 		if (parseInfo.error) {
 			return this.renderError(parseInfo.message);
 		}
-
 		let position = parseInfo.position;
-		let sqm = parseSquareMarkers(this.props.squareMarkers);
+
+		// Compute the annotations.
+		let sqm = parseMarkers(this.props.squareMarkers, (result, token) => {
+			if(/^([GRY])([a-h][1-8])$/.test(token)) {
+				result[RegExp.$2] = RegExp.$1.toLowerCase();
+			}
+		});
+		let txtm = parseMarkers(this.props.textMarkers, (result, token) => {
+			if(/^([GRY])([A-Za-z0-9])([a-h][1-8])$/.test(token)) {
+				result[RegExp.$3] = { color: RegExp.$1.toLowerCase(), text: RegExp.$2 };
+			}
+		});
+
+		// Compute the attributes.
 		let squareSize = this.getSquareSize();
 		let coordinateVisible = this.isCoordinateVisible();
 		let fontSize = computeCoordinateFontSize(squareSize);
@@ -71,6 +85,7 @@ export default class extends React.Component {
 		let pieces = [];
 		let handles = [];
 		let squareMarkers = [];
+		let textMarkers = [];
 		kokopu.forEachSquare(sq => {
 			squares.push(this.renderSquare(squareSize, colorset, sq));
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
@@ -78,6 +93,7 @@ export default class extends React.Component {
 				handles.push(this.renderSquareHandle(squareSize, sq));
 			}
 			squareMarkers.push(this.renderSquareMarker(sqm, squareSize, colorset, sq));
+			textMarkers.push(this.renderTextMarker(txtm, squareSize, colorset, sq));
 		});
 
 		// Render coordinates.
@@ -102,6 +118,7 @@ export default class extends React.Component {
 				{squareMarkers}
 				{this.renderHoveredSquare(squareSize, colorset)}
 				{pieces}
+				{textMarkers}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{handles}
 				{this.renderTurnFlag(position, squareSize, pieceset)}
@@ -192,6 +209,26 @@ export default class extends React.Component {
 		return <rect key={'sqm-' + sq} x={x} y={y} className="kokopu-annotation" width={squareSize} height={squareSize} fill={colorset[value]} />;
 	}
 
+	renderTextMarker(txtm, squareSize, colorset, sq) {
+		let value = txtm[sq];
+		if (!value || !isValidAnnotationColor(value.color) || typeof value.text !== 'string') {
+			return undefined;
+		}
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		x += squareSize / 2;
+		y += squareSize / 2;
+		if (/^[A-Za-z0-9]$/.test(value.text)) {
+			return (
+				<text key={'txtm-' + sq} className="kokopu-annotation kokopu-label" x={x} y={y} fill={colorset[value.color]} style={{ 'fontSize': squareSize }}>
+					{value.text}
+				</text>
+			);
+		}
+		else {
+			return undefined;
+		}
+	}
+
 	renderTurnFlag(position, squareSize, pieceset) {
 		let turn = position.turn();
 		let x = 8 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
@@ -203,14 +240,14 @@ export default class extends React.Component {
 		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
 		let y = (this.props.isFlipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
-		return <text key={'rank-' + label} className="kokopu-rankCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
+		return <text key={'rank-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
 	}
 
 	renderFileCoordinate(squareSize, fontSize, file) {
 		let x = (this.props.isFlipped ? 7.5 - file : 0.5 + file) * squareSize;
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
-		return <text key={'file-' + label} className="kokopu-fileCoordinate" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
+		return <text key={'file-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>
 	}
 
 	handlePieceDragStart(sq, event) {
@@ -362,23 +399,20 @@ function parsePosition(position) {
 
 
 /**
- * Try to interpret the given object as a list of square markers.
+ * Try to interpret the given object as a list of markers.
  *
- * @param {*} squareMarkers
+ * @param {*} markers
+ * @param {callback} callback
  * @returns {object}
  */
-function parseSquareMarkers(squareMarkers) {
-	if (typeof squareMarkers === 'string') {
+function parseMarkers(markers, callback) {
+	if (typeof markers === 'string') {
 		let result = {};
-		squareMarkers.split(',').forEach(token => {
-			if(/^\s*([GRY])([a-h][1-8])\s*$/.test(token)) {
-				result[RegExp.$2] = RegExp.$1.toLowerCase();
-			}
-		});
+		markers.split(',').forEach(token => callback(result, token.trim()));
 		return result;
 	}
-	else if (typeof squareMarkers === 'object') {
-		return squareMarkers;
+	else if (typeof markers === 'object') {
+		return markers;
 	}
 	else {
 		return {};
