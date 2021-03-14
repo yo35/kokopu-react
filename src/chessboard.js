@@ -39,7 +39,7 @@ const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
 
 export const MIN_SQUARE_SIZE = 12;
-export const MAX_SQUARE_SIZE = 64;
+export const MAX_SQUARE_SIZE = 96;
 
 
 /**
@@ -320,7 +320,7 @@ export default class extends React.Component {
 	 * Return the (sanitized) pieceset.
 	 */
 	getPieceset() {
-		return piecesets['cburnett']; // TODO plug pieceset
+		return piecesets[this.props.pieceset in piecesets ? this.props.pieceset : 'cburnett'];
 	}
 
 	/**

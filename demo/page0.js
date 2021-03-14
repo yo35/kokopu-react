@@ -24,6 +24,7 @@ import React from 'react';
 import kokopu from 'kokopu';
 
 import colorsets from '../src/colorsets';
+import piecesets from '../src/piecesets';
 import Chessboard, { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../src/chessboard';
 
 import Box from '@material-ui/core/Box';
@@ -45,6 +46,7 @@ export const initialState0 = {
 	coordinateVisible: true,
 	annotationVisible: false,
 	colorset: 'original',
+	pieceset: 'cburnett',
 };
 
 
@@ -96,11 +98,19 @@ export class Page0 extends React.Component {
 					min={MIN_SQUARE_SIZE} max={MAX_SQUARE_SIZE} step={1} valueLabelDisplay="on" color="primary"
 				/>
 			</Box>
-			<Box m={2}>
-				<Typography>Colorset</Typography>
-				<Select value={state.colorset} onChange={event => this.handleColorsetChanged(event.target.value)}>
-					{colorsetMenuItems()}
-				</Select>
+			<Box display="flex" flexDirection="row">
+				<Box m={2}>
+					<Typography>Colorset</Typography>
+					<Select value={state.colorset} onChange={event => this.handleColorsetChanged(event.target.value)}>
+						{Object.keys(colorsets).map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
+					</Select>
+				</Box>
+				<Box m={2}>
+					<Typography>Pieceset</Typography>
+					<Select value={state.pieceset} onChange={event => this.handlePiecesetChanged(event.target.value)}>
+						{Object.keys(piecesets).map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
+					</Select>
+				</Box>
 			</Box>
 		</>);
 	}
@@ -116,6 +126,7 @@ export class Page0 extends React.Component {
 					coordinateVisible={state.coordinateVisible}
 					squareMarkers={state.annotationVisible ? 'Gc4,Gc5,Re4,Re5,Yg4,Yg5' : ''}
 					colorset={state.colorset}
+					pieceset={state.pieceset}
 				/>
 			</div>
 		);
@@ -156,12 +167,10 @@ export class Page0 extends React.Component {
 		newState.colorset = newColorset;
 		this.props.setState(newState);
 	}
-}
 
-function colorsetMenuItems() {
-	let result = [];
-	for (let colorset in colorsets) {
-		result.push(<MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>);
+	handlePiecesetChanged(newPieceset) {
+		let newState = {...this.props.state};
+		newState.pieceset = newPieceset;
+		this.props.setState(newState);
 	}
-	return result;
 }
