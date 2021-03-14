@@ -24,6 +24,9 @@ export default {
 	original: {
 		b: '#b5876b',
 		w: '#f0dec7',
+		g: '#0e0',
+		r: '#d00',
+		y: '#db0',
 		s: '#04f',
 	},
 };

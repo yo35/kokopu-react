@@ -59,23 +59,28 @@ export default class extends React.Component {
 		}
 
 		let position = parseInfo.position;
+		let sqm = parseSquareMarkers(this.props.squareMarkers);
 		let squareSize = this.getSquareSize();
 		let coordinateVisible = this.isCoordinateVisible();
 		let fontSize = computeCoordinateFontSize(squareSize);
 		let colorset = this.getColorset();
 		let pieceset = this.getPieceset();
 
+		// Render squares and square-related objects.
 		let squares = [];
 		let pieces = [];
 		let handles = [];
+		let squareMarkers = [];
 		kokopu.forEachSquare(sq => {
 			squares.push(this.renderSquare(squareSize, colorset, sq));
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
 			if (this.props.interactionMode) {
 				handles.push(this.renderSquareHandle(squareSize, sq));
 			}
+			squareMarkers.push(this.renderSquareMarker(sqm, squareSize, colorset, sq));
 		});
 
+		// Render coordinates.
 		let rankCoordinates = [];
 		let fileCoordinates = [];
 		if (coordinateVisible) {
@@ -85,6 +90,7 @@ export default class extends React.Component {
 			}
 		}
 
+		// Render the whole canvas.
 		let xmin = coordinateVisible ? Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) : 0;
 		let ymin = 0;
 		let xmax = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
@@ -93,6 +99,7 @@ export default class extends React.Component {
 		return (
 			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				{squares}
+				{squareMarkers}
 				{this.renderHoveredSquare(squareSize, colorset)}
 				{pieces}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
@@ -174,6 +181,15 @@ export default class extends React.Component {
 		else {
 			return undefined;
 		}
+	}
+
+	renderSquareMarker(sqm, squareSize, colorset, sq) {
+		let value = sqm[sq];
+		if (!isValidAnnotationColor(value)) {
+			return undefined;
+		}
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		return <rect key={'sqm-' + sq} x={x} y={y} className="kokopu-annotation" width={squareSize} height={squareSize} fill={colorset[value]} />;
 	}
 
 	renderTurnFlag(position, squareSize, pieceset) {
@@ -300,6 +316,17 @@ function computeCoordinateFontSize(squareSize) {
 
 
 /**
+ * Whether the given value is a valid color code for an annotation.
+ *
+ * @param {string} value
+ * @returns {boolean}
+ */
+function isValidAnnotationColor(value) {
+	return value === 'g' || value === 'r' || value === 'y';
+}
+
+
+/**
  * Try to interpret the given object as a chess position.
  *
  * @param {*} position
@@ -330,5 +357,30 @@ function parsePosition(position) {
 				throw e;
 			}
 		}
+	}
+}
+
+
+/**
+ * Try to interpret the given object as a list of square markers.
+ *
+ * @param {*} squareMarkers
+ * @returns {object}
+ */
+function parseSquareMarkers(squareMarkers) {
+	if (typeof squareMarkers === 'string') {
+		let result = {};
+		squareMarkers.split(',').forEach(token => {
+			if(/^\s*([GRY])([a-h][1-8])\s*$/.test(token)) {
+				result[RegExp.$2] = RegExp.$1.toLowerCase();
+			}
+		});
+		return result;
+	}
+	else if (typeof squareMarkers === 'object') {
+		return squareMarkers;
+	}
+	else {
+		return {};
 	}
 }

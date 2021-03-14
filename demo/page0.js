@@ -40,6 +40,7 @@ export const initialState0 = {
 	isFlipped: false,
 	squareSize: 40,
 	coordinateVisible: true,
+	annotationVisible: false,
 };
 
 
@@ -79,6 +80,10 @@ export class Page0 extends React.Component {
 					control={<Switch checked={state.coordinateVisible} onChange={() => this.handleCoordinateVisibleClicked(!state.coordinateVisible)} color="primary" />}
 					label="Show coordinates"
 				/>
+				<FormControlLabel
+					control={<Switch checked={state.annotationVisible} onChange={() => this.handleAnnotationVisibleClicked(!state.annotationVisible)} color="primary" />}
+					label="Show annotations"
+				/>
 			</Box>
 			<Box m={2}>
 				<Typography gutterBottom>
@@ -101,6 +106,7 @@ export class Page0 extends React.Component {
 					isFlipped={state.isFlipped}
 					squareSize={state.squareSize}
 					coordinateVisible={state.coordinateVisible}
+					squareMarkers={state.annotationVisible ? 'Gc4,Gc5,Re4,Re5,Yg4,Yg5' : ''}
 				/>
 			</div>
 		);
@@ -127,6 +133,12 @@ export class Page0 extends React.Component {
 	handleCoordinateVisibleClicked(newCoordinateVisible) {
 		let newState = {...this.props.state};
 		newState.coordinateVisible = newCoordinateVisible;
+		this.props.setState(newState);
+	}
+
+	handleAnnotationVisibleClicked(newAnnotationVisible) {
+		let newState = {...this.props.state};
+		newState.annotationVisible = newAnnotationVisible;
 		this.props.setState(newState);
 	}
 }

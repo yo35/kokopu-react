@@ -23,6 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
+import colorsets from '../src/colorsets';
 import piecesets from '../src/piecesets';
 import Chessboard from '../src/chessboard';
 
@@ -44,6 +45,7 @@ export const initialState1 = {
 	isFlipped: false,
 	interactionMode: 'movePieces',
 	clickMode: 'wp',
+	squareMarkers: {}
 };
 
 
@@ -64,6 +66,7 @@ export class Page1 extends React.Component {
 
 	renderControls() {
 		let state = this.props.state;
+		let colorset = colorsets['original'];
 		let pieceset = piecesets['cburnett'];
 		let disableClickMode = state.interactionMode !== 'clickSquares';
 		return (<>
@@ -89,7 +92,7 @@ export class Page1 extends React.Component {
 				<RadioGroup value={state.interactionMode} onChange={event => this.handleInteractionModeChanged(event.target.value)}>
 					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
-					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add/remove pieces" />
+					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add/remove pieces or edit annotations" />
 				</RadioGroup>
 				<Box m={0.5}>
 					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
@@ -111,6 +114,13 @@ export class Page1 extends React.Component {
 						<ToggleButton value="bp" disabled={disableClickMode}><img src={pieceset.bp} width={24} height={24} /></ToggleButton>
 					</ToggleButtonGroup>
 				</Box>
+				<Box m={0.5}>
+					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
+						<ToggleButton value="sqm-g" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'g')}</ToggleButton>
+						<ToggleButton value="sqm-r" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'r')}</ToggleButton>
+						<ToggleButton value="sqm-y" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'y')}</ToggleButton>
+					</ToggleButtonGroup>
+				</Box>
 			</Box>
 		</>);
 	}
@@ -123,6 +133,7 @@ export class Page1 extends React.Component {
 					position={state.position}
 					isFlipped={state.isFlipped}
 					squareSize={56}
+					squareMarkers={state.squareMarkers}
 					interactionMode={state.interactionMode}
 					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
 					onSquareClicked={sq => this.handleSquareClicked(sq)}
@@ -172,8 +183,24 @@ export class Page1 extends React.Component {
 	}
 
 	handleSquareClicked(sq) {
-		let newPosition = new kokopu.Position(this.props.state.position);
-		newPosition.square(sq, newPosition.square(sq) === this.props.state.clickMode ? '-' : this.props.state.clickMode);
-		this.handlePositionChanged(newPosition);
+		if (this.props.state.clickMode.startsWith('sqm-')) {
+			let color = this.props.state.clickMode.substring(4);
+			let newState = {...this.props.state};
+			newState.squareMarkers[sq] = newState.squareMarkers[sq] === color ? '' : color;
+			this.props.setState(newState);
+		}
+		else {
+			let newPosition = new kokopu.Position(this.props.state.position);
+			newPosition.square(sq, newPosition.square(sq) === this.props.state.clickMode ? '-' : this.props.state.clickMode);
+			this.handlePositionChanged(newPosition);
+		}
 	}
+}
+
+function squareMarkerButtonLabel(colorset, color) {
+	return (
+		<svg width={24} height={24}>
+			<circle cx={12} cy={12} r={12} fill={colorset[color]} />
+		</svg>
+	);
 }
