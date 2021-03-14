@@ -63,8 +63,8 @@ let App = function() {
 	let [ pageId, setPageId ] = useState(0);
 	let [ state0, setState0 ] = useState(initialState0);
 	let [ state1, setState1 ] = useState(initialState1);
-	let page0 = { label: 'Simple chessboard', content: () => <Page0 state={state0} setState={setState0} /> };
-	let page1 = { label: 'Interactive chessboard', content: () => <Page1 state={state1} setState={setState1} /> };
+	let page0 = { label: 'Simple chessboard', content: <Page0 state={state0} setState={setState0} /> };
+	let page1 = { label: 'Interactive chessboard', content: <Page1 state={state1} setState={setState1} /> };
 	let pages = [ page0, page1 ];
 	let pageButtons = pages.map((page, index) => {
 		return pageId === index ?
@@ -89,7 +89,7 @@ let App = function() {
 			</Drawer>
 			<main className={classes.content}>
 				<Toolbar />
-				{pages[pageId].content()}
+				{pages[pageId].content}
 			</main>
 		</div>
 	);

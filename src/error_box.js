@@ -28,7 +28,7 @@ import './error_box.css';
 /**
  * Display an error message.
  */
-export default function(props) {
+export default function ErrorBox(props) {
 	let message = 'message' in props ? <div className="kokopu-errorMessage">{props.message}</div> : undefined;
 	return (
 		<div className="kokopu-errorBox">
