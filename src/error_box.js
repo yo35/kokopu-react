@@ -20,6 +20,7 @@
  ******************************************************************************/
 
 
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import './error_box.css';
@@ -37,3 +38,17 @@ export default function ErrorBox(props) {
 		</div>
 	);
 }
+
+
+ErrorBox.propTypes = {
+
+	/**
+	 * Title of the error box.
+	 */
+	title: PropTypes.string.isRequired,
+
+	/**
+	 * Optional message providing additional details about the error.
+	 */
+	message: PropTypes.string,
+};

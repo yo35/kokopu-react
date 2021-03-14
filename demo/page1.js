@@ -94,7 +94,7 @@ export class Page1 extends React.Component {
 					Interaction mode
 				</Typography>
 				<RadioGroup value={state.interactionMode} onChange={evt => this.handleInteractionModeChanged(evt.target.value)}>
-					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
+					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
 					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add/remove pieces or edit annotations" />
 				</RadioGroup>

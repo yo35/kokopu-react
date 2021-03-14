@@ -20,6 +20,7 @@
  ******************************************************************************/
 
 
+import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
 import kokopu from 'kokopu';
@@ -38,7 +39,14 @@ const HOVER_MARKER_THICKNESS_FACTOR = 0.1;
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
 
+/**
+ * Minimum square size (inclusive).
+ */
 export const MIN_SQUARE_SIZE = 12;
+
+/**
+ * Maximum square size (inclusive).
+ */
 export const MAX_SQUARE_SIZE = 96;
 
 
@@ -342,6 +350,75 @@ export default class Chessboard extends React.Component {
 		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? kokopu.coordinatesToSquare(file, rank) : '-';
 	}
 }
+
+
+Chessboard.propTypes = {
+
+	/**
+	 * Displayed position, defined as a {@link kokopu.Position} or as a FEN string.
+	 */
+	position: PropTypes.oneOfType([
+		PropTypes.instanceOf(kokopu.Position),
+		PropTypes.string
+	]),
+
+	/**
+	 * Square markers, defined as a "square -> color" struct (e.g. `{ e4: 'G', d5: 'R' }`) or as a comma-separated CSL string (e.g. `'Ge4,Rd5'`).
+	 */
+	squareMarkers: PropTypes.oneOfType([
+		PropTypes.objectOf(PropTypes.string),
+		PropTypes.string
+	]),
+
+	/**
+	 * Text markers, defined as a "square -> (text, color)" struct (e.g. `{ e4: { text: 'A', color: 'G' }, d5: { text: 'z', color: 'R' }}`)
+	 * or as a comma-separated CTL string (e.g. `'GAe4,Rzd5'`).
+	 */
+	textMarkers: PropTypes.oneOfType([
+		PropTypes.objectOf(PropTypes.exact({ text: PropTypes.string.isRequired, color: PropTypes.string.isRequired })),
+		PropTypes.string
+	]),
+
+	/**
+	 * Whether the board is flipped (i.e. seen from Black's point of view) or not.
+	 */
+	isFlipped: PropTypes.bool,
+
+	/**
+	 * Size of the squares (in pixels). Must be between {@link MIN_SQUARE_SIZE} and {@link MAX_SQUARE_SIZE}.
+	 */
+	squareSize: PropTypes.number,
+
+	/**
+	 * Whether the row and column coordinates are visible or not.
+	 */
+	coordinateVisible: PropTypes.bool,
+
+	/**
+	 * Color theme ID.
+	 */
+	colorset: PropTypes.string,
+
+	/**
+	 * Piece theme ID.
+	 */
+	pieceset: PropTypes.string,
+
+	/**
+	 * Type of action allowed with the mouse on the chessboard.
+	 */
+	interactionMode: PropTypes.oneOf([ '', 'movePieces', 'clickSquares' ]),
+
+	/**
+	 * Callback invoked when a piece is moved through drag&drop (only if `interactionMode` is set to `'movePieces'`).
+	 */
+	onPieceMoved: PropTypes.func,
+
+	/**
+	 * Callback invoked when the user clicks on a square (only if `interactionMode` is set to `'clickSquares'`).
+	 */
+	onSquareClicked: PropTypes.func,
+};
 
 
 /**
