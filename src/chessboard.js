@@ -144,7 +144,7 @@ export default class extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
-		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.s} strokeWidth={thickness} />;
+		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.highlight} strokeWidth={thickness} />;
 	}
 
 	renderPiece(position, squareSize,  pieceset, sq) {

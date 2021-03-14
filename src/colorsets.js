@@ -27,6 +27,6 @@ export default {
 		g: '#0e0',
 		r: '#d00',
 		y: '#db0',
-		s: '#04f',
+		highlight: '#04f',
 	},
 };
