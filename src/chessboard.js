@@ -38,6 +38,9 @@ const HOVER_MARKER_THICKNESS_FACTOR = 0.1;
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
 
+export const MIN_SQUARE_SIZE = 12;
+export const MAX_SQUARE_SIZE = 64;
+
 
 /**
  * Chessboard diagram.
@@ -296,7 +299,7 @@ export default class extends React.Component {
 	 */
 	getSquareSize() {
 		let value = Number(this.props.squareSize);
-		return isNaN(value) ? 40 : Math.min(Math.max(Math.round(value), 12), 64);
+		return isNaN(value) ? 40 : Math.min(Math.max(Math.round(value), MIN_SQUARE_SIZE), MAX_SQUARE_SIZE);
 	}
 
 	/**

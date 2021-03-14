@@ -24,7 +24,7 @@ import React from 'react';
 import kokopu from 'kokopu';
 
 import colorsets from '../src/colorsets';
-import Chessboard from '../src/chessboard';
+import Chessboard, { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../src/chessboard';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -93,7 +93,7 @@ export class Page0 extends React.Component {
 				<Typography gutterBottom>Square size</Typography>
 				<Slider
 					value={state.squareSize}  onChange={(_, newValue) => this.handleSquareSizeChanged(newValue)}
-					min={12} max={64} step={1} valueLabelDisplay="on" color="primary"
+					min={MIN_SQUARE_SIZE} max={MAX_SQUARE_SIZE} step={1} valueLabelDisplay="on" color="primary"
 				/>
 			</Box>
 			<Box m={2}>
