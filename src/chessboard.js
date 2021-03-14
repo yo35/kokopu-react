@@ -310,7 +310,7 @@ export default class extends React.Component {
 	 * Return the (sanitized) colorset.
 	 */
 	getColorset() {
-		return colorsets['original']; // TODO plug colorset
+		return colorsets[this.props.colorset in colorsets ? this.props.colorset : 'original'];
 	}
 
 	/**

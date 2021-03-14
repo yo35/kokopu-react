@@ -23,6 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
+import colorsets from '../src/colorsets';
 import Chessboard from '../src/chessboard';
 
 import Box from '@material-ui/core/Box';
@@ -30,6 +31,8 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
@@ -41,6 +44,7 @@ export const initialState0 = {
 	squareSize: 40,
 	coordinateVisible: true,
 	annotationVisible: false,
+	colorset: 'original',
 };
 
 
@@ -86,13 +90,17 @@ export class Page0 extends React.Component {
 				/>
 			</Box>
 			<Box m={2}>
-				<Typography gutterBottom>
-					Square size
-				</Typography>
+				<Typography gutterBottom>Square size</Typography>
 				<Slider
 					value={state.squareSize}  onChange={(_, newValue) => this.handleSquareSizeChanged(newValue)}
 					min={12} max={64} step={1} valueLabelDisplay="on" color="primary"
 				/>
+			</Box>
+			<Box m={2}>
+				<Typography>Colorset</Typography>
+				<Select value={state.colorset} onChange={event => this.handleColorsetChanged(event.target.value)}>
+					{colorsetMenuItems()}
+				</Select>
 			</Box>
 		</>);
 	}
@@ -107,6 +115,7 @@ export class Page0 extends React.Component {
 					squareSize={state.squareSize}
 					coordinateVisible={state.coordinateVisible}
 					squareMarkers={state.annotationVisible ? 'Gc4,Gc5,Re4,Re5,Yg4,Yg5' : ''}
+					colorset={state.colorset}
 				/>
 			</div>
 		);
@@ -141,4 +150,18 @@ export class Page0 extends React.Component {
 		newState.annotationVisible = newAnnotationVisible;
 		this.props.setState(newState);
 	}
+
+	handleColorsetChanged(newColorset) {
+		let newState = {...this.props.state};
+		newState.colorset = newColorset;
+		this.props.setState(newState);
+	}
+}
+
+function colorsetMenuItems() {
+	let result = [];
+	for (let colorset in colorsets) {
+		result.push(<MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>);
+	}
+	return result;
 }
