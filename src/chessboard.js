@@ -71,7 +71,7 @@ export default class extends React.Component {
 		kokopu.forEachSquare(sq => {
 			squares.push(this.renderSquare(squareSize, colorset, sq));
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
-			if (this.props.interactionMode === 'movePieces' || this.props.interactionMode === 'clickSquares') {
+			if (this.props.interactionMode) {
 				handles.push(this.renderSquareHandle(squareSize, sq));
 			}
 		});
@@ -163,13 +163,16 @@ export default class extends React.Component {
 				</Draggable>
 			);
 		}
-		else { // interactionMode === 'clickSquares'
+		else if (this.props.interactionMode === 'clickSquares') {
 			return (
 				<rect
 					key={'handle-' + sq} className="kokopu-handle kokopu-clickable" x={x} y={y} width={squareSize} height={squareSize}
 					onClick={() => this.handleSquareClicked(sq)}
 				/>
 			);
+		}
+		else {
+			return undefined;
 		}
 	}
 
