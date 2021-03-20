@@ -138,7 +138,7 @@ export class Page2 extends React.Component {
 
 	handlePlayClicked() {
 		let newState = {...this.props.state};
-		let currentPosition = newState.positionAfter ? newState.positionAfter : newState.position;
+		let currentPosition = new kokopu.Position(newState.positionAfter ? newState.positionAfter : newState.position);
 		let move = newState.editedMove.trim();
 		if (move === '') {
 			newState.playedMove = '';
