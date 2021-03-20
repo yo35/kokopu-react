@@ -59,11 +59,11 @@ export class Page1 extends React.Component {
 
 	render() {
 		return (
-			<Grid container spacing={10}>
-				<Grid item xs={4}>
+			<Grid container>
+				<Grid item xs={5}>
 					{this.renderControls()}
 				</Grid>
-				<Grid item xs={8}>
+				<Grid item xs={7}>
 					{this.renderChessboard()}
 				</Grid>
 			</Grid>
