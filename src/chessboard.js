@@ -71,9 +71,19 @@ export default class Chessboard extends React.Component {
 		// Compute the current position.
 		let parseInfo = parsePosition(this.props.position);
 		if (parseInfo.error) {
-			return Chessboard.renderError(parseInfo.message);
+			return <ErrorBox title="Error while analysing a FEN string." message={parseInfo.message}></ErrorBox>;
 		}
 		let position = parseInfo.position;
+		let move = null;
+		if (this.props.move) {
+			parseInfo = parseMove(position, this.props.move);
+			if (parseInfo.error) {
+				return <ErrorBox title="Invalid move notation." message={parseInfo.message}></ErrorBox>;
+			}
+			move = parseInfo.move;
+			position = new kokopu.Position(position);
+			position.play(move);
+		}
 
 		// Compute the annotations.
 		let sqm = parseMarkers(this.props.squareMarkers, (result, token) => {
@@ -142,6 +152,7 @@ export default class Chessboard extends React.Component {
 					{this.renderArrowTip(colorset, 'g')}
 					{this.renderArrowTip(colorset, 'r')}
 					{this.renderArrowTip(colorset, 'y')}
+					{this.renderArrowTip(colorset, 'highlight')}
 				</defs>
 				{squares}
 				{squareMarkers}
@@ -149,6 +160,7 @@ export default class Chessboard extends React.Component {
 				{pieces}
 				{textMarkers}
 				{arrowMarkers}
+				{this.renderMoveArrow(move, squareSize, colorset)}
 				{handles}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{this.renderDraggedArrow(squareSize, colorset)}
@@ -157,10 +169,6 @@ export default class Chessboard extends React.Component {
 				{fileCoordinates}
 			</svg>
 		);
-	}
-
-	static renderError(message) {
-		return <ErrorBox title="Error while analysing a FEN string." message={message}></ErrorBox>;
 	}
 
 	renderSquare(squareSize, colorset, sq) {
@@ -308,6 +316,26 @@ export default class Chessboard extends React.Component {
 		return result;
 	}
 
+	renderMoveArrow(move, squareSize, colorset) {
+		if (!move || !this.isMoveArrowVisible()) {
+			return undefined;
+		}
+		let { x: xFrom, y: yFrom } = this.getSquareCoordinates(squareSize, move.from());
+		xFrom += squareSize / 2;
+		yFrom += squareSize / 2;
+		let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.to());
+		xTo += squareSize / 2;
+		yTo += squareSize / 2;
+		xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
+		yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
+		return (
+			<line
+				className="kokopu-annotation" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo} stroke={colorset['highlight']}
+				style={{ 'strokeWidth': squareSize * STROKE_THICKNESS_FACTOR, 'markerEnd': `url(#${this.getArrowTipId('highlight')})` }}
+			/>
+		);
+	}
+
 	renderArrowTip(colorset, color) {
 		return (
 			<marker id={this.getArrowTipId(color)} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto" style={{ fill: colorset[color] }}>
@@ -414,6 +442,13 @@ export default class Chessboard extends React.Component {
 	}
 
 	/**
+	 * Whether an arrow is displayed when moving a piece or not.
+	 */
+	isMoveArrowVisible() {
+		return 'moveArrowVisible' in this.props ? this.props.moveArrowVisible : true;
+	}
+
+	/**
 	 * Return the (sanitized) colorset.
 	 */
 	getColorset() {
@@ -466,6 +501,15 @@ Chessboard.propTypes = {
 	]),
 
 	/**
+	 * Displayed move (optional), defined as a {@link kokopu.MoveDescriptor} or as a SAN string. In both cases, it must represent a legal move in position
+	 * defined in attribute `position`.
+	 */
+	move: PropTypes.oneOfType([
+		PropTypes.instanceOf(kokopu.Position),
+		PropTypes.string
+	]),
+
+	/**
 	 * Square markers, defined as a "square -> color" struct (e.g. `{ e4: 'G', d5: 'R' }`) or as a comma-separated CSL string (e.g. `'Ge4,Rd5'`).
 	 */
 	squareMarkers: PropTypes.oneOfType([
@@ -505,6 +549,11 @@ Chessboard.propTypes = {
 	 * Whether the row and column coordinates are visible or not.
 	 */
 	coordinateVisible: PropTypes.bool,
+
+	/**
+	 * Whether moves are highlighted with an arrow or not.
+	 */
+	moveArrowVisible: PropTypes.bool,
 
 	/**
 	 * Color theme ID.
@@ -573,24 +622,42 @@ function isValidAnnotationColor(value) {
  */
 function parsePosition(position) {
 	if (position instanceof kokopu.Position) {
-		return {
-			error: false,
-			position: position
-		};
+		return { error: false, position: position };
 	}
 	else {
 		try {
-			return {
-				error: false,
-				position: new kokopu.Position(position)
-			};
+			return { error: false, position: new kokopu.Position(position) };
 		}
 		catch (e) {
 			if (e instanceof kokopu.exception.InvalidFEN) {
-				return {
-					error: true,
-					message: e.message
-				};
+				return { error: true, message: e.message };
+			}
+			else {
+				throw e;
+			}
+		}
+	}
+}
+
+
+/**
+ * Try to interpret the given object `move` as a move descriptor based on the given position.
+ *
+ * @param {kokopu.Position} position
+ * @param {*} move
+ * @returns {({error:false, move:kokopu.MoveDescriptor}|{error:true, message:string})}
+ */
+function parseMove(position, move) {
+	if (kokopu.isMoveDescriptor(move)) {
+		return { error: false, move: move };
+	}
+	else {
+		try {
+			return { error: false, move: position.notation(move) };
+		}
+		catch (e) {
+			if (e instanceof kokopu.exception.InvalidNotation) {
+				return { error: true, message: e.message };
 			}
 			else {
 				throw e;
