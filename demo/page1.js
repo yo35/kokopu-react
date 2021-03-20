@@ -98,6 +98,32 @@ export class Page1 extends React.Component {
 				</Typography>
 				<RadioGroup value={state.interactionMode} onChange={evt => this.handleInteractionModeChanged(evt.target.value)}>
 					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
+					<Box display="flex" flexDirection="row">
+						<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label="Add/remove pieces" />
+						<Box>
+							<Box m={0.5}>
+								<ToggleButtonGroup value={state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
+									<ToggleButton value="wk" disabled={disablePieceEditMode}><img src={pieceset.wk} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="wq" disabled={disablePieceEditMode}><img src={pieceset.wq} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="wr" disabled={disablePieceEditMode}><img src={pieceset.wr} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="wb" disabled={disablePieceEditMode}><img src={pieceset.wb} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="wn" disabled={disablePieceEditMode}><img src={pieceset.wn} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="wp" disabled={disablePieceEditMode}><img src={pieceset.wp} width={24} height={24} /></ToggleButton>
+								</ToggleButtonGroup>
+							</Box>
+							<Box m={0.5}>
+								<ToggleButtonGroup value={state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
+									<ToggleButton value="bk" disabled={disablePieceEditMode}><img src={pieceset.bk} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="bq" disabled={disablePieceEditMode}><img src={pieceset.bq} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="br" disabled={disablePieceEditMode}><img src={pieceset.br} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="bb" disabled={disablePieceEditMode}><img src={pieceset.bb} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="bn" disabled={disablePieceEditMode}><img src={pieceset.bn} width={24} height={24} /></ToggleButton>
+									<ToggleButton value="bp" disabled={disablePieceEditMode}><img src={pieceset.bp} width={24} height={24} /></ToggleButton>
+								</ToggleButtonGroup>
+							</Box>
+						</Box>
+					</Box>
+					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
 					<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label="Edit square annotations" />
 					<Box display="flex" flexDirection="row">
 						<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label="Edit text annotations" />
@@ -106,29 +132,7 @@ export class Page1 extends React.Component {
 						</Select>
 					</Box>
 					<FormControlLabel value="editArrows" control={<Radio color="primary" />} label="Edit arrow annotations" />
-					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
-					<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label="Add/remove pieces" />
 				</RadioGroup>
-				<Box m={0.5}>
-					<ToggleButtonGroup value={state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
-						<ToggleButton value="wk" disabled={disablePieceEditMode}><img src={pieceset.wk} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wq" disabled={disablePieceEditMode}><img src={pieceset.wq} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wr" disabled={disablePieceEditMode}><img src={pieceset.wr} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wb" disabled={disablePieceEditMode}><img src={pieceset.wb} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wn" disabled={disablePieceEditMode}><img src={pieceset.wn} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wp" disabled={disablePieceEditMode}><img src={pieceset.wp} width={24} height={24} /></ToggleButton>
-					</ToggleButtonGroup>
-				</Box>
-				<Box m={0.5}>
-					<ToggleButtonGroup value={state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
-						<ToggleButton value="bk" disabled={disablePieceEditMode}><img src={pieceset.bk} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bq" disabled={disablePieceEditMode}><img src={pieceset.bq} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="br" disabled={disablePieceEditMode}><img src={pieceset.br} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bb" disabled={disablePieceEditMode}><img src={pieceset.bb} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bn" disabled={disablePieceEditMode}><img src={pieceset.bn} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bp" disabled={disablePieceEditMode}><img src={pieceset.bp} width={24} height={24} /></ToggleButton>
-					</ToggleButtonGroup>
-				</Box>
 			</Box>
 			<Box m={2}>
 				<Typography gutterBottom>
