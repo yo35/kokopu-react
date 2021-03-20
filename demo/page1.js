@@ -90,11 +90,13 @@ export class Page1 extends React.Component {
 					control={<Switch checked={state.isFlipped} onChange={() => this.handleFlipClicked(!state.isFlipped)} color="primary" />}
 					label="Flip"
 				/>
-				<Button color="primary" size="small" variant="outlined" onClick={() => this.handleTurnClicked(state.position.turn() === 'w' ? 'b' : 'w')}>Change turn</Button>
+				<Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(state.position.turn() === 'w' ? 'b' : 'w')}>
+					Change turn
+				</Button>
 			</Box>
 			<Box m={2}>
 				<Typography gutterBottom>
-					Interaction mode
+					Edition mode
 				</Typography>
 				<RadioGroup value={state.interactionMode} onChange={evt => this.handleInteractionModeChanged(evt.target.value)}>
 					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
