@@ -113,7 +113,7 @@ export default class Chessboard extends React.Component {
 			squares.push(this.renderSquare(squareSize, colorset, sq));
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
 			if (this.props.interactionMode) {
-				handles.push(this.renderSquareHandle(squareSize, sq));
+				handles.push(this.renderSquareHandle(position, squareSize, sq));
 			}
 			squareMarkers.push(this.renderSquareMarker(sqm, squareSize, colorset, sq));
 			textMarkers.push(this.renderTextMarker(txtm, squareSize, colorset, sq));
@@ -220,9 +220,9 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
-	renderSquareHandle(squareSize, sq) {
+	renderSquareHandle(position, squareSize, sq) {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		if (this.isPieceDragModeEnabled() || this.isArrowDragModeEnabled()) {
+		if ((this.isPieceDragModeEnabled() && position.square(sq) !== '-') || this.isArrowDragModeEnabled()) {
 			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
 			let bounds = this.isPieceDragModeEnabled() ? { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y } : undefined;
 			let classNames = [ 'kokopu-handle', this.isPieceDragModeEnabled() ? 'kokopu-pieceDraggable' : 'kokopu-arrowDraggable' ];
