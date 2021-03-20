@@ -35,6 +35,8 @@ const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
 const FILE_COORDINATE_HEIGHT_FACTOR = 1.4;
 const HOVER_MARKER_THICKNESS_FACTOR = 0.1;
+const STROKE_THICKNESS_FACTOR = 0.15;
+const ARROW_TIP_OFFSET_FACTOR = 0.3;
 
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
@@ -61,6 +63,7 @@ export default class Chessboard extends React.Component {
 			draggedSquare: '-',
 			hoveredSquare: '-',
 		};
+		this.arrowTipIdSuffix = generateRandomId();
 	}
 
 	render() {
@@ -83,6 +86,14 @@ export default class Chessboard extends React.Component {
 				result[RegExp.$3] = { color: RegExp.$1.toLowerCase(), text: RegExp.$2 };
 			}
 		});
+		let arm = parseMarkers(this.props.arrowMarkers, (result, token) => {
+			if(/^([GRY])([a-h][1-8])([a-h][1-8])$/.test(token)) {
+				if (!(RegExp.$2 in result)) {
+					result[RegExp.$2] = {};
+				}
+				result[RegExp.$2][RegExp.$3] = RegExp.$1.toLowerCase();
+			}
+		});
 
 		// Compute the attributes.
 		let squareSize = this.getSquareSize();
@@ -97,6 +108,7 @@ export default class Chessboard extends React.Component {
 		let handles = [];
 		let squareMarkers = [];
 		let textMarkers = [];
+		let arrowMarkers = [];
 		kokopu.forEachSquare(sq => {
 			squares.push(this.renderSquare(squareSize, colorset, sq));
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
@@ -105,6 +117,7 @@ export default class Chessboard extends React.Component {
 			}
 			squareMarkers.push(this.renderSquareMarker(sqm, squareSize, colorset, sq));
 			textMarkers.push(this.renderTextMarker(txtm, squareSize, colorset, sq));
+			arrowMarkers = arrowMarkers.concat(this.renderArrowMarkers(arm, squareSize, colorset, sq));
 		});
 
 		// Render coordinates.
@@ -125,11 +138,17 @@ export default class Chessboard extends React.Component {
 		let viewBox = `${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`;
 		return (
 			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
+				<defs>
+					{this.renderArrowTip(colorset, 'g')}
+					{this.renderArrowTip(colorset, 'r')}
+					{this.renderArrowTip(colorset, 'y')}
+				</defs>
 				{squares}
 				{squareMarkers}
 				{this.renderHoveredSquare(squareSize, colorset)}
 				{pieces}
 				{textMarkers}
+				{arrowMarkers}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{handles}
 				{this.renderTurnFlag(position, squareSize, pieceset)}
@@ -217,7 +236,7 @@ export default class Chessboard extends React.Component {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		return <rect key={'sqm-' + sq} x={x} y={y} className="kokopu-annotation" width={squareSize} height={squareSize} fill={colorset[value]} />;
+		return <rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset[value]} />;
 	}
 
 	renderTextMarker(txtm, squareSize, colorset, sq) {
@@ -238,6 +257,39 @@ export default class Chessboard extends React.Component {
 		else {
 			return undefined;
 		}
+	}
+
+	renderArrowMarkers(arm, squareSize, colorset, from) {
+		let result = [];
+		if (from in arm) {
+			let strokeWidth = squareSize * STROKE_THICKNESS_FACTOR;
+			let { x: xFrom, y: yFrom } = this.getSquareCoordinates(squareSize, from);
+			xFrom += squareSize / 2;
+			yFrom += squareSize / 2;
+			kokopu.forEachSquare(to => {
+				let value = arm[from][to];
+				if (from === to || !isValidAnnotationColor(value)) {
+					return;
+				}
+				let arrowTipId = this.getArrowTipId(value);
+				let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, to);
+				xTo += squareSize / 2;
+				yTo += squareSize / 2;
+				xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
+				yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
+				result.push(<line key={'arm-' + from + to} className="kokopu-annotation" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
+					stroke={colorset[value]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }} />);
+			});
+		}
+		return result;
+	}
+
+	renderArrowTip(colorset, color) {
+		return (
+			<marker id={this.getArrowTipId(color)} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto" style={{ fill: colorset[color] }}>
+				<path d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
+			</marker>
+		);
 	}
 
 	renderTurnFlag(position, squareSize, pieceset) {
@@ -349,6 +401,13 @@ export default class Chessboard extends React.Component {
 		let rank = this.props.isFlipped ? Math.floor(y / squareSize) : 7 - Math.floor(y / squareSize);
 		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? kokopu.coordinatesToSquare(file, rank) : '-';
 	}
+
+	/**
+	 * Return the DOM ID of an arrow tip with the given color.
+	 */
+	getArrowTipId(color) {
+		return 'kokopu-arrowTip-' + color + '-' + this.arrowTipIdSuffix;
+	}
 }
 
 
@@ -376,6 +435,15 @@ Chessboard.propTypes = {
 	 */
 	textMarkers: PropTypes.oneOfType([
 		PropTypes.objectOf(PropTypes.exact({ text: PropTypes.string.isRequired, color: PropTypes.string.isRequired })),
+		PropTypes.string
+	]),
+
+	/**
+	 * Arrow markers, defined as a "squareFrom -> squareTo -> color" struct (e.g. `{ e2: { e4: 'G' }, g8: { f6: 'R', h6: 'Y' }}`)
+	 * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
+	 */
+	arrowMarkers: PropTypes.oneOfType([
+		PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
 		PropTypes.string
 	]),
 
@@ -497,4 +565,20 @@ function parseMarkers(markers, callback) {
 	else {
 		return {};
 	}
+}
+
+
+/**
+ * Generate a random string.
+ *
+ * @returns {string}
+ */
+function generateRandomId() {
+	let buffer = new Uint32Array(8);
+	crypto.getRandomValues(buffer);
+	let result = '';
+	for (let i = 0; i < buffer.length; ++i) {
+		result += buffer[i].toString(16);
+	}
+	return result;
 }

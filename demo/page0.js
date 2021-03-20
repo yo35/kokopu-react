@@ -125,6 +125,7 @@ export class Page0 extends React.Component {
 					squareSize={state.squareSize}
 					coordinateVisible={state.coordinateVisible}
 					squareMarkers={state.annotationVisible ? 'Gc4,Gc5,Re4,Re5,Yg4,Yg5' : ''}
+					arrowMarkers={state.annotationVisible ? 'Gd3b6,Rf3d6,Yh3f6' : ''}
 					colorset={state.colorset}
 					pieceset={state.pieceset}
 				/>
