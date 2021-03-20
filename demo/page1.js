@@ -46,10 +46,12 @@ export const initialState1 = {
 	position: new kokopu.Position(),
 	isFlipped: false,
 	interactionMode: 'movePieces',
-	clickMode: 'wp',
+	textMarkerMode: 'A',
+	pieceEditMode: 'wp',
+	annotationColor: 'g',
 	squareMarkers: {},
 	textMarkers: {},
-	textMarkerMode: 'A',
+	arrowMarkers: {},
 };
 
 
@@ -72,7 +74,8 @@ export class Page1 extends React.Component {
 		let state = this.props.state;
 		let colorset = colorsets['original'];
 		let pieceset = piecesets['cburnett'];
-		let disableClickMode = state.interactionMode !== 'clickSquares';
+		let disablePieceEditMode = state.interactionMode !== 'addRemovePieces';
+		let disableTextMarkerMode = state.interactionMode !== 'editTextMarkers';
 		return (<>
 			<Box m={2}>
 				<ButtonGroup color="primary" size="small">
@@ -95,46 +98,48 @@ export class Page1 extends React.Component {
 				</Typography>
 				<RadioGroup value={state.interactionMode} onChange={evt => this.handleInteractionModeChanged(evt.target.value)}>
 					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
+					<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label="Edit square annotations" />
+					<Box display="flex" flexDirection="row">
+						<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label="Edit text annotations" />
+						<Select value={state.textMarkerMode} disabled={disableTextMarkerMode} onChange={evt => this.handleTextMarkerModeChanged(evt.target.value)}>
+							{[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'].map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
+						</Select>
+					</Box>
+					<FormControlLabel value="editArrows" control={<Radio color="primary" />} label="Edit arrow annotations" />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
-					<FormControlLabel value="clickSquares" control={<Radio color="primary" />} label="Add/remove pieces or edit annotations" />
+					<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label="Add/remove pieces" />
 				</RadioGroup>
 				<Box m={0.5}>
-					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
-						<ToggleButton value="wk" disabled={disableClickMode}><img src={pieceset.wk} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wq" disabled={disableClickMode}><img src={pieceset.wq} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wr" disabled={disableClickMode}><img src={pieceset.wr} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wb" disabled={disableClickMode}><img src={pieceset.wb} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wn" disabled={disableClickMode}><img src={pieceset.wn} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="wp" disabled={disableClickMode}><img src={pieceset.wp} width={24} height={24} /></ToggleButton>
+					<ToggleButtonGroup value={state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
+						<ToggleButton value="wk" disabled={disablePieceEditMode}><img src={pieceset.wk} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wq" disabled={disablePieceEditMode}><img src={pieceset.wq} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wr" disabled={disablePieceEditMode}><img src={pieceset.wr} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wb" disabled={disablePieceEditMode}><img src={pieceset.wb} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wn" disabled={disablePieceEditMode}><img src={pieceset.wn} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="wp" disabled={disablePieceEditMode}><img src={pieceset.wp} width={24} height={24} /></ToggleButton>
 					</ToggleButtonGroup>
 				</Box>
 				<Box m={0.5}>
-					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
-						<ToggleButton value="bk" disabled={disableClickMode}><img src={pieceset.bk} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bq" disabled={disableClickMode}><img src={pieceset.bq} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="br" disabled={disableClickMode}><img src={pieceset.br} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bb" disabled={disableClickMode}><img src={pieceset.bb} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bn" disabled={disableClickMode}><img src={pieceset.bn} width={24} height={24} /></ToggleButton>
-						<ToggleButton value="bp" disabled={disableClickMode}><img src={pieceset.bp} width={24} height={24} /></ToggleButton>
+					<ToggleButtonGroup value={state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
+						<ToggleButton value="bk" disabled={disablePieceEditMode}><img src={pieceset.bk} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bq" disabled={disablePieceEditMode}><img src={pieceset.bq} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="br" disabled={disablePieceEditMode}><img src={pieceset.br} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bb" disabled={disablePieceEditMode}><img src={pieceset.bb} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bn" disabled={disablePieceEditMode}><img src={pieceset.bn} width={24} height={24} /></ToggleButton>
+						<ToggleButton value="bp" disabled={disablePieceEditMode}><img src={pieceset.bp} width={24} height={24} /></ToggleButton>
 					</ToggleButtonGroup>
 				</Box>
+			</Box>
+			<Box m={2}>
+				<Typography gutterBottom>
+					Annotation color
+				</Typography>
 				<Box m={0.5}>
-					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
-						<ToggleButton value="sqm-g" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'g')}</ToggleButton>
-						<ToggleButton value="sqm-r" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'r')}</ToggleButton>
-						<ToggleButton value="sqm-y" disabled={disableClickMode}>{squareMarkerButtonLabel(colorset, 'y')}</ToggleButton>
+					<ToggleButtonGroup value={state.annotationColor} exclusive size="small" onChange={(_, newColor) => this.handleAnnotationColorChanged(newColor)}>
+						<ToggleButton value="g">{colorButtonLabel(colorset, 'g')}</ToggleButton>
+						<ToggleButton value="r">{colorButtonLabel(colorset, 'r')}</ToggleButton>
+						<ToggleButton value="y">{colorButtonLabel(colorset, 'y')}</ToggleButton>
 					</ToggleButtonGroup>
-				</Box>
-				<Box m={0.5}>
-					<ToggleButtonGroup value={state.clickMode} exclusive size="small" onChange={(_, newClickMode) => this.handleClickModeChanged(newClickMode)}>
-						<ToggleButton value="txtm-g" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'g', state.textMarkerMode)}</ToggleButton>
-						<ToggleButton value="txtm-r" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'r', state.textMarkerMode)}</ToggleButton>
-						<ToggleButton value="txtm-y" disabled={disableClickMode}>{textMarkerButtonLabel(colorset, 'y', state.textMarkerMode)}</ToggleButton>
-					</ToggleButtonGroup>
-					{' '}
-					<Select value={state.textMarkerMode} disabled={disableClickMode} onChange={evt => this.handleTextMarkerModeChanged(evt.target.value)}>
-						{[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'].map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
-					</Select>
 				</Box>
 			</Box>
 		</>);
@@ -142,6 +147,8 @@ export class Page1 extends React.Component {
 
 	renderChessboard() {
 		let state = this.props.state;
+		let interactionMode = state.interactionMode === 'editSquareMarkers' || state.interactionMode === 'editTextMarkers' ||
+			state.interactionMode === 'addRemovePieces' ? 'clickSquares' : state.interactionMode;
 		return (
 			<div>
 				<Chessboard
@@ -150,8 +157,11 @@ export class Page1 extends React.Component {
 					squareSize={56}
 					squareMarkers={state.squareMarkers}
 					textMarkers={state.textMarkers}
-					interactionMode={state.interactionMode}
+					arrowMarkers={state.arrowMarkers}
+					interactionMode={interactionMode}
+					editedArrowColor={state.annotationColor}
 					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
+					onArrowEdited={(from, to) => this.handleArrowEdited(from, to)}
 					onSquareClicked={sq => this.handleSquareClicked(sq)}
 				/>
 			</div>
@@ -182,18 +192,27 @@ export class Page1 extends React.Component {
 		this.props.setState(newState);
 	}
 
-	handleClickModeChanged(newClickMode) {
-		if (newClickMode === null) {
-			return;
-		}
+	handleTextMarkerModeChanged(newMode) {
 		let newState = {...this.props.state};
-		newState.clickMode = newClickMode;
+		newState.textMarkerMode = newMode;
 		this.props.setState(newState);
 	}
 
-	handleTextMarkerModeChanged(newTextMarkerMode) {
+	handlePieceEditModeChanged(newMode) {
+		if (newMode === null) {
+			return;
+		}
 		let newState = {...this.props.state};
-		newState.textMarkerMode = newTextMarkerMode;
+		newState.pieceEditMode = newMode;
+		this.props.setState(newState);
+	}
+
+	handleAnnotationColorChanged(newColor) {
+		if (newColor === null) {
+			return;
+		}
+		let newState = {...this.props.state};
+		newState.annotationColor = newColor;
 		this.props.setState(newState);
 	}
 
@@ -204,37 +223,39 @@ export class Page1 extends React.Component {
 		this.handlePositionChanged(newPosition);
 	}
 
+	handleArrowEdited(from, to) {
+		let newState = {...this.props.state};
+		if (!(from in newState.arrowMarkers)) {
+			newState.arrowMarkers[from] = {};
+		}
+		newState.arrowMarkers[from][to] = newState.arrowMarkers[from][to] === newState.annotationColor ? '' : newState.annotationColor;
+		this.props.setState(newState);
+	}
+
 	handleSquareClicked(sq) {
-		if (this.props.state.clickMode.startsWith('sqm-')) {
-			let color = this.props.state.clickMode.substring(4);
+		if (this.props.state.interactionMode === 'editSquareMarkers') {
 			let newState = {...this.props.state};
-			newState.squareMarkers[sq] = newState.squareMarkers[sq] === color ? '' : color;
+			newState.squareMarkers[sq] = newState.squareMarkers[sq] === newState.annotationColor ? '' : newState.annotationColor;
 			this.props.setState(newState);
 		}
-		else if(this.props.state.clickMode.startsWith('txtm-')) {
-			let color = this.props.state.clickMode.substring(5);
-			let text = this.props.state.textMarkerMode;
+		else if (this.props.state.interactionMode === 'editTextMarkers') {
 			let newState = {...this.props.state};
-			if (newState.textMarkers[sq] && newState.textMarkers[sq].color === color && newState.textMarkers[sq].text === text) {
+			if (newState.textMarkers[sq] && newState.textMarkers[sq].color === newState.annotationColor && newState.textMarkers[sq].text === newState.textMarkerMode) {
 				delete newState.textMarkers[sq];
 			}
 			else {
-				newState.textMarkers[sq] = { color: color, text: text };
+				newState.textMarkers[sq] = { color: newState.annotationColor, text: newState.textMarkerMode };
 			}
 			this.props.setState(newState);
 		}
-		else {
+		else if (this.props.state.interactionMode === 'addRemovePieces') {
 			let newPosition = new kokopu.Position(this.props.state.position);
-			newPosition.square(sq, newPosition.square(sq) === this.props.state.clickMode ? '-' : this.props.state.clickMode);
+			newPosition.square(sq, newPosition.square(sq) === this.props.state.pieceEditMode ? '-' : this.props.state.pieceEditMode);
 			this.handlePositionChanged(newPosition);
 		}
 	}
 }
 
-function squareMarkerButtonLabel(colorset, color) {
+function colorButtonLabel(colorset, color) {
 	return <svg width={24} height={24}><circle cx={12} cy={12} r={12} fill={colorset[color]} /></svg>;
-}
-
-function textMarkerButtonLabel(colorset, color, textMarkerMode) {
-	return <svg width={24} height={24}><text className="kokopu-label" x={12} y={12} style={{ fontSize: 24 }} fill={colorset[color]}>{textMarkerMode}</text></svg>;
 }

@@ -42,10 +42,14 @@
 	cursor: pointer;
 }
 
-.kokopu-draggable {
+.kokopu-pieceDraggable {
 	cursor: grab;
 }
 
-.kokopu-draggable.kokopu-dragging {
+.kokopu-pieceDraggable.kokopu-dragging {
 	cursor: grabbing;
+}
+
+.kokopu-arrowDraggable {
+	cursor: crosshair;
 }
