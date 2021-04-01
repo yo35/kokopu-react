@@ -23,6 +23,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
+import { Motion, spring } from 'react-motion';
 import kokopu from 'kokopu';
 
 import ErrorBox from './error_box';
@@ -75,12 +76,14 @@ export default class Chessboard extends React.Component {
 		}
 		let position = parseInfo.position;
 		let move = null;
+		let positionBefore = null;
 		if (this.props.move) {
 			parseInfo = parseMove(position, this.props.move);
 			if (parseInfo.error) {
 				return <ErrorBox title="Invalid move notation." message={parseInfo.message}></ErrorBox>;
 			}
 			move = parseInfo.move;
+			positionBefore = position;
 			position = new kokopu.Position(position);
 			position.play(move);
 		}
@@ -123,8 +126,37 @@ export default class Chessboard extends React.Component {
 				{squares}
 				{rankCoordinates}
 				{fileCoordinates}
-				{this.renderBoardContentStill(position, move, squareSize, colorset, pieceset)}
+				{this.renderBoardContent(position, positionBefore, move, squareSize, colorset, pieceset)}
 			</svg>
+		);
+	}
+
+	renderBoardContent(position, positionBefore, move, squareSize, colorset, pieceset) {
+		if (move && this.props.animated) {
+			return (
+				<Motion key={move.toString()} defaultStyle={{ alpha: 0 }} style={{ alpha: spring(1) }}>
+					{currentStyle => (currentStyle.alpha >= 1 ? this.renderBoardContentStill(position, move, squareSize, colorset, pieceset)
+						: this.renderBoardContentAnimated(positionBefore, move, currentStyle.alpha, squareSize, colorset, pieceset))}
+				</Motion>
+			);
+		}
+		else {
+			return this.renderBoardContentStill(position, move, squareSize, colorset, pieceset);
+		}
+	}
+
+	/**
+	 * Render the board content during the animation.
+	 */
+	renderBoardContentAnimated(positionBefore, move, alpha, squareSize, colorset, pieceset) {
+		let pieces = [];
+		kokopu.forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, alpha, squareSize, pieceset, sq)));
+		return (
+			<>
+				{pieces}
+				{this.renderMoveArrow(move, alpha, squareSize, colorset)}
+				{this.renderTurnFlag(positionBefore.turn() === 'w' ? 'b' : 'w', alpha, squareSize, pieceset)}
+			</>
 		);
 	}
 
@@ -179,7 +211,7 @@ export default class Chessboard extends React.Component {
 				{handles}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{this.renderDraggedArrow(squareSize, colorset)}
-				{this.renderTurnFlag(position, squareSize, pieceset)}
+				{this.renderTurnFlag(position.turn(), 1, squareSize, pieceset)}
 			</>
 		);
 	}
@@ -205,6 +237,28 @@ export default class Chessboard extends React.Component {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
+	}
+
+	renderPieceAnimated(positionBefore, move, alpha, squareSize,  pieceset, sq) {
+		let cp = positionBefore.square(sq);
+		if (cp === '-' || move.to() === sq || (move.isEnPassant() && move.enPassantSquare() === sq)) {
+			return undefined;
+		}
+		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		if (sq === move.from()) {
+			let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.to());
+			x = xTo * alpha + x * (1 - alpha);
+			y = yTo * alpha + y * (1 - alpha);
+			if (move.isPromotion() && alpha > 0.8) {
+				cp = move.color() + move.promotion(); // TODO use coloredPromotion
+			}
+		}
+		else if (move.isCastling() && sq === move.rookFrom()) {
+			let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.rookTo());
+			x = xTo * alpha + x * (1 - alpha);
+			y = yTo * alpha + y * (1 - alpha);
+		}
 		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
@@ -330,7 +384,7 @@ export default class Chessboard extends React.Component {
 	}
 
 	renderMoveArrow(move, alpha, squareSize, colorset) {
-		if (!move || !this.isMoveArrowVisible() || move.from() === move.to()) {
+		if (!move || alpha < 0.1 || !this.isMoveArrowVisible() || move.from() === move.to()) {
 			return undefined;
 		}
 		let { x: xFrom, y: yFrom } = this.getSquareCoordinates(squareSize, move.from());
@@ -359,11 +413,10 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
-	renderTurnFlag(position, squareSize, pieceset) {
-		let turn = position.turn();
+	renderTurnFlag(turn, alpha, squareSize, pieceset) {
 		let x = 8 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
 		let y = (turn === 'w') === this.props.isFlipped ? 0 : 7 * squareSize;
-		return <image x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} />;
+		return <image key={'turn-' + turn} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} style={{ opacity: alpha }} />;
 	}
 
 	renderRankCoordinate(squareSize, fontSize, rank) {
@@ -569,6 +622,11 @@ Chessboard.propTypes = {
 	 * Whether moves are highlighted with an arrow or not.
 	 */
 	moveArrowVisible: PropTypes.bool,
+
+	/**
+	 * Whether moves are animated or not.
+	 */
+	animated: PropTypes.bool,
 
 	/**
 	 * Color theme ID.

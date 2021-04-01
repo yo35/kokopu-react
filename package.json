@@ -10,7 +10,8 @@
 		"prop-types": "~15.7.2",
 		"react": "~17.0.1",
 		"react-dom": "~17.0.1",
-		"react-draggable": "~4.4.3"
+		"react-draggable": "~4.4.3",
+		"react-motion": "~0.5.2"
 	},
 	"devDependencies": {
 		"@babel/cli": "~7.12.13",

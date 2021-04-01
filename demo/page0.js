@@ -72,9 +72,8 @@ export class Page0 extends React.Component {
 				<ButtonGroup color="primary" size="small">
 					<Button onClick={() => this.handlePositionClicked(new kokopu.Position('empty'))}>Empty position</Button>
 					<Button onClick={() => this.handlePositionClicked(new kokopu.Position())}>Start position</Button>
-					<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position 1</Button>
-					<Button onClick={() => this.handlePositionClicked('r3k3/1bn3nP/1P6/2n3n1/R4pP1/8/Q2P3R/8 w kq - 0 1')}>Custom position 2</Button>
-					<Button onClick={() => this.handlePositionClicked('8/k1b/8/8/8/4k3/q7/4K3 b - - 0 1')}>Bad FEN</Button>
+					<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position</Button>
+					<Button onClick={() => this.handlePositionClicked('8/k1b/8/8/8/4k3/q7/4K3 b - - 0 1')}>Ill-formed FEN</Button>
 				</ButtonGroup>
 			</Box>
 			<Box m={2}>

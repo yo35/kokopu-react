@@ -40,6 +40,7 @@ export const initialState2 = {
 	positionAfter: null, // non-null only if a valid move has been played
 	isFlipped: false,
 	moveArrowVisible: true,
+	animated: true,
 	editedMove: '',
 	playedMove: '',
 };
@@ -68,7 +69,7 @@ export class Page2 extends React.Component {
 					<Button onClick={() => this.handlePositionClicked(new kokopu.Position('empty'))}>Empty position</Button>
 					<Button onClick={() => this.handlePositionClicked(new kokopu.Position())}>Start position</Button>
 					<Button onClick={() => this.handlePositionClicked('8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Custom position 1</Button>
-					<Button onClick={() => this.handlePositionClicked('r3k3/1bn3nP/1P6/2n3n1/R4pP1/8/Q2P3R/8 w kq - 0 1')}>Custom position 2</Button>
+					<Button onClick={() => this.handlePositionClicked('r3k2r/p1pp1ppp/2n1p3/1q2P3/8/5N2/PpPP1PPP/R2QKB1R b KQkq - 0 1')}>Custom position 2</Button>
 				</ButtonGroup>
 			</Box>
 			<Box m={2}>
@@ -79,6 +80,10 @@ export class Page2 extends React.Component {
 				<FormControlLabel
 					control={<Switch checked={state.moveArrowVisible} onChange={() => this.handleMoveArrowVisibleClicked(!state.moveArrowVisible)} color="primary" />}
 					label="Show move arrow" disabled={!state.positionAfter}
+				/>
+				<FormControlLabel
+					control={<Switch checked={state.animated} onChange={() => this.handleAnimationClicked(!state.animated)} color="primary" />}
+					label="Animation" disabled={!state.positionAfter}
 				/>
 			</Box>
 			<Box m={2}>
@@ -105,6 +110,7 @@ export class Page2 extends React.Component {
 					isFlipped={state.isFlipped}
 					squareSize={56}
 					moveArrowVisible={state.moveArrowVisible}
+					animated={state.animated}
 				/>
 			</div>
 		);
@@ -127,6 +133,12 @@ export class Page2 extends React.Component {
 	handleMoveArrowVisibleClicked(newMoveArrowVisible) {
 		let newState = {...this.props.state};
 		newState.moveArrowVisible = newMoveArrowVisible;
+		this.props.setState(newState);
+	}
+
+	handleAnimationClicked(newAnimated) {
+		let newState = {...this.props.state};
+		newState.animated = newAnimated;
 		this.props.setState(newState);
 	}
 
