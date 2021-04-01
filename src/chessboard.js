@@ -155,7 +155,7 @@ export default class Chessboard extends React.Component {
 			<>
 				{pieces}
 				{this.renderMoveArrow(move, alpha, squareSize, colorset)}
-				{this.renderTurnFlag(positionBefore.turn() === 'w' ? 'b' : 'w', alpha, squareSize, pieceset)}
+				{this.renderTurnFlag(kokopu.oppositeColor(positionBefore.turn()), alpha, squareSize, pieceset)}
 			</>
 		);
 	}
@@ -251,7 +251,7 @@ export default class Chessboard extends React.Component {
 			x = xTo * alpha + x * (1 - alpha);
 			y = yTo * alpha + y * (1 - alpha);
 			if (move.isPromotion() && alpha > 0.8) {
-				cp = move.color() + move.promotion(); // TODO use coloredPromotion
+				cp = move.coloredPromotion();
 			}
 		}
 		else if (move.isCastling() && sq === move.rookFrom()) {
