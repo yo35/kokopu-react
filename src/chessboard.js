@@ -39,6 +39,8 @@ const HOVER_MARKER_THICKNESS_FACTOR = 0.1;
 const STROKE_THICKNESS_FACTOR = 0.15;
 const ARROW_TIP_OFFSET_FACTOR = 0.3;
 
+const ANIMATION_SPEED = { stiffness: 700, damping: 40 };
+
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
 
@@ -134,7 +136,7 @@ export default class Chessboard extends React.Component {
 	renderBoardContent(position, positionBefore, move, squareSize, colorset, pieceset) {
 		if (move && this.props.animated) {
 			return (
-				<Motion key={move.toString()} defaultStyle={{ alpha: 0 }} style={{ alpha: spring(1) }}>
+				<Motion key={move.toString()} defaultStyle={{ alpha: 0 }} style={{ alpha: spring(1, ANIMATION_SPEED) }}>
 					{currentStyle => (currentStyle.alpha >= 1 ? this.renderBoardContentStill(position, move, squareSize, colorset, pieceset)
 						: this.renderBoardContentAnimated(positionBefore, move, currentStyle.alpha, squareSize, colorset, pieceset))}
 				</Motion>
@@ -155,7 +157,7 @@ export default class Chessboard extends React.Component {
 			<>
 				{pieces}
 				{this.renderMoveArrow(move, alpha, squareSize, colorset)}
-				{this.renderTurnFlag(kokopu.oppositeColor(positionBefore.turn()), alpha, squareSize, pieceset)}
+				{this.renderTurnFlag(kokopu.oppositeColor(positionBefore.turn()), squareSize, pieceset)}
 			</>
 		);
 	}
@@ -211,7 +213,7 @@ export default class Chessboard extends React.Component {
 				{handles}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{this.renderDraggedArrow(squareSize, colorset)}
-				{this.renderTurnFlag(position.turn(), 1, squareSize, pieceset)}
+				{this.renderTurnFlag(position.turn(), squareSize, pieceset)}
 			</>
 		);
 	}
@@ -413,10 +415,10 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
-	renderTurnFlag(turn, alpha, squareSize, pieceset) {
+	renderTurnFlag(turn, squareSize, pieceset) {
 		let x = 8 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
 		let y = turn === (this.props.isFlipped ? 'w' : 'b') ? 0 : 7 * squareSize;
-		return <image key={'turn-' + turn} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} style={{ opacity: alpha }} />;
+		return <image key={'turn-' + turn} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} />;
 	}
 
 	renderRankCoordinate(squareSize, fontSize, rank) {

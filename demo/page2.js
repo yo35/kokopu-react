@@ -176,7 +176,6 @@ export class Page2 extends React.Component {
 				}
 			}
 		}
-		newState.editedMove = '';
 		this.props.setState(newState);
 	}
 
