@@ -1,6 +1,6 @@
 {
 	"name": "@yo35/test-kokopu-react",
-	"version": "0.10.0",
+	"version": "0.11.0",
 	"main": "dist/lib/index.js",
 	"files": [
 		"dist/lib"
