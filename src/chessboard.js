@@ -415,7 +415,7 @@ export default class Chessboard extends React.Component {
 
 	renderTurnFlag(turn, alpha, squareSize, pieceset) {
 		let x = 8 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
-		let y = (turn === 'w') === this.props.isFlipped ? 0 : 7 * squareSize;
+		let y = turn === (this.props.isFlipped ? 'w' : 'b') ? 0 : 7 * squareSize;
 		return <image key={'turn-' + turn} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} style={{ opacity: alpha }} />;
 	}
 
