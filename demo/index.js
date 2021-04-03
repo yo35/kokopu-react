@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- *    This file is part of KokopuReact, a JavaScript chess library.           *
+ *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021  Yoann Le Montagner <yo35 -at- melix.net>            *
  *                                                                            *
  *    This program is free software: you can redistribute it and/or           *
@@ -80,7 +80,7 @@ let App = function() {
 			<AppBar position="fixed" className={classes.appBar}>
 				<Toolbar>
 					<Typography variant="h5" noWrap>
-						KokopuReact demo
+						Kokopu-React demo
 					</Typography>
 				</Toolbar>
 			</AppBar>

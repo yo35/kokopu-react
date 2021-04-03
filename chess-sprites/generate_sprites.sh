@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 #                                                                              #
-#     This file is part of KokopuReact, a JavaScript chess library.            #
+#     This file is part of Kokopu-React, a JavaScript chess library.           #
 #     Copyright (C) 2021  Yoann Le Montagner <yo35 -at- melix.net>             #
 #                                                                              #
 #     This program is free software: you can redistribute it and/or            #
