@@ -699,7 +699,7 @@ function parsePosition(position) {
 	if (position instanceof kokopu.Position) {
 		return { error: false, position: position };
 	}
-	else {
+	else if (typeof position === 'string') {
 		try {
 			return { error: false, position: new kokopu.Position(position) };
 		}
@@ -711,6 +711,12 @@ function parsePosition(position) {
 				throw e;
 			}
 		}
+	}
+	else if (!position) {
+		return { error: false, position: new kokopu.Position() };
+	}
+	else {
+		return { error: true, message: 'Invalid "position" attribute.' };
 	}
 }
 
@@ -726,7 +732,7 @@ function parseMove(position, move) {
 	if (kokopu.isMoveDescriptor(move)) {
 		return { error: false, move: move };
 	}
-	else {
+	else if (typeof move === 'string') {
 		try {
 			return { error: false, move: position.notation(move) };
 		}
@@ -738,6 +744,9 @@ function parseMove(position, move) {
 				throw e;
 			}
 		}
+	}
+	else {
+		return { error: true, message: 'Invalid "move" attribute.' };
 	}
 }
 
