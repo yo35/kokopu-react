@@ -46,6 +46,6 @@
 		"lint": "eslint demo src",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "babel --delete-dir-on-start --copy-files -d dist/lib src",
-		"start": "webpack serve --open"
+		"start": "webpack serve --open --config scripts/demo.webpack-config.js"
 	}
 }
