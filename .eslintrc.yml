@@ -32,7 +32,6 @@ rules:
   no-console: [ error ]
 
   # Additional rules (best practices)
-  class-methods-use-this:       [ error ]
   curly:                        [ error, all ]
   eqeqeq:                       [ error, always ]
   no-alert:                     [ error ]
