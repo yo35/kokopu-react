@@ -29,6 +29,7 @@ import kokopu from 'kokopu';
 import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
+import { sanitizeBoolean } from './util';
 
 import './chessboard.css';
 
@@ -91,6 +92,7 @@ export default class Chessboard extends React.Component {
 		}
 
 		// Compute the attributes.
+		let isFlipped = this.isFlipped();
 		let squareSize = this.getSquareSize();
 		let coordinateVisible = this.isCoordinateVisible();
 		let fontSize = computeCoordinateFontSize(squareSize);
@@ -99,15 +101,15 @@ export default class Chessboard extends React.Component {
 
 		// Render the squares.
 		let squares = [];
-		kokopu.forEachSquare(sq => squares.push(this.renderSquare(squareSize, colorset, sq)));
+		kokopu.forEachSquare(sq => squares.push(this.renderSquare(isFlipped, squareSize, colorset, sq)));
 
 		// Render coordinates.
 		let rankCoordinates = [];
 		let fileCoordinates = [];
 		if (coordinateVisible) {
 			for (let c = 0; c < 8; ++c) {
-				rankCoordinates.push(this.renderRankCoordinate(squareSize, fontSize, c));
-				fileCoordinates.push(this.renderFileCoordinate(squareSize, fontSize, c));
+				rankCoordinates.push(this.renderRankCoordinate(isFlipped, squareSize, fontSize, c));
+				fileCoordinates.push(this.renderFileCoordinate(isFlipped, squareSize, fontSize, c));
 			}
 		}
 
@@ -128,36 +130,36 @@ export default class Chessboard extends React.Component {
 				{squares}
 				{rankCoordinates}
 				{fileCoordinates}
-				{this.renderBoardContent(position, positionBefore, move, squareSize, colorset, pieceset)}
+				{this.renderBoardContent(position, positionBefore, move, isFlipped, squareSize, colorset, pieceset)}
 			</svg>
 		);
 	}
 
-	renderBoardContent(position, positionBefore, move, squareSize, colorset, pieceset) {
-		if (move && this.props.animated) {
+	renderBoardContent(position, positionBefore, move, isFlipped, squareSize, colorset, pieceset) {
+		if (move && this.isAnimated()) {
 			return (
 				<Motion key={move.toString()} defaultStyle={{ alpha: 0 }} style={{ alpha: spring(1, ANIMATION_SPEED) }}>
-					{currentStyle => (currentStyle.alpha >= 1 ? this.renderBoardContentStill(position, move, squareSize, colorset, pieceset)
-						: this.renderBoardContentAnimated(positionBefore, move, currentStyle.alpha, squareSize, colorset, pieceset))}
+					{currentStyle => (currentStyle.alpha >= 1 ? this.renderBoardContentStill(position, move, isFlipped, squareSize, colorset, pieceset)
+						: this.renderBoardContentAnimated(positionBefore, move, currentStyle.alpha, isFlipped, squareSize, colorset, pieceset))}
 				</Motion>
 			);
 		}
 		else {
-			return this.renderBoardContentStill(position, move, squareSize, colorset, pieceset);
+			return this.renderBoardContentStill(position, move, isFlipped, squareSize, colorset, pieceset);
 		}
 	}
 
 	/**
 	 * Render the board content during the animation.
 	 */
-	renderBoardContentAnimated(positionBefore, move, alpha, squareSize, colorset, pieceset) {
+	renderBoardContentAnimated(positionBefore, move, alpha, isFlipped, squareSize, colorset, pieceset) {
 		let pieces = [];
-		kokopu.forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, alpha, squareSize, pieceset, sq)));
+		kokopu.forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, alpha, isFlipped, squareSize, pieceset, sq)));
 		return (
 			<>
 				{pieces}
-				{this.renderMoveArrow(move, alpha, squareSize, colorset)}
-				{this.renderTurnFlag(kokopu.oppositeColor(positionBefore.turn()), squareSize, pieceset)}
+				{this.renderMoveArrow(move, alpha, isFlipped, squareSize, colorset)}
+				{this.renderTurnFlag(kokopu.oppositeColor(positionBefore.turn()), isFlipped, squareSize, pieceset)}
 			</>
 		);
 	}
@@ -165,7 +167,7 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Render the board content when the animation has been completed (or if there is no animation).
 	 */
-	renderBoardContentStill(position, move, squareSize, colorset, pieceset) {
+	renderBoardContentStill(position, move, isFlipped, squareSize, colorset, pieceset) {
 
 		// Compute the annotations.
 		let sqm = parseMarkers(this.props.squareMarkers, (result, token) => {
@@ -194,62 +196,62 @@ export default class Chessboard extends React.Component {
 		let textMarkers = [];
 		let arrowMarkers = [];
 		kokopu.forEachSquare(sq => {
-			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
+			pieces.push(this.renderPiece(position, isFlipped, squareSize, pieceset, sq));
 			if (this.props.interactionMode) {
-				handles.push(this.renderSquareHandle(position, squareSize, sq));
+				handles.push(this.renderSquareHandle(position, isFlipped, squareSize, sq));
 			}
-			squareMarkers.push(this.renderSquareMarker(sqm, squareSize, colorset, sq));
-			textMarkers.push(this.renderTextMarker(txtm, squareSize, colorset, sq));
-			arrowMarkers = arrowMarkers.concat(this.renderArrowMarkers(arm, squareSize, colorset, sq));
+			squareMarkers.push(this.renderSquareMarker(sqm, isFlipped, squareSize, colorset, sq));
+			textMarkers.push(this.renderTextMarker(txtm, isFlipped, squareSize, colorset, sq));
+			arrowMarkers = arrowMarkers.concat(this.renderArrowMarkers(arm, isFlipped, squareSize, colorset, sq));
 		});
 		return (
 			<>
 				{squareMarkers}
-				{this.renderHoveredSquare(squareSize, colorset)}
+				{this.renderHoveredSquare(isFlipped, squareSize, colorset)}
 				{pieces}
 				{textMarkers}
 				{arrowMarkers}
-				{this.renderMoveArrow(move, 1, squareSize, colorset)}
+				{this.renderMoveArrow(move, 1, isFlipped, squareSize, colorset)}
 				{handles}
-				{this.renderDraggedPiece(position, squareSize, pieceset)}
-				{this.renderDraggedArrow(squareSize, colorset)}
-				{this.renderTurnFlag(position.turn(), squareSize, pieceset)}
+				{this.renderDraggedPiece(position, isFlipped, squareSize, pieceset)}
+				{this.renderDraggedArrow(isFlipped, squareSize, colorset)}
+				{this.renderTurnFlag(position.turn(), isFlipped, squareSize, pieceset)}
 			</>
 		);
 	}
 
-	renderSquare(squareSize, colorset, sq) {
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+	renderSquare(isFlipped, squareSize, colorset, sq) {
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
 		return <rect key={sq} x={x} y={y} width={squareSize} height={squareSize} fill={colorset[kokopu.squareColor(sq)]} />;
 	}
 
-	renderHoveredSquare(squareSize, colorset) {
+	renderHoveredSquare(isFlipped, squareSize, colorset) {
 		if (this.state.hoveredSquare === '-') {
 			return undefined;
 		}
-		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, this.state.hoveredSquare);
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
 		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.highlight} strokeWidth={thickness} />;
 	}
 
-	renderPiece(position, squareSize,  pieceset, sq) {
+	renderPiece(position, isFlipped, squareSize,  pieceset, sq) {
 		let cp = position.square(sq);
 		if (cp === '-' || (this.isPieceDragModeEnabled() && this.state.draggedSquare === sq)) {
 			return undefined;
 		}
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
 		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
-	renderPieceAnimated(positionBefore, move, alpha, squareSize,  pieceset, sq) {
+	renderPieceAnimated(positionBefore, move, alpha, isFlipped, squareSize,  pieceset, sq) {
 		let cp = positionBefore.square(sq);
 		if (cp === '-' || move.to() === sq || (move.isEnPassant() && move.enPassantSquare() === sq)) {
 			return undefined;
 		}
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
 		if (sq === move.from()) {
-			let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.to());
+			let { x: xTo, y: yTo } = this.getSquareCoordinates(isFlipped, squareSize, move.to());
 			x = xTo * alpha + x * (1 - alpha);
 			y = yTo * alpha + y * (1 - alpha);
 			if (move.isPromotion() && alpha > 0.8) {
@@ -257,18 +259,18 @@ export default class Chessboard extends React.Component {
 			}
 		}
 		else if (move.isCastling() && sq === move.rookFrom()) {
-			let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.rookTo());
+			let { x: xTo, y: yTo } = this.getSquareCoordinates(isFlipped, squareSize, move.rookTo());
 			x = xTo * alpha + x * (1 - alpha);
 			y = yTo * alpha + y * (1 - alpha);
 		}
 		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
-	renderDraggedPiece(position, squareSize, pieceset) {
+	renderDraggedPiece(position, isFlipped, squareSize, pieceset) {
 		if (!this.isPieceDragModeEnabled() || this.state.draggedSquare === '-') {
 			return undefined;
 		}
-		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, this.state.draggedSquare);
 		let cp = position.square(this.state.draggedSquare);
 		return (
 			<image
@@ -278,13 +280,13 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
-	renderDraggedArrow(squareSize, colorset) {
+	renderDraggedArrow(isFlipped, squareSize, colorset) {
 		if (!this.isArrowDragModeEnabled() || this.state.draggedSquare === '-') {
 			return undefined;
 		}
 		let strokeWidth = squareSize * STROKE_THICKNESS_FACTOR;
 		let arrowTipId = this.getArrowTipId(this.props.editedArrowColor);
-		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, this.state.draggedSquare);
 		let xFrom = x + squareSize / 2;
 		let yFrom = y + squareSize / 2;
 		let xTo = Math.min(Math.max(x + this.state.dragPosition.x + this.state.cursorOffset.x, squareSize/2), 15 * squareSize / 2);
@@ -297,8 +299,8 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
-	renderSquareHandle(position, squareSize, sq) {
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+	renderSquareHandle(position, isFlipped, squareSize, sq) {
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
 		if ((this.isPieceDragModeEnabled() && position.square(sq) !== '-') || this.isArrowDragModeEnabled()) {
 			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
 			let bounds = this.isPieceDragModeEnabled() ? { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y } : undefined;
@@ -327,21 +329,21 @@ export default class Chessboard extends React.Component {
 		}
 	}
 
-	renderSquareMarker(sqm, squareSize, colorset, sq) {
+	renderSquareMarker(sqm, isFlipped, squareSize, colorset, sq) {
 		let value = sqm[sq];
 		if (!isValidAnnotationColor(value)) {
 			return undefined;
 		}
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
 		return <rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset[value]} />;
 	}
 
-	renderTextMarker(txtm, squareSize, colorset, sq) {
+	renderTextMarker(txtm, isFlipped, squareSize, colorset, sq) {
 		let value = txtm[sq];
 		if (!value || !isValidAnnotationColor(value.color) || typeof value.text !== 'string') {
 			return undefined;
 		}
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
 		x += squareSize / 2;
 		y += squareSize / 2;
 		if (/^[A-Za-z0-9]$/.test(value.text)) {
@@ -356,11 +358,11 @@ export default class Chessboard extends React.Component {
 		}
 	}
 
-	renderArrowMarkers(arm, squareSize, colorset, from) {
+	renderArrowMarkers(arm, isFlipped, squareSize, colorset, from) {
 		let result = [];
 		if (from in arm) {
 			let strokeWidth = squareSize * STROKE_THICKNESS_FACTOR;
-			let { x: xFrom, y: yFrom } = this.getSquareCoordinates(squareSize, from);
+			let { x: xFrom, y: yFrom } = this.getSquareCoordinates(isFlipped, squareSize, from);
 			xFrom += squareSize / 2;
 			yFrom += squareSize / 2;
 			kokopu.forEachSquare(to => {
@@ -369,7 +371,7 @@ export default class Chessboard extends React.Component {
 					return;
 				}
 				let arrowTipId = this.getArrowTipId(value);
-				let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, to);
+				let { x: xTo, y: yTo } = this.getSquareCoordinates(isFlipped, squareSize, to);
 				xTo += squareSize / 2;
 				yTo += squareSize / 2;
 				xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
@@ -385,14 +387,14 @@ export default class Chessboard extends React.Component {
 		return result;
 	}
 
-	renderMoveArrow(move, alpha, squareSize, colorset) {
+	renderMoveArrow(move, alpha, isFlipped, squareSize, colorset) {
 		if (!move || alpha < 0.1 || !this.isMoveArrowVisible() || move.from() === move.to()) {
 			return undefined;
 		}
-		let { x: xFrom, y: yFrom } = this.getSquareCoordinates(squareSize, move.from());
+		let { x: xFrom, y: yFrom } = this.getSquareCoordinates(isFlipped, squareSize, move.from());
 		xFrom += squareSize / 2;
 		yFrom += squareSize / 2;
-		let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.to());
+		let { x: xTo, y: yTo } = this.getSquareCoordinates(isFlipped, squareSize, move.to());
 		xTo += squareSize / 2;
 		yTo += squareSize / 2;
 		xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
@@ -415,21 +417,21 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
-	renderTurnFlag(turn, squareSize, pieceset) {
+	renderTurnFlag(turn, isFlipped, squareSize, pieceset) {
 		let x = 8 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
-		let y = turn === (this.props.isFlipped ? 'w' : 'b') ? 0 : 7 * squareSize;
+		let y = turn === (isFlipped ? 'w' : 'b') ? 0 : 7 * squareSize;
 		return <image key={'turn-' + turn} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[turn + 'x']} />;
 	}
 
-	renderRankCoordinate(squareSize, fontSize, rank) {
+	renderRankCoordinate(isFlipped, squareSize, fontSize, rank) {
 		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
-		let y = (this.props.isFlipped ? rank + 0.5 : 7.5 - rank) * squareSize;
+		let y = (isFlipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
 		return <text key={'rank-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
 	}
 
-	renderFileCoordinate(squareSize, fontSize, file) {
-		let x = (this.props.isFlipped ? 7.5 - file : 0.5 + file) * squareSize;
+	renderFileCoordinate(isFlipped, squareSize, fontSize, file) {
+		let x = (isFlipped ? 7.5 - file : 0.5 + file) * squareSize;
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
 		return <text key={'file-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
@@ -446,9 +448,10 @@ export default class Chessboard extends React.Component {
 	}
 
 	handleDrag(sq, dragData) {
+		let isFlipped = this.isFlipped();
 		let squareSize = this.getSquareSize();
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
+		let targetSq = this.getSquareAt(isFlipped, squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
 		this.setState({
 			draggedSquare: sq,
 			hoveredSquare: targetSq,
@@ -458,9 +461,10 @@ export default class Chessboard extends React.Component {
 	}
 
 	handleDragStop(sq, dragData) {
+		let isFlipped = this.isFlipped();
 		let squareSize = this.getSquareSize();
-		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
+		let { x, y } = this.getSquareCoordinates(isFlipped, squareSize, sq);
+		let targetSq = this.getSquareAt(isFlipped, squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
 		this.setState({
 			draggedSquare: '-',
 			hoveredSquare: '-',
@@ -497,6 +501,13 @@ export default class Chessboard extends React.Component {
 	}
 
 	/**
+	 * Whether the board is flipped (i.e. seen from Black's point of view) or not.
+	 */
+	isFlipped() {
+		return sanitizeBoolean(this.props.isFlipped, false);
+	}
+
+	/**
 	 * Return the (sanitized) square size.
 	 */
 	getSquareSize() {
@@ -508,14 +519,21 @@ export default class Chessboard extends React.Component {
 	 * Whether the file/rank coordinates are visible or not.
 	 */
 	isCoordinateVisible() {
-		return 'coordinateVisible' in this.props ? this.props.coordinateVisible : true;
+		return sanitizeBoolean(this.props.coordinateVisible, true);
 	}
 
 	/**
 	 * Whether an arrow is displayed when moving a piece or not.
 	 */
 	isMoveArrowVisible() {
-		return 'moveArrowVisible' in this.props ? this.props.moveArrowVisible : true;
+		return sanitizeBoolean(this.props.moveArrowVisible, true);
+	}
+
+	/**
+	 * Whether moves are animated or not.
+	 */
+	isAnimated() {
+		return sanitizeBoolean(this.props.animated, false);
 	}
 
 	/**
@@ -535,19 +553,19 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Return the (x,y) coordinates of the given square in the SVG canvas.
 	 */
-	getSquareCoordinates(squareSize, sq) {
+	getSquareCoordinates(isFlipped, squareSize, sq) {
 		let { file, rank } = kokopu.squareToCoordinates(sq);
-		let x = this.props.isFlipped ? (7 - file) * squareSize : file * squareSize;
-		let y = this.props.isFlipped ? rank * squareSize : (7 - rank) * squareSize;
+		let x = isFlipped ? (7 - file) * squareSize : file * squareSize;
+		let y = isFlipped ? rank * squareSize : (7 - rank) * squareSize;
 		return { x: x, y: y };
 	}
 
 	/**
 	 * Return the square at the given location.
 	 */
-	getSquareAt(squareSize, x, y) {
-		let file = this.props.isFlipped ? 7 - Math.floor(x / squareSize) : Math.floor(x / squareSize);
-		let rank = this.props.isFlipped ? Math.floor(y / squareSize) : 7 - Math.floor(y / squareSize);
+	getSquareAt(isFlipped, squareSize, x, y) {
+		let file = isFlipped ? 7 - Math.floor(x / squareSize) : Math.floor(x / squareSize);
+		let rank = isFlipped ? Math.floor(y / squareSize) : 7 - Math.floor(y / squareSize);
 		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? kokopu.coordinatesToSquare(file, rank) : '-';
 	}
 
