@@ -26,10 +26,10 @@ export function sanitizeBoolean(input, defaultValue) {
 	}
 	else if (typeof input === 'string') {
 		input = input.trim().toLowerCase();
-		if (input in ['true', 't', 'on', 'yes', 'y', '1']) {
+		if (['true', 't', 'on', 'yes', 'y', '1'].includes(input)) {
 			return true;
 		}
-		else if (input in ['false', 'f', 'off', 'no', 'n', '0']) {
+		else if (['false', 'f', 'off', 'no', 'n', '0'].includes(input)) {
 			return false;
 		}
 		else {
