@@ -38,7 +38,7 @@ import TextField from '@material-ui/core/TextField';
 export const initialState2 = {
 	position: new kokopu.Position(),
 	positionAfter: null, // non-null only if a valid move has been played
-	isFlipped: false,
+	flipped: false,
 	moveArrowVisible: true,
 	animated: true,
 	editedMove: '',
@@ -74,7 +74,7 @@ export class Page2 extends React.Component {
 			</Box>
 			<Box m={2}>
 				<FormControlLabel
-					control={<Switch checked={state.isFlipped} onChange={() => this.handleFlipClicked(!state.isFlipped)} color="primary" />}
+					control={<Switch checked={state.flipped} onChange={() => this.handleFlipClicked(!state.flipped)} color="primary" />}
 					label="Flip"
 				/>
 				<FormControlLabel
@@ -107,7 +107,7 @@ export class Page2 extends React.Component {
 				<Chessboard
 					position={state.position}
 					move={state.playedMove}
-					isFlipped={state.isFlipped}
+					flipped={state.flipped}
 					squareSize={56}
 					moveArrowVisible={state.moveArrowVisible}
 					animated={state.animated}
@@ -124,9 +124,9 @@ export class Page2 extends React.Component {
 		this.props.setState(newState);
 	}
 
-	handleFlipClicked(newIsFlipped) {
+	handleFlipClicked(newFlipped) {
 		let newState = {...this.props.state};
-		newState.isFlipped = newIsFlipped;
+		newState.flipped = newFlipped;
 		this.props.setState(newState);
 	}
 

@@ -44,7 +44,7 @@ import Typography from '@material-ui/core/Typography';
 
 export const initialState1 = {
 	position: new kokopu.Position(),
-	isFlipped: false,
+	flipped: false,
 	interactionMode: 'movePieces',
 	textMarkerMode: 'A',
 	pieceEditMode: 'wp',
@@ -87,7 +87,7 @@ export class Page1 extends React.Component {
 			</Box>
 			<Box m={2}>
 				<FormControlLabel
-					control={<Switch checked={state.isFlipped} onChange={() => this.handleFlipClicked(!state.isFlipped)} color="primary" />}
+					control={<Switch checked={state.flipped} onChange={() => this.handleFlipClicked(!state.flipped)} color="primary" />}
 					label="Flip"
 				/>
 				<Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(state.position.turn() === 'w' ? 'b' : 'w')}>
@@ -159,7 +159,7 @@ export class Page1 extends React.Component {
 			<div>
 				<Chessboard
 					position={state.position}
-					isFlipped={state.isFlipped}
+					flipped={state.flipped}
 					squareSize={56}
 					squareMarkers={state.squareMarkers}
 					textMarkers={state.textMarkers}
@@ -180,9 +180,9 @@ export class Page1 extends React.Component {
 		this.props.setState(newState);
 	}
 
-	handleFlipClicked(newIsFlipped) {
+	handleFlipClicked(newFlipped) {
 		let newState = {...this.props.state};
-		newState.isFlipped = newIsFlipped;
+		newState.flipped = newFlipped;
 		this.props.setState(newState);
 	}
 
