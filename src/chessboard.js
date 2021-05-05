@@ -686,9 +686,55 @@ Chessboard.propTypes = {
 
 
 /**
+ * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
+ *
+ * @param {number} width
+ * @param {number} height
+ * @param {boolean} coordinateVisible
+ * @returns {number}
+ */
+export function adaptSquareSize(width, height, coordinateVisible) {
+	coordinateVisible = sanitizeBoolean(coordinateVisible, true);
+
+	function isAdapted(squareSize) {
+		let actualWidth = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+		let actualHeight = 8 * squareSize;
+		if (coordinateVisible) {
+			let fontSize = computeCoordinateFontSize(squareSize);
+			actualWidth += Math.round(RANK_COORDINATE_WIDTH_FACTOR * fontSize);
+			actualHeight += Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize);
+		}
+		return actualWidth <= width && actualHeight <= height;
+	}
+
+	// Check min/max bounds.
+	if (isAdapted(MAX_SQUARE_SIZE)) {
+		return MAX_SQUARE_SIZE;
+	}
+	else if (!isAdapted(MIN_SQUARE_SIZE)) {
+		return MIN_SQUARE_SIZE;
+	}
+
+	// Dichotomic search, between a (inclusive) and b (exclusive).
+	let a = MIN_SQUARE_SIZE;
+	let b = MAX_SQUARE_SIZE;
+	while (a + 1 < b) {
+		let mid = Math.floor((a + b) / 2);
+		if (isAdapted(mid)) {
+			a = mid;
+		}
+		else {
+			b = mid;
+		}
+	}
+	return a;
+}
+
+
+/**
  * Return the font size to use for coordinates assuming the given square size.
  *
- * @param {number}
+ * @param {number} squareSize
  * @returns {number}
  */
 function computeCoordinateFontSize(squareSize) {

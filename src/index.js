@@ -22,4 +22,4 @@
 
 export { default as colorsets } from './colorsets';
 export { default as piecesets } from './piecesets';
-export { default as Chessboard } from './chessboard';
+export { default as Chessboard, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, adaptSquareSize } from './chessboard';
