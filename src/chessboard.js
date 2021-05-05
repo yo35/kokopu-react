@@ -427,14 +427,14 @@ export default class Chessboard extends React.Component {
 		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
 		let y = (flipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
-		return <text key={'rank-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
+		return <text key={'rank-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
 	}
 
 	renderFileCoordinate(flipped, squareSize, fontSize, file) {
 		let x = (flipped ? 7.5 - file : 0.5 + file) * squareSize;
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
-		return <text key={'file-' + label} className="kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
+		return <text key={'file-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
 	}
 
 	handleDragStart(sq, evt) {

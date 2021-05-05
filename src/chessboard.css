@@ -28,6 +28,10 @@
 	letter-spacing: 0px;
 }
 
+.kokopu-coordinate {
+	fill: currentcolor;
+}
+
 .kokopu-annotation {
 	opacity: 0.8;
 	stroke-linecap: round;
