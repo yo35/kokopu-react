@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+0.99.4 (May 5, 2021)
+--------------------
+* Provide function `adaptSquareSize(..)`.
+* Minor fixes.
+
 0.99.3 (May 3, 2021)
 --------------------
 * Change attribute 'isFlipped' into 'flipped'.
