@@ -46,7 +46,7 @@
 		"webpack-dev-server": "~3.11.2"
 	},
 	"scripts": {
-		"lint": "eslint demo src",
+		"lint": "eslint demo src test",
 		"preunit": "webpack --config scripts/test_headless.webpack-config.js",
 		"unit": "mocha --bail --sort",
 		"test": "npm run lint && npm run unit",

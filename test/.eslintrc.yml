@@ -1,0 +1,7 @@
+env:
+  node: true
+  mocha: true
+
+rules:
+  no-shadow: [ error, { builtinGlobals: true, allow: [ test ] }]
+
