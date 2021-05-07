@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+0.99.6 (May 7, 2021)
+--------------------
+* Revert change brought by version 0.99.5.
+
 0.99.5 (May 7, 2021)
 --------------------
 * Limit chessboard with to 90% of available space.
