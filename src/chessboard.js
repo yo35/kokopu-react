@@ -120,7 +120,7 @@ export default class Chessboard extends React.Component {
 		let ymax = 8 * squareSize + (coordinateVisible ? Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) : 0);
 		let viewBox = `${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`;
 		return (
-			<svg className="kokopu-chessboard" viewBox={viewBox} width={`min(90%, ${xmax - xmin}px)`}>
+			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				<defs>
 					{this.renderArrowTip(colorset, 'g')}
 					{this.renderArrowTip(colorset, 'r')}
