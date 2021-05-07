@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+0.99.5 (May 7, 2021)
+--------------------
+* Limit chessboard with to 90% of available space.
+
 0.99.4 (May 5, 2021)
 --------------------
 * Provide function `adaptSquareSize(..)`.
