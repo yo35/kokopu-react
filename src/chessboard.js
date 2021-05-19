@@ -181,11 +181,18 @@ export default class Chessboard extends React.Component {
 			}
 		});
 		let arm = parseMarkers(this.props.arrowMarkers, (result, token) => {
-			if(/^([GRY])([a-h][1-8])([a-h][1-8])$/.test(token)) {
+			if (/^([GRY])([a-h][1-8])([a-h][1-8])$/.test(token)) {
 				if (!(RegExp.$2 in result)) {
 					result[RegExp.$2] = {};
 				}
 				result[RegExp.$2][RegExp.$3] = RegExp.$1.toLowerCase();
+			}
+		}, (result, key, value) => {
+			if (/^([a-h][1-8])([a-h][1-8])$/.test(key)) {
+				if (!(RegExp.$1 in result)) {
+					result[RegExp.$1] = {};
+				}
+				result[RegExp.$1][RegExp.$2] = value;
 			}
 		});
 
@@ -615,7 +622,7 @@ Chessboard.propTypes = {
 	]),
 
 	/**
-	 * Arrow markers, defined as a "squareFrom -> squareTo -> color" struct (e.g. `{ e2: { e4: 'G' }, g8: { f6: 'R', h6: 'Y' }}`)
+	 * Arrow markers, defined as a "squareFromSquareTo -> color" struct (e.g. `{ e2e4: 'G', g8f6: 'R', g8h6: 'Y' }`)
 	 * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
 	 */
 	arrowMarkers: PropTypes.oneOfType([
@@ -820,16 +827,24 @@ function parseMove(position, move) {
  *
  * @param {*} markers
  * @param {callback} callback
+ * @param {callback?} objectCallback
  * @returns {object}
  */
-function parseMarkers(markers, callback) {
+function parseMarkers(markers, callback, objectCallback) {
 	if (typeof markers === 'string') {
 		let result = {};
 		markers.split(',').forEach(token => callback(result, token.trim()));
 		return result;
 	}
 	else if (typeof markers === 'object') {
-		return markers;
+		if (objectCallback) {
+			let result = {};
+			Object.entries(markers).forEach(([ key, value ]) => objectCallback(result, key, value));
+			return result;
+		}
+		else {
+			return markers;
+		}
 	}
 	else {
 		return {};

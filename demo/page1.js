@@ -231,10 +231,8 @@ export class Page1 extends React.Component {
 
 	handleArrowEdited(from, to) {
 		let newState = {...this.props.state};
-		if (!(from in newState.arrowMarkers)) {
-			newState.arrowMarkers[from] = {};
-		}
-		newState.arrowMarkers[from][to] = newState.arrowMarkers[from][to] === newState.annotationColor ? '' : newState.annotationColor;
+		let key = from + to;
+		newState.arrowMarkers[key] = newState.arrowMarkers[key] === newState.annotationColor ? '' : newState.annotationColor;
 		this.props.setState(newState);
 	}
 
