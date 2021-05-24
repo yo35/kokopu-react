@@ -20,6 +20,7 @@
  ******************************************************************************/
 
 
+export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
 export { default as colorsets } from './colorsets';
 export { default as piecesets } from './piecesets';
 export { default as Chessboard, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, adaptSquareSize } from './chessboard';

@@ -40,3 +40,23 @@ export function sanitizeBoolean(input, defaultValue) {
 		return defaultValue;
 	}
 }
+
+
+export function isValidSquare(sq) {
+	return /^[a-h][1-8]$/.test(sq);
+}
+
+
+export function isValidVector(vect) {
+	return /^[a-h][1-8][a-h][1-8]$/.test(vect);
+}
+
+
+export function isValidColor(color) {
+	return color === 'g' || color === 'r' || color === 'y';
+}
+
+
+export function isValidSymbol(symbol) {
+	return /^[A-Za-z0-9]$/.test(symbol);
+}

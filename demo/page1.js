@@ -244,11 +244,11 @@ export class Page1 extends React.Component {
 		}
 		else if (this.props.state.interactionMode === 'editTextMarkers') {
 			let newState = {...this.props.state};
-			if (newState.textMarkers[sq] && newState.textMarkers[sq].color === newState.annotationColor && newState.textMarkers[sq].text === newState.textMarkerMode) {
+			if (newState.textMarkers[sq] && newState.textMarkers[sq].color === newState.annotationColor && newState.textMarkers[sq].symbol === newState.textMarkerMode) {
 				delete newState.textMarkers[sq];
 			}
 			else {
-				newState.textMarkers[sq] = { color: newState.annotationColor, text: newState.textMarkerMode };
+				newState.textMarkers[sq] = { color: newState.annotationColor, symbol: newState.textMarkerMode };
 			}
 			this.props.setState(newState);
 		}

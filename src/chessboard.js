@@ -29,7 +29,7 @@ import kokopu from 'kokopu';
 import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
-import { sanitizeBoolean } from './util';
+import { sanitizeBoolean } from './impl/util';
 
 import './chessboard.css';
 
@@ -177,7 +177,7 @@ export default class Chessboard extends React.Component {
 		});
 		let txtm = parseMarkers(this.props.textMarkers, (result, token) => {
 			if(/^([GRY])([A-Za-z0-9])([a-h][1-8])$/.test(token)) {
-				result[RegExp.$3] = { color: RegExp.$1.toLowerCase(), text: RegExp.$2 };
+				result[RegExp.$3] = { color: RegExp.$1.toLowerCase(), symbol: RegExp.$2 };
 			}
 		});
 		let arm = parseMarkers(this.props.arrowMarkers, (result, token) => {
@@ -347,16 +347,16 @@ export default class Chessboard extends React.Component {
 
 	renderTextMarker(txtm, flipped, squareSize, colorset, sq) {
 		let value = txtm[sq];
-		if (!value || !isValidAnnotationColor(value.color) || typeof value.text !== 'string') {
+		if (!value || !isValidAnnotationColor(value.color) || typeof value.symbol !== 'string') {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(flipped, squareSize, sq);
 		x += squareSize / 2;
 		y += squareSize / 2;
-		if (/^[A-Za-z0-9]$/.test(value.text)) {
+		if (/^[A-Za-z0-9]$/.test(value.symbol)) {
 			return (
 				<text key={'txtm-' + sq} className="kokopu-annotation kokopu-label" x={x} y={y} fill={colorset[value.color]} style={{ 'fontSize': squareSize }}>
-					{value.text}
+					{value.symbol}
 				</text>
 			);
 		}
@@ -605,7 +605,7 @@ Chessboard.propTypes = {
 	]),
 
 	/**
-	 * Square markers, defined as a "square -> color" struct (e.g. `{ e4: 'G', d5: 'R' }`) or as a comma-separated CSL string (e.g. `'Ge4,Rd5'`).
+	 * Square markers, defined as a "square -> color" struct (e.g. `{ e4: 'g', d5: 'r' }`) or as a comma-separated CSL string (e.g. `'Rd5,Ge4'`).
 	 */
 	squareMarkers: PropTypes.oneOfType([
 		PropTypes.objectOf(PropTypes.string),
@@ -613,16 +613,16 @@ Chessboard.propTypes = {
 	]),
 
 	/**
-	 * Text markers, defined as a "square -> (text, color)" struct (e.g. `{ e4: { text: 'A', color: 'G' }, d5: { text: 'z', color: 'R' }}`)
-	 * or as a comma-separated CTL string (e.g. `'GAe4,Rzd5'`).
+	 * Text markers, defined as a "square -> (symbol, color)" struct (e.g. `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }}`)
+	 * or as a comma-separated CTL string (e.g. `'Rzd5,GAe4'`).
 	 */
 	textMarkers: PropTypes.oneOfType([
-		PropTypes.objectOf(PropTypes.exact({ text: PropTypes.string.isRequired, color: PropTypes.string.isRequired })),
+		PropTypes.objectOf(PropTypes.exact({ symbol: PropTypes.string.isRequired, color: PropTypes.string.isRequired })),
 		PropTypes.string
 	]),
 
 	/**
-	 * Arrow markers, defined as a "squareFromSquareTo -> color" struct (e.g. `{ e2e4: 'G', g8f6: 'R', g8h6: 'Y' }`)
+	 * Arrow markers, defined as a "squareFromSquareTo -> color" struct (e.g. `{ e2e4: 'g', g8f6: 'r', g8h6: 'y' }`)
 	 * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
 	 */
 	arrowMarkers: PropTypes.oneOfType([
