@@ -20,8 +20,12 @@
  ******************************************************************************/
 
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-export { default as colorsets } from './colorsets';
-export { default as piecesets } from './piecesets';
-export { default as Chessboard, adaptSquareSize } from './chessboard';
+/**
+ * Minimum square size (inclusive).
+ */
+export const MIN_SQUARE_SIZE = 12;
+
+/**
+ * Maximum square size (inclusive).
+ */
+export const MAX_SQUARE_SIZE = 96;

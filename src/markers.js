@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 
-import { isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
+import { isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
 
 
 /**

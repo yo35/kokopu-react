@@ -26,13 +26,14 @@ import Draggable from 'react-draggable';
 import { Motion, spring } from 'react-motion';
 import kokopu from 'kokopu';
 
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
 import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
-import { sanitizeBoolean, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
+import { sanitizeBoolean, sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
 
-import './chessboard.css';
+import './css/chessboard.css';
 
 const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
@@ -45,16 +46,6 @@ const ANIMATION_SPEED = { stiffness: 700, damping: 40 };
 
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
-
-/**
- * Minimum square size (inclusive).
- */
-export const MIN_SQUARE_SIZE = 12;
-
-/**
- * Maximum square size (inclusive).
- */
-export const MAX_SQUARE_SIZE = 96;
 
 
 /**
@@ -485,8 +476,7 @@ export default class Chessboard extends React.Component {
 	 * Return the (sanitized) square size.
 	 */
 	getSquareSize() {
-		let value = Number(this.props.squareSize);
-		return isNaN(value) ? 40 : Math.min(Math.max(Math.round(value), MIN_SQUARE_SIZE), MAX_SQUARE_SIZE);
+		return sanitizeInteger(this.props.squareSize, 40, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
 	}
 
 	/**
