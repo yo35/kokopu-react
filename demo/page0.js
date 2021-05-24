@@ -23,9 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import colorsets from '../src/colorsets';
-import piecesets from '../src/piecesets';
-import Chessboard, { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../src/chessboard';
+import { Chessboard, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, colorsets, piecesets } from '../src/index';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';

@@ -23,7 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import Chessboard from '../src/chessboard';
+import { Chessboard } from '../src/index';
 
 import Alert from '@material-ui/lab/Alert';
 import Box from '@material-ui/core/Box';
