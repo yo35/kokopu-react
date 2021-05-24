@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+0.99.9 (May 24, 2021)
+---------------------
+* Utility functions to parse/flatten marker sets.
+* SVG icons for markers.
+
 0.99.8 (May 19, 2021)
 ---------------------
 * Simplify arrow marker parameter definition.
