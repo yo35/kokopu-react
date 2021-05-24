@@ -23,7 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import { Chessboard, SquareMarkerIcon, colorsets, piecesets } from '../src/index';
+import { Chessboard, SquareMarkerIcon, TextMarkerIcon, colorsets, piecesets } from '../src/index';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -38,7 +38,6 @@ import Switch from '@material-ui/core/Switch';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
-
 
 export const initialState1 = {
 	position: new kokopu.Position(),
@@ -171,13 +170,25 @@ export class Page1 extends React.Component {
 				</Typography>
 				<Box m={0.5}>
 					<ToggleButtonGroup value={annotationColor} exclusive size="small" onChange={(_, newColor) => this.handleAnnotationColorChanged(newColor)}>
-						<ToggleButton value="g">{colorButtonLabel(colorset, 'g')}</ToggleButton>
-						<ToggleButton value="r">{colorButtonLabel(colorset, 'r')}</ToggleButton>
-						<ToggleButton value="y">{colorButtonLabel(colorset, 'y')}</ToggleButton>
+						<ToggleButton className="kokopu-fixTextTransform" value="g">{this.renderColorButtonLabel(colorset.g)}</ToggleButton>
+						<ToggleButton className="kokopu-fixTextTransform" value="r">{this.renderColorButtonLabel(colorset.r)}</ToggleButton>
+						<ToggleButton className="kokopu-fixTextTransform" value="y">{this.renderColorButtonLabel(colorset.y)}</ToggleButton>
 					</ToggleButtonGroup>
 				</Box>
 			</Box>
 		);
+	}
+
+	renderColorButtonLabel(color) {
+		switch(this.props.state.interactionMode) {
+			case 'editSquareMarkers':
+			case 'editArrows': // TODO arrow icon
+				return <SquareMarkerIcon size={24} color={color} />;
+			case 'editTextMarkers':
+				return <TextMarkerIcon size={24} symbol={this.props.state.textMarkerMode} color={color} />;
+			default:
+				return undefined;
+		}
 	}
 
 	renderChessboard() {
@@ -287,8 +298,4 @@ export class Page1 extends React.Component {
 			this.handlePositionChanged(newPosition);
 		}
 	}
-}
-
-function colorButtonLabel(colorset, color) {
-	return <SquareMarkerIcon size={24} color={colorset[color]} />;
 }

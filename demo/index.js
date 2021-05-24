@@ -37,6 +37,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import './demo.css';
+
 const DRAWER_WIDTH = 240;
 
 let useStyles = makeStyles(theme => ({

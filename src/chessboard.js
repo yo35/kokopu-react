@@ -34,6 +34,7 @@ import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './marke
 import { sanitizeBoolean, sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
 
 import './css/chessboard.css';
+import './css/label.css';
 
 const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
