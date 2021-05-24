@@ -29,7 +29,8 @@ import kokopu from 'kokopu';
 import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
-import { sanitizeBoolean } from './impl/util';
+import { sanitizeBoolean, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
+import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
 
 import './chessboard.css';
 
@@ -170,54 +171,26 @@ export default class Chessboard extends React.Component {
 	renderBoardContentStill(position, move, flipped, squareSize, colorset, pieceset) {
 
 		// Compute the annotations.
-		let sqm = parseMarkers(this.props.squareMarkers, (result, token) => {
-			if(/^([GRY])([a-h][1-8])$/.test(token)) {
-				result[RegExp.$2] = RegExp.$1.toLowerCase();
-			}
-		});
-		let txtm = parseMarkers(this.props.textMarkers, (result, token) => {
-			if(/^([GRY])([A-Za-z0-9])([a-h][1-8])$/.test(token)) {
-				result[RegExp.$3] = { color: RegExp.$1.toLowerCase(), symbol: RegExp.$2 };
-			}
-		});
-		let arm = parseMarkers(this.props.arrowMarkers, (result, token) => {
-			if (/^([GRY])([a-h][1-8])([a-h][1-8])$/.test(token)) {
-				if (!(RegExp.$2 in result)) {
-					result[RegExp.$2] = {};
-				}
-				result[RegExp.$2][RegExp.$3] = RegExp.$1.toLowerCase();
-			}
-		}, (result, key, value) => {
-			if (/^([a-h][1-8])([a-h][1-8])$/.test(key)) {
-				if (!(RegExp.$1 in result)) {
-					result[RegExp.$1] = {};
-				}
-				result[RegExp.$1][RegExp.$2] = value;
-			}
-		});
+		let sqm = parseMarkers(this.props.squareMarkers, parseSquareMarkers, isValidSquare, isValidColor);
+		let txtm = parseMarkers(this.props.textMarkers, parseTextMarkers, isValidSquare, value => value && isValidSymbol(value.symbol) && isValidColor(value.color));
+		let arm = parseMarkers(this.props.arrowMarkers, parseArrowMarkers, isValidVector, isValidColor);
 
 		// Render the square-related objects.
 		let pieces = [];
 		let handles = [];
-		let squareMarkers = [];
-		let textMarkers = [];
-		let arrowMarkers = [];
 		kokopu.forEachSquare(sq => {
 			pieces.push(this.renderPiece(position, flipped, squareSize, pieceset, sq));
 			if (this.props.interactionMode) {
 				handles.push(this.renderSquareHandle(position, flipped, squareSize, sq));
 			}
-			squareMarkers.push(this.renderSquareMarker(sqm, flipped, squareSize, colorset, sq));
-			textMarkers.push(this.renderTextMarker(txtm, flipped, squareSize, colorset, sq));
-			arrowMarkers = arrowMarkers.concat(this.renderArrowMarkers(arm, flipped, squareSize, colorset, sq));
 		});
 		return (
 			<>
-				{squareMarkers}
+				{this.renderSquareMarkers(sqm, flipped, squareSize, colorset)}
 				{this.renderHoveredSquare(flipped, squareSize, colorset)}
 				{pieces}
-				{textMarkers}
-				{arrowMarkers}
+				{this.renderTextMarkers(txtm, flipped, squareSize, colorset)}
+				{this.renderArrowMarkers(arm, flipped, squareSize, colorset)}
 				{this.renderMoveArrow(move, 1, flipped, squareSize, colorset)}
 				{handles}
 				{this.renderDraggedPiece(position, flipped, squareSize, pieceset)}
@@ -336,61 +309,55 @@ export default class Chessboard extends React.Component {
 		}
 	}
 
-	renderSquareMarker(sqm, flipped, squareSize, colorset, sq) {
-		let value = sqm[sq];
-		if (!isValidAnnotationColor(value)) {
-			return undefined;
-		}
-		let { x, y } = this.getSquareCoordinates(flipped, squareSize, sq);
-		return <rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset[value]} />;
+	renderSquareMarkers(sqm, flipped, squareSize, colorset) {
+		let result = [];
+		Object.entries(sqm).forEach(([ sq, color ]) => {
+			let { x, y } = this.getSquareCoordinates(flipped, squareSize, sq);
+			result.push(<rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset[color]} />);
+		});
+		return result;
 	}
 
-	renderTextMarker(txtm, flipped, squareSize, colorset, sq) {
-		let value = txtm[sq];
-		if (!value || !isValidAnnotationColor(value.color) || typeof value.symbol !== 'string') {
-			return undefined;
-		}
-		let { x, y } = this.getSquareCoordinates(flipped, squareSize, sq);
-		x += squareSize / 2;
-		y += squareSize / 2;
-		if (/^[A-Za-z0-9]$/.test(value.symbol)) {
-			return (
+	renderTextMarkers(txtm, flipped, squareSize, colorset) {
+		let result = [];
+		Object.entries(txtm).forEach(([ sq, value ]) => {
+			let { x, y } = this.getSquareCoordinates(flipped, squareSize, sq);
+			x += squareSize / 2;
+			y += squareSize / 2;
+			result.push(
 				<text key={'txtm-' + sq} className="kokopu-annotation kokopu-label" x={x} y={y} fill={colorset[value.color]} style={{ 'fontSize': squareSize }}>
 					{value.symbol}
 				</text>
 			);
-		}
-		else {
-			return undefined;
-		}
+		});
+		return result;
 	}
 
-	renderArrowMarkers(arm, flipped, squareSize, colorset, from) {
+	renderArrowMarkers(arm, flipped, squareSize, colorset) {
 		let result = [];
-		if (from in arm) {
-			let strokeWidth = squareSize * STROKE_THICKNESS_FACTOR;
+		let strokeWidth = squareSize * STROKE_THICKNESS_FACTOR;
+		Object.entries(arm).forEach(([ vect, color ]) => {
+			let from = vect.substring(0, 2);
+			let to = vect.substring(2, 4);
+			if (from === to) {
+				return;
+			}
 			let { x: xFrom, y: yFrom } = this.getSquareCoordinates(flipped, squareSize, from);
+			let { x: xTo, y: yTo } = this.getSquareCoordinates(flipped, squareSize, to);
 			xFrom += squareSize / 2;
 			yFrom += squareSize / 2;
-			kokopu.forEachSquare(to => {
-				let value = arm[from][to];
-				if (from === to || !isValidAnnotationColor(value)) {
-					return;
-				}
-				let arrowTipId = this.getArrowTipId(value);
-				let { x: xTo, y: yTo } = this.getSquareCoordinates(flipped, squareSize, to);
-				xTo += squareSize / 2;
-				yTo += squareSize / 2;
-				xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
-				yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
-				result.push(
-					<line
-						key={'arm-' + from + to} className="kokopu-annotation" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-						stroke={colorset[value]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }}
-					/>
-				);
-			});
-		}
+			xTo += squareSize / 2;
+			yTo += squareSize / 2;
+			xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
+			yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
+			let arrowTipId = this.getArrowTipId(color);
+			result.push(
+				<line
+					key={'arm-' + vect} className="kokopu-annotation" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
+					stroke={colorset[color]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }}
+				/>
+			);
+		});
 		return result;
 	}
 
@@ -504,7 +471,7 @@ export default class Chessboard extends React.Component {
 	 * Whether the "edit arrow" mode is enabled or not.
 	 */
 	isArrowDragModeEnabled() {
-		return this.props.interactionMode === 'editArrows' && isValidAnnotationColor(this.props.editedArrowColor);
+		return this.props.interactionMode === 'editArrows' && isValidColor(this.props.editedArrowColor);
 	}
 
 	/**
@@ -626,7 +593,7 @@ Chessboard.propTypes = {
 	 * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
 	 */
 	arrowMarkers: PropTypes.oneOfType([
-		PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
+		PropTypes.objectOf(PropTypes.string),
 		PropTypes.string
 	]),
 
@@ -750,17 +717,6 @@ function computeCoordinateFontSize(squareSize) {
 
 
 /**
- * Whether the given value is a valid color code for an annotation.
- *
- * @param {string} value
- * @returns {boolean}
- */
-function isValidAnnotationColor(value) {
-	return value === 'g' || value === 'r' || value === 'y';
-}
-
-
-/**
  * Try to interpret the given object as a chess position.
  *
  * @param {*} position
@@ -822,29 +778,17 @@ function parseMove(position, move) {
 }
 
 
-/**
- * Try to interpret the given object as a list of markers.
- *
- * @param {*} markers
- * @param {callback} callback
- * @param {callback?} objectCallback
- * @returns {object}
- */
-function parseMarkers(markers, callback, objectCallback) {
+// Try to interpret the given object as a list of markers.
+function parseMarkers(markers, parse, isValidKey, isValidValue) {
 	if (typeof markers === 'string') {
-		let result = {};
-		markers.split(',').forEach(token => callback(result, token.trim()));
-		return result;
+		return parse(markers);
 	}
 	else if (typeof markers === 'object') {
-		if (objectCallback) {
-			let result = {};
-			Object.entries(markers).forEach(([ key, value ]) => objectCallback(result, key, value));
-			return result;
-		}
-		else {
-			return markers;
-		}
+		let result = {};
+		Object.entries(markers)
+			.filter(([ key, value ]) => isValidKey(key) && isValidValue(value))
+			.forEach(([ key, value ]) => { result[key] = value; });
+		return result;
 	}
 	else {
 		return {};
@@ -852,11 +796,7 @@ function parseMarkers(markers, callback, objectCallback) {
 }
 
 
-/**
- * Generate a random string.
- *
- * @returns {string}
- */
+// Generate a random string.
 function generateRandomId() {
 	let buffer = new Uint32Array(8);
 	crypto.getRandomValues(buffer);
