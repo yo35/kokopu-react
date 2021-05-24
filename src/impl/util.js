@@ -20,9 +20,15 @@
  ******************************************************************************/
 
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-export { default as colorsets } from './colorsets';
-export { default as piecesets } from './piecesets';
-export { default as Chessboard, adaptSquareSize } from './chessboard';
-export { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from './marker_icons';
+/**
+ * Generate a random string.
+ */
+export function generateRandomId() {
+	let buffer = new Uint32Array(8);
+	crypto.getRandomValues(buffer);
+	let result = '';
+	for (let i = 0; i < buffer.length; ++i) {
+		result += buffer[i].toString(16);
+	}
+	return result;
+}

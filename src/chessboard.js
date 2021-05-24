@@ -30,10 +30,13 @@ import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
 import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
+import { ArrowTip } from './marker_icons';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
 import { sanitizeBoolean, sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
+import { generateRandomId } from './impl/util';
 
 import './css/chessboard.css';
+import './css/arrow.css';
 import './css/label.css';
 
 const TURN_FLAG_SPACING_FACTOR = 0.1;
@@ -265,7 +268,7 @@ export default class Chessboard extends React.Component {
 		let yTo = Math.min(Math.max(y + this.state.dragPosition.y + this.state.cursorOffset.y, squareSize/2), 15 * squareSize / 2);
 		return (
 			<line
-				className="kokopu-annotation kokopu-arrowDraggable kokopu-dragging" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
+				className="kokopu-annotation kokopu-arrow kokopu-arrowDraggable kokopu-dragging" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
 				stroke={colorset[this.props.editedArrowColor]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }}
 			/>
 		);
@@ -345,7 +348,7 @@ export default class Chessboard extends React.Component {
 			let arrowTipId = this.getArrowTipId(color);
 			result.push(
 				<line
-					key={'arm-' + vect} className="kokopu-annotation" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
+					key={'arm-' + vect} className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
 					stroke={colorset[color]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }}
 				/>
 			);
@@ -369,18 +372,14 @@ export default class Chessboard extends React.Component {
 		let y = yTo * alpha + yFrom * (1 - alpha);
 		return (
 			<line
-				className="kokopu-annotation" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset['highlight']}
+				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset['highlight']}
 				style={{ 'strokeWidth': squareSize * STROKE_THICKNESS_FACTOR, 'markerEnd': `url(#${this.getArrowTipId('highlight')})` }}
 			/>
 		);
 	}
 
 	renderArrowTip(colorset, color) {
-		return (
-			<marker id={this.getArrowTipId(color)} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto" style={{ fill: colorset[color] }}>
-				<path d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
-			</marker>
-		);
+		return <ArrowTip id={this.getArrowTipId(color)} color={colorset[color]} />;
 	}
 
 	renderTurnFlag(turn, flipped, squareSize, pieceset) {
@@ -784,16 +783,4 @@ function parseMarkers(markers, parse, isValidKey, isValidValue) {
 	else {
 		return {};
 	}
-}
-
-
-// Generate a random string.
-function generateRandomId() {
-	let buffer = new Uint32Array(8);
-	crypto.getRandomValues(buffer);
-	let result = '';
-	for (let i = 0; i < buffer.length; ++i) {
-		result += buffer[i].toString(16);
-	}
-	return result;
 }

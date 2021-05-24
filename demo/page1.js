@@ -23,7 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import { Chessboard, SquareMarkerIcon, TextMarkerIcon, colorsets, piecesets } from '../src/index';
+import { Chessboard, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon, colorsets, piecesets } from '../src/index';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -182,10 +182,11 @@ export class Page1 extends React.Component {
 	renderColorButtonLabel(color) {
 		switch(this.props.state.interactionMode) {
 			case 'editSquareMarkers':
-			case 'editArrows': // TODO arrow icon
 				return <SquareMarkerIcon size={24} color={color} />;
 			case 'editTextMarkers':
 				return <TextMarkerIcon size={24} symbol={this.props.state.textMarkerMode} color={color} />;
+			case 'editArrows':
+				return <ArrowMarkerIcon size={24} color={color} />;
 			default:
 				return undefined;
 		}
