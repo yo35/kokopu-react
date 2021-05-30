@@ -62,8 +62,18 @@ export default class Chessboard extends React.Component {
 		this.state = {
 			draggedSquare: '-',
 			hoveredSquare: '-',
+			windowWidth: window.innerWidth,
 		};
 		this.arrowTipIdSuffix = generateRandomId();
+		this.windowResizeListener = () => this.handleWindowResize();
+	}
+
+	componentDidMount() {
+		window.addEventListener('resize', this.windowResizeListener);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.windowResizeListener);
 	}
 
 	render() {
@@ -400,6 +410,10 @@ export default class Chessboard extends React.Component {
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
 		return <text key={'file-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
+	}
+
+	handleWindowResize() {
+		this.setState({ windowWidth: window.innerWidth });
 	}
 
 	handleDragStart(sq, evt) {
