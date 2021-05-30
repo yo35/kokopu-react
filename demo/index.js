@@ -23,9 +23,9 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { initialState0, Page0 } from './page0';
-import { initialState1, Page1 } from './page1';
-import { initialState2, Page2 } from './page2';
+import { initialStateBase, PageBase } from './page_base';
+import { initialStateEdition, PageEdition } from './page_edition';
+import { initialStateMove, PageMove } from './page_move';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -64,12 +64,12 @@ let useStyles = makeStyles(theme => ({
 let App = function() {
 	let classes = useStyles();
 	let [ pageId, setPageId ] = useState(0);
-	let [ state0, setState0 ] = useState(initialState0);
-	let [ state1, setState1 ] = useState(initialState1);
-	let [ state2, setState2 ] = useState(initialState2);
-	let page0 = { label: 'Simple chessboard', content: <Page0 state={state0} setState={setState0} /> };
-	let page1 = { label: 'Position edition', content: <Page1 state={state1} setState={setState1} /> };
-	let page2 = { label: 'Move display', content: <Page2 state={state2} setState={setState2} /> };
+	let [ stateBase, setStateBase ] = useState(initialStateBase);
+	let [ stateEdition, setStateEdition ] = useState(initialStateEdition);
+	let [ stateMove, setStateMove ] = useState(initialStateMove);
+	let page0 = { label: 'Simple chessboard', content: <PageBase state={stateBase} setState={setStateBase} /> };
+	let page1 = { label: 'Position edition', content: <PageEdition state={stateEdition} setState={setStateEdition} /> };
+	let page2 = { label: 'Move display', content: <PageMove state={stateMove} setState={setStateMove} /> };
 	let pages = [ page0, page1, page2 ];
 	let pageButtons = pages.map((page, index) => {
 		return pageId === index ?

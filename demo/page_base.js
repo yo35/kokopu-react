@@ -37,7 +37,7 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 
 
-export const initialState0 = {
+export const initialStateBase = {
 	position: new kokopu.Position(),
 	flipped: false,
 	squareSize: 40,
@@ -48,7 +48,7 @@ export const initialState0 = {
 };
 
 
-export class Page0 extends React.Component {
+export class PageBase extends React.Component {
 
 	render() {
 		return (

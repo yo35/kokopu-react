@@ -35,7 +35,7 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 
 
-export const initialState2 = {
+export const initialStateMove = {
 	position: new kokopu.Position(),
 	positionAfter: null, // non-null only if a valid move has been played
 	flipped: false,
@@ -46,7 +46,7 @@ export const initialState2 = {
 };
 
 
-export class Page2 extends React.Component {
+export class PageMove extends React.Component {
 
 	render() {
 		return (

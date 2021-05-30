@@ -39,7 +39,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
 
-export const initialState1 = {
+export const initialStateEdition = {
 	position: new kokopu.Position(),
 	flipped: false,
 	interactionMode: 'movePieces',
@@ -52,7 +52,7 @@ export const initialState1 = {
 };
 
 
-export class Page1 extends React.Component {
+export class PageEdition extends React.Component {
 
 	render() {
 		return (
