@@ -26,6 +26,7 @@ import ReactDOM from 'react-dom';
 import { initialStateBase, PageBase } from './page_base';
 import { initialStateEdition, PageEdition } from './page_edition';
 import { initialStateMove, PageMove } from './page_move';
+import { initialStateSmallScreen, PageSmallScreen } from './page_small_screen';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -67,10 +68,12 @@ let App = function() {
 	let [ stateBase, setStateBase ] = useState(initialStateBase);
 	let [ stateEdition, setStateEdition ] = useState(initialStateEdition);
 	let [ stateMove, setStateMove ] = useState(initialStateMove);
+	let [ stateSmallScreen, setStateSmallScreen ] = useState(initialStateSmallScreen);
 	let page0 = { label: 'Simple chessboard', content: <PageBase state={stateBase} setState={setStateBase} /> };
 	let page1 = { label: 'Position edition', content: <PageEdition state={stateEdition} setState={setStateEdition} /> };
 	let page2 = { label: 'Move display', content: <PageMove state={stateMove} setState={setStateMove} /> };
-	let pages = [ page0, page1, page2 ];
+	let page3 = { label: 'Small-screen', content: <PageSmallScreen state={stateSmallScreen} setState={setStateSmallScreen} /> };
+	let pages = [ page0, page1, page2, page3 ];
 	let pageButtons = pages.map((page, index) => {
 		return pageId === index ?
 			<ListItem key={index}><ListItemText primary={page.label} /></ListItem> :

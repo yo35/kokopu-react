@@ -490,14 +490,18 @@ export default class Chessboard extends React.Component {
 	 * Return the (sanitized) square size.
 	 */
 	getSquareSize() {
-		return sanitizeInteger(this.props.squareSize, 40, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		let squareSize = sanitizeInteger(this.props.squareSize, 40, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		let limit = Number(this.getSmallScreenLimits('squareSize'));
+		return isNaN(limit) ? squareSize : Math.min(squareSize, Math.max(limit, MIN_SQUARE_SIZE));
 	}
 
 	/**
 	 * Whether the file/rank coordinates are visible or not.
 	 */
 	isCoordinateVisible() {
-		return sanitizeBoolean(this.props.coordinateVisible, true);
+		let coordinateVisible = sanitizeBoolean(this.props.coordinateVisible, true);
+		let limit = sanitizeBoolean(this.getSmallScreenLimits('coordinateVisible'), true);
+		return coordinateVisible && limit;
 	}
 
 	/**
@@ -526,6 +530,19 @@ export default class Chessboard extends React.Component {
 	 */
 	getPieceset() {
 		return piecesets[this.props.pieceset in piecesets ? this.props.pieceset : 'cburnett'];
+	}
+
+	/**
+	 * Return the most-suited small-screen limit applicable for the given key.
+	 */
+	getSmallScreenLimits(key) {
+		if (!(this.props.smallScreenLimits instanceof Array)) {
+			return undefined;
+		}
+		let applicableLimits = this.props.smallScreenLimits
+			.filter(limit => limit && key in limit && this.state.windowWidth <= limit.width)
+			.sort((la, lb) => la.width - lb.width);
+		return applicableLimits.length > 0 ? applicableLimits[0][key] : undefined;
 	}
 
 	/**
@@ -635,6 +652,15 @@ Chessboard.propTypes = {
 	 * Piece theme ID.
 	 */
 	pieceset: PropTypes.string,
+
+	/**
+	 * Limits applicable on small-screen devices.
+	 */
+	smallScreenLimits: PropTypes.arrayOf(PropTypes.shape({
+		width: PropTypes.number.isRequired,
+		squareSize: PropTypes.number,
+		coordinateVisible: PropTypes.bool,
+	})),
 
 	/**
 	 * Type of action allowed with the mouse on the chessboard.
