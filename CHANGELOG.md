@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+0.99.10 (May 30, 2021)
+----------------------
+* Support limits for square-size and coordinate-visible on small-screen devices.
+
 0.99.9 (May 24, 2021)
 ---------------------
 * Utility functions to parse/flatten marker sets.
