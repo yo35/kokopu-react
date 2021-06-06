@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+0.99.11 (June 6, 2021)
+----------------------
+* Proper handling of small-screen limits in `adaptSquareSize(..)`.
+
 0.99.10 (May 30, 2021)
 ----------------------
 * Support limits for square-size and coordinate-visible on small-screen devices.
