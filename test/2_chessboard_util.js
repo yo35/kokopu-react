@@ -38,3 +38,38 @@ describe('Adapt square-size', () => {
 	it('Size 600x450 with coordinates', () => { test.value(adaptSquareSize(600, 450, true)).is(54); });
 	it('Size 600x450 without coordinates', () => { test.value(adaptSquareSize(600, 450, false)).is(56); });
 });
+
+describe('Adapt square-size with small-screen limits', () => {
+
+	let limits = [
+		{ width: 470, squareSize: 12, coordinateVisible: false },
+		{ width: 540, squareSize: 16, coordinateVisible: false },
+		{ width: 620, squareSize: 24, coordinateVisible: false },
+		{ width: 730, squareSize: 32 },
+		{ width: 860, squareSize: 44 },
+	];
+
+	before(() => {
+		global.window = {};
+	});
+	after(() => {
+		delete global.window;
+	});
+
+	it('Window-limited', () => {
+		window.innerWidth = 640;
+		test.value(adaptSquareSize(9999, 9999, true, limits)).is(32);
+	});
+	it('Available-space-limited 1', () => {
+		window.innerWidth = 800;
+		test.value(adaptSquareSize(375, 500, true, limits)).is(40);
+	});
+	it('Available-space-limited 2', () => {
+		window.innerWidth = 800;
+		test.value(adaptSquareSize(375, 500, false, limits)).is(41);
+	});
+	it('Force hidden coordinates', () => {
+		window.innerWidth = 600;
+		test.value(adaptSquareSize(185, 300, true, limits)).is(20);
+	});
+});

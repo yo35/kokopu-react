@@ -491,7 +491,7 @@ export default class Chessboard extends React.Component {
 	 */
 	getSquareSize() {
 		let squareSize = sanitizeInteger(this.props.squareSize, 40, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-		let limit = Number(this.getSmallScreenLimits('squareSize'));
+		let limit = Number(computeSmallScreenLimits('squareSize', this.props.smallScreenLimits, this.state.windowWidth));
 		return isNaN(limit) ? squareSize : Math.min(squareSize, Math.max(limit, MIN_SQUARE_SIZE));
 	}
 
@@ -500,7 +500,7 @@ export default class Chessboard extends React.Component {
 	 */
 	isCoordinateVisible() {
 		let coordinateVisible = sanitizeBoolean(this.props.coordinateVisible, true);
-		let limit = sanitizeBoolean(this.getSmallScreenLimits('coordinateVisible'), true);
+		let limit = sanitizeBoolean(computeSmallScreenLimits('coordinateVisible', this.props.smallScreenLimits, this.state.windowWidth), true);
 		return coordinateVisible && limit;
 	}
 
@@ -530,19 +530,6 @@ export default class Chessboard extends React.Component {
 	 */
 	getPieceset() {
 		return piecesets[this.props.pieceset in piecesets ? this.props.pieceset : 'cburnett'];
-	}
-
-	/**
-	 * Return the most-suited small-screen limit applicable for the given key.
-	 */
-	getSmallScreenLimits(key) {
-		if (!(this.props.smallScreenLimits instanceof Array)) {
-			return undefined;
-		}
-		let applicableLimits = this.props.smallScreenLimits
-			.filter(limit => limit && key in limit && this.state.windowWidth <= limit.width)
-			.sort((la, lb) => la.width - lb.width);
-		return applicableLimits.length > 0 ? applicableLimits[0][key] : undefined;
 	}
 
 	/**
@@ -695,10 +682,21 @@ Chessboard.propTypes = {
  * @param {number} width
  * @param {number} height
  * @param {boolean} coordinateVisible
+ * @param {{width:number, squareSize:number, coordinateVisible:boolean}[]} smallScreenLimits
  * @returns {number}
  */
-export function adaptSquareSize(width, height, coordinateVisible) {
+export function adaptSquareSize(width, height, coordinateVisible, smallScreenLimits) {
 	coordinateVisible = sanitizeBoolean(coordinateVisible, true);
+	let maxSquareSize = MAX_SQUARE_SIZE;
+
+	// Enforce small-screen limits, if any.
+	if (typeof window !== 'undefined') {
+		coordinateVisible = coordinateVisible && sanitizeBoolean(computeSmallScreenLimits('coordinateVisible', smallScreenLimits, window.innerWidth), true);
+		let squareSizeLimit = Number(computeSmallScreenLimits('squareSize', smallScreenLimits, window.innerWidth));
+		if (!isNaN(squareSizeLimit)) {
+			maxSquareSize = Math.min(maxSquareSize, Math.max(squareSizeLimit, MIN_SQUARE_SIZE));
+		}
+	}
 
 	function isAdapted(squareSize) {
 		let actualWidth = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
@@ -712,8 +710,8 @@ export function adaptSquareSize(width, height, coordinateVisible) {
 	}
 
 	// Check min/max bounds.
-	if (isAdapted(MAX_SQUARE_SIZE)) {
-		return MAX_SQUARE_SIZE;
+	if (isAdapted(maxSquareSize)) {
+		return maxSquareSize;
 	}
 	else if (!isAdapted(MIN_SQUARE_SIZE)) {
 		return MIN_SQUARE_SIZE;
@@ -721,7 +719,7 @@ export function adaptSquareSize(width, height, coordinateVisible) {
 
 	// Dichotomic search, between a (inclusive) and b (exclusive).
 	let a = MIN_SQUARE_SIZE;
-	let b = MAX_SQUARE_SIZE;
+	let b = maxSquareSize;
 	while (a + 1 < b) {
 		let mid = Math.floor((a + b) / 2);
 		if (isAdapted(mid)) {
@@ -732,6 +730,17 @@ export function adaptSquareSize(width, height, coordinateVisible) {
 		}
 	}
 	return a;
+}
+
+
+function computeSmallScreenLimits(key, smallScreenLimits, windowWidth) {
+	if (!(smallScreenLimits instanceof Array)) {
+		return undefined;
+	}
+	let applicableLimits = smallScreenLimits
+		.filter(limit => limit && key in limit && windowWidth <= limit.width)
+		.sort((la, lb) => la.width - lb.width);
+	return applicableLimits.length > 0 ? applicableLimits[0][key] : undefined;
 }
 
 
