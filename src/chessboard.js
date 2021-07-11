@@ -575,7 +575,11 @@ Chessboard.propTypes = {
 	 * defined in attribute `position`.
 	 */
 	move: PropTypes.oneOfType([
-		PropTypes.instanceOf(kokopu.Position),
+		function(props, propName, componentName) {
+			if (!kokopu.isMoveDescriptor(props[propName])) {
+				return new Error(`Invalid prop ${propName} supplied to ${componentName}. Validation failed.`);
+			}
+		},
 		PropTypes.string
 	]),
 
