@@ -25,16 +25,16 @@ const { openBrowser, closeBrowser, itChecksScreenshot, itChecksScreenshots } = r
 
 describe('Chessboard graphic', function() {
 
-	let driver = null;
+	const browserContext = {};
 
 	before(async function() {
-		driver = await openBrowser(this);
+		await openBrowser(this, browserContext);
 	});
 
 	after(async function() {
-		await closeBrowser(driver); 
+		await closeBrowser(browserContext);
 	});
 
-	itChecksScreenshots(() => driver, '01_chessboard_simple', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
-	itChecksScreenshot(() => driver, '02_chessboard_flipped');
+	itChecksScreenshots(browserContext, '01_chessboard_simple', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
+	itChecksScreenshot(browserContext, '02_chessboard_flipped');
 });
