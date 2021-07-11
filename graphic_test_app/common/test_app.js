@@ -20,16 +20,31 @@
  ******************************************************************************/
 
 
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './test_app.css';
 
 
+function flattenMultiElements(elements) {
+	let items = [];
+	for (let i = 0; i < elements.length; ++i) {
+		items.push(<div className="test-item" id={'test-item-' + i}>{elements[i]}</div>);
+	}
+	return <div>{items}</div>;
+}
+
+
 /**
- * Create an DIV element at the root of the current document, and render the given element in it.
+ * Create an DIV element at the root of the current document, and render the given elements in it.
  */
-export default function(element) {
+export default function(elements) {
+
+	// Create the main anchor.
 	let anchor = document.createElement('div');
 	anchor.id = 'test-app';
 	document.body.appendChild(anchor);
-	ReactDOM.render(element, anchor);
+
+	// Render the content.
+	let content = Array.isArray(elements) ? flattenMultiElements(elements) : elements;
+	ReactDOM.render(content, anchor);
 }

@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 
-const { openBrowser, closeBrowser, checkScreenshot } = require('./common/graphic');
+const { openBrowser, closeBrowser, itChecksScreenshot, itChecksScreenshots } = require('./common/graphic');
 
 
 describe('Chessboard graphic', function() {
@@ -35,11 +35,6 @@ describe('Chessboard graphic', function() {
 		await closeBrowser(driver); 
 	});
 
-	it('01_chessboard_simple', async function() {
-		await checkScreenshot(driver, '01_chessboard_simple');
-	});
-
-	it('02_chessboard_flipped', async function() {
-		await checkScreenshot(driver, '02_chessboard_flipped');
-	});
+	itChecksScreenshots(() => driver, '01_chessboard_simple', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
+	itChecksScreenshot(() => driver, '02_chessboard_flipped');
 });

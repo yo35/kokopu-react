@@ -58,17 +58,24 @@ exports.closeBrowser = async function(driver) {
 
 
 /**
- * Open the page corresponding to the given test-case, take a screenshot, and compare it to the reference.
+ * Open the page corresponding to the given test-case.
  */
-exports.checkScreenshot = async function(driver, testCaseName) {
-
-	let actualFilename = `${outputDir}/${testCaseName}.png`;
-	let expectedFilename = `${referenceDir}/${testCaseName}.png`;
-	let differenceFilename = `${outputDir}/${testCaseName}.diff.png`;
-
-	// Take a screenshot of the browser content corresponding to the given test-case.
+async function fetchTestCase(driver, testCaseName) {
 	await driver.get(`file:///app/build/test_graphic/${testCaseName}/index.html`);
-	let image = await driver.findElement(By.css('#test-app')).takeScreenshot();
+}
+
+
+/**
+ * Take a screenshot of the element identified by the given CSS target, and compare it to the reference.
+ */
+async function takeScreenshotAndCompare(driver, imageBaseName, cssTarget) {
+
+	let actualFilename = `${outputDir}/${imageBaseName}.png`;
+	let expectedFilename = `${referenceDir}/${imageBaseName}.png`;
+	let differenceFilename = `${outputDir}/${imageBaseName}.diff.png`;
+
+	// Take a screenshot of the targeted element.
+	let image = await driver.findElement(By.css(cssTarget)).takeScreenshot();
 	fs.writeFileSync(actualFilename, image, 'base64');
 
 	// Compare the current screenshot to the reference.
@@ -78,4 +85,30 @@ exports.checkScreenshot = async function(driver, testCaseName) {
 		diffFilename: differenceFilename,
 	});
 	test.object(result).hasProperty('imagesAreSame', true);
+}
+
+
+/**
+ * Open the page corresponding to the given test-case, take a screenshot, and compare it to the reference.
+ */
+exports.itChecksScreenshot = function(driverProvider, testCaseName) {
+	it(testCaseName, async function() {
+		let driver = driverProvider();
+		await fetchTestCase(driver, testCaseName);
+		await takeScreenshotAndCompare(driver, testCaseName, '#test-app');
+	});
+};
+
+
+/**
+ * Open the page corresponding to the given test-case, take a screenshot for each item, and compare them to the reference.
+ */
+exports.itChecksScreenshots = function(driverProvider, testCaseName, itemNames) {
+	for (let i = 0; i < itemNames.length; ++i) {
+		it(`${testCaseName} - Item ${i} (${itemNames[i]})`, async function() {
+			let driver = driverProvider();
+			await fetchTestCase(driver, testCaseName);
+			await takeScreenshotAndCompare(driver, testCaseName + '_item_' + i, '#test-item-' + i);
+		});
+	}
 };
