@@ -21,14 +21,28 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
 import testApp from './common/test_app';
 import { Chessboard } from '../src/index';
 
+let squareMarkers1 = 'Ga1,Ga2,Rb1,Rb2,Yc1,Yc2';
+let arrowMarkers1 = 'Gb8c6,Re8f6,Yf8g6';
+let textMarkers1 = 'GAf1,Gaf2,RZg1,Rzg2,Y2h1,Y8h2';
+
+let squareMarkers2 = { e4: 'g', g5: 'r', g1: 'y' };
+let arrowMarkers2 = { c3a2: 'y', c4a4: 'g', c5a6: 'r', c6a8: 'y', d6c8: 'g', e6e8: 'r', f6g8: 'y' };
+let textMarkers2 = { g3: { symbol: 'H', color: 'r' }, g5: { symbol: 'M', color: 'g' } };
+
+let squareMarkers3 = { b5: 'r', e4: 'g', h5: 'y' };
+let arrowMarkers3 = { d1h5: 'g', a5f4: 'r', c7c3: 'y' };
+let textMarkers3 = 'G5c6';
+
 testApp([
-	<Chessboard key="item-0" flipped={true} />,
-	<Chessboard key="item-1" flipped={true} position="empty" />,
-	<Chessboard key="item-2" flipped={true} position="something invalid" />,
-	<Chessboard key="item-3" flipped={true} position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-	<Chessboard key="item-4" flipped={true} position={new kokopu.Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
+	<Chessboard key="item-0" squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={false} coordinateVisible={true} />,
+	<Chessboard key="item-1" squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={true} coordinateVisible={true} />,
+	<Chessboard key="item-2" squareMarkers={squareMarkers2} arrowMarkers={arrowMarkers2} textMarkers={textMarkers2} flipped={false} coordinateVisible={false} />,
+	<Chessboard key="item-3" squareMarkers={squareMarkers2} arrowMarkers={arrowMarkers2} textMarkers={textMarkers2} flipped={true} coordinateVisible={false} />,
+	<Chessboard key="item-4" squareMarkers={squareMarkers3} arrowMarkers={arrowMarkers3} textMarkers={textMarkers3} flipped={false} coordinateVisible={false}
+		position="empty" />,
+	<Chessboard key="item-5" squareMarkers={squareMarkers3} arrowMarkers={arrowMarkers3} textMarkers={textMarkers3} flipped={true} coordinateVisible={true}
+		position="8/8/1r6/8/5k1K/8/8/8 b - - 0 1" />,
 ]);

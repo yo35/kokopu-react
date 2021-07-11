@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 
-const { openBrowser, closeBrowser, itChecksScreenshot, itChecksScreenshots } = require('./common/graphic');
+const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
 describe('Chessboard graphic', function() {
@@ -36,5 +36,7 @@ describe('Chessboard graphic', function() {
 	});
 
 	itChecksScreenshots(browserContext, '01_chessboard_simple', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
-	itChecksScreenshot(browserContext, '02_chessboard_flipped');
+	itChecksScreenshots(browserContext, '02_chessboard_flipped', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
+	itChecksScreenshots(browserContext, '03_chessboard_annotations', [ 'with coordinates', 'with coordinates & flip', 'without coordinates', 'without coordinates & flip',
+		'overlap', 'overlap & flip' ]);
 });
