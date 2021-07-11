@@ -23,6 +23,7 @@
 .test-item,
 #test-app {
 	display: inline-block;
+	line-height: 0px;
 }
 
 .test-item {
