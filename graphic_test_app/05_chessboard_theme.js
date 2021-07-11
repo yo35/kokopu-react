@@ -21,7 +21,6 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
 import testApp from './common/test_app';
 import { Chessboard } from '../src/index';
 
