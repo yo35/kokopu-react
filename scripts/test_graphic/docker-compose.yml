@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  web-client:
+    image: selenium/standalone-firefox:4.0.0-rc-1-prerelease-20210618
+    shm_size: '2gb'
+    ports:
+      - 4444:4444 # Driver (http://localhost:4444)
+      - 7900:7900 # VNC (http://localhost:7900, pass: secret)
+    volumes:
+      - type: bind
+        source: ../..
+        target: /app
+        read_only: true
