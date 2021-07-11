@@ -28,13 +28,13 @@ import { Chessboard } from '../src/index';
 let pos = new kokopu.Position('r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4');
 let move = pos.notation('Bxc6');
 
-testApp([
-	<Chessboard key="item-0" move="e4" animated={false} />,
-	<Chessboard key="item-1" move="Nf3" moveArrowVisible={false} animated={false} />,
-	<Chessboard key="item-2" move="Nf4" animated={false} />,
-	<Chessboard key="item-3" position="rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2" move="Bb4+" moveArrowVisible={true} flipped={true} animated={false} />,
-	<Chessboard key="item-4" position={pos} move={move} animated={false} />,
-	<Chessboard key="item-5" position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={false} />,
-	<Chessboard key="item-6" position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={false} />,
-	<Chessboard key="item-7" position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={false} />,
-]);
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard move="e4" animated={false} />,
+	<Chessboard move="Nf3" moveArrowVisible={false} animated={false} />,
+	<Chessboard move="Nf4" animated={false} />,
+	<Chessboard position="rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2" move="Bb4+" moveArrowVisible={true} flipped={true} animated={false} />,
+	<Chessboard position={pos} move={move} animated={false} />,
+	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={false} />,
+	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={false} />,
+	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={false} />,
+]); /* eslint-enable react/jsx-key */

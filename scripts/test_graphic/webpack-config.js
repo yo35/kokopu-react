@@ -43,7 +43,7 @@ plugins.push(new CopyWebpackPlugin({
 }));
 
 module.exports = {
-	mode: 'production',
+	mode: 'development',
 	entry: entries,
 	output: {
 		path: path.resolve(__dirname, '../../build/test_graphic'),

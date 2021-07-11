@@ -25,10 +25,10 @@ import kokopu from 'kokopu';
 import testApp from './common/test_app';
 import { Chessboard } from '../src/index';
 
-testApp([
-	<Chessboard key="item-0" flipped={true} />,
-	<Chessboard key="item-1" flipped={true} position="empty" />,
-	<Chessboard key="item-2" flipped={true} position="something invalid" />,
-	<Chessboard key="item-3" flipped={true} position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-	<Chessboard key="item-4" flipped={true} position={new kokopu.Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
-]);
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard flipped={true} />,
+	<Chessboard flipped={true} position="empty" />,
+	<Chessboard flipped={true} position="something invalid" />,
+	<Chessboard flipped={true} position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
+	<Chessboard flipped={true} position={new kokopu.Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
+]); /* eslint-enable react/jsx-key */

@@ -36,13 +36,12 @@ let squareMarkers3 = { b5: 'r', e4: 'g', h5: 'y' };
 let arrowMarkers3 = { d1h5: 'g', a5f4: 'r', c7c3: 'y' };
 let textMarkers3 = 'G5c6';
 
-testApp([
-	<Chessboard key="item-0" squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={false} coordinateVisible={true} />,
-	<Chessboard key="item-1" squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={true} coordinateVisible={true} />,
-	<Chessboard key="item-2" squareMarkers={squareMarkers2} arrowMarkers={arrowMarkers2} textMarkers={textMarkers2} flipped={false} coordinateVisible={false} />,
-	<Chessboard key="item-3" squareMarkers={squareMarkers2} arrowMarkers={arrowMarkers2} textMarkers={textMarkers2} flipped={true} coordinateVisible={false} />,
-	<Chessboard key="item-4" squareMarkers={squareMarkers3} arrowMarkers={arrowMarkers3} textMarkers={textMarkers3} flipped={false} coordinateVisible={false}
-		position="empty" />,
-	<Chessboard key="item-5" squareMarkers={squareMarkers3} arrowMarkers={arrowMarkers3} textMarkers={textMarkers3} flipped={true} coordinateVisible={true}
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={false} coordinateVisible={true} />,
+	<Chessboard squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={true} coordinateVisible={true} />,
+	<Chessboard squareMarkers={squareMarkers2} arrowMarkers={arrowMarkers2} textMarkers={textMarkers2} flipped={false} coordinateVisible={false} />,
+	<Chessboard squareMarkers={squareMarkers2} arrowMarkers={arrowMarkers2} textMarkers={textMarkers2} flipped={true} coordinateVisible={false} />,
+	<Chessboard squareMarkers={squareMarkers3} arrowMarkers={arrowMarkers3} textMarkers={textMarkers3} flipped={false} coordinateVisible={false} position="empty" />,
+	<Chessboard squareMarkers={squareMarkers3} arrowMarkers={arrowMarkers3} textMarkers={textMarkers3} flipped={true} coordinateVisible={true}
 		position="8/8/1r6/8/5k1K/8/8/8 b - - 0 1" />,
-]);
+]); /* eslint-enable react/jsx-key */
