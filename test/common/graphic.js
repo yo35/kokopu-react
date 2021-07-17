@@ -21,6 +21,7 @@
 
 
 const fs = require('fs');
+const path = require('path');
 const { Builder, By, Capabilities } = require('selenium-webdriver');
 const { imgDiff } = require('img-diff-js');
 const test = require('unit.js');
@@ -37,9 +38,6 @@ exports.openBrowser = async function(mochaContext, browserContext) {
 
 	// The initialization process may take a while, thus increase the timeout threshold.
 	mochaContext.timeout(10000);
-
-	// Ensure that the output directory (i.e. where the screenshots are generated) do exist.
-	fs.mkdirSync(outputDir, { recursive: true });
 
 	// Start the browser and ensure it can fetch something.
 	let capabilities = Capabilities.firefox();
@@ -85,6 +83,7 @@ async function takeScreenshotAndCompare(browserContext, imageBaseName, cssTarget
 
 	// Take a screenshot of the targeted element.
 	let image = await browserContext.driver.findElement(By.css(cssTarget)).takeScreenshot();
+	fs.mkdirSync(path.dirname(actualFilename), { recursive: true });
 	fs.writeFileSync(actualFilename, image, 'base64');
 
 	// Compare the current screenshot to the reference.
@@ -115,7 +114,7 @@ exports.itChecksScreenshots = function(browserContext, testCaseName, itemNames) 
 	for (let i = 0; i < itemNames.length; ++i) {
 		it(`${testCaseName} - Item ${i} (${itemNames[i]})`, async function() {
 			await fetchTestCase(browserContext, testCaseName);
-			await takeScreenshotAndCompare(browserContext, testCaseName + '_item_' + i, '#test-item-' + i);
+			await takeScreenshotAndCompare(browserContext, testCaseName + '/' + i, '#test-item-' + i);
 		});
 	}
 };
