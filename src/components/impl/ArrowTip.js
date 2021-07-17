@@ -20,11 +20,34 @@
  ******************************************************************************/
 
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-export { default as colorsets } from './colorsets';
-export { default as piecesets } from './piecesets';
-export { default as Chessboard, adaptSquareSize } from './chessboard';
-export { default as SquareMarkerIcon } from './components/SquareMarkerIcon';
-export { default as ArrowMarkerIcon } from './components/ArrowMarkerIcon';
-export { default as TextMarkerIcon } from './components/TextMarkerIcon';
+import PropTypes from 'prop-types';
+import React from 'react';
+
+
+/**
+ * Tip of the arrow markers.
+ */
+export default function ArrowTip(props) {
+	return (
+		<marker id={props.id} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto" style={{ fill: props.color }}>
+			<path d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
+		</marker>
+	);
+}
+
+ArrowTip.propTypes = {
+
+	/**
+	 * ID of the element.
+	 */
+	id: PropTypes.string.isRequired,
+
+	/**
+	 * Color to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: PropTypes.string,
+};
+
+ArrowTip.defaultProps = {
+	color: 'currentcolor',
+};

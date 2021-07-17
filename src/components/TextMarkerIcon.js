@@ -20,11 +20,51 @@
  ******************************************************************************/
 
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-export { default as colorsets } from './colorsets';
-export { default as piecesets } from './piecesets';
-export { default as Chessboard, adaptSquareSize } from './chessboard';
-export { default as SquareMarkerIcon } from './components/SquareMarkerIcon';
-export { default as ArrowMarkerIcon } from './components/ArrowMarkerIcon';
-export { default as TextMarkerIcon } from './components/TextMarkerIcon';
+import PropTypes from 'prop-types';
+import React from 'react';
+
+import '../css/label.css';
+
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../constants';
+import { sanitizeInteger, isValidSymbol } from '../impl/validation';
+
+
+/**
+ * SVG icon representing a text marker.
+ */
+export default function TextMarkerIcon(props) {
+	let size = sanitizeInteger(props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+	if (isNaN(size) || !isValidSymbol(props.symbol)) {
+		return undefined;
+	}
+	let viewBox = `0 0 ${size} ${size}`;
+	return (
+		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<text className="kokopu-label" x={size / 2} y={size / 2} fill={props.color} style={{ 'fontSize': size }}>
+				{props.symbol}
+			</text>
+		</svg>
+	);
+}
+
+TextMarkerIcon.propTypes = {
+
+	/**
+	 * Width and height (in pixels) of the icon.
+	 */
+	size: PropTypes.number.isRequired,
+
+	/**
+	 * Symbol to represent on the icon. Must be either a letter (upper-case or lower-case) or a digit.
+	 */
+	symbol: PropTypes.string.isRequired,
+
+	/**
+	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: PropTypes.string,
+};
+
+TextMarkerIcon.defaultProps = {
+	color: 'currentcolor',
+};

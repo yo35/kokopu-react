@@ -20,11 +20,61 @@
  ******************************************************************************/
 
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-export { default as colorsets } from './colorsets';
-export { default as piecesets } from './piecesets';
-export { default as Chessboard, adaptSquareSize } from './chessboard';
-export { default as SquareMarkerIcon } from './components/SquareMarkerIcon';
-export { default as ArrowMarkerIcon } from './components/ArrowMarkerIcon';
-export { default as TextMarkerIcon } from './components/TextMarkerIcon';
+import PropTypes from 'prop-types';
+import React from 'react';
+
+import '../css/arrow.css';
+
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../constants';
+import { sanitizeInteger } from '../impl/validation';
+import { generateRandomId } from '../impl/util';
+import ArrowTip from './impl/ArrowTip';
+
+const ARROW_THICKNESS_FACTOR = 0.2;
+
+
+/**
+ * SVG icon representing an arrow marker.
+ */
+export default class ArrowMarkerIcon extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.arrowTipId = generateRandomId();
+	}
+
+	render() {
+		let size = sanitizeInteger(this.props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		if (isNaN(size)) {
+			return undefined;
+		}
+		let halfThickness = size / 2 - Math.round(size * (1 - ARROW_THICKNESS_FACTOR) / 2);
+		let viewBox = `0 0 ${size} ${size}`;
+		return (
+			<svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
+				<defs>
+					<ArrowTip id={this.arrowTipId} color={this.props.color} />
+				</defs>
+				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={this.props.color}
+					style={{ 'strokeWidth': halfThickness * 2, 'markerEnd': `url(#${this.arrowTipId})` }} />
+			</svg>
+		);
+	}
+}
+
+ArrowMarkerIcon.propTypes = {
+
+	/**
+	 * Width and height (in pixels) of the icon.
+	 */
+	size: PropTypes.number.isRequired,
+
+	/**
+	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: PropTypes.string,
+};
+
+ArrowMarkerIcon.defaultProps = {
+	color: 'currentcolor',
+};

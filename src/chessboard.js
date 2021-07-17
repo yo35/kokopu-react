@@ -30,7 +30,7 @@ import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
 import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
-import { ArrowTip } from './marker_icons';
+import ArrowTip from './components/impl/ArrowTip';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
 import { sanitizeBoolean, sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
 import { generateRandomId } from './impl/util';
