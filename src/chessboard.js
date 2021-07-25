@@ -27,10 +27,10 @@ import { Motion, spring } from 'react-motion';
 import kokopu from 'kokopu';
 
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-import ErrorBox from './error_box';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
-import ArrowTip from './components/impl/ArrowTip';
+import ArrowTip from './impl/ArrowTip';
+import ErrorBox from './impl/ErrorBox';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
 import { sanitizeBoolean, sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
 import { generateRandomId } from './impl/util';

@@ -23,44 +23,31 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../constants';
-import { sanitizeInteger } from '../impl/validation';
-
-const SQUARE_MARGIN_FACTOR = 0.1;
+import '../css/error_box.css';
 
 
 /**
- * SVG icon representing a square marker.
- *
- * @component
+ * Display an error message.
  */
-export default function SquareMarkerIcon(props) {
-	let size = sanitizeInteger(props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-	if (isNaN(size)) {
-		return undefined;
-	}
-	let margin = Math.round(size * SQUARE_MARGIN_FACTOR);
-	let viewBox = `0 0 ${size} ${size}`;
+export default function ErrorBox(props) {
+	let message = 'message' in props ? <div className="kokopu-errorMessage">{props.message}</div> : undefined;
 	return (
-		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<rect x={margin} y={margin} width={size - margin*2} height={size - margin*2} fill={props.color} />
-		</svg>
+		<div className="kokopu-errorBox">
+			<div className="kokopu-errorTitle">{props.title}</div>
+			{message}
+		</div>
 	);
 }
 
-SquareMarkerIcon.propTypes = {
+ErrorBox.propTypes = {
 
 	/**
-	 * Width and height (in pixels) of the icon.
+	 * Title of the error box.
 	 */
-	size: PropTypes.number.isRequired,
+	title: PropTypes.string.isRequired,
 
 	/**
-	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 * Optional message providing additional details about the error.
 	 */
-	color: PropTypes.string,
-};
-
-SquareMarkerIcon.defaultProps = {
-	color: 'currentcolor',
+	message: PropTypes.string,
 };

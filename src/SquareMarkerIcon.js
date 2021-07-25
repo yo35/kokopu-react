@@ -23,31 +23,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import '../css/label.css';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
+import { sanitizeInteger } from './impl/validation';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../constants';
-import { sanitizeInteger, isValidSymbol } from '../impl/validation';
+const SQUARE_MARGIN_FACTOR = 0.1;
 
 
 /**
- * SVG icon representing a text marker.
+ * SVG icon representing a square marker.
+ *
+ * @component
  */
-export default function TextMarkerIcon(props) {
+export default function SquareMarkerIcon(props) {
 	let size = sanitizeInteger(props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-	if (isNaN(size) || !isValidSymbol(props.symbol)) {
+	if (isNaN(size)) {
 		return undefined;
 	}
+	let margin = Math.round(size * SQUARE_MARGIN_FACTOR);
 	let viewBox = `0 0 ${size} ${size}`;
 	return (
-		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<text className="kokopu-label" x={size / 2} y={size / 2} fill={props.color} style={{ 'fontSize': size }}>
-				{props.symbol}
-			</text>
+		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<rect x={margin} y={margin} width={size - margin*2} height={size - margin*2} fill={props.color} />
 		</svg>
 	);
 }
 
-TextMarkerIcon.propTypes = {
+SquareMarkerIcon.propTypes = {
 
 	/**
 	 * Width and height (in pixels) of the icon.
@@ -55,16 +56,11 @@ TextMarkerIcon.propTypes = {
 	size: PropTypes.number.isRequired,
 
 	/**
-	 * Symbol to represent on the icon. Must be either a letter (upper-case or lower-case) or a digit.
-	 */
-	symbol: PropTypes.string.isRequired,
-
-	/**
 	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
 	 */
 	color: PropTypes.string,
 };
 
-TextMarkerIcon.defaultProps = {
+SquareMarkerIcon.defaultProps = {
 	color: 'currentcolor',
 };

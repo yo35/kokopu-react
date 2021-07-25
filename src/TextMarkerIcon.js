@@ -23,46 +23,31 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import '../css/arrow.css';
+import './css/label.css';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../constants';
-import { sanitizeInteger } from '../impl/validation';
-import { generateRandomId } from '../impl/util';
-import ArrowTip from './impl/ArrowTip';
-
-const ARROW_THICKNESS_FACTOR = 0.2;
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
+import { sanitizeInteger, isValidSymbol } from './impl/validation';
 
 
 /**
- * SVG icon representing an arrow marker.
+ * SVG icon representing a text marker.
  */
-export default class ArrowMarkerIcon extends React.Component {
-
-	constructor(props) {
-		super(props);
-		this.arrowTipId = generateRandomId();
+export default function TextMarkerIcon(props) {
+	let size = sanitizeInteger(props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+	if (isNaN(size) || !isValidSymbol(props.symbol)) {
+		return undefined;
 	}
-
-	render() {
-		let size = sanitizeInteger(this.props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-		if (isNaN(size)) {
-			return undefined;
-		}
-		let halfThickness = size / 2 - Math.round(size * (1 - ARROW_THICKNESS_FACTOR) / 2);
-		let viewBox = `0 0 ${size} ${size}`;
-		return (
-			<svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
-				<defs>
-					<ArrowTip id={this.arrowTipId} color={this.props.color} />
-				</defs>
-				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={this.props.color}
-					style={{ 'strokeWidth': halfThickness * 2, 'markerEnd': `url(#${this.arrowTipId})` }} />
-			</svg>
-		);
-	}
+	let viewBox = `0 0 ${size} ${size}`;
+	return (
+		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<text className="kokopu-label" x={size / 2} y={size / 2} fill={props.color} style={{ 'fontSize': size }}>
+				{props.symbol}
+			</text>
+		</svg>
+	);
 }
 
-ArrowMarkerIcon.propTypes = {
+TextMarkerIcon.propTypes = {
 
 	/**
 	 * Width and height (in pixels) of the icon.
@@ -70,11 +55,16 @@ ArrowMarkerIcon.propTypes = {
 	size: PropTypes.number.isRequired,
 
 	/**
+	 * Symbol to represent on the icon. Must be either a letter (upper-case or lower-case) or a digit.
+	 */
+	symbol: PropTypes.string.isRequired,
+
+	/**
 	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
 	 */
 	color: PropTypes.string,
 };
 
-ArrowMarkerIcon.defaultProps = {
+TextMarkerIcon.defaultProps = {
 	color: 'currentcolor',
 };

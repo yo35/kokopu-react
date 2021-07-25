@@ -23,32 +23,58 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import './css/error_box.css';
+import './css/arrow.css';
+
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
+import { sanitizeInteger } from './impl/validation';
+import { generateRandomId } from './impl/util';
+import ArrowTip from './impl/ArrowTip';
+
+const ARROW_THICKNESS_FACTOR = 0.2;
 
 
 /**
- * Display an error message.
+ * SVG icon representing an arrow marker.
  */
-export default function ErrorBox(props) {
-	let message = 'message' in props ? <div className="kokopu-errorMessage">{props.message}</div> : undefined;
-	return (
-		<div className="kokopu-errorBox">
-			<div className="kokopu-errorTitle">{props.title}</div>
-			{message}
-		</div>
-	);
+export default class ArrowMarkerIcon extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.arrowTipId = generateRandomId();
+	}
+
+	render() {
+		let size = sanitizeInteger(this.props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		if (isNaN(size)) {
+			return undefined;
+		}
+		let halfThickness = size / 2 - Math.round(size * (1 - ARROW_THICKNESS_FACTOR) / 2);
+		let viewBox = `0 0 ${size} ${size}`;
+		return (
+			<svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
+				<defs>
+					<ArrowTip id={this.arrowTipId} color={this.props.color} />
+				</defs>
+				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={this.props.color}
+					style={{ 'strokeWidth': halfThickness * 2, 'markerEnd': `url(#${this.arrowTipId})` }} />
+			</svg>
+		);
+	}
 }
 
-
-ErrorBox.propTypes = {
-
-	/**
-	 * Title of the error box.
-	 */
-	title: PropTypes.string.isRequired,
+ArrowMarkerIcon.propTypes = {
 
 	/**
-	 * Optional message providing additional details about the error.
+	 * Width and height (in pixels) of the icon.
 	 */
-	message: PropTypes.string,
+	size: PropTypes.number.isRequired,
+
+	/**
+	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: PropTypes.string,
+};
+
+ArrowMarkerIcon.defaultProps = {
+	color: 'currentcolor',
 };

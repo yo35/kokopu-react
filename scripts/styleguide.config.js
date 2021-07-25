@@ -57,7 +57,7 @@ module.exports = {
 	sections: [
 		{
 			name: 'Components',
-			components: '../src/components/*.js',
+			components: '../src/[A-Z]*([A-Za-z0-9]).js',
 			sectionDepth: 1
 		},
 	],
