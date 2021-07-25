@@ -30,6 +30,12 @@ const rootDir = __dirname + '/../..';
 const referenceDir = rootDir + '/test/references';
 const outputDir = rootDir + '/build/graphic_output';
 
+const UNREACHABLE_TEST_CLIENT_MESSAGE =
+	'Cannot reach the dockerized selenium webbrowser used for graphic tests (probably because the test environment is not running).\n' +
+	'\n' +
+	'Use command `npm run start_test_env` to start the test environment.\n' +
+	'Do not forget to run `npm run stop_test_env` when finished.\n';
+
 
 /**
  * Open a browser in the client (+ ensure everything else is ready to execute graphic tests).
@@ -42,7 +48,9 @@ exports.openBrowser = async function(mochaContext, browserContext) {
 	// Start the browser and ensure it can fetch something.
 	let capabilities = Capabilities.firefox();
 	let driver = new Builder().usingServer('http://localhost:4444').withCapabilities(capabilities).build();
-	await driver.get('file:///app/build/test_graphic/healthcheck.txt');
+	await driver.get('file:///app/build/test_graphic/healthcheck.txt').catch(reason => {
+		return Promise.reject(reason.message.includes('ECONNREFUSED') ? new Error(UNREACHABLE_TEST_CLIENT_MESSAGE) : reason);
+	});
 
 	// Initialize the browser context
 	browserContext.driver = driver;
@@ -54,9 +62,11 @@ exports.openBrowser = async function(mochaContext, browserContext) {
  * Close the given browser.
  */
 exports.closeBrowser = async function(browserContext) {
-	await browserContext.driver.quit();
-	delete browserContext.driver;
-	delete browserContext.latestTestCase;
+	if (browserContext.driver) {
+		await browserContext.driver.quit();
+		delete browserContext.driver;
+		delete browserContext.latestTestCase;
+	}
 };
 
 

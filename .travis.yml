@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-  - "node"
+  - node
 
 services:
   - docker
 
 before_script:
-  - npm run start_test_client
+  - npm run start_test_env
 
 after_script:
-  - npm run stop_test_client
+  - npm run stop_test_env
