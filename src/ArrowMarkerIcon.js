@@ -44,7 +44,7 @@ export default class ArrowMarkerIcon extends React.Component {
 	}
 
 	render() {
-		let size = sanitizeInteger(this.props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		let size = sanitizeInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
 		if (isNaN(size)) {
 			return undefined;
 		}

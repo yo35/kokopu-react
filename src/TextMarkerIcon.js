@@ -33,7 +33,7 @@ import { sanitizeInteger, isValidSymbol } from './impl/validation';
  * SVG icon representing a text marker.
  */
 export default function TextMarkerIcon(props) {
-	let size = sanitizeInteger(props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+	let size = sanitizeInteger(props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
 	if (isNaN(size) || !isValidSymbol(props.symbol)) {
 		return undefined;
 	}

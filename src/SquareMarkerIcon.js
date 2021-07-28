@@ -35,7 +35,7 @@ const SQUARE_MARGIN_FACTOR = 0.1;
  * @component
  */
 export default function SquareMarkerIcon(props) {
-	let size = sanitizeInteger(props.size, NaN, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+	let size = sanitizeInteger(props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
 	if (isNaN(size)) {
 		return undefined;
 	}

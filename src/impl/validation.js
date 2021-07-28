@@ -42,9 +42,8 @@ export function sanitizeBoolean(input, defaultValue) {
 }
 
 
-export function sanitizeInteger(input, defaultValue, min, max) {
-	let value = Number(input);
-	return isNaN(value) ? defaultValue : Math.min(Math.max(Math.round(value), min), max);
+export function sanitizeInteger(input, min, max) {
+	return Math.min(Math.max(Math.round(input), min), max);
 }
 
 
