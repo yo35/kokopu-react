@@ -51,7 +51,7 @@ module.exports = {
 	},
 	getExampleFilename: function(componentPath) {
 		let componentName = path.basename(componentPath, '.js');
-		return path.dirname(componentPath) + '/../../doc_src/examples/' + componentName + '.md';
+		return path.dirname(componentPath) + '/../doc_src/examples/' + componentName + '.md';
 	},
 	pagePerSection: true,
 	sections: [
