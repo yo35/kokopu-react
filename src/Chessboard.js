@@ -26,8 +26,8 @@ import Draggable from 'react-draggable';
 import { Motion, spring } from 'react-motion';
 import kokopu from 'kokopu';
 
-import colorsets from './colorsets';
-import piecesets from './piecesets';
+import colorsets from './impl/colorsets';
+import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
 import ErrorBox from './impl/ErrorBox';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
@@ -597,6 +597,27 @@ export default class Chessboard extends React.Component {
 	 */
 	static maxSquareSize() {
 		return MAX_SQUARE_SIZE;
+	}
+
+	/**
+	 * Available colorsets for theming.
+	 *
+	 * @returns {Object.<string, {w: string, b: string, g: string, r: string, y: string, highlight: string}>}
+	 * @public
+	 */
+	static colorsets() {
+		return colorsets;
+	}
+
+	/**
+	 * Available piecesets for theming.
+	 *
+	 * @returns {Object.<string, {bb: string, bk: string, bn: string, bp: string, bq: string, br: string, bx: string,
+	 *                            wb: string, wk: string, wn: string, wp: string, wq: string, wr: string, wx: string}>}
+	 * @public
+	 */
+	static piecesets() {
+		return piecesets;
 	}
 }
 

@@ -21,8 +21,6 @@
 
 
 export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { default as colorsets } from './colorsets';
-export { default as piecesets } from './piecesets';
 export { default as Chessboard } from './Chessboard';
 export { default as SquareMarkerIcon } from './SquareMarkerIcon';
 export { default as TextMarkerIcon } from './TextMarkerIcon';

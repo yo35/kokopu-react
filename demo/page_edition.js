@@ -23,7 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import { Chessboard, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon, colorsets, piecesets } from '../src/index';
+import { Chessboard, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../src/index';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -115,7 +115,7 @@ export class PageEdition extends React.Component {
 		if (interactionMode !== 'addRemovePieces') {
 			return undefined;
 		}
-		let pieceset = piecesets['cburnett'];
+		let pieceset = Chessboard.piecesets()['cburnett'];
 		let pieceEditMode = this.props.state.pieceEditMode;
 		return (
 			<Box>
@@ -161,7 +161,7 @@ export class PageEdition extends React.Component {
 		if (interactionMode !== 'editSquareMarkers' && interactionMode !== 'editTextMarkers' && interactionMode !== 'editArrowMarkers') {
 			return undefined;
 		}
-		let colorset = colorsets['original'];
+		let colorset = Chessboard.colorsets()['original'];
 		let annotationColor = this.props.state.annotationColor;
 		return (
 			<Box m={2}>

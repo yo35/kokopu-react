@@ -23,7 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import { Chessboard, colorsets, piecesets } from '../src/index';
+import { Chessboard } from '../src/index';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -99,13 +99,13 @@ export class PageBase extends React.Component {
 				<Box m={2}>
 					<Typography>Colorset</Typography>
 					<Select value={state.colorset} onChange={evt => this.handleColorsetChanged(evt.target.value)}>
-						{Object.keys(colorsets).map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
+						{Object.keys(Chessboard.colorsets()).map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
 					</Select>
 				</Box>
 				<Box m={2}>
 					<Typography>Pieceset</Typography>
 					<Select value={state.pieceset} onChange={evt => this.handlePiecesetChanged(evt.target.value)}>
-						{Object.keys(piecesets).map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
+						{Object.keys(Chessboard.piecesets()).map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
 					</Select>
 				</Box>
 			</Box>
