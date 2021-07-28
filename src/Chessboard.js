@@ -649,16 +649,24 @@ Chessboard.propTypes = {
 
 	/**
 	 * Callback invoked when a piece is moved through drag&drop (only if `interactionMode` is set to `'movePieces'`).
+	 *
+	 * @param {string} from Origin square (e.g. `'g1'`).
+	 * @param {string} to Target square (e.g. `'f3'`).
 	 */
 	onPieceMoved: PropTypes.func,
 
 	/**
 	 * Callback invoked when the user clicks on a square (only if `interactionMode` is set to `'clickSquares'`).
+	 *
+	 * @param {string} square Clicked square (e.g. `e4`).
 	 */
 	onSquareClicked: PropTypes.func,
 
 	/**
 	 * Callback invoked when an arrow is dragged (only if `interactionMode` is set to `'editArrows'`).
+	 *
+	 * @param {string} from Origin square (e.g. `'g1'`).
+	 * @param {string} to Target square (e.g. `'f3'`).
 	 */
 	onArrowEdited: PropTypes.func,
 };
