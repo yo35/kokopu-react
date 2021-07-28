@@ -26,14 +26,14 @@ import Draggable from 'react-draggable';
 import { Motion, spring } from 'react-motion';
 import kokopu from 'kokopu';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
 import colorsets from './colorsets';
 import piecesets from './piecesets';
 import ArrowTip from './impl/ArrowTip';
 import ErrorBox from './impl/ErrorBox';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
-import { sanitizeBoolean, sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './impl/constants';
 import { generateRandomId } from './impl/util';
+import { sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
 
 import './css/chessboard.css';
 import './css/arrow.css';
@@ -521,6 +521,83 @@ export default class Chessboard extends React.Component {
 	getArrowTipId(color) {
 		return 'kokopu-arrowTip-' + color + '-' + this.arrowTipIdSuffix;
 	}
+
+	/**
+	 * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
+	 *
+	 * @param {number} width
+	 * @param {number} height
+	 * @param {boolean} coordinateVisible
+	 * @param {{width:number, squareSize:number, coordinateVisible:boolean}[]} smallScreenLimits
+	 * @returns {number}
+	 * @public
+	 */
+	static adaptSquareSize(width, height, coordinateVisible, smallScreenLimits) {
+		let maxSquareSize = MAX_SQUARE_SIZE;
+
+		// Enforce small-screen limits, if any.
+		if (typeof window !== 'undefined') {
+			let squareSizeLimit = computeSmallScreenLimits('squareSize', smallScreenLimits, window.innerWidth);
+			let coordinateVisibleLimit = computeSmallScreenLimits('coordinateVisible', smallScreenLimits, window.innerWidth);
+			if (!isNaN(squareSizeLimit)) {
+				maxSquareSize = sanitizeInteger(squareSizeLimit, MIN_SQUARE_SIZE, maxSquareSize);
+			}
+			coordinateVisible = coordinateVisible && (coordinateVisibleLimit === undefined || coordinateVisibleLimit);
+		}
+
+		function isAdapted(squareSize) {
+			let actualWidth = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+			let actualHeight = 8 * squareSize;
+			if (coordinateVisible) {
+				let fontSize = computeCoordinateFontSize(squareSize);
+				actualWidth += Math.round(RANK_COORDINATE_WIDTH_FACTOR * fontSize);
+				actualHeight += Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize);
+			}
+			return actualWidth <= width && actualHeight <= height;
+		}
+
+		// Check min/max bounds.
+		if (isAdapted(maxSquareSize)) {
+			return maxSquareSize;
+		}
+		else if (!isAdapted(MIN_SQUARE_SIZE)) {
+			return MIN_SQUARE_SIZE;
+		}
+
+		// Dichotomic search, between a (inclusive) and b (exclusive).
+		let a = MIN_SQUARE_SIZE;
+		let b = maxSquareSize;
+		while (a + 1 < b) {
+			let mid = Math.floor((a + b) / 2);
+			if (isAdapted(mid)) {
+				a = mid;
+			}
+			else {
+				b = mid;
+			}
+		}
+		return a;
+	}
+
+	/**
+	 * Minimum square size (inclusive).
+	 *
+	 * @returns {number}
+	 * @public
+	 */
+	static minSquareSize() {
+		return MIN_SQUARE_SIZE;
+	}
+
+	/**
+	 * Maximum square size (inclusive).
+	 *
+	 * @returns {number}
+	 * @public
+	 */
+	static maxSquareSize() {
+		return MAX_SQUARE_SIZE;
+	}
 }
 
 
@@ -589,7 +666,7 @@ Chessboard.propTypes = {
 	flipped: PropTypes.bool,
 
 	/**
-	 * Size of the squares (in pixels). Must be between {@link MIN_SQUARE_SIZE} and {@link MAX_SQUARE_SIZE}.
+	 * Size of the squares (in pixels). Must be an integer between `Chessboard.minSquareSize()` and `Chessboard.maxSquareSize()`.
 	 */
 	squareSize: PropTypes.number,
 
@@ -682,63 +759,6 @@ Chessboard.defaultProps = {
 	colorset: 'original',
 	pieceset: 'cburnett',
 };
-
-
-/**
- * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
- *
- * @param {number} width
- * @param {number} height
- * @param {boolean} coordinateVisible
- * @param {{width:number, squareSize:number, coordinateVisible:boolean}[]} smallScreenLimits
- * @returns {number}
- */
-export function adaptSquareSize(width, height, coordinateVisible, smallScreenLimits) {
-	coordinateVisible = sanitizeBoolean(coordinateVisible, true);
-	let maxSquareSize = MAX_SQUARE_SIZE;
-
-	// Enforce small-screen limits, if any.
-	if (typeof window !== 'undefined') {
-		coordinateVisible = coordinateVisible && sanitizeBoolean(computeSmallScreenLimits('coordinateVisible', smallScreenLimits, window.innerWidth), true);
-		let squareSizeLimit = Number(computeSmallScreenLimits('squareSize', smallScreenLimits, window.innerWidth));
-		if (!isNaN(squareSizeLimit)) {
-			maxSquareSize = Math.min(maxSquareSize, Math.max(squareSizeLimit, MIN_SQUARE_SIZE));
-		}
-	}
-
-	function isAdapted(squareSize) {
-		let actualWidth = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
-		let actualHeight = 8 * squareSize;
-		if (coordinateVisible) {
-			let fontSize = computeCoordinateFontSize(squareSize);
-			actualWidth += Math.round(RANK_COORDINATE_WIDTH_FACTOR * fontSize);
-			actualHeight += Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize);
-		}
-		return actualWidth <= width && actualHeight <= height;
-	}
-
-	// Check min/max bounds.
-	if (isAdapted(maxSquareSize)) {
-		return maxSquareSize;
-	}
-	else if (!isAdapted(MIN_SQUARE_SIZE)) {
-		return MIN_SQUARE_SIZE;
-	}
-
-	// Dichotomic search, between a (inclusive) and b (exclusive).
-	let a = MIN_SQUARE_SIZE;
-	let b = maxSquareSize;
-	while (a + 1 < b) {
-		let mid = Math.floor((a + b) / 2);
-		if (isAdapted(mid)) {
-			a = mid;
-		}
-		else {
-			b = mid;
-		}
-	}
-	return a;
-}
 
 
 /**

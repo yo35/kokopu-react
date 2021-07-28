@@ -23,7 +23,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './impl/constants';
 import { sanitizeInteger } from './impl/validation';
 
 const SQUARE_MARGIN_FACTOR = 0.1;

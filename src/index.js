@@ -21,10 +21,9 @@
 
 
 export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
 export { default as colorsets } from './colorsets';
 export { default as piecesets } from './piecesets';
-export { default as Chessboard, adaptSquareSize } from './Chessboard';
+export { default as Chessboard } from './Chessboard';
 export { default as SquareMarkerIcon } from './SquareMarkerIcon';
 export { default as TextMarkerIcon } from './TextMarkerIcon';
 export { default as ArrowMarkerIcon } from './ArrowMarkerIcon';

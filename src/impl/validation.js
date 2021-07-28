@@ -20,28 +20,6 @@
  ******************************************************************************/
 
 
-export function sanitizeBoolean(input, defaultValue) {
-	if (typeof input === 'boolean') {
-		return input;
-	}
-	else if (typeof input === 'string') {
-		input = input.trim().toLowerCase();
-		if (['true', 't', 'on', 'yes', 'y', '1'].includes(input)) {
-			return true;
-		}
-		else if (['false', 'f', 'off', 'no', 'n', '0'].includes(input)) {
-			return false;
-		}
-		else {
-			return defaultValue;
-		}
-	}
-	else {
-		return defaultValue;
-	}
-}
-
-
 export function sanitizeInteger(input, min, max) {
 	return Math.min(Math.max(Math.round(input), min), max);
 }

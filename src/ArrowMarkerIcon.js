@@ -25,10 +25,10 @@ import React from 'react';
 
 import './css/arrow.css';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './constants';
-import { sanitizeInteger } from './impl/validation';
-import { generateRandomId } from './impl/util';
 import ArrowTip from './impl/ArrowTip';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './impl/constants';
+import { generateRandomId } from './impl/util';
+import { sanitizeInteger } from './impl/validation';
 
 const ARROW_THICKNESS_FACTOR = 0.2;
 
