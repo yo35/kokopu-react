@@ -31,9 +31,7 @@ import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
 import ErrorBox from './impl/ErrorBox';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './impl/constants';
-import { generateRandomId } from './impl/util';
-import { sanitizeInteger, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/validation';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
 
 import './css/chessboard.css';
 import './css/arrow.css';

@@ -20,9 +20,10 @@
  ******************************************************************************/
 
 
-/**
- * Generate a random string.
- */
+export const MIN_SQUARE_SIZE = 12;
+export const MAX_SQUARE_SIZE = 96;
+
+
 export function generateRandomId() {
 	let buffer = new Uint32Array(8);
 	crypto.getRandomValues(buffer);
@@ -31,4 +32,29 @@ export function generateRandomId() {
 		result += buffer[i].toString(16);
 	}
 	return result;
+}
+
+
+export function sanitizeInteger(input, min, max) {
+	return Math.min(Math.max(Math.round(input), min), max);
+}
+
+
+export function isValidSquare(sq) {
+	return /^[a-h][1-8]$/.test(sq);
+}
+
+
+export function isValidVector(vect) {
+	return /^[a-h][1-8][a-h][1-8]$/.test(vect);
+}
+
+
+export function isValidColor(color) {
+	return color === 'g' || color === 'r' || color === 'y';
+}
+
+
+export function isValidSymbol(symbol) {
+	return /^[A-Za-z0-9]$/.test(symbol);
 }

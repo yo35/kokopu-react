@@ -25,8 +25,7 @@ import React from 'react';
 
 import './css/label.css';
 
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './impl/constants';
-import { sanitizeInteger, isValidSymbol } from './impl/validation';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, isValidSymbol } from './impl/util';
 
 
 /**
