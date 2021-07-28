@@ -103,7 +103,7 @@ export class PageEdition extends React.Component {
 						<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label="Edit text annotations" />
 						{this.renderSymbolSelector()}
 					</Box>
-					<FormControlLabel value="editArrows" control={<Radio color="primary" />} label="Edit arrow annotations" />
+					<FormControlLabel value="editArrowMarkers" control={<Radio color="primary" />} label="Edit arrow annotations" />
 				</RadioGroup>
 			</Box>
 			{this.renderAnnotationColorSelector()}
@@ -158,7 +158,7 @@ export class PageEdition extends React.Component {
 
 	renderAnnotationColorSelector() {
 		let interactionMode = this.props.state.interactionMode;
-		if (interactionMode !== 'editSquareMarkers' && interactionMode !== 'editTextMarkers' && interactionMode !== 'editArrows') {
+		if (interactionMode !== 'editSquareMarkers' && interactionMode !== 'editTextMarkers' && interactionMode !== 'editArrowMarkers') {
 			return undefined;
 		}
 		let colorset = colorsets['original'];
@@ -185,7 +185,7 @@ export class PageEdition extends React.Component {
 				return <SquareMarkerIcon size={24} color={color} />;
 			case 'editTextMarkers':
 				return <TextMarkerIcon size={24} symbol={this.props.state.textMarkerMode} color={color} />;
-			case 'editArrows':
+			case 'editArrowMarkers':
 				return <ArrowMarkerIcon size={24} color={color} />;
 			default:
 				return undefined;
@@ -194,8 +194,6 @@ export class PageEdition extends React.Component {
 
 	renderChessboard() {
 		let state = this.props.state;
-		let interactionMode = state.interactionMode === 'editSquareMarkers' || state.interactionMode === 'editTextMarkers' ||
-			state.interactionMode === 'addRemovePieces' ? 'clickSquares' : state.interactionMode;
 		return (
 			<div>
 				<Chessboard
@@ -205,7 +203,7 @@ export class PageEdition extends React.Component {
 					squareMarkers={state.squareMarkers}
 					textMarkers={state.textMarkers}
 					arrowMarkers={state.arrowMarkers}
-					interactionMode={interactionMode}
+					interactionMode={this.getChessboardInterationMode()}
 					editedArrowColor={state.annotationColor}
 					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
 					onArrowEdited={(from, to) => this.handleArrowEdited(from, to)}
@@ -273,14 +271,24 @@ export class PageEdition extends React.Component {
 	handleArrowEdited(from, to) {
 		let newState = {...this.props.state};
 		let key = from + to;
-		newState.arrowMarkers[key] = newState.arrowMarkers[key] === newState.annotationColor ? '' : newState.annotationColor;
+		if (newState.arrowMarkers[key] === newState.annotationColor) {
+			delete newState.arrowMarkers[key];
+		}
+		else {
+			newState.arrowMarkers[key] = newState.annotationColor;
+		}
 		this.props.setState(newState);
 	}
 
 	handleSquareClicked(sq) {
 		if (this.props.state.interactionMode === 'editSquareMarkers') {
 			let newState = {...this.props.state};
-			newState.squareMarkers[sq] = newState.squareMarkers[sq] === newState.annotationColor ? '' : newState.annotationColor;
+			if (newState.squareMarkers[sq] === newState.annotationColor) {
+				delete newState.squareMarkers[sq];
+			}
+			else {
+				newState.squareMarkers[sq] = newState.annotationColor;
+			}
 			this.props.setState(newState);
 		}
 		else if (this.props.state.interactionMode === 'editTextMarkers') {
@@ -297,6 +305,21 @@ export class PageEdition extends React.Component {
 			let newPosition = new kokopu.Position(this.props.state.position);
 			newPosition.square(sq, newPosition.square(sq) === this.props.state.pieceEditMode ? '-' : this.props.state.pieceEditMode);
 			this.handlePositionChanged(newPosition);
+		}
+	}
+
+	getChessboardInterationMode() {
+		switch(this.props.state.interactionMode) {
+			case 'addRemovePieces':
+			case 'editSquareMarkers':
+			case 'editTextMarkers':
+				return 'clickSquares';
+			case 'editArrowMarkers':
+				return 'editArrows';
+			case 'movePieces':
+				return 'movePieces';
+			default:
+				return undefined;
 		}
 	}
 }
