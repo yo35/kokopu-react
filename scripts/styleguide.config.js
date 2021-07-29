@@ -20,9 +20,34 @@
  ******************************************************************************/
 
 
+const fs = require('fs');
 const path = require('path');
 const version = require('../package.json').version;
 
+const demoPages = [
+	{ id: 'ChessboardBase', title: 'Chessboard - Basic features' },
+	{ id: 'ChessboardEdition', title: 'Chessboard - Edition' },
+	{ id: 'ChessboardMove', title: 'Chessboard - Display moves' },
+	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
+];
+
+const docSrcDir = path.join('..', 'doc_src');
+const tmpDir = path.join('..', 'build', 'tmp_docs');
+
+
+// Generate the Markdown file corresponding to each demo page.
+fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
+demoPages.forEach(demoPage => {
+	let filename = path.resolve(__dirname, tmpDir, demoPage.id + '.md');
+	fs.writeFileSync(filename,
+		'```js\n' +
+		`<Page${demoPage.id} />\n` +
+		'```\n'
+	);
+});
+
+
+// Styleguidist config.
 module.exports = {
 	styleguideDir: '../dist/docs',
 	webpackConfig: {
@@ -45,14 +70,13 @@ module.exports = {
 	},
 	usageMode: 'expand',
 	exampleMode: 'expand',
-	getComponentPathLine: function(componentPath) {
-		let componentName = path.basename(componentPath, '.js');
-		return `import { ${componentName} } from kokopu-react;`;
-	},
-	getExampleFilename: function(componentPath) {
-		let componentName = path.basename(componentPath, '.js');
-		return path.dirname(componentPath) + '/../doc_src/examples/' + componentName + '.md';
-	},
+	context: Object.fromEntries(demoPages.map(demoPage => {
+		let componentName = 'Page' + demoPage.id;
+		let modulePath = path.resolve(__dirname, docSrcDir, 'demo', componentName);
+		return [ componentName, modulePath ];
+	})),
+	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.js')} } from kokopu-react;`,
+	getExampleFilename: componentPath => path.resolve(__dirname, docSrcDir, 'examples', path.basename(componentPath, '.js') + '.md'),
 	pagePerSection: true,
 	sections: [
 		{
@@ -60,7 +84,21 @@ module.exports = {
 			components: '../src/[A-Z]*([A-Za-z0-9]).js',
 			sectionDepth: 1
 		},
+		{
+			name: 'Live demo',
+			sectionDepth: 1,
+			sections: demoPages.map(demoPage => {
+				return {
+					name: demoPage.title,
+					content: path.join(tmpDir, demoPage.id + '.md'),
+					exampleMode: 'hide'
+				};
+			}),
+		},
 	],
+	theme: {
+		sidebarWidth: 300,
+	},
 	title: 'Kokopu-React documentation',
 	version: version
 }
