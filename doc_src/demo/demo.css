@@ -20,36 +20,15 @@
  ******************************************************************************/
 
 
-import React from 'react';
+.kokopu-demoCode {
+	border: 1px solid rgb(232, 232, 232);
+	border-radius: 3px;
+	background-color: rgb(245, 245, 245);
+	font-size: 13px;
+	padding: 16px;
+	white-space: pre-wrap;
+}
 
-import { Chessboard } from '../src/index';
-
-import Alert from '@material-ui/lab/Alert';
-import Box from '@material-ui/core/Box';
-
-
-export const initialStateSmallScreen = {};
-
-
-export class PageSmallScreen extends React.Component {
-
-	render() {
-		let limits = [
-			{ width: 470, squareSize: 12, coordinateVisible: false },
-			{ width: 540, squareSize: 16, coordinateVisible: false },
-			{ width: 620, squareSize: 24, coordinateVisible: false },
-			{ width: 730, squareSize: 32 },
-			{ width: 860, squareSize: 44 },
-		];
-		return (
-			<div>
-				<Box m={2}>
-					<Alert severity="info">Resize the browser to see the chessboard adapt its size...</Alert>
-				</Box>
-				<Box m={2}>
-					<Chessboard squareSize={56} smallScreenLimits={limits} />
-				</Box>
-			</div>
-		);
-	}
+.MuiToggleButton-root.kokopu-fixTextTransform {
+	text-transform: none;
 }

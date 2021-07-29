@@ -20,6 +20,6 @@
  ******************************************************************************/
 
 
-.MuiToggleButton-root.kokopu-fixTextTransform {
-	text-transform: none;
+export function buildComponentDemoCode(componentName, attributes) {
+	return attributes.length === 0 ? `<${componentName} />` : `<${componentName} ${attributes.join(' ')} />`;
 }

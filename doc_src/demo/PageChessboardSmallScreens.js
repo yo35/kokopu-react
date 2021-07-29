@@ -22,6 +22,100 @@
 
 import React from 'react';
 
-export default function Page() {
-	return <div>TODO page chessboard small screens</div>;
+import { Chessboard } from '../../src/index';
+import { buildComponentDemoCode } from './util';
+
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+
+import './demo.css';
+
+
+export default class Page extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			squareSize: 56,
+			windowWidth: window.innerWidth,
+			limits: [
+				{ width: 170, squareSize: 12, coordinateVisible: false },
+				{ width: 250, squareSize: 16, coordinateVisible: false },
+				{ width: 340, squareSize: 24, coordinateVisible: false },
+				{ width: 450, squareSize: 32 },
+				{ width: 560, squareSize: 44 },
+				{ width: 600, squareSize: 52, coordinateVisible: true },
+				{ width: 640, squareSize: 24, coordinateVisible: false },
+				{ width: 750, squareSize: 32 },
+				{ width: 860, squareSize: 44 },
+			],
+		};
+		this.windowResizeListener = () => this.handleWindowResize();
+	}
+
+	componentDidMount() {
+		window.addEventListener('resize', this.windowResizeListener);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.windowResizeListener);
+	}
+
+	render() {
+		return (
+			<div>
+				{this.renderControls()}
+				{this.renderChessboard()}
+				{this.renderCode()}
+			</div>
+		);
+	}
+
+	renderControls() {
+		return (
+			<Box my={2}>
+				<Typography>Resize the browser to see the chessboard adapt its size...</Typography>
+				<Typography>{`Current browser width: ${this.state.windowWidth} px`}</Typography>
+			</Box>
+		);
+	}
+
+	renderChessboard() {
+		return (
+			<Box my={2}>
+				<Chessboard squareSize={this.state.squareSize} smallScreenLimits={this.state.limits} />
+			</Box>
+		);
+	}
+
+	renderCode() {
+
+		let limits = this.state.limits.map(limit => {
+			let limitAttributes = [`width: ${limit.width}`, `squareSize: ${limit.squareSize}`];
+			if ('coordinateVisible' in limit) {
+				limitAttributes.push(`coordinateVisible: ${limit.coordinateVisible}`);
+			}
+			return `    { ${limitAttributes.join(', ')} },\n`;
+		});
+
+		let attributes = [];
+		attributes.push(`squareSize={${this.state.squareSize}}`);
+		attributes.push('smallScreenLimits={limits}');
+		return (
+			<Box my={2}>
+				<pre className="kokopu-demoCode">
+					{
+						'let limits = [\n' +
+						limits.join('') +
+						'];\n' +
+						buildComponentDemoCode('Chessboard', attributes)
+					}
+				</pre>
+			</Box>
+		);
+	}
+
+	handleWindowResize() {
+		this.setState({ windowWidth: window.innerWidth });
+	}
 }

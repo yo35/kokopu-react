@@ -23,10 +23,10 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { initialStateBase, PageBase } from './page_base';
-import { initialStateEdition, PageEdition } from './page_edition';
-import { initialStateMove, PageMove } from './page_move';
-import { initialStateSmallScreen, PageSmallScreen } from './page_small_screen';
+import { default as PageChessboardBase } from '../doc_src/demo/PageChessboardBase';
+import { default as PageChessboardEdition } from '../doc_src/demo/PageChessboardEdition';
+import { default as PageChessboardMove } from '../doc_src/demo/PageChessboardMove';
+import { default as PageChessboardSmallScreens } from '../doc_src/demo/PageChessboardSmallScreens';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -38,9 +38,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import './demo.css';
-
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 300;
+const MAIN_PADDING = 20;
+const MAIN_WIDTH = 936 + MAIN_PADDING * 2;
 
 let useStyles = makeStyles(theme => ({
 	root: {
@@ -57,22 +57,19 @@ let useStyles = makeStyles(theme => ({
 		width: DRAWER_WIDTH,
 	},
 	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3),
+		width: MAIN_WIDTH,
+		paddingLeft: MAIN_PADDING,
+		paddingRight: MAIN_PADDING,
 	},
 }));
 
-let App = function() {
+function App() {
 	let classes = useStyles();
 	let [ pageId, setPageId ] = useState(0);
-	let [ stateBase, setStateBase ] = useState(initialStateBase);
-	let [ stateEdition, setStateEdition ] = useState(initialStateEdition);
-	let [ stateMove, setStateMove ] = useState(initialStateMove);
-	let [ stateSmallScreen, setStateSmallScreen ] = useState(initialStateSmallScreen);
-	let page0 = { label: 'Simple chessboard', content: <PageBase state={stateBase} setState={setStateBase} /> };
-	let page1 = { label: 'Position edition', content: <PageEdition state={stateEdition} setState={setStateEdition} /> };
-	let page2 = { label: 'Move display', content: <PageMove state={stateMove} setState={setStateMove} /> };
-	let page3 = { label: 'Small-screen', content: <PageSmallScreen state={stateSmallScreen} setState={setStateSmallScreen} /> };
+	let page0 = { label: 'Chessboard - Basic features', content: <PageChessboardBase /> };
+	let page1 = { label: 'Chessboard - Edition', content: <PageChessboardEdition /> };
+	let page2 = { label: 'Chessboard - Display moves', content: <PageChessboardMove /> };
+	let page3 = { label: 'Chessboard - Small screens', content: <PageChessboardSmallScreens /> };
 	let pages = [ page0, page1, page2, page3 ];
 	let pageButtons = pages.map((page, index) => {
 		return pageId === index ?
@@ -101,7 +98,7 @@ let App = function() {
 			</main>
 		</div>
 	);
-};
+}
 
 const appAnchor = document.createElement('div');
 document.body.appendChild(appAnchor);
