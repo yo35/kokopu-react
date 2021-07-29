@@ -30,8 +30,6 @@ const SQUARE_MARGIN_FACTOR = 0.1;
 
 /**
  * SVG icon representing a square marker.
- *
- * @component
  */
 export default function SquareMarkerIcon(props) {
 	let size = sanitizeInteger(props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
