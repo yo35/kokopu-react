@@ -13,7 +13,7 @@
 	"repository": "github:yo35/kokopu-react",
 	"license": "LGPL-3.0-or-later",
 	"author": "Yoann Le Montagner <yo35@melix.net>",
-	"main": "dduist/lib/index.js",
+	"main": "dist/lib/index.js",
 	"files": [
 		"dist/lib",
 		"doc_src",
