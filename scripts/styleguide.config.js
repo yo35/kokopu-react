@@ -103,10 +103,14 @@ module.exports = {
 				};
 			}),
 		},
+		{
+			name: 'Kokopu core library documentation',
+			href: 'https://kokopu.yo35.org/',
+		},
 	],
 	theme: {
 		sidebarWidth: 300,
 	},
 	title: 'Kokopu-React documentation',
-	version: version
+	version: version,
 }
