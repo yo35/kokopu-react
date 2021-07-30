@@ -1,6 +1,6 @@
 {
 	"name": "kokopu-react",
-	"version": "0.99.11",
+	"version": "1.0.0",
 	"description": "A React-based library to create and display chessboard components.",
 	"keywords": [
 		"chess",
@@ -13,7 +13,7 @@
 	"repository": "github:yo35/kokopu-react",
 	"license": "LGPL-3.0-or-later",
 	"author": "Yoann Le Montagner <yo35@melix.net>",
-	"main": "dist/lib/index.js",
+	"main": "dduist/lib/index.js",
 	"files": [
 		"dist/lib",
 		"doc_src",
