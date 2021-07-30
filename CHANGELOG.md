@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+1.0.0 (July 30, 2021)
+---------------------
+* Implement graphic tests (using Selenium).
+* Provide documentation.
+* Fewer exported symbols: `adaptSquareSize(..)`, `colorsets` and `piecesets` are now defined as static members of `Chessboard`.
+
 0.99.11 (June 6, 2021)
 ----------------------
 * Proper handling of small-screen limits in `adaptSquareSize(..)`.
