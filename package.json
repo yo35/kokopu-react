@@ -50,7 +50,7 @@
 		"webpack-dev-server": "^3.11.2"
 	},
 	"scripts": {
-		"lint": "eslint demo doc_src graphic_test_app src test",
+		"lint": "eslint doc_src graphic_test_app src test",
 		"preunit": "webpack --config scripts/test_headless.webpack-config.js && webpack --config scripts/test_graphic/webpack-config.js && node scripts/test_graphic/clean-graphic-output.js",
 		"unit": "mocha --bail --sort",
 		"test": "npm run lint && npm run unit",
@@ -58,7 +58,7 @@
 		"stop_test_env": "docker-compose -f scripts/test_graphic/docker-compose.yml down",
 		"build": "make -f scripts/build.mk",
 		"clean": "make -f scripts/build.mk clean",
-		"start": "webpack serve --open --config scripts/demo.webpack-config.js",
+		"start": "styleguidist server --open --config scripts/styleguide.config.js",
 		"predeploy": "npm run test && npm run build",
 		"deploy": "npm publish"
 	}
