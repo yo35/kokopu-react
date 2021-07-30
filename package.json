@@ -49,8 +49,10 @@
 		"img-diff-js": "^0.5.2",
 		"mocha": "^9.0.2",
 		"null-loader": "^4.0.1",
+		"prompt": "^1.1.0",
 		"react-styleguidist": "^11.1.7",
 		"selenium-webdriver": "^4.0.0-beta.4",
+		"ssh2-sftp-client": "^7.0.0",
 		"style-loader": "^3.2.1",
 		"unit.js": "^2.1.1",
 		"webpack": "^5.46.0",
@@ -68,6 +70,6 @@
 		"clean": "make -f scripts/build.mk clean",
 		"start": "styleguidist server --open --config scripts/styleguide.config.js",
 		"predeploy": "npm run test && npm run build",
-		"deploy": "npm publish"
+		"deploy": "npm publish && node scripts/deploy.js"
 	}
 }
