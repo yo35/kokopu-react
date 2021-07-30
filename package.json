@@ -15,7 +15,15 @@
 	"author": "Yoann Le Montagner <yo35@melix.net>",
 	"main": "dist/lib/index.js",
 	"files": [
-		"dist/lib"
+		"dist/lib",
+		"doc_src",
+		"graphic_test_app",
+		"scripts/test_graphic",
+		"scripts/test_headless.webpack-config.js",
+		"src",
+		"test",
+		".babelrc",
+		".eslint.yml"
 	],
 	"dependencies": {
 		"kokopu": "^1.10.0",
