@@ -32,6 +32,7 @@ const demoPages = [
 ];
 
 const docSrcDir = path.join('..', 'doc_src');
+const srcDir = path.join('..', 'src');
 const tmpDir = path.join('..', 'build', 'tmp_docs');
 
 
@@ -45,6 +46,13 @@ demoPages.forEach(demoPage => {
 		'```\n'
 	);
 });
+
+// Retrieve the components to document.
+let components = fs.readdirSync(path.resolve(__dirname, srcDir)).filter(filename => /^[A-Z].*\.js$/.test(filename)).map(filename => path.basename(filename, '.js'));
+
+// Define the symbols available for example blocks in documentation.
+let componentContext = Object.fromEntries(components.map(componentName => [ componentName, path.resolve(__dirname, srcDir, componentName) ]));
+let demoContext = Object.fromEntries(demoPages.map(demoPage => [ 'Page' + demoPage.id, path.resolve(__dirname, docSrcDir, 'demo', 'Page' + demoPage.id) ]));
 
 
 // Styleguidist config.
@@ -70,18 +78,18 @@ module.exports = {
 	},
 	usageMode: 'expand',
 	exampleMode: 'expand',
-	context: Object.fromEntries(demoPages.map(demoPage => {
-		let componentName = 'Page' + demoPage.id;
-		let modulePath = path.resolve(__dirname, docSrcDir, 'demo', componentName);
-		return [ componentName, modulePath ];
-	})),
+	context: Object.assign({}, componentContext, demoContext),
 	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.js')} } from kokopu-react;`,
 	getExampleFilename: componentPath => path.resolve(__dirname, docSrcDir, 'examples', path.basename(componentPath, '.js') + '.md'),
 	pagePerSection: true,
 	sections: [
 		{
+			name: 'Home',
+			content: path.join(docSrcDir, 'home.md'),
+		},
+		{
 			name: 'Components',
-			components: '../src/[A-Z]*([A-Za-z0-9]).js',
+			components: components.map(componentName => path.join(srcDir, componentName + '.js')),
 			sectionDepth: 1
 		},
 		{

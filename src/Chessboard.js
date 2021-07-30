@@ -51,7 +51,8 @@ const FILE_LABELS = 'abcdefgh';
 
 
 /**
- * Chessboard diagram.
+ * SVG image representing a chessboard diagram. Optionally, the user may interact with the board (move pieces, click on squares...).
+ * Annotations such as square markers or arrows can also be added to the board.
  */
 export default class Chessboard extends React.Component {
 
