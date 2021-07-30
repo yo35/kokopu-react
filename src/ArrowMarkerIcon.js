@@ -46,7 +46,7 @@ export default class ArrowMarkerIcon extends React.Component {
 		if (isNaN(size)) {
 			return undefined;
 		}
-		let halfThickness = size / 2 - Math.round(size * (1 - ARROW_THICKNESS_FACTOR) / 2);
+		let halfThickness = size * ARROW_THICKNESS_FACTOR / 2;
 		let viewBox = `0 0 ${size} ${size}`;
 		return (
 			<svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
