@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.0.1 (July 30, 2021)
+---------------------
+* Wrong config in `package.json`.
+
 1.0.0 (July 30, 2021)
 ---------------------
 * Implement graphic tests (using Selenium).
