@@ -91,13 +91,13 @@ export default class Page extends React.Component {
 				<Box mr={2}>
 					<Typography>Colorset</Typography>
 					<Select value={this.state.colorset} onChange={evt => this.set('colorset', evt.target.value)}>
-						{Object.keys(Chessboard.colorsets()).map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
+						{Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
 					</Select>
 				</Box>
 				<Box mx={2}>
 					<Typography>Pieceset</Typography>
 					<Select value={this.state.pieceset} onChange={evt => this.set('pieceset', evt.target.value)}>
-						{Object.keys(Chessboard.piecesets()).map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
+						{Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
 					</Select>
 				</Box>
 				<Box ml={2}>
