@@ -13,6 +13,7 @@
 	"repository": "github:yo35/kokopu-react",
 	"license": "LGPL-3.0-or-later",
 	"author": "Yoann Le Montagner <yo35@melix.net>",
+	"funding": "https://www.paypal.com/donate?hosted_button_id=4EGWA4YEZSALW",
 	"main": "dist/lib/index.js",
 	"files": [
 		"dist/lib",
