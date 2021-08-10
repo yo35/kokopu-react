@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.0.2 (August 10, 2021)
+-----------------------
+* No need for ReactDOM in dependencies (dev-dependencies only).
+
 1.0.1 (July 30, 2021)
 ---------------------
 * Wrong config in `package.json`.
