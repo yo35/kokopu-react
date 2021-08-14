@@ -95,4 +95,37 @@ describe('Chessboard interaction', function() {
 
 	itCheckNonMovePiece(0, 'from == to', 75, 375, 80, 360, 'empty_move');
 	itCheckNonMovePiece(0, 'move empty square', 175, 225, 275, 75, 'empty_square');
+
+	function itCheckEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
+		itCustom(browserContext, '09_chessboard_edit_arrows', itemIndex, label, async function(element) {
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
+			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await actions.release().perform();
+			await getSandboxAndCompare(browserContext, expectedText);
+		});
+	}
+
+	itCheckEditArrow(0, 'base 1', 325, 275, 110, 140, 'base_1', 'arrow edited: g3 -> c6');
+	itCheckEditArrow(0, 'base 2', 260, 10, 175, 375, 'base_2', 'arrow edited: f8 -> d1');
+	itCheckEditArrow(1, 'over square marker', 275, 125, 275, 230, 'over_square_marker', 'arrow edited: c3 -> c5');
+	itCheckEditArrow(1, 'over arrow marker', 40, 110, 125, 290, 'over_arrow_marker', 'arrow edited: h3 -> f6');
+
+	function itCheckNonEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
+		itCustom(browserContext, '09_chessboard_edit_arrows', itemIndex, label, async function(element) {
+			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
+			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await actions.release().perform();
+			await getSandboxAndCompare(browserContext, imageBaseName);
+		});
+	}
+
+	itCheckNonEditArrow(2, 'edit color not set', 125, 175, 325, 225, 'edit_color_not_set');
+	itCheckNonEditArrow(0, 'from == to', 275, 225, 290, 210, 'null_vector');
+
+	// TODO check move out of the board
 });
