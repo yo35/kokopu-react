@@ -257,13 +257,10 @@ export default class Chessboard extends React.Component {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
+		x = Math.min(Math.max(x + this.state.dragPosition.x, 0), 7 * squareSize);
+		y = Math.min(Math.max(y + this.state.dragPosition.y, 0), 7 * squareSize);
 		let cp = position.square(this.state.draggedSquare);
-		return (
-			<image
-				className="kokopu-pieceDraggable kokopu-dragging"
-				x={x + this.state.dragPosition.x} y={y + this.state.dragPosition.y} width={squareSize} height={squareSize} href={pieceset[cp]}
-			/>
-		);
+		return <image className="kokopu-pieceDraggable kokopu-dragging" x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
 	renderDraggedArrow(squareSize, colorset) {
@@ -289,11 +286,10 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
 		if ((this.isMovePieceModeEnabled() && position.square(sq) !== '-') || this.isEditArrowModeEnabled()) {
 			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
-			let bounds = this.isMovePieceModeEnabled() ? { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y } : undefined;
 			let classNames = [ 'kokopu-handle', this.isMovePieceModeEnabled() ? 'kokopu-pieceDraggable' : 'kokopu-arrowDraggable' ];
 			return (
 				<Draggable
-					key={'handle-' + sq} position={dragPosition} bounds={bounds}
+					key={'handle-' + sq} position={dragPosition}
 					onStart={evt => this.handleDragStart(sq, evt)}
 					onDrag={(_, dragData) => this.handleDrag(sq, dragData)}
 					onStop={(_, dragData) => this.handleDragStop(sq, dragData)}
@@ -432,9 +428,7 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
 		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
 		this.setState({
-			draggedSquare: sq,
 			hoveredSquare: targetSq,
-			cursorOffset: this.state.cursorOffset,
 			dragPosition: { x: dragData.x, y: dragData.y },
 		});
 	}
@@ -447,7 +441,7 @@ export default class Chessboard extends React.Component {
 			draggedSquare: '-',
 			hoveredSquare: '-',
 		});
-		if (sq === targetSq) {
+		if (sq === targetSq || targetSq === '-') {
 			return;
 		}
 		if (this.isMovePieceModeEnabled() && this.props.onPieceMoved) {

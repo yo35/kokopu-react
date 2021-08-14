@@ -77,7 +77,7 @@ describe('Chessboard interaction', function() {
 	itCheckMovePiece(0, 'over non-empty 1', 280, 365, 75, 75, 'over_non_empty_1', 'piece moved: f1 -> b7');
 	itCheckMovePiece(0, 'over non-empty 2', 130, 75, 225, 375, 'over_non_empty_2', 'piece moved: c7 -> e1');
 	itCheckMovePiece(1, 'over square marker', 10, 325, 275, 175, 'over_square_marker', 'piece moved: h7 -> c4');
-	itCheckMovePiece(1, 'over text marker', 225, 25, -100, 135, 'over_text_marker', 'piece moved: d1 -> h3');
+	itCheckMovePiece(1, 'over text marker', 225, 25, 10, 135, 'over_text_marker', 'piece moved: d1 -> h3');
 	itCheckMovePiece(1, 'over arrow marker', 325, 25, 315, 260, 'over_arrow_marker', 'piece moved: b1 -> b6');
 	itCheckMovePiece(2, 'after move', 225, 225, 75, 260, 'after_move', 'piece moved: e4 -> b3');
 
@@ -95,6 +95,7 @@ describe('Chessboard interaction', function() {
 
 	itCheckNonMovePiece(0, 'from == to', 75, 375, 80, 360, 'empty_move');
 	itCheckNonMovePiece(0, 'move empty square', 175, 225, 275, 75, 'empty_square');
+	itCheckNonMovePiece(0, 'out of board', 175, 25, 500, 210, 'out_of_board');
 
 	function itCheckEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
 		itCustom(browserContext, '09_chessboard_edit_arrows', itemIndex, label, async function(element) {
@@ -126,6 +127,5 @@ describe('Chessboard interaction', function() {
 
 	itCheckNonEditArrow(2, 'edit color not set', 125, 175, 325, 225, 'edit_color_not_set');
 	itCheckNonEditArrow(0, 'from == to', 275, 225, 290, 210, 'null_vector');
-
-	// TODO check move out of the board
+	itCheckNonEditArrow(0, 'out of board', 175, 225, 500, 280, 'out_of_board');
 });
