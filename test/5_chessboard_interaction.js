@@ -79,6 +79,7 @@ describe('Chessboard interaction', function() {
 	itCheckMovePiece(1, 'over square marker', 10, 325, 275, 175, 'over_square_marker', 'piece moved: h7 -> c4');
 	itCheckMovePiece(1, 'over text marker', 225, 25, -100, 135, 'over_text_marker', 'piece moved: d1 -> h3');
 	itCheckMovePiece(1, 'over arrow marker', 325, 25, 315, 260, 'over_arrow_marker', 'piece moved: b1 -> b6');
+	itCheckMovePiece(2, 'after move', 225, 225, 75, 260, 'after_move', 'piece moved: e4 -> b3');
 
 	function itCheckNonMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
 		itCustom(browserContext, '08_chessboard_move_pieces', itemIndex, label, async function(element) {
