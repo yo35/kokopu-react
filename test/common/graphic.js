@@ -85,14 +85,14 @@ async function fetchTestCase(browserContext, testCaseName) {
 /**
  * Take a screenshot of the element identified by the given CSS target, and compare it to the reference.
  */
-async function takeScreenshotAndCompare(browserContext, imageBaseName, cssTarget) {
+let takeScreenshotAndCompare = exports.takeScreenshotAndCompare = async function(browserContext, imageBaseName, element) {
 
-	let actualFilename = `${outputDir}/${imageBaseName}.png`;
-	let expectedFilename = `${referenceDir}/${imageBaseName}.png`;
-	let differenceFilename = `${outputDir}/${imageBaseName}.diff.png`;
+	let actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	let expectedFilename = `${referenceDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	let differenceFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.diff.png`;
 
 	// Take a screenshot of the targeted element.
-	let image = await browserContext.driver.findElement(By.css(cssTarget)).takeScreenshot();
+	let image = await element.takeScreenshot();
 	fs.mkdirSync(path.dirname(actualFilename), { recursive: true });
 	fs.writeFileSync(actualFilename, image, 'base64');
 
@@ -103,16 +103,26 @@ async function takeScreenshotAndCompare(browserContext, imageBaseName, cssTarget
 		diffFilename: differenceFilename,
 	});
 	test.object(result).hasProperty('imagesAreSame', true);
-}
+};
 
 
 /**
- * Open the page corresponding to the given test-case, take a screenshot, and compare it to the reference.
+ * Get the content of the sandbox, and compare it to the expected text.
  */
-exports.itChecksScreenshot = function(browserContext, testCaseName) {
-	it(testCaseName, async function() {
+exports.getSandboxAndCompare = async function(browserContext, expectedText) {
+	let actualText = await browserContext.driver.findElement(By.id('sandbox')).getText();
+	test.value(actualText).is(expectedText);
+};
+
+
+/**
+ * Open the page corresponding to the given test-case, and execute the given scenario.
+ */
+let itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {
+	it(testCaseName + ' - ' + itemName, async function() {
 		await fetchTestCase(browserContext, testCaseName);
-		await takeScreenshotAndCompare(browserContext, testCaseName, '#test-app');
+		let element = await browserContext.driver.findElement(By.id('test-item-' + itemIndex));
+		await scenario(element);
 	});
 };
 
@@ -122,9 +132,8 @@ exports.itChecksScreenshot = function(browserContext, testCaseName) {
  */
 exports.itChecksScreenshots = function(browserContext, testCaseName, itemNames) {
 	for (let i = 0; i < itemNames.length; ++i) {
-		it(`${testCaseName} - Item ${i} (${itemNames[i]})`, async function() {
-			await fetchTestCase(browserContext, testCaseName);
-			await takeScreenshotAndCompare(browserContext, testCaseName + '/' + i, '#test-item-' + i);
+		itCustom(browserContext, testCaseName, i, itemNames[i], async function(element) {
+			await takeScreenshotAndCompare(browserContext, i, element);
 		});
 	}
 };

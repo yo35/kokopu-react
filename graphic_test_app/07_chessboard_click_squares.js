@@ -21,44 +21,16 @@
 
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './test_app.css';
+import testApp, { setSandbox } from './common/test_app';
+import { Chessboard } from '../src/index';
 
-
-function flattenMultiElements(elements) {
-	let items = [];
-	for (let i = 0; i < elements.length; ++i) {
-		items.push(<div key={'test-item-' + i} className="test-item" id={'test-item-' + i}>{elements[i]}</div>);
-	}
-	return <div>{items}</div>;
+function onSquareClicked(sq) {
+	setSandbox(`square clicked: ${sq}`);
 }
 
-
-/**
- * Create an DIV element at the root of the current document, and render the given elements in it.
- */
-export default function(elements) {
-
-	// Create the main anchor.
-	let anchor = document.createElement('div');
-	anchor.id = 'test-app';
-	document.body.appendChild(anchor);
-
-	// Render the content.
-	let content = Array.isArray(elements) ? flattenMultiElements(elements) : elements;
-	ReactDOM.render(content, anchor);
-
-	// Append a text area
-	let sandbox = document.createElement('pre');
-	sandbox.id = 'sandbox';
-	document.body.appendChild(sandbox);
-}
-
-
-/**
- * Set the content of the sandbox.
- */
-export function setSandbox(text) {
-	let sandbox = document.getElementById('sandbox');
-	sandbox.innerText = text;
-}
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} />,
+	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} flipped coordinateVisible={false} />,
+	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} position="empty"
+		squareMarkers="Ga8" arrowMarkers="Ra6d6" textMarkers="YAb4" coordinateVisible={false} />,
+]); /* eslint-enable react/jsx-key */
