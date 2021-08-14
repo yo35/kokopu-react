@@ -223,7 +223,7 @@ export default class Chessboard extends React.Component {
 
 	renderPiece(position, squareSize,  pieceset, sq) {
 		let cp = position.square(sq);
-		if (cp === '-' || (this.isPieceDragModeEnabled() && this.state.draggedSquare === sq)) {
+		if (cp === '-' || (this.isMovePieceModeEnabled() && this.state.draggedSquare === sq)) {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
@@ -253,7 +253,7 @@ export default class Chessboard extends React.Component {
 	}
 
 	renderDraggedPiece(position, squareSize, pieceset) {
-		if (!this.isPieceDragModeEnabled() || this.state.draggedSquare === '-') {
+		if (!this.isMovePieceModeEnabled() || this.state.draggedSquare === '-') {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
@@ -267,7 +267,7 @@ export default class Chessboard extends React.Component {
 	}
 
 	renderDraggedArrow(squareSize, colorset) {
-		if (!this.isArrowDragModeEnabled() || this.state.draggedSquare === '-') {
+		if (!this.isEditArrowModeEnabled() || this.state.draggedSquare === '-') {
 			return undefined;
 		}
 		let strokeWidth = squareSize * STROKE_THICKNESS_FACTOR;
@@ -287,10 +287,10 @@ export default class Chessboard extends React.Component {
 
 	renderSquareHandle(position, squareSize, sq) {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		if ((this.isPieceDragModeEnabled() && position.square(sq) !== '-') || this.isArrowDragModeEnabled()) {
+		if ((this.isMovePieceModeEnabled() && position.square(sq) !== '-') || this.isEditArrowModeEnabled()) {
 			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
-			let bounds = this.isPieceDragModeEnabled() ? { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y } : undefined;
-			let classNames = [ 'kokopu-handle', this.isPieceDragModeEnabled() ? 'kokopu-pieceDraggable' : 'kokopu-arrowDraggable' ];
+			let bounds = this.isMovePieceModeEnabled() ? { left: -x, top: -y, right: 7 * squareSize - x, bottom: 7 * squareSize - y } : undefined;
+			let classNames = [ 'kokopu-handle', this.isMovePieceModeEnabled() ? 'kokopu-pieceDraggable' : 'kokopu-arrowDraggable' ];
 			return (
 				<Draggable
 					key={'handle-' + sq} position={dragPosition} bounds={bounds}
@@ -450,10 +450,10 @@ export default class Chessboard extends React.Component {
 		if (sq === targetSq) {
 			return;
 		}
-		if (this.isPieceDragModeEnabled() && this.props.onPieceMoved) {
+		if (this.isMovePieceModeEnabled() && this.props.onPieceMoved) {
 			this.props.onPieceMoved(sq, targetSq);
 		}
-		else if (this.isArrowDragModeEnabled() && this.props.onArrowEdited) {
+		else if (this.isEditArrowModeEnabled() && this.props.onArrowEdited) {
 			this.props.onArrowEdited(sq, targetSq);
 		}
 	}
@@ -467,14 +467,14 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Whether the "move piece" mode is enabled or not.
 	 */
-	isPieceDragModeEnabled() {
+	isMovePieceModeEnabled() {
 		return this.props.interactionMode === 'movePieces';
 	}
 
 	/**
 	 * Whether the "edit arrow" mode is enabled or not.
 	 */
-	isArrowDragModeEnabled() {
+	isEditArrowModeEnabled() {
 		return this.props.interactionMode === 'editArrows' && isValidColor(this.props.editedArrowColor);
 	}
 
