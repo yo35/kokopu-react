@@ -116,6 +116,15 @@ exports.getSandboxAndCompare = async function(browserContext, expectedText) {
 
 
 /**
+ * Set the content of the sandbox to the given value.
+ */
+exports.setSandbox = async function(browserContext, value) {
+	value = value.replace(/\W/g, '');
+	await browserContext.driver.executeScript(`document.getElementById("sandbox").innerText = "${value}"`);
+};
+
+
+/**
  * Open the page corresponding to the given test-case, and execute the given scenario.
  */
 let itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {

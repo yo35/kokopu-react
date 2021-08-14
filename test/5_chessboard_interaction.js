@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 
-const { openBrowser, closeBrowser, itCustom, getSandboxAndCompare } = require('./common/graphic');
+const { openBrowser, closeBrowser, itCustom, setSandbox, getSandboxAndCompare, takeScreenshotAndCompare } = require('./common/graphic');
 
 
 describe('Chessboard interaction', function() {
@@ -65,4 +65,37 @@ describe('Chessboard interaction', function() {
 		await actions.move({ x: area.x + 75, y: area.y + 225 }).click().perform();
 		await getSandboxAndCompare(browserContext, 'square clicked: b4');
 	});
+
+	function itCheckMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
+		itCustom(browserContext, '08_chessboard_move_pieces', itemIndex, label, async function(element) {
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
+			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await actions.release().perform();
+			await getSandboxAndCompare(browserContext, expectedText);
+		});
+	}
+
+	itCheckMovePiece(0, 'over empty', 275, 385, 225, 175, 'over_empty', 'piece moved: f1 -> e5');
+	itCheckMovePiece(0, 'over non-empty 1', 280, 365, 75, 75, 'over_non_empty_1', 'piece moved: f1 -> b7');
+	itCheckMovePiece(0, 'over non-empty 2', 130, 75, 225, 375, 'over_non_empty_2', 'piece moved: c7 -> e1');
+	itCheckMovePiece(1, 'over square marker', 10, 325, 275, 175, 'over_square_marker', 'piece moved: h7 -> c4');
+	itCheckMovePiece(1, 'over text marker', 225, 25, -100, 135, 'over_text_marker', 'piece moved: d1 -> h3');
+	itCheckMovePiece(1, 'over arrow marker', 325, 25, 315, 260, 'over_arrow_marker', 'piece moved: b1 -> b6');
+
+	function itCheckNonMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
+		itCustom(browserContext, '08_chessboard_move_pieces', itemIndex, label, async function(element) {
+			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
+			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await actions.release().perform();
+			await getSandboxAndCompare(browserContext, imageBaseName);
+		});
+	}
+
+	itCheckNonMovePiece(0, 'from == to', 75, 375, 80, 360, 'empty_move');
+	itCheckNonMovePiece(0, 'move empty square', 175, 225, 275, 75, 'empty_square');
 });
