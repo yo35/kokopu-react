@@ -93,8 +93,8 @@ describe('Chessboard interaction', function() {
 		});
 	}
 
-	itCheckNonMovePiece(0, 'from == to', 75, 375, 80, 360, 'empty_move');
 	itCheckNonMovePiece(0, 'move empty square', 175, 225, 275, 75, 'empty_square');
+	itCheckNonMovePiece(0, 'from == to', 75, 375, 80, 360, 'null_vector');
 	itCheckNonMovePiece(0, 'out of board', 175, 25, 500, 210, 'out_of_board');
 
 	function itCheckEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
