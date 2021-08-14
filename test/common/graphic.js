@@ -29,6 +29,7 @@ const test = require('unit.js');
 const rootDir = __dirname + '/../..';
 const referenceDir = rootDir + '/test/references';
 const outputDir = rootDir + '/build/graphic_output';
+const coverageDir = rootDir + '/build/.nyc_output';
 
 const UNREACHABLE_TEST_CLIENT_MESSAGE =
 	'Cannot reach the dockerized selenium webbrowser used for graphic tests (probably because the test environment is not running).\n' +
@@ -54,7 +55,6 @@ exports.openBrowser = async function(mochaContext, browserContext) {
 
 	// Initialize the browser context
 	browserContext.driver = driver;
-	browserContext.latestTestCase = '';
 };
 
 
@@ -63,11 +63,38 @@ exports.openBrowser = async function(mochaContext, browserContext) {
  */
 exports.closeBrowser = async function(browserContext) {
 	if (browserContext.driver) {
+
+		// Save the coverage data before closing the browser.
+		await saveCoverage(browserContext);
+
+		// Close the browser and clean its context.
 		await browserContext.driver.quit();
 		delete browserContext.driver;
 		delete browserContext.latestTestCase;
 	}
 };
+
+
+/**
+ * Save the coverage data, if any.
+ */
+async function saveCoverage(browserContext) {
+	if (!browserContext.latestTestCase) {
+		return;
+	}
+
+	// Allocate a filename to save the coverage data.
+	let pageIndex = 0;
+	let coverageFile = '';
+	do {
+		coverageFile = `${coverageDir}/${browserContext.latestTestCase}-${pageIndex}.json`;
+		++pageIndex;
+	} while (fs.existsSync(coverageFile));
+
+	// Retrieve and save the coverage data.
+	let coverageData = await browserContext.driver.executeScript('return JSON.stringify(window.__coverage__)');
+	fs.writeFileSync(coverageFile, coverageData);
+}
 
 
 /**
@@ -77,6 +104,11 @@ async function fetchTestCase(browserContext, testCaseName) {
 	if (browserContext.latestTestCase === testCaseName) {
 		return;
 	}
+
+	// Save coverage data before changing the page.
+	await saveCoverage(browserContext);
+
+	// Fetch the new page.
 	await browserContext.driver.get(`file:///app/build/test_graphic/${testCaseName}/index.html`);
 	browserContext.latestTestCase = testCaseName;
 }

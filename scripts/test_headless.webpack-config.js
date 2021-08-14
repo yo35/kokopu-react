@@ -37,7 +37,12 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/i,
-				loader: 'babel-loader',
+				use: {
+					loader: 'babel-loader',
+					options: {
+						plugins: [ 'istanbul' ],
+					},
+				},
 			},
 			{
 				test: /\.css$/i,

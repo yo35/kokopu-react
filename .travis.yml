@@ -10,3 +10,6 @@ before_script:
 
 after_script:
   - npm run stop_test_env
+
+after_success:
+  - npm run publish_coverage
