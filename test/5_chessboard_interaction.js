@@ -35,36 +35,32 @@ describe('Chessboard interaction', function() {
 		await closeBrowser(browserContext);
 	});
 
-	itCustom(browserContext, '07_chessboard_click_squares', 0, 'default', async function(element) {
-		let actions = browserContext.driver.actions({ async: true });
-		let area = await element.getRect();
-		await actions.move({ x: area.x + 225, y: area.y + 75 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: e7');
-		await actions.move({ x: area.x + 25, y: area.y + 375 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: a1');
-		await actions.move({ x: area.x + 325, y: area.y + 175 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: g5');
-	});
+	function itCheckClickSquare(itemIndex, label, targets) {
+		itCustom(browserContext, '07_chessboard_click_squares', itemIndex, label, async function(element) {
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			for (let i = 0; i < targets.length; ++i) {
+				let target = targets[i];
+				await actions.move({ x: area.x + target.x, y: area.y + target.y }).click().perform();
+				await getSandboxAndCompare(browserContext, target.expectedText);
+			}
+		});
+	}
 
-	itCustom(browserContext, '07_chessboard_click_squares', 1, 'with flip', async function(element) {
-		let actions = browserContext.driver.actions({ async: true });
-		let area = await element.getRect();
-		await actions.move({ x: area.x + 325, y: area.y + 175 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: b4');
-	});
-
-	itCustom(browserContext, '07_chessboard_click_squares', 2, 'over annotations', async function(element) {
-		let actions = browserContext.driver.actions({ async: true });
-		let area = await element.getRect();
-		await actions.move({ x: area.x + 25, y: area.y + 25 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: a8');
-		await actions.move({ x: area.x + 75, y: area.y + 125 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: b6');
-		await actions.move({ x: area.x + 175, y: area.y + 125 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: d6');
-		await actions.move({ x: area.x + 75, y: area.y + 225 }).click().perform();
-		await getSandboxAndCompare(browserContext, 'square clicked: b4');
-	});
+	itCheckClickSquare(0, 'default', [
+		{ x: 225, y: 75, expectedText: 'square clicked: e7' },
+		{ x: 25, y: 375, expectedText: 'square clicked: a1' },
+		{ x: 325, y: 175, expectedText: 'square clicked: g5' },
+	]);
+	itCheckClickSquare(1, 'with flip', [
+		{ x: 325, y: 175, expectedText: 'square clicked: b4' },
+	]);
+	itCheckClickSquare(2, 'over annotations', [
+		{ x: 25, y: 25, expectedText: 'square clicked: a8' },
+		{ x: 75, y: 125, expectedText: 'square clicked: b6' },
+		{ x: 175, y: 125, expectedText: 'square clicked: d6' },
+		{ x: 75, y: 225, expectedText: 'square clicked: b4' },
+	]);
 
 	function itCheckMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
 		itCustom(browserContext, '08_chessboard_move_pieces', itemIndex, label, async function(element) {
