@@ -24,7 +24,8 @@
 		"src",
 		"test",
 		".babelrc",
-		".eslint.yml"
+		".eslint.yml",
+		".nycrc.yml"
 	],
 	"dependencies": {
 		"kokopu": "^1.10.1",
