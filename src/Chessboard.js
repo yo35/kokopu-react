@@ -498,7 +498,10 @@ export default class Chessboard extends React.Component {
 					});
 					break;
 
+				// TODO fix chess960 castling
+
 				// Other cases are not supposed to happen.
+				// istanbul ignore next
 				default:
 					break;
 			}
