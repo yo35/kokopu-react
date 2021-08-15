@@ -35,12 +35,12 @@ describe('Chessboard graphic', function() {
 		await closeBrowser(browserContext);
 	});
 
-	itChecksScreenshots(browserContext, '02_chessboard_simple', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
+	itChecksScreenshots(browserContext, '02_chessboard_simple', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object', 'wrong type' ]);
 	itChecksScreenshots(browserContext, '03_chessboard_flipped', [ 'default', 'empty', 'invalid', 'from FEN', 'from Kokopu object' ]);
 	itChecksScreenshots(browserContext, '04_chessboard_annotations', [ 'with coordinates', 'with coordinates & flip', 'without coordinates', 'without coordinates & flip',
 		'overlap', 'overlap & flip' ]);
 	itChecksScreenshots(browserContext, '05_chessboard_move', [ 'default', 'no move arrow', 'invalid', 'with forced move arrow & flip', 'capture', 'castling move',
-		'en-passant', 'promotion' ]);
+		'en-passant', 'promotion', 'wrong type' ]);
 	itChecksScreenshots(browserContext, '06_chessboard_theme', [ 'default', 'large', 'small', 'custom 1', 'custom 2', 'custom 3',
 		'custom 4', 'custom 5', 'custom 6' ]);
 });

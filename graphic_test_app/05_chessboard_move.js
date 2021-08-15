@@ -37,4 +37,5 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={false} />,
 	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={false} />,
 	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={false} />,
+	<Chessboard move={42} animated={false} />,
 ]); /* eslint-enable react/jsx-key */
