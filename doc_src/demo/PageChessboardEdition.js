@@ -103,6 +103,7 @@ export default class Page extends React.Component {
 						{this.renderPieceSelector()}
 					</Box>
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
+					<FormControlLabel value="playMoves" control={<Radio color="primary" />} label="Move pieces (obeying chess rules)" />
 					<Box display="flex" flexDirection="row">
 						<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label="Edit square annotations" />
 						{this.renderMarkerColorSelector('squareMarkerColor', 'editSquareMarkers')}
@@ -204,6 +205,7 @@ export default class Page extends React.Component {
 					interactionMode={this.getChessboardInterationMode()}
 					editedArrowColor={this.state.arrowMarkerColor}
 					onPieceMoved={(from, to) => this.handlePieceMoved(from, to)}
+					onMovePlayed={move => this.handleMovePlayed(move)}
 					onArrowEdited={(from, to) => this.handleArrowEdited(from, to)}
 					onSquareClicked={sq => this.handleSquareClicked(sq)}
 				/>
@@ -248,6 +250,10 @@ export default class Page extends React.Component {
 				attributes.push('interactionMode="movePieces"');
 				attributes.push('onPieceMoved={(from, to) => handlePieceMoved(from, to)}');
 				break;
+			case 'playMoves':
+				attributes.push('interactionMode="playMoves"');
+				attributes.push('onMovePlayed={move => handleMovePlayed(move)}');
+				break;
 			default:
 				break;
 		}
@@ -282,6 +288,12 @@ export default class Page extends React.Component {
 		let newPosition = new kokopu.Position(this.state.position);
 		newPosition.square(to, newPosition.square(from));
 		newPosition.square(from, '-');
+		this.set('position', newPosition);
+	}
+
+	handleMovePlayed(move) {
+		let newPosition = new kokopu.Position(this.state.position);
+		newPosition.play(move);
 		this.set('position', newPosition);
 	}
 
@@ -334,7 +346,8 @@ export default class Page extends React.Component {
 			case 'editArrowMarkers':
 				return 'editArrows';
 			case 'movePieces':
-				return 'movePieces';
+			case 'playMoves':
+				return this.state.interactionMode;
 			default:
 				return undefined;
 		}

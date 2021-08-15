@@ -78,23 +78,14 @@ export default class Chessboard extends React.Component {
 	render() {
 
 		// Compute the current position.
-		let parseInfo = parsePosition(this.props.position);
-		if (parseInfo.error) {
-			return <ErrorBox title="Error while analysing a FEN string." message={parseInfo.message}></ErrorBox>;
+		let info = this.getPositionAndMoveInfo();
+		if (info.positionError) {
+			return <ErrorBox title="Error while analysing a FEN string." message={info.message}></ErrorBox>;
 		}
-		let position = parseInfo.position;
-		let move = null;
-		let positionBefore = null;
-		if (this.props.move) {
-			parseInfo = parseMove(position, this.props.move);
-			if (parseInfo.error) {
-				return <ErrorBox title="Invalid move notation." message={parseInfo.message}></ErrorBox>;
-			}
-			move = parseInfo.move;
-			positionBefore = position;
-			position = new kokopu.Position(position);
-			position.play(move);
+		else if (info.moveError) {
+			return <ErrorBox title="Invalid move notation." message={info.message}></ErrorBox>;
 		}
+		let { position, move, positionBefore } = info;
 
 		// Compute the attributes.
 		let squareSize = this.getSquareSize();
@@ -223,7 +214,7 @@ export default class Chessboard extends React.Component {
 
 	renderPiece(position, squareSize,  pieceset, sq) {
 		let cp = position.square(sq);
-		if (cp === '-' || (this.isMovePieceModeEnabled() && this.state.draggedSquare === sq)) {
+		if (cp === '-' || ((this.isMovePieceModeEnabled() || this.isPlayMoveModeEnabled()) && this.state.draggedSquare === sq)) {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
@@ -253,7 +244,7 @@ export default class Chessboard extends React.Component {
 	}
 
 	renderDraggedPiece(position, squareSize, pieceset) {
-		if (!this.isMovePieceModeEnabled() || this.state.draggedSquare === '-') {
+		if (!(this.isMovePieceModeEnabled() || this.isPlayMoveModeEnabled()) || this.state.draggedSquare === '-') {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.draggedSquare);
@@ -284,9 +275,10 @@ export default class Chessboard extends React.Component {
 
 	renderSquareHandle(position, squareSize, sq) {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		if ((this.isMovePieceModeEnabled() && position.square(sq) !== '-') || this.isEditArrowModeEnabled()) {
+		if ((this.isMovePieceModeEnabled() && position.square(sq) !== '-') || this.isEditArrowModeEnabled() ||
+			(this.isPlayMoveModeEnabled() && position.isLegal() && position.square(sq).startsWith(position.turn()))) {
 			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
-			let classNames = [ 'kokopu-handle', this.isMovePieceModeEnabled() ? 'kokopu-pieceDraggable' : 'kokopu-arrowDraggable' ];
+			let classNames = [ 'kokopu-handle', this.isEditArrowModeEnabled() ? 'kokopu-arrowDraggable' : 'kokopu-pieceDraggable' ];
 			return (
 				<Draggable
 					key={'handle-' + sq} position={dragPosition}
@@ -450,6 +442,29 @@ export default class Chessboard extends React.Component {
 		else if (this.isEditArrowModeEnabled() && this.props.onArrowEdited) {
 			this.props.onArrowEdited(sq, targetSq);
 		}
+		else if (this.isPlayMoveModeEnabled() && this.props.onMovePlayed) {
+			let { position } = this.getPositionAndMoveInfo();
+			let info = position.isMoveLegal(sq, targetSq);
+			if (!info) {
+				return;
+			}
+			switch (info.status) {
+
+				// Regular move.
+				case 'regular':
+					this.props.onMovePlayed(position.notation(info()));
+					break;
+
+				// Promotion move.
+				case 'promotion':
+					this.props.onMovePlayed(position.notation(info('q'))); // TODO implement selector
+					break;
+
+				// Other cases are not supposed to happen.
+				default:
+					break;
+			}
+		}
 	}
 
 	handleSquareClicked(sq) {
@@ -463,6 +478,13 @@ export default class Chessboard extends React.Component {
 	 */
 	isMovePieceModeEnabled() {
 		return this.props.interactionMode === 'movePieces';
+	}
+
+	/**
+	 * Whether the "play move" mode is enabled or not.
+	 */
+	isPlayMoveModeEnabled() {
+		return this.props.interactionMode === 'playMoves';
 	}
 
 	/**
@@ -497,6 +519,34 @@ export default class Chessboard extends React.Component {
 		let x = this.props.flipped ? (7 - file) * squareSize : file * squareSize;
 		let y = this.props.flipped ? rank * squareSize : (7 - rank) * squareSize;
 		return { x: x, y: y };
+	}
+
+	/**
+	 * Return information regarding the current displayed position and move, or parsing error message if something went wrong.
+	 */
+	getPositionAndMoveInfo() {
+
+		// Parse the position.
+		let positionInfo = parsePosition(this.props.position);
+		if (positionInfo.error) {
+			return { positionError: true, moveError: true, message: positionInfo.message };
+		}
+
+		// Nothing else to do if no move is defined.
+		if (!this.props.move) {
+			return { positionError: false, moveError: false, position: positionInfo.position };
+		}
+
+		// Parse the move.
+		let moveInfo = parseMove(positionInfo.position, this.props.move);
+		if (moveInfo.error) {
+			return { positionError: false, moveError: true, message: moveInfo.message, positionBefore: positionInfo.position };
+		}
+
+		// Compute the position after the move and return the result.
+		let positionAfter = new kokopu.Position(positionInfo.position);
+		positionAfter.play(moveInfo.move);
+		return { positionError: false, moveError: false, positionBefore: positionInfo.position, move: moveInfo.move, position: positionAfter };
 	}
 
 	/**
@@ -730,8 +780,13 @@ Chessboard.propTypes = {
 
 	/**
 	 * Type of action allowed with the mouse on the chessboard. If undefined, then the user cannot interact with the component.
+	 *
+	 * - `'movePieces'` allows the user to drag & drop the chess pieces from one square to another (regardless of the chess rules),
+	 * - `'clickSquares'` allows the user to click on squares,
+	 * - `'editArrows'` allows the user to draw arrow markers from one square to another (warning: attribute `editedArrowColor` must be set),
+	 * - `'playMoves'` allows the user to play legal chess moves (thus no interaction is possible if the displayed position is not legal).
 	 */
-	interactionMode: PropTypes.oneOf([ 'movePieces', 'clickSquares', 'editArrows' ]),
+	interactionMode: PropTypes.oneOf([ 'movePieces', 'clickSquares', 'editArrows', 'playMoves' ]),
 
 	/**
 	 * Color of the edited arrow (only used if `interactionMode` is set to `'editArrows'`).
@@ -760,6 +815,13 @@ Chessboard.propTypes = {
 	 * @param {string} to Target square (e.g. `'f3'`).
 	 */
 	onArrowEdited: PropTypes.func,
+
+	/**
+	 * Callback invoked when a move is played (only if `interactionMode` is set to `'playMoves'`).
+	 *
+	 * @param {string} move SAN notation representing the played move (e.g. `Nxe5`).
+	 */
+	onMovePlayed: PropTypes.func,
 };
 
 

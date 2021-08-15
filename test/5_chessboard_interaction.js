@@ -128,4 +128,37 @@ describe('Chessboard interaction', function() {
 	itCheckNonEditArrow(2, 'edit color not set', 125, 175, 325, 225, 'edit_color_not_set');
 	itCheckNonEditArrow(0, 'from == to', 275, 225, 290, 210, 'null_vector');
 	itCheckNonEditArrow(0, 'out of board', 175, 225, 500, 280, 'out_of_board');
+
+	function itCheckPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
+		itCustom(browserContext, '10_chessboard_play_moves', itemIndex, label, async function(element) {
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
+			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await actions.release().perform();
+			await getSandboxAndCompare(browserContext, expectedText);
+		});
+	}
+
+	itCheckPlayMove(0, 'regular move 1', 225, 335, 220, 225, 'regular_move_1', 'move played: e4');
+	itCheckPlayMove(1, 'regular move 2', 275, 225, 135, 85, 'regular_move_2', 'move played: Bxf2+');
+	itCheckPlayMove(1, 'castling move', 175, 375, 75, 375, 'castling_move', 'move played: O-O');
+
+	function itCheckNonPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
+		itCustom(browserContext, '10_chessboard_play_moves', itemIndex, label, async function(element) {
+			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
+			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await actions.release().perform();
+			await getSandboxAndCompare(browserContext, imageBaseName);
+		});
+	}
+
+	itCheckNonPlayMove(2, 'illegal position', 225, 325, 225, 225, 'illegal_position');
+	itCheckNonPlayMove(0, 'wrong color moved', 75, 25, 125, 125, 'wrong_color');
+	itCheckNonPlayMove(0, 'illegal move', 75, 375, 125, 225, 'illegal_move');
+	itCheckNonPlayMove(0, 'from == to', 75, 375, 85, 365, 'null_vector');
+	itCheckNonPlayMove(0, 'out of board', 325, 375, 450, 285, 'out_of_board');
 });
