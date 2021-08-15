@@ -30,11 +30,10 @@ import '../css/error_box.css';
  * Display an error message.
  */
 export default function ErrorBox(props) {
-	let message = 'message' in props ? <div className="kokopu-errorMessage">{props.message}</div> : undefined;
 	return (
 		<div className="kokopu-errorBox">
 			<div className="kokopu-errorTitle">{props.title}</div>
-			{message}
+			<div className="kokopu-errorMessage">{props.message}</div>
 		</div>
 	);
 }
@@ -47,7 +46,7 @@ ErrorBox.propTypes = {
 	title: PropTypes.string.isRequired,
 
 	/**
-	 * Optional message providing additional details about the error.
+	 * Additional message providing details about the error.
 	 */
-	message: PropTypes.string,
+	message: PropTypes.string.isRequired,
 };
