@@ -33,7 +33,7 @@ let arrowMarkers2 = { c3a2: 'y', c4a4: 'g', c5a6: 'r', c6a8: 'y', d6c8: 'g', e6e
 let textMarkers2 = { g3: { symbol: 'H', color: 'r' }, g5: { symbol: 'M', color: 'g' } };
 
 let squareMarkers3 = { b5: 'r', e4: 'g', h5: 'y' };
-let arrowMarkers3 = { d1h5: 'g', a5f4: 'r', c7c3: 'y' };
+let arrowMarkers3 = { d1h5: 'g', a5f4: 'r', c7c3: 'y', g7g7: 'g' };
 let textMarkers3 = 'G5c6';
 
 testApp([ /* eslint-disable react/jsx-key */
