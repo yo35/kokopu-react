@@ -809,6 +809,7 @@ function parsePosition(position) {
 			return { error: false, position: new kokopu.Position(position) };
 		}
 		catch (e) {
+			// istanbul ignore else
 			if (e instanceof kokopu.exception.InvalidFEN) {
 				return { error: true, message: e.message };
 			}
@@ -835,6 +836,7 @@ function parseMove(position, move) {
 			return { error: false, move: position.notation(move) };
 		}
 		catch (e) {
+			// istanbul ignore else
 			if (e instanceof kokopu.exception.InvalidNotation) {
 				return { error: true, message: e.message };
 			}
