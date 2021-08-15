@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.1.0 (August 15, 2021)
+-----------------------
+* Provide interaction mode `playMoves`.
+* Add code coverage.
+
 1.0.2 (August 10, 2021)
 -----------------------
 * No need for ReactDOM in dependencies (dev-dependencies only).
