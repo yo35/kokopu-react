@@ -59,8 +59,10 @@ export default class Chessboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			inhibitedSquare: '-',
 			draggedSquare: '-',
 			hoveredSquare: '-',
+			promotionDrawer: false,
 			windowWidth: window.innerWidth,
 		};
 		this.arrowTipIdSuffix = generateRandomId();
@@ -190,6 +192,7 @@ export default class Chessboard extends React.Component {
 				{this.renderArrowMarkers(arm, squareSize, colorset)}
 				{this.renderMoveArrow(move, 1, squareSize, colorset)}
 				{handles}
+				{this.renderPromotionDrawer(position, squareSize, colorset, pieceset)}
 				{this.renderDraggedPiece(position, squareSize, pieceset)}
 				{this.renderDraggedArrow(squareSize, colorset)}
 				{this.renderTurnFlag(position.turn(), squareSize, pieceset)}
@@ -214,7 +217,7 @@ export default class Chessboard extends React.Component {
 
 	renderPiece(position, squareSize,  pieceset, sq) {
 		let cp = position.square(sq);
-		if (cp === '-' || ((this.isMovePieceModeEnabled() || this.isPlayMoveModeEnabled()) && this.state.draggedSquare === sq)) {
+		if (cp === '-' || this.state.inhibitedSquare === sq) {
 			return undefined;
 		}
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
@@ -273,10 +276,34 @@ export default class Chessboard extends React.Component {
 		);
 	}
 
+	renderPromotionDrawer(position, squareSize, colorset, pieceset) {
+		if (!this.state.promotionDrawer) {
+			return undefined;
+		}
+		let { x, y } = this.getSquareCoordinates(squareSize, this.state.promotionDrawer.origin);
+		let inverted = position.turn() === (this.props.flipped ? 'w' : 'b'); // false==top-to-bottom true==bottom-to-top
+		let y0 = inverted ? y - squareSize * (this.state.promotionDrawer.buttons.length - 1) : y;
+		let buttons = this.state.promotionDrawer.buttons.map((p, i) => {
+			let cp = position.turn() + p;
+			return <image key={'drawer-piece-' + p} className="kokopu-clickable" x={x} y={y + i * (inverted ? -squareSize : squareSize)}
+				width={squareSize} height={squareSize} href={pieceset[cp]} onClick={() => this.handleDrawerButtonClicked(p)} />;
+		});
+		return (
+			<>
+				<rect className="kokopu-handle" x={0} y={0} width={squareSize * 8} height={squareSize * 8} onClick={() => this.handleDrawerCancelButtonClicked()} />
+				<rect x={x} y={y0} width={squareSize} height={squareSize * this.state.promotionDrawer.buttons.length} fill={colorset.b} />
+				<rect x={x} y={y0} width={squareSize} height={squareSize * this.state.promotionDrawer.buttons.length} className="kokopu-drawerMask" fill={colorset.w} />
+				{buttons}
+			</>
+		);
+	}
+
 	renderSquareHandle(position, squareSize, sq) {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		if ((this.isMovePieceModeEnabled() && position.square(sq) !== '-') || this.isEditArrowModeEnabled() ||
-			(this.isPlayMoveModeEnabled() && position.isLegal() && position.square(sq).startsWith(position.turn()))) {
+		let dragEnabledForMovePieces = this.isMovePieceModeEnabled() && position.square(sq) !== '-';
+		let dragEnabledForEditArrows = this.isEditArrowModeEnabled();
+		let dragEnabledForPlayMoves = this.isPlayMoveModeEnabled() && position.isLegal() && position.square(sq).startsWith(position.turn()) && !this.state.promotionDrawer;
+		if (dragEnabledForMovePieces || dragEnabledForEditArrows || dragEnabledForPlayMoves) {
 			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
 			let classNames = [ 'kokopu-handle', this.isEditArrowModeEnabled() ? 'kokopu-arrowDraggable' : 'kokopu-pieceDraggable' ];
 			return (
@@ -408,6 +435,7 @@ export default class Chessboard extends React.Component {
 	handleDragStart(sq, evt) {
 		let squareBoundary = evt.target.getBoundingClientRect();
 		this.setState({
+			inhibitedSquare: this.isMovePieceModeEnabled() || this.isPlayMoveModeEnabled() ? sq : '-',
 			draggedSquare: sq,
 			hoveredSquare: sq,
 			cursorOffset: { x: evt.clientX - squareBoundary.left, y: evt.clientY - squareBoundary.top },
@@ -430,6 +458,7 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
 		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
 		this.setState({
+			inhibitedSquare: '-',
 			draggedSquare: '-',
 			hoveredSquare: '-',
 		});
@@ -442,7 +471,7 @@ export default class Chessboard extends React.Component {
 		else if (this.isEditArrowModeEnabled() && this.props.onArrowEdited) {
 			this.props.onArrowEdited(sq, targetSq);
 		}
-		else if (this.isPlayMoveModeEnabled() && this.props.onMovePlayed) {
+		else if (this.isPlayMoveModeEnabled()) {
 			let { position } = this.getPositionAndMoveInfo();
 			let info = position.isMoveLegal(sq, targetSq);
 			if (!info) {
@@ -452,18 +481,45 @@ export default class Chessboard extends React.Component {
 
 				// Regular move.
 				case 'regular':
-					this.props.onMovePlayed(position.notation(info()));
+					if (this.props.onMovePlayed) {
+						this.props.onMovePlayed(position.notation(info()));
+					}
 					break;
 
 				// Promotion move.
 				case 'promotion':
-					this.props.onMovePlayed(position.notation(info('q'))); // TODO implement selector
+					this.setState({
+						inhibitedSquare: sq,
+						promotionDrawer: {
+							origin: targetSq,
+							buttons: position.variant() === 'antichess' ? [ 'q', 'r', 'b', 'n', 'k' ] : [ 'q', 'r', 'b', 'n' ],
+							builder: piece => position.notation(info(piece)),
+						},
+					});
 					break;
 
 				// Other cases are not supposed to happen.
 				default:
 					break;
 			}
+		}
+	}
+
+	handleDrawerCancelButtonClicked() {
+		this.setState({
+			inhibitedSquare: '-',
+			promotionDrawer: false,
+		});
+	}
+
+	handleDrawerButtonClicked(piece) {
+		let builder = this.state.promotionDrawer.builder;
+		this.setState({
+			inhibitedSquare: '-',
+			promotionDrawer: false,
+		});
+		if (this.props.onMovePlayed) {
+			this.props.onMovePlayed(builder(piece));
 		}
 	}
 

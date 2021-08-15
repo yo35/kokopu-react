@@ -69,4 +69,35 @@ describe('Chessboard play moves', function() {
 	itCheckNonPlayMove(0, 'illegal move', 75, 375, 125, 225, 'illegal_move');
 	itCheckNonPlayMove(0, 'from == to', 75, 375, 85, 365, 'null_vector');
 	itCheckNonPlayMove(0, 'out of board', 325, 375, 450, 285, 'out_of_board');
+
+	function itCheckPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName, expectedText) {
+		itCustom(browserContext, '11_chessboard_play_promotions', itemIndex, label, async function(element) {
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).release().perform();
+			await takeScreenshot(browserContext, imageBaseName, element);
+			await actions.move({ x: area.x + xPromo, y: area.y + yPromo }).click().perform();
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, expectedText);
+		});
+	}
+
+	itCheckPlayPromotion(0, 'regular promotion 1', 75, 75, 75, 25, 60, 10, 'regular_promotion_1', 'promotion move played: b8=Q');
+	itCheckPlayPromotion(1, 'regular promotion 2', 75, 325, 25, 375, 15, 280, 'regular_promotion_2', 'promotion move played: bxa1=B');
+	itCheckPlayPromotion(2, 'antichess promotion', 325, 325, 325, 375, 325, 175, 'antichess_promotion', 'promotion move played: b8=K');
+
+	function itCheckNonPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName) {
+		itCustom(browserContext, '11_chessboard_play_promotions', itemIndex, label, async function(element) {
+			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
+			let actions = browserContext.driver.actions({ async: true });
+			let area = await element.getRect();
+			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).release().perform();
+			await takeScreenshot(browserContext, imageBaseName, element);
+			await actions.move({ x: area.x + xPromo, y: area.y + yPromo }).click().perform();
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, imageBaseName);
+		});
+	}
+
+	itCheckNonPlayPromotion(1, 'cancel promotion', 75, 325, 75, 375, 190, 220, 'cancel_promotion');
 });
