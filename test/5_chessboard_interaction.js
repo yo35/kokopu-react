@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 
-const { openBrowser, closeBrowser, itCustom, setSandbox, getSandboxAndCompare, takeScreenshotAndCompare } = require('./common/graphic');
+const { openBrowser, closeBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
 
 
 describe('Chessboard interaction', function() {
@@ -42,7 +42,7 @@ describe('Chessboard interaction', function() {
 			for (let i = 0; i < targets.length; ++i) {
 				let target = targets[i];
 				await actions.move({ x: area.x + target.x, y: area.y + target.y }).click().perform();
-				await getSandboxAndCompare(browserContext, target.expectedText);
+				await compareSandbox(browserContext, target.expectedText);
 			}
 		});
 	}
@@ -67,9 +67,10 @@ describe('Chessboard interaction', function() {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
-			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
-			await getSandboxAndCompare(browserContext, expectedText);
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, expectedText);
 		});
 	}
 
@@ -87,9 +88,10 @@ describe('Chessboard interaction', function() {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
-			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
-			await getSandboxAndCompare(browserContext, imageBaseName);
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, imageBaseName);
 		});
 	}
 
@@ -102,9 +104,10 @@ describe('Chessboard interaction', function() {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
-			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
-			await getSandboxAndCompare(browserContext, expectedText);
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, expectedText);
 		});
 	}
 
@@ -119,9 +122,10 @@ describe('Chessboard interaction', function() {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
-			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
-			await getSandboxAndCompare(browserContext, imageBaseName);
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, imageBaseName);
 		});
 	}
 
@@ -134,9 +138,10 @@ describe('Chessboard interaction', function() {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
-			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
-			await getSandboxAndCompare(browserContext, expectedText);
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, expectedText);
 		});
 	}
 
@@ -150,9 +155,10 @@ describe('Chessboard interaction', function() {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
-			await takeScreenshotAndCompare(browserContext, imageBaseName, element);
+			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
-			await getSandboxAndCompare(browserContext, imageBaseName);
+			await compareScreenshot(browserContext, imageBaseName);
+			await compareSandbox(browserContext, imageBaseName);
 		});
 	}
 

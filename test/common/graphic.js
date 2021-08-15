@@ -115,18 +115,27 @@ async function fetchTestCase(browserContext, testCaseName) {
 
 
 /**
- * Take a screenshot of the element identified by the given CSS target, and compare it to the reference.
+ * Take a screenshot of the element identified by the given CSS target.
  */
-let takeScreenshotAndCompare = exports.takeScreenshotAndCompare = async function(browserContext, imageBaseName, element) {
+let takeScreenshot = exports.takeScreenshot = async function(browserContext, imageBaseName, element) {
 
 	let actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
-	let expectedFilename = `${referenceDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
-	let differenceFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.diff.png`;
 
 	// Take a screenshot of the targeted element.
 	let image = await element.takeScreenshot();
 	fs.mkdirSync(path.dirname(actualFilename), { recursive: true });
 	fs.writeFileSync(actualFilename, image, 'base64');
+};
+
+
+/**
+ * Compare a screenshot to its reference.
+ */
+let compareScreenshot = exports.compareScreenshot = async function(browserContext, imageBaseName) {
+
+	let actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	let expectedFilename = `${referenceDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	let differenceFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.diff.png`;
 
 	// Compare the current screenshot to the reference.
 	let result = await imgDiff({
@@ -139,9 +148,9 @@ let takeScreenshotAndCompare = exports.takeScreenshotAndCompare = async function
 
 
 /**
- * Get the content of the sandbox, and compare it to the expected text.
+ * Compare content of the sandbox to the expected text.
  */
-exports.getSandboxAndCompare = async function(browserContext, expectedText) {
+exports.compareSandbox = async function(browserContext, expectedText) {
 	let actualText = await browserContext.driver.findElement(By.id('sandbox')).getText();
 	test.value(actualText).is(expectedText);
 };
@@ -174,7 +183,8 @@ let itCustom = exports.itCustom = function(browserContext, testCaseName, itemInd
 exports.itChecksScreenshots = function(browserContext, testCaseName, itemNames) {
 	for (let i = 0; i < itemNames.length; ++i) {
 		itCustom(browserContext, testCaseName, i, itemNames[i], async function(element) {
-			await takeScreenshotAndCompare(browserContext, i, element);
+			await takeScreenshot(browserContext, i, element);
+			await compareScreenshot(browserContext, i);
 		});
 	}
 };
