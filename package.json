@@ -28,7 +28,7 @@
 		".nycrc.yml"
 	],
 	"dependencies": {
-		"kokopu": "^1.10.1",
+		"kokopu": "^1.10.2",
 		"prop-types": "^15.7.2",
 		"react": "^17.0.2",
 		"react-draggable": "^4.4.3",
@@ -60,7 +60,7 @@
 		"ssh2-sftp-client": "^7.0.1",
 		"style-loader": "^3.2.1",
 		"unit.js": "^2.1.1",
-		"webpack": "^5.49.0",
+		"webpack": "^5.50.0",
 		"webpack-cli": "^4.7.2"
 	},
 	"scripts": {
