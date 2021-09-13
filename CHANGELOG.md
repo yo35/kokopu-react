@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.2.0 (September 13, 2021)
+--------------------------
+* Fix ambiguous castling move issue at Chess960.
+
 1.1.0 (August 15, 2021)
 -----------------------
 * Provide interaction mode `playMoves`.
