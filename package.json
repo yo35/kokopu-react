@@ -19,6 +19,7 @@
 		"dist/lib",
 		"doc_src",
 		"graphic_test_app",
+		"graphics",
 		"scripts/test_graphic",
 		"scripts/test_headless.webpack-config.js",
 		"src",
