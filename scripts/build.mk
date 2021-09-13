@@ -45,7 +45,7 @@ ECHO = echo
 all: $(LIB_DIR) $(DOCUMENTATION_DIR)
 
 clean:
-	@rm -rf npm-debug.log $(BUILD_DIR) $(DIST_DIR)
+	@rm -rf $(BUILD_DIR) $(DIST_DIR)
 
 
 # Build targets
