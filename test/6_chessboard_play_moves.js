@@ -50,6 +50,9 @@ describe('Chessboard play moves', function() {
 	itCheckPlayMove(0, 'regular move 1', 225, 335, 220, 225, 'regular_move_1', 'move played: e4');
 	itCheckPlayMove(1, 'regular move 2', 275, 225, 135, 85, 'regular_move_2', 'move played: Bxf2+');
 	itCheckPlayMove(1, 'castling move', 175, 375, 75, 375, 'castling_move', 'move played: O-O');
+	itCheckPlayMove(3, 'chess960 castling move 1', 275, 375, 75, 375, 'chess960_castling_move_1', 'move played: O-O-O');
+	itCheckPlayMove(3, 'chess960 castling move 2', 275, 375, 375, 375, 'chess960_castling_move_2', 'move played: O-O');
+	itCheckPlayMove(3, 'chess960 ambiguous king move', 275, 375, 320, 375, 'chess960_ambiguous_king_move', 'move played: Kg1');
 
 	function itCheckNonPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
 		itCustom(browserContext, '10_chessboard_play_moves', itemIndex, label, async function(element) {
@@ -69,6 +72,7 @@ describe('Chessboard play moves', function() {
 	itCheckNonPlayMove(0, 'illegal move', 75, 375, 125, 225, 'illegal_move');
 	itCheckNonPlayMove(0, 'from == to', 75, 375, 85, 365, 'null_vector');
 	itCheckNonPlayMove(0, 'out of board', 325, 375, 450, 285, 'out_of_board');
+	itCheckNonPlayMove(3, 'chess960 non-KxR castling', 275, 375, 130, 375, 'chess960_non_kxr_castling');
 
 	function itCheckPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName, expectedText) {
 		itCustom(browserContext, '11_chessboard_play_promotions', itemIndex, label, async function(element) {
