@@ -29,7 +29,7 @@
 		".nycrc.yml"
 	],
 	"dependencies": {
-		"kokopu": "^1.10.2",
+		"kokopu": "^2.0.0",
 		"prop-types": "^15.7.2",
 		"react": "^17.0.2",
 		"react-draggable": "^4.4.4",
