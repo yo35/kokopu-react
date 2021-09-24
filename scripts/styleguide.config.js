@@ -108,6 +108,9 @@ module.exports = {
 			href: 'https://kokopu.yo35.org/',
 		},
 	],
+	styleguideComponents: {
+		LogoRenderer: path.resolve(__dirname, `${docSrcDir}/theming/LogoRenderer`),
+	},
 	theme: {
 		sidebarWidth: 300,
 	},
