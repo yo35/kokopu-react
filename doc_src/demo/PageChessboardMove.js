@@ -26,12 +26,13 @@ import kokopu from 'kokopu';
 import { Chessboard } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 
 import './demo.css';
 
@@ -56,17 +57,17 @@ export default class Page extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<Stack spacing={2} mt={2}>
 				{this.renderControls()}
 				{this.renderChessboard()}
 				{this.renderCode()}
-			</div>
+			</Stack>
 		);
 	}
 
 	renderControls() {
 		return (<>
-			<Box my={2}>
+			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControlLabel label="Flip"
 					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
 				/>
@@ -76,23 +77,21 @@ export default class Page extends React.Component {
 				<FormControlLabel label="Animation" disabled={!this.state.positionAfter}
 					control={<Switch checked={this.state.animated} onChange={() => this.set('animated', !this.state.animated)} color="primary" />}
 				/>
-			</Box>
-			<Box my={2} display="flex" flexDirection="row" alignItems="center">
-				<TextField label="Move" value={this.state.editedMove} onChange={evt => this.set('editedMove', evt.target.value)} />
+			</Stack>
+			<Stack direction="row" spacing={2} alignItems="center">
+				<TextField label="Move" variant="standard" value={this.state.editedMove} onChange={evt => this.set('editedMove', evt.target.value)} />
 				<Button color="primary" size="small" variant="contained" onClick={() => this.handlePlayClicked()}>Play</Button>
-				<Box mx={2}>
-					<ButtonGroup color="primary" size="small">
-						<Button onClick={() => this.setPosition(new kokopu.Position('empty'))}>Clear</Button>
-						<Button onClick={() => this.setPosition(new kokopu.Position())}>Reset</Button>
-					</ButtonGroup>
-				</Box>
-			</Box>
+				<ButtonGroup color="primary" size="small">
+					<Button onClick={() => this.setPosition(new kokopu.Position('empty'))}>Clear</Button>
+					<Button onClick={() => this.setPosition(new kokopu.Position())}>Reset</Button>
+				</ButtonGroup>
+			</Stack>
 		</>);
 	}
 
 	renderChessboard() {
 		return (
-			<Box my={2}>
+			<Box>
 				<Chessboard
 					position={this.state.position}
 					move={this.state.playedMove}
@@ -115,13 +114,7 @@ export default class Page extends React.Component {
 		}
 		attributes.push(`moveArrowVisible={${this.state.moveArrowVisible}}`);
 		attributes.push(`animated={${this.state.animated}}`);
-		return (
-			<Box my={2}>
-				<pre className="kokopu-demoCode">
-					{buildComponentDemoCode('Chessboard', attributes)}
-				</pre>
-			</Box>
-		);
+		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;
 	}
 
 	set(attributeName, newValue) {

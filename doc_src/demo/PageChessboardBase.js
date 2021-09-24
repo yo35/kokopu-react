@@ -25,15 +25,18 @@ import React from 'react';
 import { Chessboard } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Slider from '@material-ui/core/Slider';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
 
 import './demo.css';
 
@@ -59,17 +62,17 @@ export default class Page extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<Stack spacing={2} mt={2}>
 				{this.renderControls()}
 				{this.renderChessboard()}
 				{this.renderCode()}
-			</div>
+			</Stack>
 		);
 	}
 
 	renderControls() {
 		return (<>
-			<Box my={2}>
+			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControlLabel label="Flip"
 					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
 				/>
@@ -79,42 +82,40 @@ export default class Page extends React.Component {
 				<FormControlLabel label="Show annotations"
 					control={<Switch checked={this.state.annotationVisible} onChange={() => this.set('annotationVisible', !this.state.annotationVisible)} color="primary" />}
 				/>
-			</Box>
-			<Box my={2}>
+			</Stack>
+			<Box>
 				<Typography gutterBottom>Square size</Typography>
 				<Slider
 					value={this.state.squareSize} onChange={(_, newValue) => this.set('squareSize', newValue)}
 					min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
 				/>
 			</Box>
-			<Box my={2} display="flex" flexDirection="row" alignItems="center">
-				<Box mr={2}>
-					<Typography>Colorset</Typography>
-					<Select value={this.state.colorset} onChange={evt => this.set('colorset', evt.target.value)}>
+			<Stack direction="row" spacing={2} alignItems="center">
+				<FormControl variant="standard">
+					<InputLabel id="colorset-label">Colorset</InputLabel>
+					<Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.set('colorset', evt.target.value)}>
 						{Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
 					</Select>
-				</Box>
-				<Box mx={2}>
-					<Typography>Pieceset</Typography>
-					<Select value={this.state.pieceset} onChange={evt => this.set('pieceset', evt.target.value)}>
+				</FormControl>
+				<FormControl variant="standard">
+					<InputLabel id="pieceset-label">Pieceset</InputLabel>
+					<Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.set('pieceset', evt.target.value)}>
 						{Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
 					</Select>
-				</Box>
-				<Box ml={2}>
-					<ButtonGroup color="primary" size="small">
-						<Button onClick={() => this.set('position', 'empty')}>Clear</Button>
-						<Button onClick={() => this.set('position', 'start')}>Reset</Button>
-						<Button onClick={() => this.set('position', '8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Set FEN</Button>
-						<Button onClick={() => this.set('position', 'I\'m an invalid FEN string')}>Set ill-formed FEN</Button>
-					</ButtonGroup>
-				</Box>
-			</Box>
+				</FormControl>
+				<ButtonGroup color="primary" size="small">
+					<Button onClick={() => this.set('position', 'empty')}>Clear</Button>
+					<Button onClick={() => this.set('position', 'start')}>Reset</Button>
+					<Button onClick={() => this.set('position', '8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Set FEN</Button>
+					<Button onClick={() => this.set('position', 'I\'m an invalid FEN string')}>Set ill-formed FEN</Button>
+				</ButtonGroup>
+			</Stack>
 		</>);
 	}
 
 	renderChessboard() {
 		return (
-			<Box my={2}>
+			<Box>
 				<Chessboard
 					position={this.state.position}
 					flipped={this.state.flipped}
@@ -145,13 +146,7 @@ export default class Page extends React.Component {
 		attributes.push(`coordinateVisible={${this.state.coordinateVisible}}`);
 		attributes.push(`colorset="${this.state.colorset}"`);
 		attributes.push(`pieceset="${this.state.pieceset}"`);
-		return (
-			<Box my={2}>
-				<pre className="kokopu-demoCode">
-					{buildComponentDemoCode('Chessboard', attributes)}
-				</pre>
-			</Box>
-		);
+		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;
 	}
 
 	set(attributeName, newValue) {

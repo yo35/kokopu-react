@@ -26,18 +26,19 @@ import kokopu from 'kokopu';
 import { Chessboard, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Select from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Typography from '@mui/material/Typography';
 
 import './demo.css';
 
@@ -68,55 +69,53 @@ export default class Page extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<Stack spacing={2} mt={2}>
 				{this.renderControls()}
 				{this.renderChessboard()}
 				{this.renderCode()}
-			</div>
+			</Stack>
 		);
 	}
 
 	renderControls() {
 		return (<>
-			<Box my={2} display="flex" flexDirection="row" alignItems="center">
+			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControlLabel label="Flip"
 					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
 				/>
 				<Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(kokopu.oppositeColor(this.state.position.turn()))}>
 					Change turn
 				</Button>
-				<Box mx={2}>
-					<ButtonGroup color="primary" size="small">
-						<Button onClick={() => this.set('position', new kokopu.Position('empty'))}>Clear</Button>
-						<Button onClick={() => this.set('position', new kokopu.Position())}>Reset</Button>
-					</ButtonGroup>
-				</Box>
-			</Box>
-			<Box my={2}>
+				<ButtonGroup color="primary" size="small">
+					<Button onClick={() => this.set('position', new kokopu.Position('empty'))}>Clear</Button>
+					<Button onClick={() => this.set('position', new kokopu.Position())}>Reset</Button>
+				</ButtonGroup>
+			</Stack>
+			<Box>
 				<Typography gutterBottom>
 					Edition mode
 				</Typography>
 				<RadioGroup value={this.state.interactionMode} onChange={evt => this.set('interactionMode', evt.target.value)}>
 					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
-					<Box display="flex" flexDirection="row">
+					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label="Add/remove pieces" />
 						{this.renderPieceSelector()}
-					</Box>
+					</Stack>
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
 					<FormControlLabel value="playMoves" control={<Radio color="primary" />} label="Move pieces (obeying chess rules)" />
-					<Box display="flex" flexDirection="row">
+					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label="Edit square annotations" />
 						{this.renderMarkerColorSelector('squareMarkerColor', 'editSquareMarkers')}
-					</Box>
-					<Box display="flex" flexDirection="row">
+					</Stack>
+					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label="Edit text annotations" />
 						{this.renderMarkerColorSelector('textMarkerColor', 'editTextMarkers')}
 						{this.renderTextMarkerSymbolSelector()}
-					</Box>
-					<Box display="flex" flexDirection="row">
+					</Stack>
+					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="editArrowMarkers" control={<Radio color="primary" />} label="Edit arrow annotations" />
 						{this.renderMarkerColorSelector('arrowMarkerColor', 'editArrowMarkers')}
-					</Box>
+					</Stack>
 				</RadioGroup>
 			</Box>
 		</>);
@@ -128,28 +127,24 @@ export default class Page extends React.Component {
 		}
 		let pieceset = Chessboard.piecesets()['cburnett'];
 		return (
-			<Box mx={2}>
-				<Box my={0.5}>
-					<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.setIfNonNull('pieceEditMode', newMode)}>
-						<ToggleButton value="wk"><img src={pieceset.wk} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="wq"><img src={pieceset.wq} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="wr"><img src={pieceset.wr} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="wb"><img src={pieceset.wb} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="wn"><img src={pieceset.wn} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="wp"><img src={pieceset.wp} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-					</ToggleButtonGroup>
-				</Box>
-				<Box my={0.5}>
-					<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.setIfNonNull('pieceEditMode', newMode)}>
-						<ToggleButton value="bk"><img src={pieceset.bk} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="bq"><img src={pieceset.bq} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="br"><img src={pieceset.br} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="bb"><img src={pieceset.bb} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="bn"><img src={pieceset.bn} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-						<ToggleButton value="bp"><img src={pieceset.bp} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
-					</ToggleButtonGroup>
-				</Box>
-			</Box>
+			<Stack spacing={0.5}>
+				<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.setIfNonNull('pieceEditMode', newMode)}>
+					<ToggleButton value="wk"><img src={pieceset.wk} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="wq"><img src={pieceset.wq} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="wr"><img src={pieceset.wr} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="wb"><img src={pieceset.wb} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="wn"><img src={pieceset.wn} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="wp"><img src={pieceset.wp} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+				</ToggleButtonGroup>
+				<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.setIfNonNull('pieceEditMode', newMode)}>
+					<ToggleButton value="bk"><img src={pieceset.bk} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="bq"><img src={pieceset.bq} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="br"><img src={pieceset.br} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="bb"><img src={pieceset.bb} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="bn"><img src={pieceset.bn} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+					<ToggleButton value="bp"><img src={pieceset.bp} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
+				</ToggleButtonGroup>
+			</Stack>
 		);
 	}
 
@@ -158,7 +153,7 @@ export default class Page extends React.Component {
 			return undefined;
 		}
 		return (
-			<Select value={this.state.textMarkerSymbol} onChange={evt => this.set('textMarkerSymbol', evt.target.value)}>
+			<Select variant="standard" value={this.state.textMarkerSymbol} onChange={evt => this.set('textMarkerSymbol', evt.target.value)}>
 				{[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'].map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
 			</Select>
 		);
@@ -170,13 +165,11 @@ export default class Page extends React.Component {
 		}
 		let colorset = Chessboard.colorsets()['original'];
 		return (
-			<Box mx={2} my={0.5}>
-				<ToggleButtonGroup value={this.state[attributeName]} exclusive size="small" onChange={(_, newColor) => this.setIfNonNull(attributeName, newColor)}>
-					<ToggleButton className="kokopu-fixTextTransform" value="g">{this.renderColorButtonLabel(colorset.g)}</ToggleButton>
-					<ToggleButton className="kokopu-fixTextTransform" value="r">{this.renderColorButtonLabel(colorset.r)}</ToggleButton>
-					<ToggleButton className="kokopu-fixTextTransform" value="y">{this.renderColorButtonLabel(colorset.y)}</ToggleButton>
-				</ToggleButtonGroup>
-			</Box>
+			<ToggleButtonGroup value={this.state[attributeName]} exclusive size="small" onChange={(_, newColor) => this.setIfNonNull(attributeName, newColor)}>
+				<ToggleButton className="kokopu-fixTextTransform" value="g">{this.renderColorButtonLabel(colorset.g)}</ToggleButton>
+				<ToggleButton className="kokopu-fixTextTransform" value="r">{this.renderColorButtonLabel(colorset.r)}</ToggleButton>
+				<ToggleButton className="kokopu-fixTextTransform" value="y">{this.renderColorButtonLabel(colorset.y)}</ToggleButton>
+			</ToggleButtonGroup>
 		);
 	}
 
@@ -195,7 +188,7 @@ export default class Page extends React.Component {
 
 	renderChessboard() {
 		return (
-			<Box my={2}>
+			<Box>
 				<Chessboard
 					position={this.state.position}
 					flipped={this.state.flipped}
@@ -257,13 +250,7 @@ export default class Page extends React.Component {
 			default:
 				break;
 		}
-		return (
-			<Box my={2}>
-				<pre className="kokopu-demoCode">
-					{buildComponentDemoCode('Chessboard', attributes)}
-				</pre>
-			</Box>
-		);
+		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;
 	}
 
 	set(attributeName, newValue) {

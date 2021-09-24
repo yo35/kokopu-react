@@ -25,8 +25,9 @@ import React from 'react';
 import { Chessboard } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import './demo.css';
 
@@ -63,17 +64,17 @@ export default class Page extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<Stack spacing={2} mt={2}>
 				{this.renderControls()}
 				{this.renderChessboard()}
 				{this.renderCode()}
-			</div>
+			</Stack>
 		);
 	}
 
 	renderControls() {
 		return (
-			<Box my={2}>
+			<Box>
 				<Typography>Resize the browser to see the chessboard adapt its size...</Typography>
 				<Typography>{`Current browser width: ${this.state.windowWidth} px`}</Typography>
 			</Box>
@@ -82,7 +83,7 @@ export default class Page extends React.Component {
 
 	renderChessboard() {
 		return (
-			<Box my={2}>
+			<Box>
 				<Chessboard squareSize={this.state.squareSize} smallScreenLimits={this.state.limits} />
 			</Box>
 		);
@@ -102,16 +103,14 @@ export default class Page extends React.Component {
 		attributes.push(`squareSize={${this.state.squareSize}}`);
 		attributes.push('smallScreenLimits={limits}');
 		return (
-			<Box my={2}>
-				<pre className="kokopu-demoCode">
-					{
-						'let limits = [\n' +
-						limits.join('') +
-						'];\n' +
-						buildComponentDemoCode('Chessboard', attributes)
-					}
-				</pre>
-			</Box>
+			<pre className="kokopu-demoCode">
+				{
+					'let limits = [\n' +
+					limits.join('') +
+					'];\n' +
+					buildComponentDemoCode('Chessboard', attributes)
+				}
+			</pre>
 		);
 	}
 
