@@ -24,6 +24,25 @@ const fs = require('fs');
 const path = require('path');
 const version = require('../package.json').version;
 
+
+const docSrcDir = '../doc_src';
+const srcDir = '../src';
+const tmpDir = '../build/tmp_docs';
+
+fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
+
+
+// Component section configuration
+// -------------------------------
+
+const componentSectionTitle = 'Components';
+const components = fs.readdirSync(path.resolve(__dirname, srcDir)).filter(filename => /^[A-Z].*\.js$/.test(filename)).map(filename => path.basename(filename, '.js'));
+
+
+// Demo section configuration
+// --------------------------
+
+const demoSectionTitle = 'Live demo';
 const demoPages = [
 	{ id: 'ChessboardBase', title: 'Chessboard - Basic features' },
 	{ id: 'ChessboardEdition', title: 'Chessboard - Edition' },
@@ -31,24 +50,33 @@ const demoPages = [
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
 ];
 
-const docSrcDir = '../doc_src';
-const srcDir = '../src';
-const tmpDir = '../build/tmp_docs';
 
+// Build the documentation
+// -----------------------
 
 // Generate the Markdown file corresponding to each demo page.
-fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 demoPages.forEach(demoPage => {
-	let filename = path.resolve(__dirname, `${tmpDir}/${demoPage.id}.md`);
-	fs.writeFileSync(filename,
+	let filename = `${tmpDir}/${demoPage.id}.md`;
+	fs.writeFileSync(path.resolve(__dirname, filename),
 		'```js\n' +
 		`<Page${demoPage.id} />\n` +
 		'```\n'
 	);
+	demoPage.filename = filename;
 });
 
-// Retrieve the components to document (-> all the .js files starting with a capital in src root directory).
-let components = fs.readdirSync(path.resolve(__dirname, srcDir)).filter(filename => /^[A-Z].*\.js$/.test(filename)).map(filename => path.basename(filename, '.js'));
+// Generate the table of contents for each sections with sub-sections.
+function generateTableOfContents(parentName, itemNames) {
+	let text = itemNames.map(itemName => {
+		let link = `#/${parentName}/${itemName}`.replace(/ /g, '%20');
+		return `- [${itemName}](${link})\n`;
+	}).join('');
+	let filename = `${tmpDir}/Header_${parentName.replace(/ /g, '_')}.md`;
+	fs.writeFileSync(path.resolve(__dirname, filename), text);
+	return filename;
+}
+let componentsTocFilename = generateTableOfContents(componentSectionTitle, components);
+let demoTocFilename = generateTableOfContents(demoSectionTitle, demoPages.map(demoPage => demoPage.title));
 
 // Define the symbols available for example blocks in documentation.
 let componentContext = Object.fromEntries(components.map(componentName => [ componentName, path.resolve(__dirname, `${srcDir}/${componentName}`) ]));
@@ -88,17 +116,19 @@ module.exports = {
 			content: `${docSrcDir}/home.md`,
 		},
 		{
-			name: 'Components',
+			name: componentSectionTitle,
+			content: componentsTocFilename,
 			components: components.map(componentName => `${srcDir}/${componentName}.js`),
 			sectionDepth: 1
 		},
 		{
-			name: 'Live demo',
+			name: demoSectionTitle,
+			content: demoTocFilename,
 			sectionDepth: 1,
 			sections: demoPages.map(demoPage => {
 				return {
 					name: demoPage.title,
-					content: `${tmpDir}/${demoPage.id}.md`,
+					content: demoPage.filename,
 					exampleMode: 'hide'
 				};
 			}),
