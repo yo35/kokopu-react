@@ -31,15 +31,15 @@ const demoPages = [
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
 ];
 
-const docSrcDir = path.join('..', 'doc_src');
-const srcDir = path.join('..', 'src');
-const tmpDir = path.join('..', 'build', 'tmp_docs');
+const docSrcDir = '../doc_src';
+const srcDir = '../src';
+const tmpDir = '../build/tmp_docs';
 
 
 // Generate the Markdown file corresponding to each demo page.
 fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 demoPages.forEach(demoPage => {
-	let filename = path.resolve(__dirname, tmpDir, demoPage.id + '.md');
+	let filename = path.resolve(__dirname, `${tmpDir}/${demoPage.id}.md`);
 	fs.writeFileSync(filename,
 		'```js\n' +
 		`<Page${demoPage.id} />\n` +
@@ -47,12 +47,12 @@ demoPages.forEach(demoPage => {
 	);
 });
 
-// Retrieve the components to document.
+// Retrieve the components to document (-> all the .js files starting with a capital in src root directory).
 let components = fs.readdirSync(path.resolve(__dirname, srcDir)).filter(filename => /^[A-Z].*\.js$/.test(filename)).map(filename => path.basename(filename, '.js'));
 
 // Define the symbols available for example blocks in documentation.
-let componentContext = Object.fromEntries(components.map(componentName => [ componentName, path.resolve(__dirname, srcDir, componentName) ]));
-let demoContext = Object.fromEntries(demoPages.map(demoPage => [ 'Page' + demoPage.id, path.resolve(__dirname, docSrcDir, 'demo', 'Page' + demoPage.id) ]));
+let componentContext = Object.fromEntries(components.map(componentName => [ componentName, path.resolve(__dirname, `${srcDir}/${componentName}`) ]));
+let demoContext = Object.fromEntries(demoPages.map(demoPage => [ 'Page' + demoPage.id, path.resolve(__dirname, `${docSrcDir}/demo/Page${demoPage.id}`) ]));
 
 
 // Styleguidist config.
@@ -80,16 +80,16 @@ module.exports = {
 	exampleMode: 'expand',
 	context: Object.assign({}, componentContext, demoContext),
 	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.js')} } from kokopu-react;`,
-	getExampleFilename: componentPath => path.resolve(__dirname, docSrcDir, 'examples', path.basename(componentPath, '.js') + '.md'),
+	getExampleFilename: componentPath => path.resolve(__dirname, `${docSrcDir}/examples/${path.basename(componentPath, '.js')}.md`),
 	pagePerSection: true,
 	sections: [
 		{
 			name: 'Home',
-			content: path.join(docSrcDir, 'home.md'),
+			content: `${docSrcDir}/home.md`,
 		},
 		{
 			name: 'Components',
-			components: components.map(componentName => path.join(srcDir, componentName + '.js')),
+			components: components.map(componentName => `${srcDir}/${componentName}.js`),
 			sectionDepth: 1
 		},
 		{
@@ -98,7 +98,7 @@ module.exports = {
 			sections: demoPages.map(demoPage => {
 				return {
 					name: demoPage.title,
-					content: path.join(tmpDir, demoPage.id + '.md'),
+					content: `${tmpDir}/${demoPage.id}.md`,
 					exampleMode: 'hide'
 				};
 			}),
