@@ -29,7 +29,7 @@ import kokopu from 'kokopu';
 import colorsets from './impl/colorsets';
 import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
-import ErrorBox from './impl/ErrorBox';
+import ErrorBox from './ErrorBox';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
 
