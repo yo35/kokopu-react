@@ -107,7 +107,7 @@ module.exports = {
 	usageMode: 'expand',
 	exampleMode: 'expand',
 	context: Object.assign({}, componentContext, demoContext),
-	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.js')} } from kokopu-react;`,
+	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.js')} } from 'kokopu-react';`,
 	getExampleFilename: componentPath => path.resolve(__dirname, `${docSrcDir}/examples/${path.basename(componentPath, '.js')}.md`),
 	pagePerSection: true,
 	sections: [
