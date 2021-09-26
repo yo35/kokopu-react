@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.3.0 (September 26, 2021)
+--------------------------
+* Expose component `ErrorBox`.
+* Minor fixes in documentation.
+
 1.2.0 (September 13, 2021)
 --------------------------
 * Fix ambiguous castling move issue at Chess960.
