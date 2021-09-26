@@ -30,6 +30,7 @@ import colorsets from './impl/colorsets';
 import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
 import ErrorBox from './ErrorBox';
+import i18n from './i18n';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId, isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
 
@@ -82,10 +83,10 @@ export default class Chessboard extends React.Component {
 		// Compute the current position.
 		let info = this.getPositionAndMoveInfo();
 		if (info.positionError) {
-			return <ErrorBox title="Error while analysing a FEN string." message={info.message}></ErrorBox>;
+			return <ErrorBox title={i18n.INVALID_FEN_ERROR_TITLE} message={info.message}></ErrorBox>;
 		}
 		else if (info.moveError) {
-			return <ErrorBox title="Invalid move notation." message={info.message}></ErrorBox>;
+			return <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={info.message}></ErrorBox>;
 		}
 		let { position, move, positionBefore } = info;
 
@@ -938,7 +939,7 @@ function parsePosition(position) {
 		}
 	}
 	else {
-		return { error: true, message: 'Invalid "position" attribute.' };
+		return { error: true, message: i18n.INVALID_POSITION_ATTRIBUTE_ERROR_MESSAGE };
 	}
 }
 
@@ -965,7 +966,7 @@ function parseMove(position, move) {
 		}
 	}
 	else {
-		return { error: true, message: 'Invalid "move" attribute.' };
+		return { error: true, message: i18n.INVALID_MOVE_ATTRIBUTE_ERROR_MESSAGE };
 	}
 }
 
