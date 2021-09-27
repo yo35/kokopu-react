@@ -22,11 +22,12 @@ settings:
 rules:
 
   # Style
-  indent:          [ error, tab, { SwitchCase: 1 }]
-  linebreak-style: [ error, unix ]
-  quotes:          [ error, single ]
-  semi:            [ error, always ]
-  camelcase:       [ error ]
+  indent:             [ error, tab, { SwitchCase: 1 }]
+  linebreak-style:    [ error, unix ]
+  quotes:             [ error, single ]
+  semi:               [ error, always ]
+  camelcase:          [ error ]
+  no-trailing-spaces: [ error ]
 
   # Additional rules (possible errors)
   no-console: [ error ]
