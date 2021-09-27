@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.3.1 (September 27, 2021)
+--------------------------
+* Fix missing export for `ErrorBox`.
+
 1.3.0 (September 26, 2021)
 --------------------------
 * Expose component `ErrorBox`.
