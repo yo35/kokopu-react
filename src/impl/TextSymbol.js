@@ -20,20 +20,58 @@
  ******************************************************************************/
 
 
+import PropTypes from 'prop-types';
 import React from 'react';
-import testApp from './common/test_app';
-import { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../src/index';
 
-testApp([ /* eslint-disable react/jsx-key */
-	<SquareMarkerIcon size={40} />,
-	<SquareMarkerIcon size={45} color="green" />,
-	<div style={{ color: 'purple' }}><SquareMarkerIcon size={31} /></div>,
-	<TextMarkerIcon size={41} symbol="A" />,
-	<TextMarkerIcon size={29} symbol="b" color="#0ff" />,
-	<div style={{ color: 'red' }}><TextMarkerIcon size={53} symbol="5" /></div>,
-	<ArrowMarkerIcon size={40} />,
-	<ArrowMarkerIcon size={24} color="#888" />,
-	<div style={{ color: '#f70' }}><ArrowMarkerIcon size={48} /></div>,
-	<TextMarkerIcon size={47} symbol="dot" color="#00f" />,
-	<div style={{ color: 'pink' }}><TextMarkerIcon size={48} symbol="circle" /></div>,
-]); /* eslint-enable react/jsx-key */
+import '../css/label.css';
+import '../css/symbol.css';
+
+const SHAPE_THICKNESS_FACTOR = 0.1;
+const DOT_RADIUS_FACTOR = 0.15;
+const CIRCLE_RADIUS_FACTOR = 0.425;
+
+
+/**
+ * Symbol of a text marker.
+ */
+export default function TextSymbol(props) {
+	if (props.symbol === 'dot') {
+		return <circle cx={props.x} cy={props.y} r={props.size * DOT_RADIUS_FACTOR} fill={props.color} />;
+	}
+	else if (props.symbol === 'circle') {
+		let thickness = props.size * SHAPE_THICKNESS_FACTOR;
+		return <circle className="kokopu-symbolCircle" cx={props.x} cy={props.y} r={props.size * CIRCLE_RADIUS_FACTOR} stroke={props.color} strokeWidth={thickness} />;
+	}
+	else {
+		let symbol = props.symbol === 'plus' ? '+' : props.symbol === 'times' ? '\u00d7' : props.symbol;
+		return <text className="kokopu-label" x={props.x} y={props.y} fill={props.color} fontSize={props.size}>{symbol}</text>;
+	}
+}
+
+TextSymbol.propTypes = {
+
+	/**
+	 * X-coordinate of the center of the symbol.
+	 */
+	x: PropTypes.number.isRequired,
+
+	/**
+	 * Y-coordinate of the center of the symbol.
+	 */
+	y: PropTypes.number.isRequired,
+
+	/**
+	 * Size of the symbol (i.e. size of square in which the symbol is rendered).
+	 */
+	size: PropTypes.number.isRequired,
+
+	/**
+	 * Symbol code.
+	 */
+	symbol: PropTypes.string.isRequired,
+
+	/**
+	 * Color to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: PropTypes.string.isRequired,
+};

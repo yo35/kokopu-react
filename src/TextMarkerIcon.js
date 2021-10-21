@@ -23,9 +23,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import './css/label.css';
-
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, isValidSymbol } from './impl/util';
+import TextSymbol from './impl/TextSymbol';
 
 
 /**
@@ -39,9 +38,7 @@ export default function TextMarkerIcon(props) {
 	let viewBox = `0 0 ${size} ${size}`;
 	return (
 		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<text className="kokopu-label" x={size / 2} y={size / 2} fill={props.color} style={{ 'fontSize': size }}>
-				{props.symbol}
-			</text>
+			<TextSymbol x={size / 2} y={size / 2} size={size} symbol={props.symbol} color={props.color} />
 		</svg>
 	);
 }
@@ -54,7 +51,10 @@ TextMarkerIcon.propTypes = {
 	size: PropTypes.number.isRequired,
 
 	/**
-	 * Symbol to represent on the icon. Must be either a letter (upper-case or lower-case) or a digit.
+	 * Symbol to represent on the icon. Must be one of:
+	 *  - any letter from A to Z (either upper-case or lower-case),
+	 *  - any digit from 0 to 9,
+	 *  - any symbol code among `'plus'`, `'times'`, `'dot'`, or `'circle'`.
 	 */
 	symbol: PropTypes.string.isRequired,
 

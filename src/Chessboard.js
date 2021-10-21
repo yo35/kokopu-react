@@ -29,6 +29,7 @@ import kokopu from 'kokopu';
 import colorsets from './impl/colorsets';
 import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
+import TextSymbol from './impl/TextSymbol';
 import ErrorBox from './ErrorBox';
 import i18n from './i18n';
 import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
@@ -347,9 +348,9 @@ export default class Chessboard extends React.Component {
 			x += squareSize / 2;
 			y += squareSize / 2;
 			result.push(
-				<text key={'txtm-' + sq} className="kokopu-annotation kokopu-label" x={x} y={y} fill={colorset[value.color]} style={{ 'fontSize': squareSize }}>
-					{value.symbol}
-				</text>
+				<g key={'txtm-' + sq} className="kokopu-annotation">
+					<TextSymbol x={x} y={y} size={squareSize} symbol={value.symbol} color={colorset[value.color]} />
+				</g>
 			);
 		});
 		return result;

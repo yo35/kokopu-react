@@ -36,5 +36,5 @@ describe('Marker icons graphic', function() {
 	});
 
 	itChecksScreenshots(browserContext, '01_marker_icons', [ 'default square', 'colorized square', 'wrapped square', 'default text', 'colorized text', 'wrapped text',
-		'default arrow', 'colorized arrow', 'wrapped arrow' ]);
+		'default arrow', 'colorized arrow', 'wrapped arrow', 'colorized symbol', 'wrapped symbol' ]);
 });

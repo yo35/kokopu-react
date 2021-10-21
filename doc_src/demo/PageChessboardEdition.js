@@ -152,9 +152,10 @@ export default class Page extends React.Component {
 		if (this.state.interactionMode !== 'editTextMarkers') {
 			return undefined;
 		}
+		let availableSymbols = [ 'plus', 'times', 'dot', 'circle' ].concat([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
 		return (
 			<Select variant="standard" value={this.state.textMarkerSymbol} onChange={evt => this.set('textMarkerSymbol', evt.target.value)}>
-				{[...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'].map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
+				{availableSymbols.map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
 			</Select>
 		);
 	}
