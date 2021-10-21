@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   web-client:
-    image: selenium/standalone-firefox:4.0.0-rc-1-prerelease-20210804
+    image: selenium/standalone-firefox:4.0.0-20211013
     shm_size: '2gb'
     ports:
       - 4444:4444 # Driver (http://localhost:4444)
