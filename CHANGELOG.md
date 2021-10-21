@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.4.0 (October 21, 2021)
+------------------------
+* Add support for plus/times/dot/circle in text markers.
+
 1.3.1 (September 27, 2021)
 --------------------------
 * Fix missing export for `ErrorBox`.
