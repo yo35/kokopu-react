@@ -41,14 +41,14 @@ export function flattenSquareMarkers(markers) {
 /**
  * Transform a set of text markers defined as a "square -> (symbol, color)" struct into a comma-separated string.
  *
- * @param {object} markers For example: `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }}`
- * @returns {string} For example: `'Rzd5,GAe4'`
+ * @param {object} markers For example: `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }, h3: { symbol: 'plus', color: 'y' } }`
+ * @returns {string} For example: `'Rzd5,GAe4,Y(plus)h3'`
  */
 export function flattenTextMarkers(markers) {
 	return Object.entries(markers)
 		.filter(([ sq, desc ]) => isValidSquare(sq) && desc && isValidColor(desc.color) && isValidSymbol(desc.symbol))
 		.sort((a, b) => a[0].localeCompare(b[0]))
-		.map(([ sq, desc ]) => desc.color.toUpperCase() + desc.symbol + sq)
+		.map(([ sq, desc ]) => desc.color.toUpperCase() + (desc.symbol.length === 1 ? desc.symbol : '(' + desc.symbol + ')') + sq)
 		.join(',');
 }
 
@@ -91,12 +91,13 @@ export function parseSquareMarkers(markers) {
 /**
  * Parse a set of text markers defined as a comma-separated string into a "square -> (symbol, color)" struct.
  *
- * @param {string} markers For example: `'Rzd5,GAe4'`
- * @returns {object} For example: `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }}`
+ * @param {string} markers For example: `'Rzd5,GAe4,Y(plus)h3'`
+ * @returns {object} For example: `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }, h3: { symbol: 'plus', color: 'y' } }`
  */
 export function parseTextMarkers(markers) {
 	return parseMarkers(markers, token => {
-		return /^([GRY])([A-Za-z0-9])([a-h][1-8])$/.test(token) ? { key: RegExp.$3, value: { symbol: RegExp.$2, color: RegExp.$1.toLowerCase() } } : undefined;
+		return /^([GRY])(?:([A-Za-z0-9])|\((plus|times|dot|circle)\))([a-h][1-8])$/.test(token) ?
+			{ key: RegExp.$4, value: { symbol: RegExp.$2 || RegExp.$3, color: RegExp.$1.toLowerCase() } } : undefined;
 	});
 }
 

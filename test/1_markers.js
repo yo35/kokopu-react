@@ -65,6 +65,13 @@ describe('Flatten text markers', () => {
 		h7: { symbol: 'x', color: 'r' },
 		d2: { symbol: 'L', color: 'r' },
 	})).is('G2a1,YMc5,RLd2,Rxh7,Ywh8'); });
+	it('Multi-character symbols', () => { test.value(flattenTextMarkers({
+		a1: { symbol: 'A', color: 'y' },
+		a7: { symbol: 'plus', color: 'g' },
+		b3: { symbol: 'times', color: 'r' },
+		g5: { symbol: 'dot', color: 'y' },
+		h3: { symbol: 'circle', color: 'g' },
+	})).is('YAa1,G(plus)a7,R(times)b3,Y(dot)g5,G(circle)h3'); });
 	it('<empty>', () => { test.value(flattenTextMarkers({})).is(''); });
 
 	it('Wrong square', () => { test.value(flattenTextMarkers({
@@ -83,6 +90,10 @@ describe('Flatten text markers', () => {
 		d8: { symbol: '-', color: 'r' },
 		c1: { symbol: 'abcd', color: 'r' },
 	})).is('G0a2'); });
+	it('Wrong multi-character symbol', () => { test.value(flattenTextMarkers({
+		a2: { symbol: '0', color: 'g' },
+		b5: { symbol: 'whatever', color: 'r' },
+	})).is('G0a2'); });
 });
 
 
@@ -100,6 +111,13 @@ describe('Parse text markers', () => {
 		h7: { symbol: 'x', color: 'r' },
 		d2: { symbol: 'L', color: 'r' },
 	}); });
+	it('Multi-character symbols', () => { test.value(parseTextMarkers('YAa1,G(plus)a7, R(times)b3  ,Y(dot)g5,G(circle)h3')).is({
+		a1: { symbol: 'A', color: 'y' },
+		a7: { symbol: 'plus', color: 'g' },
+		b3: { symbol: 'times', color: 'r' },
+		g5: { symbol: 'dot', color: 'y' },
+		h3: { symbol: 'circle', color: 'g' },
+	}); });
 	it('<empty>', () => { test.value(parseTextMarkers('')).is({}); });
 	it('<blank>', () => { test.value(parseTextMarkers(' ')).is({}); });
 
@@ -107,6 +125,7 @@ describe('Parse text markers', () => {
 	it('Duplicated square', () => { test.value(parseTextMarkers('Rka3,Gba3')).is({ a3: { symbol: 'b', color: 'g' } }); });
 	it('Wrong color', () => { test.value(parseTextMarkers('G3a6,BAg5')).is({ a6: { symbol: '3', color: 'g' } }); });
 	it('Wrong symbol', () => { test.value(parseTextMarkers('Rb2,RAg5,G.d3,Yabcde7')).is({ g5: { symbol: 'A', color: 'r' } }); });
+	it('Wrong multi-character symbol', () => { test.value(parseTextMarkers('RZb2,Y(whatever)e4')).is({ b2: { symbol: 'Z', color: 'r' } }); });
 	it('Wrong format', () => { test.value(parseTextMarkers('Something RHa2 invalid, Yqe4, G g3')).is({ e4: { symbol: 'q', color: 'y' } }); });
 });
 

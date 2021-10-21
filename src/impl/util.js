@@ -56,5 +56,5 @@ export function isValidColor(color) {
 
 
 export function isValidSymbol(symbol) {
-	return /^[A-Za-z0-9]$/.test(symbol);
+	return /^(?:[A-Za-z0-9]|plus|times|dot|circle)$/.test(symbol);
 }
