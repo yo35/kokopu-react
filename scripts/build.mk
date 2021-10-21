@@ -25,6 +25,7 @@ PACKAGE_JSON_FILE = package.json
 SRC_DIR           = src
 SRC_FILES         = $(shell find src -type f)
 SRC_DOC_FILES     = $(shell find doc_src -type f)
+SRC_FAVICON_FILE  = doc_src/theming/kokopu-react-favicon.png
 DOC_CONFIG_FILE   = scripts/styleguide.config.js
 
 # Generated files and folders
@@ -55,8 +56,9 @@ $(LIB_DIR): $(SRC_FILES) $(PACKAGE_JSON_FILE)
 	@$(ECHO) "Babelify files in $(SRC_DIR)..."
 	@npx babel --delete-dir-on-start --copy-files -d $@ $(SRC_DIR)
 
-$(DOCUMENTATION_DIR): $(DOC_CONFIG_FILE) $(SRC_FILES) $(SRC_DOC_FILES) $(PACKAGE_JSON_FILE)
+$(DOCUMENTATION_DIR): $(DOC_CONFIG_FILE) $(SRC_FILES) $(SRC_DOC_FILES) $(SRC_FAVICON_FILE) $(PACKAGE_JSON_FILE)
 	@$(ECHO) "Generate documentation..."
 	@mkdir -p $(DIST_DIR)
 	@rm -rf $@
 	@npx styleguidist build --config $<
+	@cp $(SRC_FAVICON_FILE) $(DOCUMENTATION_DIR)/favicon.png

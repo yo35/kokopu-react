@@ -141,6 +141,9 @@ module.exports = {
 	styleguideComponents: {
 		LogoRenderer: path.resolve(__dirname, `${docSrcDir}/theming/LogoRenderer`),
 	},
+	template: {
+		favicon: 'favicon.png',
+	},
 	theme: {
 		sidebarWidth: 300,
 	},
