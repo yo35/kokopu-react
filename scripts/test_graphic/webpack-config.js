@@ -47,6 +47,7 @@ module.exports = {
 	entry: entries,
 	output: {
 		path: path.resolve(__dirname, '../../build/test_graphic'),
+		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
 	},
 	plugins: plugins,
 	module: {

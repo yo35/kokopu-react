@@ -32,6 +32,7 @@ module.exports = {
 		library: {
 			type: 'commonjs2',
 		},
+		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
 	},
 	module: {
 		rules: [
