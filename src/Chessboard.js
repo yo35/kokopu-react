@@ -273,7 +273,7 @@ export default class Chessboard extends React.Component {
 		return (
 			<line
 				className="kokopu-annotation kokopu-arrow kokopu-arrowDraggable kokopu-dragging" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-				stroke={colorset[this.props.editedArrowColor]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }}
+				stroke={colorset[this.props.editedArrowColor]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
 			/>
 		);
 	}
@@ -377,7 +377,7 @@ export default class Chessboard extends React.Component {
 			result.push(
 				<line
 					key={'arm-' + vect} className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-					stroke={colorset[color]} style={{ 'strokeWidth': strokeWidth, 'markerEnd': `url(#${arrowTipId})` }}
+					stroke={colorset[color]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
 				/>
 			);
 		});
@@ -401,7 +401,7 @@ export default class Chessboard extends React.Component {
 		return (
 			<line
 				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset['highlight']}
-				style={{ 'strokeWidth': squareSize * STROKE_THICKNESS_FACTOR, 'markerEnd': `url(#${this.getArrowTipId('highlight')})` }}
+				strokeWidth={squareSize * STROKE_THICKNESS_FACTOR} markerEnd={`url(#${this.getArrowTipId('highlight')})`}
 			/>
 		);
 	}
@@ -420,14 +420,14 @@ export default class Chessboard extends React.Component {
 		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
 		let y = (this.props.flipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
-		return <text key={'rank-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
+		return <text key={'rank-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} fontSize={fontSize}>{label}</text>;
 	}
 
 	renderFileCoordinate(squareSize, fontSize, file) {
 		let x = (this.props.flipped ? 7.5 - file : 0.5 + file) * squareSize;
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
-		return <text key={'file-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} style={{ 'fontSize': fontSize }}>{label}</text>;
+		return <text key={'file-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} fontSize={fontSize}>{label}</text>;
 	}
 
 	handleWindowResize() {

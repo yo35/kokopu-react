@@ -29,7 +29,7 @@ import React from 'react';
  */
 export default function ArrowTip(props) {
 	return (
-		<marker id={props.id} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto" style={{ fill: props.color }}>
+		<marker id={props.id} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto" fill={props.color}>
 			<path d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
 		</marker>
 	);
@@ -45,9 +45,5 @@ ArrowTip.propTypes = {
 	/**
 	 * Color to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
 	 */
-	color: PropTypes.string,
-};
-
-ArrowTip.defaultProps = {
-	color: 'currentcolor',
+	color: PropTypes.string.isRequired,
 };

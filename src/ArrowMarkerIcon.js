@@ -54,7 +54,7 @@ export default class ArrowMarkerIcon extends React.Component {
 					<ArrowTip id={this.arrowTipId} color={this.props.color} />
 				</defs>
 				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={this.props.color}
-					style={{ 'strokeWidth': halfThickness * 2, 'markerEnd': `url(#${this.arrowTipId})` }} />
+					strokeWidth={halfThickness * 2} markerEnd={`url(#${this.arrowTipId})`} />
 			</svg>
 		);
 	}
