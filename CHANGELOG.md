@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.4.1 (January 1, 2022)
+-----------------------
+* Upgrade dependencies.
+
 1.4.0 (October 21, 2021)
 ------------------------
 * Add support for plus/times/dot/circle in text markers.
