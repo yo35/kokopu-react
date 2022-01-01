@@ -2,7 +2,7 @@
 ################################################################################
 #                                                                              #
 #     This file is part of Kokopu-React, a JavaScript chess library.           #
-#     Copyright (C) 2021  Yoann Le Montagner <yo35 -at- melix.net>             #
+#     Copyright (C) 2021-2022  Yoann Le Montagner <yo35 -at- melix.net>        #
 #                                                                              #
 #     This program is free software: you can redistribute it and/or            #
 #     modify it under the terms of the GNU Lesser General Public License       #
