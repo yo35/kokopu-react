@@ -49,7 +49,7 @@ exports.openBrowser = async function(mochaContext, browserContext) {
 	// Start the browser and ensure it can fetch something.
 	let capabilities = Capabilities.firefox();
 	let driver = new Builder().usingServer('http://localhost:4444').withCapabilities(capabilities).build();
-	await driver.get('file:///app/build/test_graphic/healthcheck.txt').catch(reason => {
+	await driver.get('file:///app/build/test_graphic/heartbeat.txt').catch(reason => {
 		return Promise.reject(reason.message.includes('ECONNREFUSED') ? new Error(UNREACHABLE_TEST_CLIENT_MESSAGE) : reason);
 	});
 

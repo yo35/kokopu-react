@@ -39,7 +39,7 @@ var plugins = items.map(item => new HtmlWebpackPlugin({
 	filename: item + '/index.html',
 }));
 plugins.push(new CopyWebpackPlugin({
-	patterns: [ { from: './graphic_test_app/common/healthcheck.txt', to: 'healthcheck.txt' } ],
+	patterns: [ { from: './graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' } ],
 }));
 
 module.exports = {
