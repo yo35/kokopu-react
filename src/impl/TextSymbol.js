@@ -23,7 +23,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import '../css/label.css';
 import '../css/symbol.css';
 
 const SHAPE_THICKNESS_FACTOR = 0.1;
@@ -44,7 +43,7 @@ export default function TextSymbol(props) {
 	}
 	else {
 		let symbol = props.symbol === 'plus' ? '+' : props.symbol === 'times' ? '\u00d7' : props.symbol;
-		return <text className="kokopu-label" x={props.x} y={props.y} fill={props.color} fontSize={props.size}>{symbol}</text>;
+		return <text className="kokopu-symbolText" x={props.x} y={props.y} fill={props.color} fontSize={props.size}>{symbol}</text>;
 	}
 }
 

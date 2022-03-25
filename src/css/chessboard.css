@@ -22,6 +22,11 @@
 
 .kokopu-coordinate {
 	fill: currentcolor;
+	font-style: normal;
+	font-family: sans-serif;
+	text-anchor: middle;
+	dominant-baseline: central;
+	letter-spacing: 0px;
 }
 
 .kokopu-annotation {

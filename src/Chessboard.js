@@ -37,7 +37,6 @@ import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId, is
 
 import './css/chessboard.css';
 import './css/arrow.css';
-import './css/label.css';
 
 const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
@@ -420,14 +419,14 @@ export default class Chessboard extends React.Component {
 		let x = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize) / 2;
 		let y = (this.props.flipped ? rank + 0.5 : 7.5 - rank) * squareSize;
 		let label = RANK_LABELS[rank];
-		return <text key={'rank-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} fontSize={fontSize}>{label}</text>;
+		return <text key={'rank-' + label} className="kokopu-coordinate" x={x} y={y} fontSize={fontSize}>{label}</text>;
 	}
 
 	renderFileCoordinate(squareSize, fontSize, file) {
 		let x = (this.props.flipped ? 7.5 - file : 0.5 + file) * squareSize;
 		let y = 8 * squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize) / 2;
 		let label = FILE_LABELS[file];
-		return <text key={'file-' + label} className="kokopu-coordinate kokopu-label" x={x} y={y} fontSize={fontSize}>{label}</text>;
+		return <text key={'file-' + label} className="kokopu-coordinate" x={x} y={y} fontSize={fontSize}>{label}</text>;
 	}
 
 	handleWindowResize() {
