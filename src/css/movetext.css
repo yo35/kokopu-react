@@ -20,18 +20,74 @@
  ******************************************************************************/
 
 
-const i18n = {
+.kokopu-colorTag {
+	width : 1.2em;
+	height: 1.2em;
+	vertical-align: middle;
+	display: inline-block;
+	border: 1px solid black;
+	margin-right: 0.25em;
+}
 
-	// Chessboard
-	INVALID_FEN_ERROR_TITLE: 'Invalid FEN string.',
-	INVALID_NOTATION_ERROR_TITLE: 'Invalid move notation.',
-	INVALID_POSITION_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "position" attribute.',
-	INVALID_MOVE_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "move" attribute.',
+.kokopu-headerGroup-whitePlayer .kokopu-colorTag {
+	background-color: white;
+} 
 
-	// Movetext
-	ANNOTATED_BY: 'Annotated by {0}',
-	INVALID_PGN_ERROR_TITLE: 'Invalid PGN string.',
-	INVALID_GAME_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "game" attribute.',
-};
+.kokopu-headerGroup-blackPlayer .kokopu-colorTag {
+	background-color: black;
+}
 
-export default i18n;
+.kokopu-headerGroup-titleRating:before,
+.kokopu-header-round:before {
+	content: "\a0("; /* \a0 == &nbsp; */
+}
+
+.kokopu-headerGroup-titleRating:after,
+.kokopu-header-round:after {
+	content: ")";
+}
+
+.kokopu-header-round,
+.kokopu-header-annotator {
+	font-style: italic;
+}
+
+* + .kokopu-move:before,
+* + .kokopu-gameResult:before,
+* + span.kokopu-comment:before {
+	content: " ";
+}
+
+span.kokopu-variation:before {
+	content: " (";
+}
+
+span.kokopu-variation:after {
+	content: ")";
+}
+
+* + .kokopu-nag:before {
+	content: "\a0"; /* \a0 == &nbsp; */
+}
+
+div.kokopu-subVariation {
+	margin-left: 1.5em;
+}
+
+.kokopu-move,
+.kokopu-gameResult {
+	font-weight: bold;
+}
+
+.kokopu-subVariation .kokopu-move {
+	font-weight: inherit;
+}
+
+.kokopu-diagram {
+	text-align: center;
+	line-height: 0px;
+}
+
+.kokopu-hidden {
+	display: none;
+}
