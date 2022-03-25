@@ -580,7 +580,7 @@ export default class Chessboard extends React.Component {
 	}
 
 	/**
-	 * Return information regarding the current displayed position and move, or parsing error message if something went wrong.
+	 * Return information regarding the currently displayed position and move, or parsing error message if something went wrong.
 	 */
 	getPositionAndMoveInfo() {
 
