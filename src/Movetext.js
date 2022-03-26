@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import kokopu from 'kokopu';
 
+import HtmlSanitizer from './impl/HtmlSanitizer';
 import Chessboard from './Chessboard';
 import ErrorBox from './ErrorBox';
 import i18n from './i18n';
@@ -109,9 +110,9 @@ export default class Movetext extends React.Component {
 
 		let classNames = [ 'kokopu-headerGroup-player', color === 'w' ? 'kokopu-headerGroup-whitePlayer' : 'kokopu-headerGroup-blackPlayer' ];
 		let colorTag = <span className="kokopu-colorTag"></span>;
-		let playerNameElement = <span className="kokopu-header-playerName">{playerName}</span>; // TODO sanitize HTML for player name
-		let titleElement = title === undefined ? undefined : <span className="kokopu-header-playerTitle">{title}</span>; // TODO sanitize HTML for title
-		let ratingElement = rating === undefined ? undefined : <span className="kokopu-header-playerRating">{rating}</span>; // TODO sanitize HTML for rating
+		let playerNameElement = <span className="kokopu-header-playerName">{sanitizeHtml(playerName)}</span>;
+		let titleElement = title === undefined ? undefined : <span className="kokopu-header-playerTitle">{sanitizeHtml(title)}</span>;
+		let ratingElement = rating === undefined ? undefined : <span className="kokopu-header-playerRating">{sanitizeHtml(rating)}</span>;
 		let separator = title === undefined || rating === undefined ? undefined : '\u00a0'; // \u00a0 == &nbsp;
 		let titleRatingGroup = title === undefined && rating === undefined ? undefined : <span className="kokopu-headerGroup-titleRating">{titleElement}{separator}{ratingElement}</span>;
 		return <div className={classNames.join(' ')} key={'player-' + color}>{colorTag}{playerNameElement}{titleRatingGroup}</div>;
@@ -126,8 +127,8 @@ export default class Movetext extends React.Component {
 			return undefined;
 		}
 		let round = game.round();
-		let roundElement = round === undefined ? undefined : <span className="kokopu-header-round">{round}</span>; // TODO sanitize HTML for round
-		let evtElement = <span className="kokopu-header-event">{evt}</span>; // TODO sanitize HTML for event
+		let roundElement = round === undefined ? undefined : <span className="kokopu-header-round">{sanitizeHtml(round)}</span>;
+		let evtElement = <span className="kokopu-header-event">{sanitizeHtml(evt)}</span>;
 		return <div className="kokopu-headerGroup-eventRound" key="event-round">{evtElement}{roundElement}</div>;
 	}
 
@@ -141,7 +142,7 @@ export default class Movetext extends React.Component {
 			return undefined;
 		}
 		let dateElement = date === undefined ? undefined : <span className="kokopu-header-date">{capitalizeFirstWord(game.dateAsString())}</span>;
-		let siteElement = site === undefined ? undefined : <span className="kokopu-header-site">{site}</span>; // TODO sanitize HTML for site
+		let siteElement = site === undefined ? undefined : <span className="kokopu-header-site">{sanitizeHtml(site)}</span>;
 		let separator = date === undefined || site === undefined ? undefined : '\u00a0\u2013\u00a0'; // \u00a0 == &nbsp;   \u2013 == &ndash;
 		return <div className="kokopu-headerGroup-dateSite" key="date-site">{dateElement}{separator}{siteElement}</div>;
 	}
@@ -155,7 +156,7 @@ export default class Movetext extends React.Component {
 			return undefined;
 		}
 		annotator = i18n.ANNOTATED_BY.replace(/\{0\}/g, annotator);
-		return <div className="kokopu-header-annotator" key="annotator">{annotator}</div>; // TODO sanitize HTML for annotator
+		return <div className="kokopu-header-annotator" key="annotator">{sanitizeHtml(annotator)}</div>;
 	}
 
 	renderBody(game) {
@@ -288,6 +289,7 @@ export default class Movetext extends React.Component {
 		let content;
 		if (comment.includes('[#]')) {
 			content = [];
+			let sanitizer = createSanitizer();
 			let isFirstPart = true;
 			for (let [index, part] of comment.split('[#]').entries()) {
 				if (!isFirstPart) {
@@ -305,12 +307,12 @@ export default class Movetext extends React.Component {
 				isFirstPart = false;
 				part = part.trim();
 				if (part.length !== 0) {
-					content.push(part); // TODO sanitize HTML for comments
+					content.push(sanitizeHtml(part, sanitizer));
 				}
 			}
 		}
 		else {
-			content = comment; // TODO sanitize HTML for comments
+			content = sanitizeHtml(comment);
 		}
 		let key = isVariation ? 'initial-comment' : node.fullMoveNumber() + node.moveColor() + '-comment';
 		return node.isLongComment() ? <div className="kokopu-comment" key={key}>{content}</div> : <span className="kokopu-comment" key={key}>{content}</span>;
@@ -369,6 +371,26 @@ function formatResult(result) {
 		case '0-1'    : return '0\u20131';
 		default: return result;
 	}
+}
+
+
+function createSanitizer() {
+	return new HtmlSanitizer({
+		allowedTags: [ 'a', 'span', 'b', 'strong', 'i', 'em', 'mark', 'small', 'del', 'ins', 'sub', 'sup' ],
+		allowedAttributes: {
+			'*': [ 'class', 'id', 'title' ],
+			'a': [ 'href', 'target' ]
+		}
+	});
+}
+
+
+function sanitizeHtml(text, sanitizer) {
+	if (!sanitizer) {
+		sanitizer = createSanitizer();
+	}
+	let result = sanitizer.parse(text);
+	return result ?? text;
 }
 
 
