@@ -25,19 +25,19 @@ import ReactDOM from 'react-dom';
 import './test_app.css';
 
 
-function flattenMultiElements(elements) {
+function flattenMultiElements(elements, containerClassName) {
 	let items = [];
 	for (let i = 0; i < elements.length; ++i) {
 		items.push(<div key={'test-item-' + i} className="test-item" id={'test-item-' + i}>{elements[i]}</div>);
 	}
-	return <div>{items}</div>;
+	return <div className={Array.isArray(containerClassName) ? containerClassName.join(' ') : containerClassName}>{items}</div>;
 }
 
 
 /**
  * Create an DIV element at the root of the current document, and render the given elements in it.
  */
-export default function(elements) {
+export default function(elements, containerClassName) {
 
 	// Create the main anchor.
 	let anchor = document.createElement('div');
@@ -45,7 +45,7 @@ export default function(elements) {
 	document.body.appendChild(anchor);
 
 	// Render the content.
-	let content = Array.isArray(elements) ? flattenMultiElements(elements) : elements;
+	let content = flattenMultiElements(elements, containerClassName);
 	ReactDOM.render(content, anchor);
 
 	// Append a text area

@@ -20,59 +20,22 @@
  ******************************************************************************/
 
 
-const fs = require('fs');
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import React from 'react';
+import kokopu from 'kokopu';
+import testApp from './common/test_app';
+import { Movetext } from '../src/index';
 
-// List all the JS files in /test/graphic, each of them corresponding to a entry.
-var items = fs.readdirSync('./graphic_test_app').filter(filename => path.extname(filename) === '.js').map(filename => path.basename(filename, '.js')).sort();
-var entries = {};
-items.forEach(item => {
-	entries[item] = `./graphic_test_app/${item}.js`;
-});
+import pgn from './common/games.pgn';
 
-// Define the outputs.
-var plugins = items.map(item => new HtmlWebpackPlugin({
-	title: 'Test ' + item,
-	chunks: [ item ],
-	filename: item + '/index.html',
-}));
-plugins.push(new CopyWebpackPlugin({
-	patterns: [ { from: './graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' } ],
-}));
+let game = new kokopu.Game();
+game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
+game.result('1-0');
 
-module.exports = {
-	mode: 'development',
-	entry: entries,
-	output: {
-		path: path.resolve(__dirname, '../../build/test_graphic'),
-		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
-	},
-	plugins: plugins,
-	module: {
-		rules: [
-			{
-				test: /\.js$/i,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						plugins: [ 'istanbul' ],
-					},
-				},
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
-			},
-			{
-				test: /\.(png|woff|woff2|txt)$/i,
-				type: 'asset/resource',
-			},
-			{
-				test: /\.pgn$/i,
-				type: 'asset/source',
-			},
-		],
-	}
-};
+let database = kokopu.pgnRead(pgn);
+
+testApp([ /* eslint-disable react/jsx-key */
+	<Movetext game={game} />,
+	<Movetext game={pgn} />,
+	<Movetext game={database} gameIndex={1} />,
+	<Movetext game={pgn} gameIndex={99} />,
+], 'width-600'); /* eslint-enable react/jsx-key */
