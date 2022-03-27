@@ -76,7 +76,7 @@ export default class Movetext extends React.Component {
 	render() {
 		let info = parseGame(this.props.game, this.props.gameIndex);
 		if (info.error) {
-			return <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={info.message}></ErrorBox>;
+			return <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={info.message} text={info.text} errorIndex={info.errorIndex} lineNumber={info.lineNumber}></ErrorBox>;
 		}
 		let game = info.game;
 
@@ -477,28 +477,15 @@ function parseGame(game, gameIndex) {
 	if (game instanceof kokopu.Game) {
 		return { error: false, game: game };
 	}
-	else if (game instanceof kokopu.Database) {
+	else if (game instanceof kokopu.Database || typeof game === 'string') {
 		try {
-			return { error: false, game: game.game(gameIndex) };
+			let result = game instanceof kokopu.Database ? game.game(gameIndex) : kokopu.pgnRead(game, gameIndex);
+			return { error: false, game: result };
 		}
 		catch (e) {
 			// istanbul ignore else
 			if (e instanceof kokopu.exception.InvalidPGN) {
-				return { error: true, message: e.message }; // TODO report + display line number
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-	else if (typeof game === 'string') {
-		try {
-			return { error: false, game: kokopu.pgnRead(game, gameIndex) };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopu.exception.InvalidPGN) {
-				return { error: true, message: e.message }; // TODO report + display line number
+				return { error: true, message: e.message, text: e.pgn, errorIndex: e.index, lineNumber: e.lineNumber };
 			}
 			else {
 				throw e;

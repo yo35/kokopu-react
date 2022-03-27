@@ -26,6 +26,7 @@ import testApp from './common/test_app';
 import { Movetext } from '../src/index';
 
 import pgn from './common/games.pgn';
+import dummyPgn from './common/dummy.pgn';
 
 let game = new kokopu.Game();
 game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
@@ -35,7 +36,10 @@ let database = kokopu.pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={game} />,
-	<Movetext game={pgn} />,
-	<Movetext game={database} gameIndex={1} />,
-	<Movetext game={pgn} gameIndex={99} />,
+	<Movetext game={database} />,
+	<Movetext game={pgn} gameIndex={1} />,
+	<Movetext game={database} gameIndex={99} />,
+	<Movetext game={dummyPgn} />,
+	<Movetext game={kokopu.pgnRead(dummyPgn)} gameIndex={1} />,
+	<Movetext game={42} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

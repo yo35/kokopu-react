@@ -36,6 +36,17 @@
 	font-style: italic;
 }
 
-.kokopu-errorMessage {
+.kokopu-errorMessage,
+.kokopu-errorExcerpt {
 	margin-top: 0.4em;
+}
+
+.kokopu-errorExcerpt {
+	white-space: pre-wrap;
+	font-family: monospace;
+	line-height: 1.5em;
+	color: #400;
+	background-color: #ffd;
+	border: solid 1px #aa0;
+	padding: 0.75em 1em 0.15em;
 }

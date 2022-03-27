@@ -22,6 +22,9 @@
 
 const i18n = {
 
+	// Error box
+	LINE: 'line',
+
 	// Chessboard
 	INVALID_FEN_ERROR_TITLE: 'Invalid FEN string.',
 	INVALID_NOTATION_ERROR_TITLE: 'Invalid move notation.',
