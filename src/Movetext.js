@@ -74,7 +74,7 @@ const SPECIAL_NAGS_LOOKUP = {
 export default class Movetext extends React.Component {
 
 	render() {
-		let info = parseGame(this.props.game);
+		let info = parseGame(this.props.game, this.props.gameIndex);
 		if (info.error) {
 			return <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={info.message}></ErrorBox>;
 		}
@@ -344,12 +344,21 @@ Movetext.propTypes = {
 
 	/**
 	 * Displayed position. Can be a [kokopu.Game](https://kokopu.yo35.org/docs/Game.html) object,
+	 * a [kokopu.Database](https://kokopu.yo35.org/docs/Database.html) object,
 	 * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation).
 	 */
 	game: PropTypes.oneOfType([
 		PropTypes.instanceOf(kokopu.Game),
+		PropTypes.instanceOf(kokopu.Database),
 		PropTypes.string
 	]),
+
+	/**
+	 * Index of the game to display (only if attribute `game` is a [kokopu.Database](https://kokopu.yo35.org/docs/Database.html)
+	 * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation)): `0` for the first game of the database/PGN, `1` for the second one, etc.
+	 * If omitted, the first game of the database/PGN is displayed.
+	 */
+	gameIndex: PropTypes.number,
 
 	/**
 	 * Options applicable to the diagrams in the comments. See [Chessboard](#/Components/Chessboard) for more details about each option.
@@ -386,6 +395,7 @@ Movetext.propTypes = {
 
 Movetext.defaultProps = {
 	game: new kokopu.Game(),
+	gameIndex: 0,
 	diagramOptions: {},
 	pieceSymbols: 'native',
 };
@@ -463,13 +473,27 @@ function figurineNotation(text, fontName) {
 /**
  * Try to interpret the given object as a chess game.
  */
-function parseGame(game) {
+function parseGame(game, gameIndex) {
 	if (game instanceof kokopu.Game) {
 		return { error: false, game: game };
 	}
+	else if (game instanceof kokopu.Database) {
+		try {
+			return { error: false, game: game.game(gameIndex) };
+		}
+		catch (e) {
+			// istanbul ignore else
+			if (e instanceof kokopu.exception.InvalidPGN) {
+				return { error: true, message: e.message }; // TODO report + display line number
+			}
+			else {
+				throw e;
+			}
+		}
+	}
 	else if (typeof game === 'string') {
 		try {
-			return { error: false, game: kokopu.pgnRead(game, 0) }; // TODO allow index customization
+			return { error: false, game: kokopu.pgnRead(game, gameIndex) };
 		}
 		catch (e) {
 			// istanbul ignore else
