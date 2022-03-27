@@ -29,6 +29,7 @@ import Chessboard from './Chessboard';
 import ErrorBox from './ErrorBox';
 import i18n from './i18n';
 
+import './css/fonts.css';
 import './css/movetext.css';
 
 
@@ -160,13 +161,13 @@ export default class Movetext extends React.Component {
 	}
 
 	renderBody(game) {
-		return this.renderVariation(game.mainVariation(), 'main-variation', true, game.result());
+		return this.renderVariation(this.getNotationTextBuilder(), game.mainVariation(), 'main-variation', true, game.result());
 	}
 
 	/**
 	 * Render the given variation and its sub-variations, recursively.
 	 */
-	renderVariation(variation, variationKey, isMainVariation, gameResult) {
+	renderVariation(notationTextBuilder, variation, variationKey, isMainVariation, gameResult) {
 
 		let moveGroups = []; // ... and also long comments and long sub-variations
 		let currentMoveGroupElements = [];
@@ -196,7 +197,7 @@ export default class Movetext extends React.Component {
 		while (node !== undefined) {
 
 			// Write the move, including directly related information (i.e. move number + NAGs).
-			currentMoveGroupElements.push(this.renderMove(node, forcePrintMoveNumber));
+			currentMoveGroupElements.push(this.renderMove(notationTextBuilder, node, forcePrintMoveNumber));
 
 			// Write the comment (if any).
 			if (node.comment() !== undefined) {
@@ -212,7 +213,7 @@ export default class Movetext extends React.Component {
 			// Write the sub-variations.
 			let hasNonEmptySubVariations = false;
 			for (let [index, subVariation] of node.variations().entries()) {
-				let subVariationElement = this.renderVariation(subVariation, node.fullMoveNumber() + node.moveColor() + '-variation-' + index, false);
+				let subVariationElement = this.renderVariation(notationTextBuilder, subVariation, node.fullMoveNumber() + node.moveColor() + '-variation-' + index, false);
 				if (subVariationElement) {
 					if (subVariation.isLongVariation()) {
 						closeMoveGroup();
@@ -255,7 +256,7 @@ export default class Movetext extends React.Component {
 	/**
 	 * Render the given move, move number, and NAG (if any).
 	 */
-	renderMove(node, forcePrintMoveNumber) {
+	renderMove(notationTextBuilder, node, forcePrintMoveNumber) {
 
 		// Move number
 		let printMoveNumber = forcePrintMoveNumber || node.moveColor() === 'w';
@@ -266,8 +267,7 @@ export default class Movetext extends React.Component {
 		}
 
 		// SAN notation.
-		let pieceSymbolTable = { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' }; // TODO impl as attr
-		let notationText = node.notation().replace(/[KQRBNP]/g, match => pieceSymbolTable[match]);
+		let notationText = notationTextBuilder(node.notation());
 
 		// NAGs
 		let nagElements = node.nags().map(nag => <span className="kokopu-nag" key={nag}>{formatNag(nag)}</span>);
@@ -317,6 +317,26 @@ export default class Movetext extends React.Component {
 		let key = isVariation ? 'initial-comment' : node.fullMoveNumber() + node.moveColor() + '-comment';
 		return node.isLongComment() ? <div className="kokopu-comment" key={key}>{content}</div> : <span className="kokopu-comment" key={key}>{content}</span>;
 	}
+
+	/**
+	 * Return the square at the given location.
+	 */
+	getNotationTextBuilder() {
+		let pieceSymbols = this.props.pieceSymbols;
+		if (pieceSymbols === 'localized') {
+			let mapping = i18n.PIECE_SYMBOLS;
+			return notation => notation.replace(/[KQRBNP]/g, match => mapping[match]);
+		}
+		else if (pieceSymbols === 'figurines') {
+			return notation => figurineNotation(notation, 'alpha');
+		}
+		else if (pieceSymbols !== 'native' && pieceSymbols && ['K', 'Q', 'R', 'B', 'N', 'P'].every(p => typeof pieceSymbols[p] === 'string')) {
+			return notation => notation.replace(/[KQRBNP]/g, match => pieceSymbols[match]);
+		}
+		else {
+			return notation => notation;
+		}
+	}
 }
 
 
@@ -342,12 +362,32 @@ Movetext.propTypes = {
 		colorset: Chessboard.propTypes.colorset,
 		pieceset: Chessboard.propTypes.pieceset,
 	}),
+
+	/**
+	 * Symbols to use for the chess pieces. Can be:
+	 * - `'native'`: use the first letter of the piece names (in English),
+	 * - `'localized'`: use the symbols defined by `i18n.PIECE_SYMBOLS`,
+	 * - `'figurines'`: use the figurines,
+	 * - or an object defining 6 string-valued properties named `K`, `Q`, `R`, `B`, `N` and `P`.
+	 */
+	pieceSymbols: PropTypes.oneOfType([
+		PropTypes.oneOf([ 'native', 'localized', 'figurines' ]),
+		PropTypes.shape({
+			K: PropTypes.string.isRequired,
+			Q: PropTypes.string.isRequired,
+			R: PropTypes.string.isRequired,
+			B: PropTypes.string.isRequired,
+			N: PropTypes.string.isRequired,
+			P: PropTypes.string.isRequired
+		})
+	]),
 };
 
 
 Movetext.defaultProps = {
 	game: new kokopu.Game(),
 	diagramOptions: {},
+	pieceSymbols: 'native',
 };
 
 
@@ -391,6 +431,32 @@ function sanitizeHtml(text, sanitizer) {
 	}
 	let result = sanitizer.parse(text);
 	return result ?? text;
+}
+
+
+/**
+ * Decompose the given string into piece symbol characters and sections of non piece symbol characters, and transform the piece symbols into
+ * React objects represented with the given chess font.
+ */
+function figurineNotation(text, fontName) {
+	let result = [];
+	let beginOfText = 0;
+	let pieceSymbolIndex = 0;
+	for (let pos = 0; pos < text.length; ++pos) {
+		let currentChar = text.charAt(pos);
+		if (currentChar === 'K' || currentChar === 'Q' || currentChar === 'R' || currentChar === 'B' || currentChar === 'N' || currentChar === 'P') {
+			if (pos > beginOfText) {
+				result.push(text.substring(beginOfText, pos));
+			}
+			beginOfText = pos + 1;
+			let key = 'symbol-' + (pieceSymbolIndex++);
+			result.push(<span className={'kokopu-font-' + fontName} key={key}>{currentChar}</span>);
+		}
+	}
+	if (beginOfText < text.length) {
+		result.push(text.substring(beginOfText));
+	}
+	return result;
 }
 
 

@@ -29,6 +29,7 @@ const i18n = {
 	INVALID_MOVE_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "move" attribute.',
 
 	// Movetext
+	PIECE_SYMBOLS: { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' },
 	ANNOTATED_BY: 'Annotated by {0}',
 	INVALID_PGN_ERROR_TITLE: 'Invalid PGN string.',
 	INVALID_GAME_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "game" attribute.',

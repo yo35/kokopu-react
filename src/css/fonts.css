@@ -20,55 +20,15 @@
  ******************************************************************************/
 
 
-const fs = require('fs');
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+@font-face {
+	font-family: 'Chess Alpha';
+	src:
+		url('../fonts/chessalpha.woff2') format('woff2'),
+		url('../fonts/chessalpha.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
 
-// List all the JS files in /test/graphic, each of them corresponding to a entry.
-var items = fs.readdirSync('./graphic_test_app').filter(filename => path.extname(filename) === '.js').map(filename => path.basename(filename, '.js')).sort();
-var entries = {};
-items.forEach(item => {
-	entries[item] = `./graphic_test_app/${item}.js`;
-});
-
-// Define the outputs.
-var plugins = items.map(item => new HtmlWebpackPlugin({
-	title: 'Test ' + item,
-	chunks: [ item ],
-	filename: item + '/index.html',
-}));
-plugins.push(new CopyWebpackPlugin({
-	patterns: [ { from: './graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' } ],
-}));
-
-module.exports = {
-	mode: 'development',
-	entry: entries,
-	output: {
-		path: path.resolve(__dirname, '../../build/test_graphic'),
-		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
-	},
-	plugins: plugins,
-	module: {
-		rules: [
-			{
-				test: /\.js$/i,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						plugins: [ 'istanbul' ],
-					},
-				},
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
-			},
-			{
-				test: /\.(png|woff|woff2|txt)$/i,
-				type: 'asset/resource',
-			},
-		],
-	}
-};
+.kokopu-font-alpha {
+	font-family: 'Chess Alpha', sans-serif;
+}
