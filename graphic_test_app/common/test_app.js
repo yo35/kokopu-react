@@ -28,7 +28,7 @@ import './test_app.css';
 function flattenMultiElements(elements, containerClassName) {
 	let items = [];
 	for (let i = 0; i < elements.length; ++i) {
-		items.push(<div key={'test-item-' + i} className="test-item" id={'test-item-' + i}>{elements[i]}</div>);
+		items.push(<div key={i} className="test-item-container"><div className="test-item" id={'test-item-' + i}>{elements[i]}</div></div>);
 	}
 	return <div className={Array.isArray(containerClassName) ? containerClassName.join(' ') : containerClassName}>{items}</div>;
 }

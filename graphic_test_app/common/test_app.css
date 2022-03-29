@@ -21,12 +21,25 @@
 
 
 .test-item,
+.test-item-container,
 #test-app {
 	display: inline-block;
 }
 
-.test-item {
-	margin: 3px;
+body {
+	background-color: lightgray;
+}
+
+.test-item-container {
+	margin: 2px;
+	padding: 3px;
+	background-color: white;
+}
+
+#sandbox {
+	padding: 3px;
+	background-color: lightgoldenrodyellow;
+	height: 100px;
 }
 
 .width-600 .test-item {
