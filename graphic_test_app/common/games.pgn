@@ -1,3 +1,22 @@
+[Event "Linares 16<sup>th</sup>"]
+[Site "Linares, ESP"]
+[Date "1999.02.25"]
+[Round "4"]
+[White "Kasparov, Garry"]
+[Black "Kramnik, Vladimir"]
+[Result "1/2-1/2"]
+[WhiteElo "2812"]
+[BlackElo "2751"]
+[WhiteTitle "WCH"]
+[BlackTitle "GM"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 d5 5. cxd5 Qxd5 6. Nf3 Qf5 7. Qxf5 exf5
+8. a3 Be7 9. Bg5 Be6 10. e3 c6 11. Bd3 Nbd7 12. O-O h6 13. Bh4 a5 14. Rac1 O-O
+15. Ne2 g5 16. Bg3 Ne4 17. Nc3 Nxc3 18. Rxc3 Nf6 19. Rcc1 Rfd8 20. Rfd1 Rac8
+1/2-1/2
+
+
+
 [Event "1<sup>st</sup> American Chess Congress"]
 [Site "?"]
 [Date "1857.11.??"]
@@ -25,22 +44,17 @@ probably to assure himself that the combination was sound and that he had a forc
 
 
 
-[Event "Linares 16<sup>th</sup>"]
-[Site "Linares, ESP"]
-[Date "1999.02.25"]
-[Round "4"]
-[White "Kasparov, Garry"]
-[Black "Kramnik, Vladimir"]
-[Result "1/2-1/2"]
-[WhiteElo "2812"]
-[BlackElo "2751"]
-[WhiteTitle "WCH"]
-[BlackTitle "GM"]
+[Event "Sample game"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "Player 1"]
+[Black "Player 2"]
+[Result "1-0"]
+[WhiteElo "2007"]
+[BlackTitle "IM"]
 
-1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 d5 5. cxd5 Qxd5 6. Nf3 Qf5 7. Qxf5 exf5
-8. a3 Be7 9. Bg5 Be6 10. e3 c6 11. Bd3 Nbd7 12. O-O h6 13. Bh4 a5 14. Rac1 O-O
-15. Ne2 g5 16. Bg3 Ne4 17. Nc3 Nxc3 18. Rxc3 Nf6 19. Rcc1 Rfd8 20. Rfd1 Rac8
-1/2-1/2
+1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6 4. Qxf7# 1-0
 
 
 

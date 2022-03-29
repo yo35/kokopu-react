@@ -22,20 +22,19 @@
 
 import React from 'react';
 import testApp from './common/test_app';
-import { Movetext, i18n } from '../src/index';
+import { Movetext } from '../src/index';
 
 import pgn from './common/games.pgn';
 
-let legacyPieceSymbols = i18n.PIECE_SYMBOLS;
-
-// Localization for French
-i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
-
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} gameIndex={1} pieceSymbols="localized" />,
-	<Movetext game={pgn} gameIndex={1} pieceSymbols={{ K: 'Ki', Q: 'Qu', R: 'Rk', B: 'Bi', N: 'Kn', P: 'Pw' }} />,
-	<Movetext game={pgn} gameIndex={2} pieceSymbols="figurines"
-		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
+	<Movetext game={pgn} gameIndex={4} />,
+	<Movetext game={pgn} gameIndex={5} />,
+	<Movetext game={pgn} gameIndex={6} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
 
-i18n.PIECE_SYMBOLS = legacyPieceSymbols;
+let customCSS = document.createElement('style');
+customCSS.innerText = `
+	.myClass { font-weight: bold; color: green; }
+	#myId { font-weight: bold; color: red; }
+`;
+document.head.appendChild(customCSS);

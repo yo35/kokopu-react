@@ -21,21 +21,21 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
 import testApp from './common/test_app';
-import { Movetext } from '../src/index';
+import { Movetext, i18n } from '../src/index';
 
 import pgn from './common/games.pgn';
 
-let game = new kokopu.Game();
-game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
-game.result('1-0');
+let legacyPieceSymbols = i18n.PIECE_SYMBOLS;
 
-let database = kokopu.pgnRead(pgn);
+// Localization for French
+i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={game} />,
-	<Movetext game={database} />,
-	<Movetext game={pgn} gameIndex={1} />,
-	<Movetext game={database} gameIndex={3} />,
+	<Movetext game={pgn} pieceSymbols="localized" />,
+	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
+	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines"
+		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
+
+i18n.PIECE_SYMBOLS = legacyPieceSymbols;

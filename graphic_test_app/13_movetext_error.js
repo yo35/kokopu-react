@@ -21,20 +21,18 @@
 
 
 import React from 'react';
+import kokopu from 'kokopu';
 import testApp from './common/test_app';
 import { Movetext } from '../src/index';
 
 import pgn from './common/games.pgn';
+import dummyPgn from './common/dummy.pgn';
+
+let database = kokopu.pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} gameIndex={3} />,
-	<Movetext game={pgn} gameIndex={4} />,
-	<Movetext game={pgn} gameIndex={5} />,
+	<Movetext game={database} gameIndex={99} />,
+	<Movetext game={dummyPgn} />,
+	<Movetext game={kokopu.pgnRead(dummyPgn)} gameIndex={1} />,
+	<Movetext game={42} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
-
-let customCSS = document.createElement('style');
-customCSS.innerText = `
-	.myClass { font-weight: bold; color: green; }
-	#myId { font-weight: bold; color: red; }
-`;
-document.head.appendChild(customCSS);
