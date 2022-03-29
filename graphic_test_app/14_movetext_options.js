@@ -20,23 +20,22 @@
  ******************************************************************************/
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+import React from 'react';
+import testApp from './common/test_app';
+import { Movetext, i18n } from '../src/index';
 
+import pgn from './common/games.pgn';
 
-describe('Movetext graphic', function() {
+let legacyPieceSymbols = i18n.PIECE_SYMBOLS;
 
-	const browserContext = {};
+// Localization for French
+i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
 
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
+testApp([ /* eslint-disable react/jsx-key */
+	<Movetext game={pgn} gameIndex={1} pieceSymbols="localized" />,
+	<Movetext game={pgn} gameIndex={1} pieceSymbols={{ K: 'Ki', Q: 'Qu', R: 'Rk', B: 'Bi', N: 'Kn', P: 'Pw' }} />,
+	<Movetext game={pgn} gameIndex={2} pieceSymbols="figurines"
+		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
+], 'width-600'); /* eslint-enable react/jsx-key */
 
-	after(async function() {
-		await closeBrowser(browserContext);
-	});
-
-	itChecksScreenshots(browserContext, '12_movetext_simple', [ 'game-1', 'game-2', 'game-3', 'game-4', 'wrong-game-index', 'pgn-parsing-error-1',
-		'pgn-parsing-error-2', 'wrong type' ]);
-	itChecksScreenshots(browserContext, '13_movetext_html', [ 'html-in-headers', 'html-in-comments', 'filtered-tags-and-attributes' ]);
-	itChecksScreenshots(browserContext, '14_movetext_options', [ 'localized-piece-symbols', 'custom-piece-symbols', 'figurine-piece-symbols-and-diagram-options' ]);
-});
+i18n.PIECE_SYMBOLS = legacyPieceSymbols;

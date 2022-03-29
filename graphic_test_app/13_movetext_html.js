@@ -20,23 +20,21 @@
  ******************************************************************************/
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+import React from 'react';
+import testApp from './common/test_app';
+import { Movetext } from '../src/index';
 
+import pgn from './common/games.pgn';
 
-describe('Movetext graphic', function() {
+testApp([ /* eslint-disable react/jsx-key */
+	<Movetext game={pgn} gameIndex={3} />,
+	<Movetext game={pgn} gameIndex={4} />,
+	<Movetext game={pgn} gameIndex={5} />,
+], 'width-600'); /* eslint-enable react/jsx-key */
 
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async function() {
-		await closeBrowser(browserContext);
-	});
-
-	itChecksScreenshots(browserContext, '12_movetext_simple', [ 'game-1', 'game-2', 'game-3', 'game-4', 'wrong-game-index', 'pgn-parsing-error-1',
-		'pgn-parsing-error-2', 'wrong type' ]);
-	itChecksScreenshots(browserContext, '13_movetext_html', [ 'html-in-headers', 'html-in-comments', 'filtered-tags-and-attributes' ]);
-	itChecksScreenshots(browserContext, '14_movetext_options', [ 'localized-piece-symbols', 'custom-piece-symbols', 'figurine-piece-symbols-and-diagram-options' ]);
-});
+let customCSS = document.createElement('style');
+customCSS.innerText = `
+	.myClass { font-weight: bold; color: green; }
+	#myId { font-weight: bold; color: red; }
+`;
+document.head.appendChild(customCSS);

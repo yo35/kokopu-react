@@ -11,8 +11,8 @@
 8. Bc4 b5 9. Be2 Nxe4 10. Nxe4 Rxe4 11. Bf3 Re6 12. c3 Qd3 13. b4 Bb6 14. a4 bxa4
 15. Qxa4 Bd7 16. Ra2 Rae8 17. Qa6
 
-{[#] Morphy took twelve minutes over his next move, probably to assure himself that
-the combination was sound and that he had a forced win in every variation.}
+{[#] [%cal Rd3f3,Re6g6][%csl Gg6][%ctl G(circle)f3] Morphy took twelve minutes over his next move,
+probably to assure himself that the combination was sound and that he had a forced win in every variation.}
 
 17... Qxf3 $3 18. gxf3 Rg6+ 19. Kh1 Bh3 20. Rd1
 ({Not} 20. Rg1 Rxg1+ 21. Kxg1 Re1+ $19)
@@ -63,3 +63,52 @@ the combination was sound and that he had a forced win in every variation.}
 40. g3 Ra8 41. f4 Ra2 42. e4 Rxd2 43. e5+ Ke7 44. f5 Rd3 45. g5 Rxc3 46. f6+ Kf7 47. d5 Re3
 48. e6+ Rxe6 49. dxe6+ Kxe6 50. h5 b4 51. h4 b3 52. g4 b2 53. g6 hxg6 54. h6 Kxf6 55. h5 b1=Q
 56. g5+ Kxg5 57. hxg6 Kxh6 58. g7 Kxg7 *
+
+
+
+[Event "HTML in <b>all</b> headers"]
+[Site "Maybe on <a href=\"https://www.wikipedia.org/\">Wikipedia</a>, maybe somewhere else..."]
+[Date "????.??.??"]
+[Round "<strong>3</strong>.2"]
+[White "1<sup>st</sup> <em>player</em>"]
+[Black "2<sub>nd</sub> <em>player</em>"]
+[Result "*"]
+[WhiteElo "<ins>2800</ins>"]
+[BlackElo "<del>1010</del>"]
+[WhiteTitle "<span class=\"myClass\">GM</span>"]
+[BlackTitle "<span id=\"myId\">no-GM</span>"]
+
+*
+
+
+
+[Event "HTML in comments"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+
+{I'm a <strong><ins>comment</ins></strong> with some <em class="myClass">HTML content</em> in it.}
+
+*
+
+
+
+[Event "Forbidden HTML tags and attributes"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+
+{
+Using <div class="myClass">div tags</div> is not allowed.
+... but <div class="myClass"><em>legit HTML elements</em> within forbidden HTML tags</div> are rendered.
+Using <span style="color: cyan;">style attributes</span> is not allowed.
+Using scripts is not allowed. <script>alert('You should not see this either.');</script>
+}
+
+*
