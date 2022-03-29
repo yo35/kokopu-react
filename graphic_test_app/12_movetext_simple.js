@@ -38,6 +38,7 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={game} />,
 	<Movetext game={database} />,
 	<Movetext game={pgn} gameIndex={1} />,
+	<Movetext game={database} gameIndex={2} />,
 	<Movetext game={database} gameIndex={99} />,
 	<Movetext game={dummyPgn} />,
 	<Movetext game={kokopu.pgnRead(dummyPgn)} gameIndex={1} />,

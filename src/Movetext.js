@@ -417,9 +417,8 @@ function formatNag(nag) {
 function formatResult(result) {
 	switch (result) {
 		case '1/2-1/2': return '\u00bd\u2013\u00bd';
-		case '1-0'    : return '1\u20130';
-		case '0-1'    : return '0\u20131';
-		default: return result;
+		case '1-0': return '1\u20130';
+		case '0-1': return '0\u20131';
 	}
 }
 

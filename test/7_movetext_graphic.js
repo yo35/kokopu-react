@@ -35,5 +35,6 @@ describe('Movetext graphic', function() {
 		await closeBrowser(browserContext);
 	});
 
-	itChecksScreenshots(browserContext, '12_movetext_simple', [ 'game', 'pgn', 'database', 'wrong-game-index', 'pgn-parsing-error-1', 'pgn-parsing-error-2', 'wrong type' ]);
+	itChecksScreenshots(browserContext, '12_movetext_simple', [ 'game-1', 'game-2', 'game-3', 'game-4', 'wrong-game-index', 'pgn-parsing-error-1',
+		'pgn-parsing-error-2', 'wrong type' ]);
 });
