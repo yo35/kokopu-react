@@ -259,11 +259,10 @@ export default class Movetext extends React.Component {
 	renderMove(notationTextBuilder, node, forcePrintMoveNumber) {
 
 		// Move number
-		let printMoveNumber = forcePrintMoveNumber || node.moveColor() === 'w';
-		let moveNumberText  = node.fullMoveNumber() + (node.moveColor() === 'w' ? '.' : '\u2026');
-		let moveNumberClassNames = [ 'kokopu-moveNumber' ];
-		if (!printMoveNumber) {
-			moveNumberClassNames.push('kokopu-hidden');
+		let moveNumber = undefined;
+		if (forcePrintMoveNumber || node.moveColor() === 'w') {
+			let moveNumberText  = node.fullMoveNumber() + (node.moveColor() === 'w' ? '.' : '\u2026');
+			moveNumber = <span className="kokopu-moveNumber">{moveNumberText}</span>;
 		}
 
 		// SAN notation.
@@ -272,11 +271,23 @@ export default class Movetext extends React.Component {
 		// NAGs
 		let nagElements = node.nags().map(nag => <span className="kokopu-nag" key={nag}>{formatNag(nag)}</span>);
 
+		// Class
+		let nodeId = node.id();
+		let moveClassNames = [ 'kokopu-move' ];
+		if (this.props.selection && this.props.selection === nodeId) {
+			moveClassNames.push('kokopu-selectedMove');
+		}
+		if (this.props.interactionMode === 'selectMove') {
+			moveClassNames.push('kokopu-clickableMove');
+		}
+
 		return (
-			<span className="kokopu-move" key={node.fullMoveNumber() + node.moveColor()}>
-				<span className={moveNumberClassNames.join(' ')}>{moveNumberText}</span>
-				<span className="kokopu-moveNotation">{notationText}</span>
-				{nagElements.length === 0 ? undefined : nagElements}
+			<span className={moveClassNames.join(' ')} key={node.fullMoveNumber() + node.moveColor()}>
+				<span className="kokopu-moveContent" onClick={() => this.handleNodeClicked(nodeId)}>
+					{moveNumber}
+					<span className="kokopu-moveNotation">{notationText}</span>
+					{nagElements.length === 0 ? undefined : nagElements}
+				</span>
 			</span>
 		);
 	}
@@ -316,6 +327,12 @@ export default class Movetext extends React.Component {
 		}
 		let key = isVariation ? 'initial-comment' : node.fullMoveNumber() + node.moveColor() + '-comment';
 		return node.isLongComment() ? <div className="kokopu-comment" key={key}>{content}</div> : <span className="kokopu-comment" key={key}>{content}</span>;
+	}
+
+	handleNodeClicked(nodeId) {
+		if (this.props.onMoveSelected) {
+			this.props.onMoveSelected(nodeId === this.props.selection ? undefined : nodeId);
+		}
 	}
 
 	/**
@@ -390,6 +407,26 @@ Movetext.propTypes = {
 			P: PropTypes.string.isRequired
 		})
 	]),
+
+	/**
+	 * ID of the selected move. Use [kokopu.Node](https://kokopu.yo35.org/docs/Node.html#id) to get the ID of a game move.
+	 */
+	selection: PropTypes.string,
+
+	/**
+	 * Type of action allowed with the mouse/keys on the component. If undefined, then the user cannot interact with the component.
+	 *
+	 * - `'selectMove'` allows the user to select a move.
+	 */
+	interactionMode: PropTypes.oneOf([ 'selectMove' ]),
+
+	/**
+	 * Callback invoked when the user clicks on a move (only if `interactionMode` is set to `'selectMove'`).
+	 *
+	 * @param {string?} nodeId ID of the selected move (as returned by [kokopu.Node](https://kokopu.yo35.org/docs/Node.html#id)),
+	 *                         or `undefined` if the user unselects the previously selected move.
+	 */
+	onMoveSelected: PropTypes.func,
 };
 
 

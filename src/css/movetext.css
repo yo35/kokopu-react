@@ -88,6 +88,21 @@ div.kokopu-subVariation {
 	line-height: 0px;
 }
 
-.kokopu-hidden {
-	display: none;
+.kokopu-moveContent {
+	display: inline-block;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+.kokopu-selectedMove .kokopu-moveContent {
+	background-color: currentcolor;
+}
+
+.kokopu-selectedMove .kokopu-moveContent > * {
+	filter: invert(1);
+}
+
+.kokopu-clickableMove .kokopu-moveContent:hover {
+	text-decoration: underline;
+	cursor: pointer;
 }
