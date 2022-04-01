@@ -23,7 +23,7 @@
 const i18n = {
 
 	// Error box
-	LINE: 'line',
+	LINE: 'line {0}',
 
 	// Chessboard
 	INVALID_FEN_ERROR_TITLE: 'Invalid FEN string.',

@@ -125,7 +125,7 @@ function ellipsisAt(text, pos, backwardCharacters, forwardCharacters, lineNumber
 	excerpt = excerpt.replace(/\n|\r|\t/g, ' ');
 	let secondLine = Array(1 + e1.length + pos - p1).join(' ') + '^';
 	if (lineNumber) {
-		secondLine += ' (' + i18n.LINE + ' ' + lineNumber + ')';
+		secondLine += ' (' + i18n.LINE.replace(/\{0\}/g, lineNumber) + ')';
 	}
 	return excerpt + '\n' + secondLine;
 }

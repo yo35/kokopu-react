@@ -95,7 +95,7 @@ export default class Movetext extends React.Component {
 		headers.push(this.renderEventRoundHeaders(game));
 		headers.push(this.renderDateSiteHeaders(game));
 		headers.push(this.renderAnnotatorHeader(game));
-		return headers.some(element => element !== undefined) ? <div>{headers}</div> : undefined;
+		return headers.some(element => element !== undefined) ? <div className="kokopu-headers">{headers}</div> : undefined;
 	}
 
 	/**
