@@ -30,7 +30,7 @@
 	],
 	"dependencies": {
 		"htmlparser2": "^7.2.0",
-		"kokopu": "^2.4.1",
+		"kokopu": "^2.5.0",
 		"prop-types": "^15.8.1",
 		"react": "^17.0.2",
 		"react-draggable": "^4.4.4",
