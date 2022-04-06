@@ -34,7 +34,7 @@ i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
 testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={pgn} pieceSymbols="localized" />,
 	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
-	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines"
+	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
 		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
 

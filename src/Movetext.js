@@ -60,6 +60,9 @@ export default class Movetext extends React.Component {
 	}
 
 	renderHeaders(game) {
+		if (!this.props.headerVisible) {
+			return undefined;
+		}
 		let headers = [];
 		headers.push(this.renderPlayerHeaders(game, 'w'));
 		headers.push(this.renderPlayerHeaders(game, 'b'));
@@ -431,6 +434,11 @@ Movetext.propTypes = {
 	]),
 
 	/**
+	 * Whether the game headers are displayed or not.
+	 */
+	headerVisible: PropTypes.bool,
+
+	/**
 	 * ID of the selected move (or `'start'` for the beginning of the main variation).
 	 * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/Node.html#id) to get the ID of a game move.
 	 */
@@ -458,6 +466,7 @@ Movetext.defaultProps = {
 	gameIndex: 0,
 	diagramOptions: {},
 	pieceSymbols: 'native',
+	headerVisible: true,
 };
 
 
