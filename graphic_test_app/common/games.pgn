@@ -126,3 +126,27 @@ Using scripts is not allowed. <script>alert('You should not see this either.');<
 }
 
 *
+
+
+
+[Event "Short game"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 d5 5. cxd5 Qxd5 6. Nf3 Qf5 *
+
+
+
+[Event "Short game with variations"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+
+1. e4 e6 (1... e5 2. Nf3 Nc6 3. Nc3 (3. Bb5 ! a6 4. Ba4)) 2. d4 *
