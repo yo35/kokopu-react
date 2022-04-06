@@ -38,6 +38,11 @@ import './css/movetext.css';
  */
 export default class Movetext extends React.Component {
 
+	constructor(props) {
+		super(props);
+		this.focusFieldRef = React.createRef();
+	}
+
 	render() {
 		let info = parseGame(this.props.game, this.props.gameIndex);
 		if (info.error) {
@@ -49,6 +54,7 @@ export default class Movetext extends React.Component {
 			<div className="kokopu-movetext">
 				{this.renderHeaders(game)}
 				{this.renderBody(game)}
+				{this.renderFocusField()}
 			</div>
 		);
 	}
@@ -123,6 +129,17 @@ export default class Movetext extends React.Component {
 		}
 		annotator = i18n.ANNOTATED_BY.replace(/\{0\}/g, annotator);
 		return <div className="kokopu-header-annotator" key="annotator">{sanitizeHtml(annotator)}</div>;
+	}
+
+	renderFocusField() {
+		if (this.props.interactionMode !== 'selectMove') {
+			return undefined;
+		}
+		return (
+			<div className="kokopu-focusFieldContainer">
+				<a className="kokopu-focusField" href="#" ref={this.focusFieldRef} onKeyDown={evt => this.handleKeyDownInFocusField(evt)}></a>
+			</div>
+		);
 	}
 
 	renderBody(game) {
@@ -239,16 +256,18 @@ export default class Movetext extends React.Component {
 		// Class
 		let nodeId = node.id();
 		let moveClassNames = [ 'kokopu-move' ];
+		let onClick = undefined;
 		if (this.props.selection && this.props.selection === nodeId) {
 			moveClassNames.push('kokopu-selectedMove');
 		}
 		if (this.props.interactionMode === 'selectMove') {
 			moveClassNames.push('kokopu-clickableMove');
+			onClick = () => this.handleNodeClicked(nodeId);
 		}
 
 		return (
 			<span className={moveClassNames.join(' ')} key={node.fullMoveNumber() + node.moveColor()}>
-				<span className="kokopu-moveContent" onClick={() => this.handleNodeClicked(nodeId)}>
+				<span className="kokopu-moveContent" onClick={onClick}>
 					{moveNumber}
 					<span className="kokopu-moveNotation">{notationText}</span>
 					{nagElements.length === 0 ? undefined : nagElements}
@@ -294,7 +313,45 @@ export default class Movetext extends React.Component {
 		return node.isLongComment() ? <div className="kokopu-comment" key={key}>{content}</div> : <span className="kokopu-comment" key={key}>{content}</span>;
 	}
 
+	handleKeyDownInFocusField(evt) {
+		if (!this.props.selection) {
+			return;
+		}
+		let game = parseGame(this.props.game, this.props.gameIndex).game;
+		let nodeId = false;
+		if (this.props.selection === 'start') {
+			if (evt.key === 'ArrowRight') {
+				nodeId = getNextNodeId(game.mainVariation(), true);
+			}
+			else if (evt.key === 'End') {
+				nodeId = getLastNodeId(game.mainVariation(), true);
+			}
+		}
+		else {
+			let currentNode = game.findById(this.props.selection);
+			if (!currentNode) {
+				return;
+			}
+			if (evt.key === 'Home') {
+				nodeId = 'start';
+			}
+			else if (evt.key === 'ArrowLeft') {
+				nodeId = getPreviousNodeId(currentNode);
+			}
+			else if (evt.key === 'ArrowRight') {
+				nodeId = getNextNodeId(currentNode, false);
+			}
+			else if (evt.key === 'End') {
+				nodeId = getLastNodeId(currentNode, false);
+			}
+		}
+		if (nodeId && this.props.onMoveSelected) {
+			this.props.onMoveSelected(nodeId);
+		}
+	}
+
 	handleNodeClicked(nodeId) {
+		this.focusFieldRef.current.focus();
 		if (this.props.onMoveSelected) {
 			this.props.onMoveSelected(nodeId === this.props.selection ? undefined : nodeId);
 		}
@@ -374,7 +431,8 @@ Movetext.propTypes = {
 	]),
 
 	/**
-	 * ID of the selected move. Use [kokopu.Node](https://kokopu.yo35.org/docs/Node.html#id) to get the ID of a game move.
+	 * ID of the selected move (or `'start'` for the beginning of the main variation).
+	 * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/Node.html#id) to get the ID of a game move.
 	 */
 	selection: PropTypes.string,
 
@@ -388,8 +446,8 @@ Movetext.propTypes = {
 	/**
 	 * Callback invoked when the user clicks on a move (only if `interactionMode` is set to `'selectMove'`).
 	 *
-	 * @param {string?} nodeId ID of the selected move (as returned by [kokopu.Node](https://kokopu.yo35.org/docs/Node.html#id)),
-	 *                         or `undefined` if the user unselects the previously selected move.
+	 * @param {string?} nodeId ID of the selected move (as returned by [kokopu.Node#id](https://kokopu.yo35.org/docs/Node.html#id)),
+	 *                         `'start'` for the beginning of the main variation, or `undefined` if the user unselects the previously selected move.
 	 */
 	onMoveSelected: PropTypes.func,
 };
@@ -463,6 +521,39 @@ function figurineNotation(text, fontName) {
 		result.push(text.substring(beginOfText));
 	}
 	return result;
+}
+
+
+function getPreviousNodeId(currentNode) {
+	let previousNode = currentNode.previous();
+	if (previousNode) {
+		return previousNode.id();
+	}
+	else {
+		let parentNode = currentNode.parentVariation().parentNode();
+		return parentNode ? getPreviousNodeId(parentNode) : 'start';
+	}
+}
+
+
+function getNextNodeId(currentNode, isVariation) {
+	let nextNode = isVariation ? currentNode.first() : currentNode.next();
+	return nextNode ? nextNode.id() : false;
+}
+
+
+function getLastNodeId(currentNode, isVariation) {
+	currentNode = isVariation ? currentNode.first() : currentNode.next();
+	if (!currentNode) { // Ensure that the input node is not already the last one.
+		return false;
+	}
+	while (true) {
+		let nextNode = currentNode.next();
+		if (!nextNode) {
+			return currentNode.id();
+		}
+		currentNode = nextNode;
+	}
 }
 
 
