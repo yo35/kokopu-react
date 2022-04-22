@@ -92,9 +92,7 @@ export default class Page extends React.Component {
 				</ButtonGroup>
 			</Stack>
 			<Box>
-				<Typography gutterBottom>
-					Edition mode
-				</Typography>
+				<Typography gutterBottom>Interaction mode</Typography>
 				<RadioGroup value={this.state.interactionMode} onChange={evt => this.set('interactionMode', evt.target.value)}>
 					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
 					<Stack direction="row" spacing={2} alignItems="center">

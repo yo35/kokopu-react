@@ -45,7 +45,7 @@ const components = fs.readdirSync(path.resolve(__dirname, srcDir)).filter(filena
 const demoSectionTitle = 'Live demo';
 const demoPages = [
 	{ id: 'ChessboardBase', title: 'Chessboard - Basic features' },
-	{ id: 'ChessboardEdition', title: 'Chessboard - Edition' },
+	{ id: 'ChessboardInteraction', title: 'Chessboard - Interactions' },
 	{ id: 'ChessboardMove', title: 'Chessboard - Display moves' },
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
 ];
