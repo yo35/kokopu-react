@@ -1,0 +1,22 @@
+[Event "Checkmate with Bishop + Knight"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[FEN "1k6/2N5/2K5/8/8/8/5B2/8 w - - 0 1"]
+
+{[#][%cal Gc6g6,Rc7d5,Rd5e7,Re7f5,Rf5g7] How to checkmate in this situation?
+The key point is to remember that the knight follows a W-shaped path between
+ranks 5 and 7, while the white king stays on rank 6.}
+
+1.Be3 Kc8 2.Ba7 Kd8 3.Nd5 Ke8 4.Kd6 Kf7 5.Ne7 Kf6 6.Be3
+
+{The black king is trapped behind the squares controlled by the white pieces.
+[#][%csl Re5,Rf5,Rg5,Rg6,Rh6]}
+
+6...Kf7 7.Bd4 Ke8 8.Ke6 Kd8 9.Bb6+ Ke8 10.Nf5 Kf8 11.Ba5 Ke8 12.Ng7+ Kf8
+13.Kf6 Kg8 14.Kg6 Kf8 15.Bb4+ Kg8 +-
+
+{[#] ... and checkmate in four moves.} *

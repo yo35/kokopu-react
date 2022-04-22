@@ -48,6 +48,7 @@ const demoPages = [
 	{ id: 'ChessboardInteraction', title: 'Chessboard - Interactions' },
 	{ id: 'ChessboardMove', title: 'Chessboard - Display moves' },
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
+	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
 ];
 
 
@@ -100,6 +101,10 @@ module.exports = {
 				{
 					test: /\.(png|woff|woff2)$/i,
 					type: 'asset/resource',
+				},
+				{
+					test: /\.pgn$/i,
+					type: 'asset/source',
 				},
 			],
 		}
