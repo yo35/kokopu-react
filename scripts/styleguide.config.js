@@ -49,6 +49,7 @@ const demoPages = [
 	{ id: 'ChessboardMove', title: 'Chessboard - Display moves' },
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
 	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
+	{ id: 'MovetextInteraction', title: 'Movetext - Interactions' },
 ];
 
 

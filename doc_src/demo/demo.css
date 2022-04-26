@@ -32,3 +32,10 @@
 .MuiToggleButton-root.kokopu-fixTextTransform {
 	text-transform: none;
 }
+
+.kokopu-fixedPopup {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	padding: 10px;
+}
