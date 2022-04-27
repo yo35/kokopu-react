@@ -36,6 +36,7 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
 	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
 		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
+	<Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
 
 i18n.PIECE_SYMBOLS = legacyPieceSymbols;

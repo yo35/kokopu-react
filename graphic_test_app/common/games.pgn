@@ -150,3 +150,18 @@ Using scripts is not allowed. <script>alert('You should not see this either.');<
 [Result "*"]
 
 1. e4 e6 (1... e5 2. Nf3 Nc6 3. Nc3 (3. Bb5 ! a6 4. Ba4)) 2. d4 *
+
+
+
+[Event "Game with several diagrams"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+
+{[#]}
+
+1. e4 {A diagram is here. [#] But it should not be visible in the test-case.}
+1... e5 2. d4 {[#]} 2... d5 *

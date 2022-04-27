@@ -89,6 +89,7 @@ export default class Page extends React.Component {
 					game={this.state.pgn}
 					selection={this.state.selection}
 					pieceSymbols="figurines"
+					diagramVisible={false}
 					interactionMode={this.state.interactionMode}
 					onMoveSelected={nodeId => this.handleMoveSelected(nodeId)}
 				/>
@@ -100,6 +101,7 @@ export default class Page extends React.Component {
 		let attributes = [];
 		attributes.push('game={pgn}');
 		attributes.push('pieceSymbols="figurines"');
+		attributes.push('diagramVisible={false}');
 		attributes.push(`selection="${this.state.selection}"`);
 		switch(this.state.interactionMode) {
 			case 'selectMove':

@@ -52,6 +52,7 @@ export default class Page extends React.Component {
 		this.state = {
 			pgn: game1,
 			headerVisible: true,
+			diagramVisible: true,
 			pieceSymbols: 'figurines',
 			customSymbols: { K:'R', Q:'D', R:'T', B:'F', N:'C', P:'P' },
 			diagramOptions: {
@@ -85,6 +86,9 @@ export default class Page extends React.Component {
 				</ButtonGroup>
 				<FormControlLabel label="Show headers"
 					control={<Switch checked={this.state.headerVisible} onChange={() => this.set('headerVisible', !this.state.headerVisible)} color="primary" />}
+				/>
+				<FormControlLabel label="Show diagrams"
+					control={<Switch checked={this.state.diagramVisible} onChange={() => this.set('diagramVisible', !this.state.diagramVisible)} color="primary" />}
 				/>
 			</Stack>
 			<Stack direction="row" spacing={2} alignItems="center">
@@ -149,6 +153,7 @@ export default class Page extends React.Component {
 				<Movetext
 					game={this.state.pgn}
 					headerVisible={this.state.headerVisible}
+					diagramVisible={this.state.diagramVisible}
 					pieceSymbols={this.state.pieceSymbols === 'custom' ? this.state.customSymbols : this.state.pieceSymbols}
 					diagramOptions={this.state.diagramOptions}
 				/>
@@ -161,6 +166,7 @@ export default class Page extends React.Component {
 		attributes.push('game={pgn}');
 		attributes.push(`headerVisible={${this.state.headerVisible}}`);
 		attributes.push(`pieceSymbols=${this.getPieceSymbolsAsText()}`);
+		attributes.push(`diagramVisible={${this.state.diagramVisible}}`);
 		attributes.push(`diagramOptions={{ ${this.getDiagramAttributesAsText()} }}`);
 		let pgnDeclaration = 'const pgn = `\n' + this.state.pgn.trim() + '`;\n\n';
 		return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('Movetext', attributes)}</pre>;

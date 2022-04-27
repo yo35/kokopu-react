@@ -167,12 +167,13 @@ export default class Movetext extends React.Component {
 		}
 
 		// Write the initial comment, if any.
-		if (variation.comment() !== undefined) {
-			if(variation.isLongComment()) {
-				moveGroups.push(this.renderComment(variation, true));
+		let variationComment = this.extractComment(variation);
+		if (variationComment !== undefined) {
+			if (variation.isLongComment()) {
+				moveGroups.push(this.renderComment(variation, variationComment, true));
 			}
 			else {
-				currentMoveGroupElements.push(this.renderComment(variation, true));
+				currentMoveGroupElements.push(this.renderComment(variation, variationComment, true));
 			}
 		}
 
@@ -185,13 +186,14 @@ export default class Movetext extends React.Component {
 			currentMoveGroupElements.push(this.renderMove(notationTextBuilder, node, forcePrintMoveNumber));
 
 			// Write the comment (if any).
-			if (node.comment() !== undefined) {
+			let nodeComment = this.extractComment(node);
+			if (nodeComment !== undefined) {
 				if (node.isLongComment()) {
 					closeMoveGroup();
-					moveGroups.push(this.renderComment(node, false));
+					moveGroups.push(this.renderComment(node, nodeComment, false));
 				}
 				else {
-					currentMoveGroupElements.push(this.renderComment(node, false));
+					currentMoveGroupElements.push(this.renderComment(node, nodeComment, false));
 				}
 			}
 
@@ -212,7 +214,7 @@ export default class Movetext extends React.Component {
 			}
 
 			// Back to the current variation, go to the next move.
-			forcePrintMoveNumber = (node.comment() !== undefined || hasNonEmptySubVariations);
+			forcePrintMoveNumber = (nodeComment !== undefined || hasNonEmptySubVariations);
 			node = node.next();
 		}
 
@@ -282,10 +284,9 @@ export default class Movetext extends React.Component {
 	/**
 	 * Render the given text comment with its diagrams, if any.
 	 */
-	renderComment(node, isVariation) {
-		let comment = node.comment();
+	renderComment(node, comment, isVariation) {
 		let content;
-		if (comment.includes('[#]')) {
+		if (this.props.diagramVisible && comment.includes('[#]')) {
 			content = [];
 			let sanitizer = createSanitizer();
 			let isFirstPart = true;
@@ -314,6 +315,21 @@ export default class Movetext extends React.Component {
 		}
 		let key = isVariation ? 'initial-comment' : node.fullMoveNumber() + node.moveColor() + '-comment';
 		return node.isLongComment() ? <div className="kokopu-comment" key={key}>{content}</div> : <span className="kokopu-comment" key={key}>{content}</span>;
+	}
+
+	extractComment(node) {
+		let comment = node.comment();
+		if (comment) {
+
+			// Remove the diagrams if necessary.
+			if (!this.props.diagramVisible) {
+				comment = comment.replace(/\[#\]/g, ' ');
+			}
+
+			// Trim and sanitize the space characters.
+			comment = comment.replace(/\s+/g, ' ').trim();
+		}
+		return comment ? comment : undefined;
 	}
 
 	handleKeyDownInFocusField(evt) {
@@ -434,7 +450,12 @@ Movetext.propTypes = {
 	]),
 
 	/**
-	 * Whether the game headers are displayed or not.
+	 * Whether the diagrams within the comments (if any) are displayed or not.
+	 */
+	diagramVisible: PropTypes.bool,
+
+	/**
+	 * Whether the game headers (if any) are displayed or not.
 	 */
 	headerVisible: PropTypes.bool,
 
@@ -466,6 +487,7 @@ Movetext.defaultProps = {
 	gameIndex: 0,
 	diagramOptions: {},
 	pieceSymbols: 'native',
+	diagramVisible: true,
 	headerVisible: true,
 };
 
