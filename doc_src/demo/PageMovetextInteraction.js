@@ -117,7 +117,8 @@ export default class Page extends React.Component {
 
 	renderNavigationBoard() {
 		let button = <Button size="small" onClick={() => this.handlePopupToggled()}>{this.state.withPopup ? 'Reduce' : 'Open'}</Button>;
-		let content = this.state.withPopup ? <Stack><Chessboard position={this.getCurrentPosition()} />{button}</Stack> : button;
+		let { position, csl, cal } = this.getCurrentPositionAndAnnotations();
+		let content = this.state.withPopup ? <Stack><Chessboard position={position} squareMarkers={csl} arrowMarkers={cal} />{button}</Stack> : button;
 		return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
 	}
 
@@ -140,8 +141,15 @@ export default class Page extends React.Component {
 		this.setState(newState);
 	}
 
-	getCurrentPosition() {
+	getCurrentPositionAndAnnotations() {
 		let game = kokopu.pgnRead(this.state.pgn, 0);
-		return this.state.selection === 'start' ? game.mainVariation().initialPosition() : game.findById(this.state.selection).position();
+		if (this.state.selection === 'start') {
+			let mainVariation = game.mainVariation();
+			return { position: mainVariation.initialPosition(), csl: mainVariation.tag('csl'), cal: mainVariation.tag('cal') };
+		}
+		else {
+			let node = game.findById(this.state.selection);
+			return { position: node.position(), csl: node.tag('csl'), cal: node.tag('cal') };
+		}
 	}
 }
