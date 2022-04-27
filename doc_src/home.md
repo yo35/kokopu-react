@@ -21,6 +21,8 @@ Main components
 
 - [Chessboard](#/Components/Chessboard): SVG image representing a chessboard diagram. Optionally, the user may interact with the board
 (move pieces, click on squares...). Annotations such as square markers or arrows can also be added to the board.
+- [Movetext](#/Components/Movetext): represents a chess game, i.e. the headers (name of the players, event, etc.), the moves,
+and all the related annotations if any (comments, variations, NAGs...).
 
 
 
