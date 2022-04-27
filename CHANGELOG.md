@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.5.0 (April 27, 2022)
+----------------------
+* Add component `Movetext` to display chess games.
+
 1.4.1 (January 1, 2022)
 -----------------------
 * Upgrade dependencies.
