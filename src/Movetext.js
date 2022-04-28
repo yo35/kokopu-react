@@ -46,14 +46,12 @@ export default class Movetext extends React.Component {
 	render() {
 		let info = parseGame(this.props.game, this.props.gameIndex);
 		if (info.error) {
-			return <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={info.message} text={info.text} errorIndex={info.errorIndex} lineNumber={info.lineNumber}></ErrorBox>;
+			return <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={info.message} text={info.text} errorIndex={info.errorIndex} lineNumber={info.lineNumber} />;
 		}
-		let game = info.game;
-
 		return (
 			<div className="kokopu-movetext">
-				{this.renderHeaders(game)}
-				{this.renderBody(game)}
+				{this.renderHeaders(info.game)}
+				{this.renderBody(info.game)}
 				{this.renderFocusField()}
 			</div>
 		);

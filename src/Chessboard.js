@@ -83,10 +83,10 @@ export default class Chessboard extends React.Component {
 		// Compute the current position.
 		let info = this.getPositionAndMoveInfo();
 		if (info.positionError) {
-			return <ErrorBox title={i18n.INVALID_FEN_ERROR_TITLE} message={info.message}></ErrorBox>;
+			return <ErrorBox title={i18n.INVALID_FEN_ERROR_TITLE} message={info.message} />;
 		}
 		else if (info.moveError) {
-			return <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={info.message}></ErrorBox>;
+			return <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={info.message} />;
 		}
 		let { position, move, positionBefore } = info;
 
