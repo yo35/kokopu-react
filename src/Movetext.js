@@ -331,6 +331,9 @@ export default class Movetext extends React.Component {
 	}
 
 	handleKeyDownInFocusField(evt) {
+		if (evt.key === 'Home' || evt.key === 'ArrowLeft' || evt.key === 'ArrowRight' || evt.key === 'End') {
+			evt.preventDefault();
+		}
 		if (!this.props.selection) {
 			return;
 		}
