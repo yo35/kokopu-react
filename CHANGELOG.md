@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.5.1 (April 29, 2022)
+----------------------
+* Add argument `evtOrigin` in `onMoveSelected(..)` callback in component `Movetext`.
+
 1.5.0 (April 27, 2022)
 ----------------------
 * Add component `Movetext` to display chess games.
