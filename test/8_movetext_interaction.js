@@ -53,18 +53,22 @@ describe('Movetext interaction', function() {
 		});
 	}
 
+	function tpl(nodeId, evtOrigin) {
+		return `move selected: ${nodeId}\norigin: ${evtOrigin}`;
+	}
+
 	itCheckClickMove(0, 'click on disabled', [
 		{ searchedText: 'Nf6', expectedText: '' },
 		{ searchedText: 'Qc2', expectedText: '' },
 	]);
 
 	itCheckClickMove(1, 'click on unselected', [
-		{ searchedText: 'cxd5', expectedText: 'move selected: 5w' },
+		{ searchedText: 'cxd5', expectedText: tpl('5w', 'click') },
 	]);
 
 	itCheckClickMove(2, 'click on with variations 1', [
-		{ searchedText: 'Bb5', expectedText: 'move selected: undefined' },
-		{ searchedText: 'Nc6', expectedText: 'move selected: 1b-v0-2b' },
+		{ searchedText: 'Bb5', expectedText: tpl(undefined, 'click') },
+		{ searchedText: 'Nc6', expectedText: tpl('1b-v0-2b', 'click') },
 	]);
 
 	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast) {
@@ -90,10 +94,10 @@ describe('Movetext interaction', function() {
 	}
 
 	itCheckKeyboardActions(1, 'key on unselected', '', '', '', '');
-	itCheckKeyboardActions(2, 'key on with variations 1', 'move selected: start', 'move selected: 1b-v0-2b', 'move selected: 1b-v0-3w-v0-3b', 'move selected: 1b-v0-3w-v0-4w');
-	itCheckKeyboardActions(3, 'key on with variations 2', 'move selected: start', 'move selected: 1b-v0-2w', 'move selected: 1b-v0-3w', 'move selected: 1b-v0-3w');
-	itCheckKeyboardActions(4, 'key on start selected', '', '', 'move selected: 1w', 'move selected: 6b');
-	itCheckKeyboardActions(5, 'key on first selected', 'move selected: start', 'move selected: start', 'move selected: 1b', 'move selected: 6b');
-	itCheckKeyboardActions(6, 'key on last selected', 'move selected: start', 'move selected: 6w', '', '');
+	itCheckKeyboardActions(2, 'key on with variations 1', tpl('start', 'key-first'), tpl('1b-v0-2b', 'key-previous'), tpl('1b-v0-3w-v0-3b', 'key-next'), tpl('1b-v0-3w-v0-4w', 'key-last'));
+	itCheckKeyboardActions(3, 'key on with variations 2', tpl('start', 'key-first'), tpl('1b-v0-2w', 'key-previous'), tpl('1b-v0-3w', 'key-next'), tpl('1b-v0-3w', 'key-last'));
+	itCheckKeyboardActions(4, 'key on start selected', '', '', tpl('1w', 'key-next'), tpl('6b', 'key-last'));
+	itCheckKeyboardActions(5, 'key on first selected', tpl('start', 'key-first'), tpl('start', 'key-previous'), tpl('1b', 'key-next'), tpl('6b', 'key-last'));
+	itCheckKeyboardActions(6, 'key on last selected', tpl('start', 'key-first'), tpl('6w', 'key-previous'), '', '');
 	itCheckKeyboardActions(7, 'key on invalid selection', '', '', '', '');
 });

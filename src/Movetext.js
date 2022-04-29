@@ -336,12 +336,15 @@ export default class Movetext extends React.Component {
 		}
 		let game = parseGame(this.props.game, this.props.gameIndex).game;
 		let nodeId = false;
+		let evtOrigin = '';
 		if (this.props.selection === 'start') {
 			if (evt.key === 'ArrowRight') {
 				nodeId = getNextNodeId(game.mainVariation(), true);
+				evtOrigin = 'key-next';
 			}
 			else if (evt.key === 'End') {
 				nodeId = getLastNodeId(game.mainVariation(), true);
+				evtOrigin = 'key-last';
 			}
 		}
 		else {
@@ -351,26 +354,30 @@ export default class Movetext extends React.Component {
 			}
 			if (evt.key === 'Home') {
 				nodeId = 'start';
+				evtOrigin = 'key-first';
 			}
 			else if (evt.key === 'ArrowLeft') {
 				nodeId = getPreviousNodeId(currentNode);
+				evtOrigin = 'key-previous';
 			}
 			else if (evt.key === 'ArrowRight') {
 				nodeId = getNextNodeId(currentNode, false);
+				evtOrigin = 'key-next';
 			}
 			else if (evt.key === 'End') {
 				nodeId = getLastNodeId(currentNode, false);
+				evtOrigin = 'key-last';
 			}
 		}
 		if (nodeId && this.props.onMoveSelected) {
-			this.props.onMoveSelected(nodeId);
+			this.props.onMoveSelected(nodeId, evtOrigin);
 		}
 	}
 
 	handleNodeClicked(nodeId) {
 		this.focusFieldRef.current.focus();
 		if (this.props.onMoveSelected) {
-			this.props.onMoveSelected(nodeId === this.props.selection ? undefined : nodeId);
+			this.props.onMoveSelected(nodeId === this.props.selection ? undefined : nodeId, 'click');
 		}
 	}
 
@@ -471,10 +478,16 @@ Movetext.propTypes = {
 	interactionMode: PropTypes.oneOf([ 'selectMove' ]),
 
 	/**
-	 * Callback invoked when the user clicks on a move (only if `interactionMode` is set to `'selectMove'`).
+	 * Callback invoked when the user selects a move (only if `interactionMode` is set to `'selectMove'`).
 	 *
 	 * @param {string?} nodeId ID of the selected move (as returned by [kokopu.Node#id](https://kokopu.yo35.org/docs/Node.html#id)),
 	 *                         `'start'` for the beginning of the main variation, or `undefined` if the user unselects the previously selected move.
+	 * @param {string} evtOrigin Origin of the event. Can be:
+	 *                        - `'key-first'`: the event has been triggered by the "go-to-first-move" key (aka. the home key),
+	 *                        - `'key-previous'`: the event has been triggered by the "go-to-previous-move" key (aka. the arrow left key),
+	 *                        - `'key-next'`: the event has been triggered by the "go-to-next-move" key (aka. the arrow right key),
+	 *                        - `'key-last'`: the event has been triggered by the "go-to-last-move" key (aka. the end key),
+	 *                        - `'click'`: the event has been triggered by a mouse click on a move.
 	 */
 	onMoveSelected: PropTypes.func,
 };

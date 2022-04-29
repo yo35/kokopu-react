@@ -26,8 +26,8 @@ import { Movetext } from '../src/index';
 
 import pgn from './common/games.pgn';
 
-function onMoveSelected(nodeId) {
-	setSandbox(`move selected: ${nodeId}`);
+function onMoveSelected(nodeId, evtOrigin) {
+	setSandbox(`move selected: ${nodeId}\norigin: ${evtOrigin}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */

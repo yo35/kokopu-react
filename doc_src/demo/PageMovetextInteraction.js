@@ -50,6 +50,7 @@ export default class Page extends React.Component {
 			selection: '28b',
 			interactionMode: 'selectMove',
 			withPopup: true,
+			withMove: false,
 		};
 	}
 
@@ -91,7 +92,7 @@ export default class Page extends React.Component {
 					pieceSymbols="figurines"
 					diagramVisible={false}
 					interactionMode={this.state.interactionMode}
-					onMoveSelected={nodeId => this.handleMoveSelected(nodeId)}
+					onMoveSelected={(nodeId, evtOrigin) => this.handleMoveSelected(nodeId, evtOrigin)}
 				/>
 			</Box>
 		);
@@ -117,14 +118,14 @@ export default class Page extends React.Component {
 
 	renderNavigationBoard() {
 		let button = <Button size="small" onClick={() => this.handlePopupToggled()}>{this.state.withPopup ? 'Reduce' : 'Open'}</Button>;
-		let { position, csl, cal } = this.getCurrentPositionAndAnnotations();
-		let content = this.state.withPopup ? <Stack><Chessboard position={position} squareMarkers={csl} arrowMarkers={cal} />{button}</Stack> : button;
+		let { position, move, csl, cal } = this.getCurrentPositionAndAnnotations();
+		let content = this.state.withPopup ? <Stack><Chessboard position={position} move={move} squareMarkers={csl} arrowMarkers={cal} animated={true} />{button}</Stack> : button;
 		return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
 	}
 
-	handleMoveSelected(nodeId) {
+	handleMoveSelected(nodeId, evtOrigin) {
 		if (nodeId) {
-			this.set('selection', nodeId);
+			this.set('selection', nodeId, 'withMove', evtOrigin === 'key-next');
 		}
 	}
 
@@ -149,7 +150,10 @@ export default class Page extends React.Component {
 		}
 		else {
 			let node = game.findById(this.state.selection);
-			return { position: node.position(), csl: node.tag('csl'), cal: node.tag('cal') };
+			let result = this.state.withMove ? { position: node.positionBefore(), move: node.notation() } : { position: node.position() };
+			result.csl = node.tag('csl');
+			result.cal = node.tag('cal');
+			return result;
 		}
 	}
 }
