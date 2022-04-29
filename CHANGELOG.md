@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.5.2 (April 29, 2022)
+----------------------
+* Prevent default actions when handling key events in component `Movetext`.
+
 1.5.1 (April 29, 2022)
 ----------------------
 * Add argument `evtOrigin` in `onMoveSelected(..)` callback in component `Movetext`.
