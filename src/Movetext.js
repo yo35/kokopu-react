@@ -52,7 +52,7 @@ export default class Movetext extends React.Component {
 			<div className="kokopu-movetext">
 				{this.renderHeaders(info.game)}
 				{this.renderBody(info.game)}
-				{this.renderFocusField()}
+				{this.renderFocusField(info.game)}
 			</div>
 		);
 	}
@@ -132,13 +132,13 @@ export default class Movetext extends React.Component {
 		return <div className="kokopu-header-annotator" key="annotator">{sanitizeHtml(annotator)}</div>;
 	}
 
-	renderFocusField() {
+	renderFocusField(game) {
 		if (this.props.interactionMode !== 'selectMove') {
 			return undefined;
 		}
 		return (
 			<div className="kokopu-focusFieldContainer">
-				<a className="kokopu-focusField" href="#" ref={this.focusFieldRef} onKeyDown={evt => this.handleKeyDownInFocusField(evt)}></a>
+				<a className="kokopu-focusField" href="#" ref={this.focusFieldRef} onKeyDown={evt => this.handleKeyDownInFocusField(evt, game)}></a>
 			</div>
 		);
 	}
@@ -330,7 +330,7 @@ export default class Movetext extends React.Component {
 		return comment ? comment : undefined;
 	}
 
-	handleKeyDownInFocusField(evt) {
+	handleKeyDownInFocusField(evt, game) {
 		if (evt.key !== 'Home' && evt.key !== 'ArrowLeft' && evt.key !== 'ArrowRight' && evt.key !== 'End') {
 			return;
 		}
@@ -338,7 +338,6 @@ export default class Movetext extends React.Component {
 		if (!this.props.selection) {
 			return;
 		}
-		let { game } = parseGame(this.props.game, this.props.gameIndex);
 		let nodeId = undefined;
 		let evtOrigin = '';
 		if (evt.key === 'Home') {
