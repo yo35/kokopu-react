@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+1.5.3 (April 30, 2022)
+----------------------
+* Add method `Movetext#focus()`.
+* Expose static methods `Movetext#firstNodeId(..)`, `Movetext#previousNodeId(..)`, `Movetext#nextNodeId(..)`
+and `Movetext#lastNodeId(..)`.
+
 1.5.2 (April 29, 2022)
 ----------------------
 * Prevent default actions when handling key events in component `Movetext`.
