@@ -39,4 +39,5 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1w" />,
 	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="6b" />,
 	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="invalid-id" />,
+	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-start" />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

@@ -90,6 +90,10 @@ describe('Movetext interaction', function() {
 			await setSandbox(browserContext, '');
 			await focusFieldElement.sendKeys(Key.END);
 			await compareSandbox(browserContext, expectedOnGoLast);
+
+			await setSandbox(browserContext, '');
+			await focusFieldElement.sendKeys(Key.ARROW_UP);
+			await compareSandbox(browserContext, '');
 		});
 	}
 
@@ -100,4 +104,5 @@ describe('Movetext interaction', function() {
 	itCheckKeyboardActions(5, 'key on first selected', tpl('start', 'key-first'), tpl('start', 'key-previous'), tpl('1b', 'key-next'), tpl('6b', 'key-last'));
 	itCheckKeyboardActions(6, 'key on last selected', tpl('start', 'key-first'), tpl('6w', 'key-previous'), '', '');
 	itCheckKeyboardActions(7, 'key on invalid selection', '', '', '', '');
+	itCheckKeyboardActions(8, 'key on sub-variation selected', tpl('start', 'key-first'), tpl('1w', 'key-previous'), tpl('1b-v0-1b', 'key-next'), tpl('1b-v0-3w', 'key-last'));
 });
