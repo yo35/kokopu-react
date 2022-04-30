@@ -331,46 +331,31 @@ export default class Movetext extends React.Component {
 	}
 
 	handleKeyDownInFocusField(evt) {
-		if (evt.key === 'Home' || evt.key === 'ArrowLeft' || evt.key === 'ArrowRight' || evt.key === 'End') {
-			evt.preventDefault();
+		if (evt.key !== 'Home' && evt.key !== 'ArrowLeft' && evt.key !== 'ArrowRight' && evt.key !== 'End') {
+			return;
 		}
+		evt.preventDefault();
 		if (!this.props.selection) {
 			return;
 		}
-		let game = parseGame(this.props.game, this.props.gameIndex).game;
-		let nodeId = false;
+		let { game } = parseGame(this.props.game, this.props.gameIndex);
+		let nodeId = undefined;
 		let evtOrigin = '';
-		if (this.props.selection === 'start') {
-			if (evt.key === 'ArrowRight') {
-				nodeId = getNextNodeId(game.mainVariation(), true);
-				evtOrigin = 'key-next';
-			}
-			else if (evt.key === 'End') {
-				nodeId = getLastNodeId(game.mainVariation(), true);
-				evtOrigin = 'key-last';
-			}
+		if (evt.key === 'Home') {
+			nodeId = Movetext.firstNodeId(game, this.props.selection);
+			evtOrigin = 'key-first';
 		}
-		else {
-			let currentNode = game.findById(this.props.selection);
-			if (!currentNode) {
-				return;
-			}
-			if (evt.key === 'Home') {
-				nodeId = 'start';
-				evtOrigin = 'key-first';
-			}
-			else if (evt.key === 'ArrowLeft') {
-				nodeId = getPreviousNodeId(currentNode);
-				evtOrigin = 'key-previous';
-			}
-			else if (evt.key === 'ArrowRight') {
-				nodeId = getNextNodeId(currentNode, false);
-				evtOrigin = 'key-next';
-			}
-			else if (evt.key === 'End') {
-				nodeId = getLastNodeId(currentNode, false);
-				evtOrigin = 'key-last';
-			}
+		else if (evt.key === 'ArrowLeft') {
+			nodeId = Movetext.previousNodeId(game, this.props.selection);
+			evtOrigin = 'key-previous';
+		}
+		else if (evt.key === 'ArrowRight') {
+			nodeId = Movetext.nextNodeId(game, this.props.selection);
+			evtOrigin = 'key-next';
+		}
+		else { // evt.key === 'End'
+			nodeId = Movetext.lastNodeId(game, this.props.selection);
+			evtOrigin = 'key-last';
 		}
 		if (nodeId && this.props.onMoveSelected) {
 			this.props.onMoveSelected(nodeId, evtOrigin);
@@ -401,6 +386,105 @@ export default class Movetext extends React.Component {
 		}
 		else {
 			return notation => notation;
+		}
+	}
+
+	/**
+	 * Return the ID of the main variation in the given chess game.
+	 * If the given selection corresponds already at the main variation, `undefined` is returned.
+	 *
+	 * This corresponds to the operation performed when the user presses key "home" on a `Movetext` component.
+	 *
+	 * @param {kokopu.Game} game Considered chess game.
+	 * @param {string} selection ID of the selected move (or `'start'` for the beginning of the main variation).
+	 * @returns {string?}
+	 * @public
+	 */
+	static firstNodeId(game, selection) {
+		if (!game.findById(selection)) {
+			return undefined;
+		}
+		return selection === 'start' ? undefined : 'start';
+	}
+
+	/**
+	 * Return the ID of the node immediately preceding the given selection in the given chess game.
+	 * If no such node exists, `undefined` is returned.
+	 *
+	 * This corresponds to the operation performed when the user presses key "arrow left" on a `Movetext` component.
+	 *
+	 * @param {kokopu.Game} game Considered chess game.
+	 * @param {string} selection ID of the selected move (or `'start'` for the beginning of the main variation).
+	 * @returns {string?}
+	 * @public
+	 */
+	static previousNodeId(game, selection) {
+		let currentNode = game.findById(selection);
+		if (!currentNode) {
+			return undefined;
+		}
+		if (selection === 'start') {
+			return undefined;
+		}
+		else if (selection.endsWith('start')) {
+			currentNode = currentNode.parentNode(); // `.parentNode()` returns always non-null ref here
+		}
+		while (currentNode) {
+			let previousNode = currentNode.previous();
+			if (previousNode) {
+				return previousNode.id();
+			}
+			currentNode = currentNode.parentVariation().parentNode();
+		}
+		return 'start';
+	}
+
+	/**
+	 * Return the ID of the node immediately following the given selection in the given chess game.
+	 * If no such node exists, `undefined` is returned.
+	 *
+	 * This corresponds to the operation performed when the user presses key "arrow right" on a `Movetext` component.
+	 *
+	 * @param {kokopu.Game} game Considered chess game.
+	 * @param {string} selection ID of the selected move (or `'start'` for the beginning of the main variation).
+	 * @returns {string?}
+	 * @public
+	 */
+	static nextNodeId(game, selection) {
+		let currentNode = game.findById(selection);
+		if (!currentNode) {
+			return undefined;
+		}
+		let nextNode = selection.endsWith('start') ? currentNode.first() : currentNode.next();
+		return nextNode ? nextNode.id() : undefined;
+	}
+
+	/**
+	 * Return the ID of the node at then end of the variation in which lies the given selection in the given chess game.
+	 * If the selection is already at the end its variation, `undefined` is returned.
+	 *
+	 * This corresponds to the operation performed when the user presses key "end" on a `Movetext` component.
+	 *
+	 * @param {kokopu.Game} game Considered chess game.
+	 * @param {string} selection ID of the selected move (or `'start'` for the beginning of the main variation).
+	 * @returns {string?}
+	 * @public
+	 */
+	static lastNodeId(game, selection) {
+		let currentNode = game.findById(selection);
+		if (!currentNode) {
+			return undefined;
+		}
+		currentNode = selection.endsWith('start') ? currentNode.first() : currentNode.next();
+		if (!currentNode) { // Ensure that the input node is not already the last one.
+			return undefined;
+		}
+		while (true) {
+			let nextNode = currentNode.next();
+			if (!nextNode) {
+				return currentNode.id();
+			}
+			currentNode = nextNode;
 		}
 	}
 }
@@ -566,39 +650,6 @@ function figurineNotation(text, fontName) {
 		result.push(text.substring(beginOfText));
 	}
 	return result;
-}
-
-
-function getPreviousNodeId(currentNode) {
-	let previousNode = currentNode.previous();
-	if (previousNode) {
-		return previousNode.id();
-	}
-	else {
-		let parentNode = currentNode.parentVariation().parentNode();
-		return parentNode ? getPreviousNodeId(parentNode) : 'start';
-	}
-}
-
-
-function getNextNodeId(currentNode, isVariation) {
-	let nextNode = isVariation ? currentNode.first() : currentNode.next();
-	return nextNode ? nextNode.id() : false;
-}
-
-
-function getLastNodeId(currentNode, isVariation) {
-	currentNode = isVariation ? currentNode.first() : currentNode.next();
-	if (!currentNode) { // Ensure that the input node is not already the last one.
-		return false;
-	}
-	while (true) {
-		let nextNode = currentNode.next();
-		if (!nextNode) {
-			return currentNode.id();
-		}
-		currentNode = nextNode;
-	}
 }
 
 
