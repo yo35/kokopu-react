@@ -363,7 +363,7 @@ export default class Movetext extends React.Component {
 	}
 
 	handleNodeClicked(nodeId) {
-		this.focusFieldRef.current.focus();
+		this.focus();
 		if (this.props.onMoveSelected) {
 			this.props.onMoveSelected(nodeId === this.props.selection ? undefined : nodeId, 'click');
 		}
@@ -387,6 +387,15 @@ export default class Movetext extends React.Component {
 		else {
 			return notation => notation;
 		}
+	}
+
+	/**
+	 * Set the focus to the current component.
+	 *
+	 * @public
+	 */
+	focus() {
+		this.focusFieldRef.current.focus();
 	}
 
 	/**
