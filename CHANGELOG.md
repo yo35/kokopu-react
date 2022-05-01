@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.5.4 (May 1, 2022)
+-------------------
+* Provide method `Chessboard#size(..)` to retrieve the width/height of a `Chessboard` component instance.
+
 1.5.3 (April 30, 2022)
 ----------------------
 * Add method `Movetext#focus()`.
