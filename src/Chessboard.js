@@ -624,6 +624,38 @@ export default class Chessboard extends React.Component {
 	}
 
 	/**
+	 * Return the size of the chessboard, assuming it is built with the given attributes.
+	 *
+	 * @param {number} squareSize
+	 * @param {boolean} coordinateVisible
+	 * @param {{width:number, squareSize:number, coordinateVisible:boolean}[]} smallScreenLimits
+	 * @returns {{width:number, height:number}}
+	 * @public
+	 */
+	static size(squareSize, coordinateVisible, smallScreenLimits) {
+
+		// Enforce small-screen limits, if any.
+		if (typeof window !== 'undefined') {
+			let squareSizeLimit = computeSmallScreenLimits('squareSize', smallScreenLimits, window.innerWidth);
+			let coordinateVisibleLimit = computeSmallScreenLimits('coordinateVisible', smallScreenLimits, window.innerWidth);
+			if (!isNaN(squareSizeLimit)) {
+				squareSize = sanitizeInteger(squareSizeLimit, MIN_SQUARE_SIZE, squareSize);
+			}
+			coordinateVisible = coordinateVisible && (coordinateVisibleLimit === undefined || coordinateVisibleLimit);
+		}
+
+		// Compute the dimensions.
+		let width = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+		let height = 8 * squareSize;
+		if (coordinateVisible) {
+			let fontSize = computeCoordinateFontSize(squareSize);
+			width += Math.round(RANK_COORDINATE_WIDTH_FACTOR * fontSize);
+			height += Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize);
+		}
+		return { width: width, height: height };
+	}
+
+	/**
 	 * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
 	 *
 	 * @param {number} width
