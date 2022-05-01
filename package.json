@@ -1,7 +1,7 @@
 {
 	"name": "kokopu-react",
 	"version": "1.5.3",
-	"description": "A React-based library to create and display chessboard components.",
+	"description": "A React-based library to create and display chessboard and chess-related components.",
 	"keywords": [
 		"chess",
 		"react",
