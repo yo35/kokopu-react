@@ -22,39 +22,51 @@
 
 'use strict';
 
+const readline = require('readline');
+const Client = require('ssh2-sftp-client');
 
-var prompt = require('prompt');
-var Client = require('ssh2-sftp-client');
+function promptPassword(prompt, callback) {
 
-prompt.start();
-prompt.get({ name: 'password', hidden: true, replace: '*' }, function(err, result) {
+	let rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+	rl.input.on("keypress", () => {
+		let len = rl.line.length;
+		readline.moveCursor(rl.output, -len, 0);
+		readline.clearLine(rl.output, 1);
+		rl.output.write('*'.repeat(len));
+	});
+
+	let password = '';
+	rl.on('close', () => callback(password));
+
+	rl.question(prompt, answer => {
+		password = answer;
+		rl.close();
+	});
+}
+
+
+const HOST = 'ftp.cluster007.ovh.net';
+const USER = 'yolgiypr';
+const ROOT_DIR = 'kokopu-react';
+
+promptPassword(`Pass for ${USER}@${HOST}: `, pass => {
 
 	// Validate the password.
-	if (err) {
-		console.log(err);
-		return;
-	}
-	else if (result.password === '') {
+	if (!pass) {
 		console.log('Deploy canceled.');
 		return;
 	}
 
-	var client = new Client();
+	let client = new Client();
 	client.connect({
-		host: 'ftp.cluster007.ovh.net',
-		username: 'yolgiypr',
-		password: result.password
+		host: HOST,
+		username: USER,
+		password: pass,
 	}).then(function() {
 
 		// Upload the documentation.
 		console.log('Upload documentation...');
-		return client.uploadDir('dist/docs', 'kokopu-react/docs');
+		return client.uploadDir('dist/docs', `${ROOT_DIR}/docs`);
 
-	}).then(function() {
-		console.log('Done.');
-	}).catch(function(err) {
-		console.log(err);
-	}).finally(function() {
-		return client.end();
-	});
+	}).then(() => console.log('Done.')).catch(() => console.log(err)).finally(() => client.end());
 });
