@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.5.5 (May 18, 2022)
+--------------------
+* Upgrade dependencies.
+* Remove dependency with security issue.
+
 1.5.4 (May 1, 2022)
 -------------------
 * Provide method `Chessboard#size(..)` to retrieve the width/height of a `Chessboard` component instance.
