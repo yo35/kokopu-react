@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.6.0 (June 1, 2022)
+--------------------
+* Allow block-formatting HTML tags in PGN comments.
+* Provide `formatMove` and `moveFormatter`.
+
 1.5.5 (May 18, 2022)
 --------------------
 * Upgrade dependencies.
