@@ -25,6 +25,12 @@ import * as htmlparser2 from 'htmlparser2';
 
 
 /**
+ * Those tags cannot have any children.
+ */
+const NO_CHILDREN_TAGS = new Set([ 'br', 'hr', 'img' ]);
+
+
+/**
  * HTML sanitizer: parse HTML string, keeping only the allowed HTML nodes, and the corresponding React object.
  */
 export default class HtmlSanitizer {
@@ -74,14 +80,14 @@ export default class HtmlSanitizer {
 			return node.data;
 		}
 		else if (node.type === 'tag') {
-			let children = node.children.map(child => this._processNode(child));
+			let children = NO_CHILDREN_TAGS.has(node.name) ? undefined : node.children.map(child => this._processNode(child));
 			if (this._allowedTags.has(node.name)) {
 				let attributes = this._filterAttributes(node.name, node.attribs);
 				attributes['key'] = this._allocateKey();
 				return React.createElement(node.name, attributes, children);
 			}
 			else {
-				return <React.Fragment key={this._allocateKey()}>{children}</React.Fragment>;
+				return children ? <React.Fragment key={this._allocateKey()}>{children}</React.Fragment> : undefined;
 			}
 		}
 		else {

@@ -284,9 +284,9 @@ export default class Movetext extends React.Component {
 	 */
 	renderComment(node, comment, isVariation) {
 		let content;
+		let sanitizer = createSanitizer(true);
 		if (this.props.diagramVisible && comment.includes('[#]')) {
 			content = [];
-			let sanitizer = createSanitizer();
 			let isFirstPart = true;
 			for (let [index, part] of comment.split('[#]').entries()) {
 				if (!isFirstPart) {
@@ -309,7 +309,7 @@ export default class Movetext extends React.Component {
 			}
 		}
 		else {
-			content = sanitizeHtml(comment);
+			content = sanitizeHtml(comment, sanitizer);
 		}
 		let key = isVariation ? 'initial-comment' : node.fullMoveNumber() + node.moveColor() + '-comment';
 		return node.isLongComment() ? <div className="kokopu-comment" key={key}>{content}</div> : <span className="kokopu-comment" key={key}>{content}</span>;
@@ -615,20 +615,43 @@ function formatResult(result) {
 }
 
 
-function createSanitizer() {
-	return new HtmlSanitizer({
-		allowedTags: [ 'a', 'span', 'b', 'strong', 'i', 'em', 'mark', 'small', 'del', 'ins', 'sub', 'sup' ],
-		allowedAttributes: {
-			'*': [ 'class', 'id', 'title' ],
-			'a': [ 'href', 'target' ]
-		}
-	});
+function createSanitizer(withBlockTags) {
+	let allowedTags = [
+		'span', // general purpose
+		'a', // links
+		'b', 'strong', 'i', 'em', // bold, italic
+		'del', 'ins', 's', 'u', // underline, strikethrough
+		'sub', 'sup', // subscript, superscript
+		'abbr', // acronym (typically associated to a title=".." tooltip)
+		'q', 'cite', // quotation and title of a work
+		'mark', // highlighted text
+		'small', // smaller text
+	];
+	let allowedAttributes = {
+		'*': [ 'class', 'id', 'title' ],
+		'a': [ 'href', 'target' ],
+	};
+	if (withBlockTags) {
+		allowedTags = allowedTags.concat([
+			'div', // general purpose
+			'h1', 'h2', 'h3', 'h4', 'h5', 'h6', // headings
+			'p', 'br', // paragraph and line break
+			'blockquote', // long quotation
+			'img', // image
+			'pre', // preformatted text
+			'ul', 'ol', 'li', // lists
+		]);
+		Object.assign(allowedAttributes, {
+			'img': [ 'alt', 'src', 'height', 'width' ],
+		});
+	}
+	return new HtmlSanitizer({ allowedTags: allowedTags, allowedAttributes: allowedAttributes });
 }
 
 
 function sanitizeHtml(text, sanitizer) {
 	if (!sanitizer) {
-		sanitizer = createSanitizer();
+		sanitizer = createSanitizer(false);
 	}
 	let result = sanitizer.parse(text);
 	return result ?? text;

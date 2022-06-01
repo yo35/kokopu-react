@@ -85,7 +85,7 @@ probably to assure himself that the combination was sound and that he had a forc
 [Date "????.??.??"]
 [Round "<strong>3</strong>.2"]
 [White "1<sup>st</sup> <em>player</em>"]
-[Black "2<sub>nd</sub> <em>player</em>"]
+[Black "2<sub>nd</sub> <i>player</i>"]
 [Result "*"]
 [WhiteElo "<ins>2800</ins>"]
 [BlackElo "<del>1010</del>"]
@@ -104,7 +104,13 @@ probably to assure himself that the combination was sound and that he had a forc
 [Black "?"]
 [Result "*"]
 
-{I'm a <strong><ins>comment</ins></strong> with some <em class="myClass">HTML content</em> in it.}
+{I'm a <strong><ins>comment</ins></strong> with some <em class="myClass">HTML content</em> in it.<br/>
+Lists are supported:
+<ul>
+<li>1<sup>st</sup> point</li>
+<li>2<sup>nd</sup> point</li>
+</ul>
+... and so are images: <img src="../smiley.png" alt="smiley" />}
 
 *
 
@@ -119,9 +125,9 @@ probably to assure himself that the combination was sound and that he had a forc
 [Result "*"]
 
 {
-Using <div class="myClass">div tags</div> is not allowed.
-... but <div class="myClass"><em>legit HTML elements</em> within forbidden HTML tags</div> are rendered.
-Using <span style="color: cyan;">style attributes</span> is not allowed.
+Using <form class="myClass">form-related tags</form> is not allowed.<br/>
+... but <button class="myClass"><em>legit HTML elements</em> within forbidden HTML tags</button> are rendered.<br/>
+Using <span style="color: cyan;">style attributes</span> is not allowed.<br/>
 Using scripts is not allowed. <script>alert('You should not see this either.');</script>
 }
 
