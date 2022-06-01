@@ -21,6 +21,7 @@
 
 
 export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
+export { formatMove, moveFormatter } from './formatmove';
 export { default as i18n } from './i18n';
 export { default as Chessboard } from './Chessboard';
 export { default as ErrorBox } from './ErrorBox';

@@ -27,9 +27,9 @@ import kokopu from 'kokopu';
 import HtmlSanitizer from './impl/HtmlSanitizer';
 import Chessboard from './Chessboard';
 import ErrorBox from './ErrorBox';
+import { moveFormatter } from './formatmove';
 import i18n from './i18n';
 
-import './css/fonts.css';
 import './css/movetext.css';
 
 
@@ -144,7 +144,8 @@ export default class Movetext extends React.Component {
 	}
 
 	renderBody(game) {
-		return this.renderVariation(this.getNotationTextBuilder(), game.mainVariation(), 'main-variation', true, game.result());
+		let notationTextBuilder = moveFormatter(this.props.pieceSymbols);
+		return this.renderVariation(notationTextBuilder, game.mainVariation(), 'main-variation', true, game.result());
 	}
 
 	/**
@@ -365,26 +366,6 @@ export default class Movetext extends React.Component {
 		this.focus();
 		if (this.props.onMoveSelected) {
 			this.props.onMoveSelected(nodeId === this.props.selection ? undefined : nodeId, 'click');
-		}
-	}
-
-	/**
-	 * Return the square at the given location.
-	 */
-	getNotationTextBuilder() {
-		let pieceSymbols = this.props.pieceSymbols;
-		if (pieceSymbols === 'localized') {
-			let mapping = i18n.PIECE_SYMBOLS;
-			return notation => notation.replace(/[KQRBNP]/g, match => mapping[match]);
-		}
-		else if (pieceSymbols === 'figurines') {
-			return notation => figurineNotation(notation, 'alpha');
-		}
-		else if (pieceSymbols !== 'native' && pieceSymbols && ['K', 'Q', 'R', 'B', 'N', 'P'].every(p => typeof pieceSymbols[p] === 'string')) {
-			return notation => notation.replace(/[KQRBNP]/g, match => pieceSymbols[match]);
-		}
-		else {
-			return notation => notation;
 		}
 	}
 
@@ -655,32 +636,6 @@ function sanitizeHtml(text, sanitizer) {
 	}
 	let result = sanitizer.parse(text);
 	return result ?? text;
-}
-
-
-/**
- * Decompose the given string into piece symbol characters and sections of non piece symbol characters, and transform the piece symbols into
- * React objects represented with the given chess font.
- */
-function figurineNotation(text, fontName) {
-	let result = [];
-	let beginOfText = 0;
-	let pieceSymbolIndex = 0;
-	for (let pos = 0; pos < text.length; ++pos) {
-		let currentChar = text.charAt(pos);
-		if (currentChar === 'K' || currentChar === 'Q' || currentChar === 'R' || currentChar === 'B' || currentChar === 'N' || currentChar === 'P') {
-			if (pos > beginOfText) {
-				result.push(text.substring(beginOfText, pos));
-			}
-			beginOfText = pos + 1;
-			let key = 'symbol-' + (pieceSymbolIndex++);
-			result.push(<span className={'kokopu-font-' + fontName} key={key}>{currentChar}</span>);
-		}
-	}
-	if (beginOfText < text.length) {
-		result.push(text.substring(beginOfText));
-	}
-	return result;
 }
 
 
