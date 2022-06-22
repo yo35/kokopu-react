@@ -18,7 +18,7 @@
 	"files": [
 		"dist/lib",
 		"doc_src",
-		"graphic_test_app",
+		"graphic_test_src",
 		"graphics",
 		"scripts/clean-graphic-output.js",
 		"scripts/docker-compose.yml",
@@ -68,7 +68,7 @@
 		"webpack-cli": "^4.9.2"
 	},
 	"scripts": {
-		"lint": "eslint doc_src graphic_test_app src test",
+		"lint": "eslint doc_src graphic_test_src src test",
 		"preunit": "webpack --config scripts/test-headless.webpack.config.js && webpack --config scripts/test-graphic.webpack.config.js && node scripts/clean-graphic-output.js",
 		"unit": "nyc mocha --bail --sort",
 		"test": "npm run lint && npm run unit",

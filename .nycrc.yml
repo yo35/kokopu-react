@@ -9,5 +9,5 @@ check-coverage: true
 
 exclude:
   - build/**
-  - graphic_test_app/**
+  - graphic_test_src/**
   - test/**

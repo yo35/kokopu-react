@@ -25,11 +25,11 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// List all the JS files in /graphic_test_app, each of them corresponding to a entry.
-var items = fs.readdirSync('./graphic_test_app').filter(filename => path.extname(filename) === '.js').map(filename => path.basename(filename, '.js')).sort();
+// List all the JS files in /graphic_test_src, each of them corresponding to a entry.
+var items = fs.readdirSync('./graphic_test_src').filter(filename => path.extname(filename) === '.js').map(filename => path.basename(filename, '.js')).sort();
 var entries = {};
 items.forEach(item => {
-	entries[item] = `./graphic_test_app/${item}`;
+	entries[item] = `./graphic_test_src/${item}`;
 });
 
 // Define the outputs.
@@ -40,8 +40,8 @@ var plugins = items.map(item => new HtmlWebpackPlugin({
 }));
 plugins.push(new CopyWebpackPlugin({
 	patterns: [
-		{ from: './graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' },
-		{ from: './graphic_test_app/common/smiley.png', to: 'smiley.png' },
+		{ from: './graphic_test_src/common/heartbeat.txt', to: 'heartbeat.txt' },
+		{ from: './graphic_test_src/common/smiley.png', to: 'smiley.png' },
 	],
 }));
 
