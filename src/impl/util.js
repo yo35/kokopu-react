@@ -51,7 +51,7 @@ export function isValidVector(vect) {
 
 
 export function isValidColor(color) {
-	return color === 'g' || color === 'r' || color === 'y';
+	return color === 'b' || color === 'g' || color === 'r' || color === 'y';
 }
 
 

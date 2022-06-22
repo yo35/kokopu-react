@@ -56,8 +56,8 @@ export function flattenTextMarkers(markers) {
 /**
  * Transform a set of arrow markers defined as a "squareFromSquareTo -> color" struct into a comma-separated string.
  *
- * @param {object} markers For example: `{ e2e4: 'g', g8f6: 'r', g8h6: 'y' }`
- * @returns {string} For example: `'Ge2e4,Rg8f6,Yg8h6'`
+ * @param {object} markers For example: `{ e2e4: 'g', g8f6: 'r', g8h6: 'b' }`
+ * @returns {string} For example: `'Ge2e4,Rg8f6,Bg8h6'`
  */
 export function flattenArrowMarkers(markers) {
 	return Object.entries(markers)
@@ -83,7 +83,7 @@ function parseMarkers(markers, tokenParser) {
  */
 export function parseSquareMarkers(markers) {
 	return parseMarkers(markers, token => {
-		return /^([GRY])([a-h][1-8])$/.test(token) ? { key: RegExp.$2, value: RegExp.$1.toLowerCase() } : undefined;
+		return /^([BGRY])([a-h][1-8])$/.test(token) ? { key: RegExp.$2, value: RegExp.$1.toLowerCase() } : undefined;
 	});
 }
 
@@ -96,7 +96,7 @@ export function parseSquareMarkers(markers) {
  */
 export function parseTextMarkers(markers) {
 	return parseMarkers(markers, token => {
-		return /^([GRY])(?:([A-Za-z0-9])|\((plus|times|dot|circle)\))([a-h][1-8])$/.test(token) ?
+		return /^([BGRY])(?:([A-Za-z0-9])|\((plus|times|dot|circle)\))([a-h][1-8])$/.test(token) ?
 			{ key: RegExp.$4, value: { symbol: RegExp.$2 || RegExp.$3, color: RegExp.$1.toLowerCase() } } : undefined;
 	});
 }
@@ -105,11 +105,11 @@ export function parseTextMarkers(markers) {
 /**
  * Parse a set of arrow markers defined as a comma-separated string into a "squareFromSquareTo -> color" struct.
  *
- * @param {string} markers For example: `'Ge2e4,Rg8f6,Yg8h6'`
- * @returns {object} For example: `{ e2e4: 'g', g8f6: 'r', g8h6: 'y' }`
+ * @param {string} markers For example: `'Ge2e4,Rg8f6,Bg8h6'`
+ * @returns {object} For example: `{ e2e4: 'g', g8f6: 'r', g8h6: 'b' }`
  */
 export function parseArrowMarkers(markers) {
 	return parseMarkers(markers, token => {
-		return /^([GRY])([a-h][1-8][a-h][1-8])$/.test(token) ? { key: RegExp.$2, value: RegExp.$1.toLowerCase() } : undefined;
+		return /^([BGRY])([a-h][1-8][a-h][1-8])$/.test(token) ? { key: RegExp.$2, value: RegExp.$1.toLowerCase() } : undefined;
 	});
 }
