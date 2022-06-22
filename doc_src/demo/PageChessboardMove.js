@@ -102,10 +102,10 @@ export default class Page extends React.Component {
 		let colorset = Chessboard.colorsets()['original'];
 		return (
 			<ToggleButtonGroup value={this.state.moveArrowColor} exclusive size="small" disabled={!this.state.positionAfter} onChange={(_, newColor) => this.setMoveColor(newColor)}>
-				<ToggleButton className="kokopu-fixOpacity" value="b"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.b} /></ToggleButton>
-				<ToggleButton className="kokopu-fixOpacity" value="g"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.g} /></ToggleButton>
-				<ToggleButton className="kokopu-fixOpacity" value="r"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.r} /></ToggleButton>
-				<ToggleButton className="kokopu-fixOpacity" value="y"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.y} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="b"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cb} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="g"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cg} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="r"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cr} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="y"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cy} /></ToggleButton>
 			</ToggleButtonGroup>
 		);
 	}

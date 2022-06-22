@@ -214,7 +214,7 @@ export default class Chessboard extends React.Component {
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
 		let color = this.props.interactionMode === 'editArrows' ? this.props.editedArrowColor : this.props.moveArrowColor;
-		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.marker[color]} strokeWidth={thickness} />;
+		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset['c' + color]} strokeWidth={thickness} />;
 	}
 
 	renderPiece(position, squareSize,  pieceset, sq) {
@@ -273,7 +273,7 @@ export default class Chessboard extends React.Component {
 		return (
 			<line
 				className="kokopu-annotation kokopu-arrow kokopu-arrowDraggable kokopu-dragging" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-				stroke={colorset.marker[this.props.editedArrowColor]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
+				stroke={colorset['c' + this.props.editedArrowColor]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
 			/>
 		);
 	}
@@ -336,7 +336,7 @@ export default class Chessboard extends React.Component {
 		let result = [];
 		Object.entries(sqm).forEach(([ sq, color ]) => {
 			let { x, y } = this.getSquareCoordinates(squareSize, sq);
-			result.push(<rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset.marker[color]} />);
+			result.push(<rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset['c' + color]} />);
 		});
 		return result;
 	}
@@ -349,7 +349,7 @@ export default class Chessboard extends React.Component {
 			y += squareSize / 2;
 			result.push(
 				<g key={'txtm-' + sq} className="kokopu-annotation">
-					<TextSymbol x={x} y={y} size={squareSize} symbol={value.symbol} color={colorset.marker[value.color]} />
+					<TextSymbol x={x} y={y} size={squareSize} symbol={value.symbol} color={colorset['c' + value.color]} />
 				</g>
 			);
 		});
@@ -377,7 +377,7 @@ export default class Chessboard extends React.Component {
 			result.push(
 				<line
 					key={'arm-' + vect} className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-					stroke={colorset.marker[color]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
+					stroke={colorset['c' + color]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
 				/>
 			);
 		});
@@ -401,14 +401,14 @@ export default class Chessboard extends React.Component {
 		let color = this.props.moveArrowColor;
 		return (
 			<line
-				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset.marker[color]}
+				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset['c' + color]}
 				strokeWidth={squareSize * STROKE_THICKNESS_FACTOR} markerEnd={`url(#${this.getArrowTipId(color)})`}
 			/>
 		);
 	}
 
 	renderArrowTip(colorset, color) {
-		return <ArrowTip id={this.getArrowTipId(color)} color={colorset.marker[color]} />;
+		return <ArrowTip id={this.getArrowTipId(color)} color={colorset['c' + color]} />;
 	}
 
 	renderTurnFlag(turn, squareSize, pieceset) {
@@ -737,7 +737,7 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Available colorsets for theming.
 	 *
-	 * @returns {Object.<string, { w: string, b: string, marker: { b: string, g: string, r: string, y: string } }>}
+	 * @returns {Object.<string, { w: string, b: string, cb: string, cg: string, cr: string, cy: string }>}
 	 * @public
 	 */
 	static colorsets() {
