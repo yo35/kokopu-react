@@ -1,6 +1,14 @@
 ChangeLog
 =========
 
+1.7.0 (June 22, 2022)
+---------------------
+* Upgrade React to React 18.
+* Add support for color blue for markers.
+* Allow customization of the move arrow color in the `Chessboard` component.
+* Change the property names used to define the marker colors in the objects returned by `Chessboard.colorsets()`:
+`g`, `r`, `y` and `highlight` have become respectively `cg`, `cr`, `cy` and `cb`.
+
 1.6.0 (June 1, 2022)
 --------------------
 * Allow block-formatting HTML tags in PGN comments.
