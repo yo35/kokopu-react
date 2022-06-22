@@ -26,8 +26,6 @@ import { Movetext, i18n } from '../src/index';
 
 import pgn from './common/games.pgn';
 
-let legacyPieceSymbols = i18n.PIECE_SYMBOLS;
-
 // Localization for French
 i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
 
@@ -38,5 +36,3 @@ testApp([ /* eslint-disable react/jsx-key */
 		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
 	<Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
-
-i18n.PIECE_SYMBOLS = legacyPieceSymbols;

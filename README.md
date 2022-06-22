@@ -27,10 +27,10 @@ Example
 
 ```javascript
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Chessboard } from 'kokopu-react';
 
-ReactDOM.render(<Chessboard />, document.body);
+createRoot(document.body).render(<Chessboard />);
 ```
 
 ![Chessboard component](test/references/02_chessboard_simple/0.png)

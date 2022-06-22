@@ -21,7 +21,7 @@
 
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './test_app.css';
 
 
@@ -45,8 +45,9 @@ export default function(elements, containerClassName) {
 	document.body.appendChild(anchor);
 
 	// Render the content.
+	let root = createRoot(anchor);
 	let content = flattenMultiElements(elements, containerClassName);
-	ReactDOM.render(content, anchor);
+	root.render(content);
 
 	// Append a text area
 	let sandbox = document.createElement('pre');
