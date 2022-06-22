@@ -24,17 +24,17 @@ import React from 'react';
 import testApp from './common/test_app';
 import { Chessboard } from '../src/index';
 
-let squareMarkers1 = 'Ga1,Ga2,Rb1,Rb2,Yc1,Yc2';
-let arrowMarkers1 = 'Gb8c6,Re8f6,Yf8g6';
-let textMarkers1 = 'GAf1,Gaf2,RZg1,Rzg2,Y2h1,Y8h2';
+let squareMarkers1 = 'Ba1,Ba2,Gb1,Gb2,Rc1,Rc2,Yd1,Yd2';
+let arrowMarkers1 = 'Ba8b6,Gb8c6,Re8f6,Yf8g6';
+let textMarkers1 = 'B(circle)e1,B(plus)e2,GAf1,Gaf2,RZg1,Rzg2,Y2h1,Y8h2';
 
-let squareMarkers2 = { e4: 'g', g5: 'r', g1: 'y' };
-let arrowMarkers2 = { c3a2: 'y', c4a4: 'g', c5a6: 'r', c6a8: 'y', d6c8: 'g', e6e8: 'r', f6g8: 'y' };
-let textMarkers2 = { g3: { symbol: 'H', color: 'r' }, g5: { symbol: 'M', color: 'g' } };
+let squareMarkers2 = { e4: 'g', g5: 'r', g1: 'y', h4: 'b' };
+let arrowMarkers2 = { c3a2: 'b', c4a4: 'g', c5a6: 'r', c6a8: 'y', d6c8: 'b', e6e8: 'g', f6g8: 'r' };
+let textMarkers2 = { g3: { symbol: 'H', color: 'r' }, g5: { symbol: 'M', color: 'g' }, h4: { symbol: 'times', color: 'y' } };
 
-let squareMarkers3 = { b5: 'r', e4: 'g', h5: 'y' };
+let squareMarkers3 = { b5: 'r', e4: 'g', h5: 'y', e2: 'b' };
 let arrowMarkers3 = { d1h5: 'g', a5f4: 'r', c7c3: 'y', g7g7: 'g' };
-let textMarkers3 = 'G5c6,R(plus)a1,G(times)b1,R(dot)a2,Y(circle)b2';
+let textMarkers3 = 'G5c6,R(plus)a1,G(times)b1,B(dot)a2,Y(circle)b2';
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={false} coordinateVisible={true} />,

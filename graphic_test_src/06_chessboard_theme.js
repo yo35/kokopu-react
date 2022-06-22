@@ -30,8 +30,8 @@ let mv1 = 'Ba5';
 let pos2 = 'start';
 let mv2 = 'e4';
 
-let sm = 'Ga8,Ga7,Rb8,Rb7,Yc8,Yc7';
-let am = 'Gb1b3,Rc1c3,Yd1d3';
+let sm = 'Ba8,Ba7,Gb8,Gb7,Rc8,Rc7,Yd8,Yd7';
+let am = 'Ba1a3,Gb1b3,Rc1c3,Yd1d3';
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} animated={false} />,

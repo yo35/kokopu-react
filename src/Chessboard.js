@@ -123,10 +123,10 @@ export default class Chessboard extends React.Component {
 		return (
 			<svg className="kokopu-chessboard" viewBox={viewBox} width={xmax - xmin} height={ymax - ymin}>
 				<defs>
+					{this.renderArrowTip(colorset, 'b')}
 					{this.renderArrowTip(colorset, 'g')}
 					{this.renderArrowTip(colorset, 'r')}
 					{this.renderArrowTip(colorset, 'y')}
-					{this.renderArrowTip(colorset, 'highlight')}
 				</defs>
 				{squares}
 				{rankCoordinates}
@@ -213,7 +213,8 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
-		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.highlight} strokeWidth={thickness} />;
+		let color = this.props.interactionMode === 'editArrows' ? this.props.editedArrowColor : 'b';
+		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.marker[color]} strokeWidth={thickness} />;
 	}
 
 	renderPiece(position, squareSize,  pieceset, sq) {
@@ -272,7 +273,7 @@ export default class Chessboard extends React.Component {
 		return (
 			<line
 				className="kokopu-annotation kokopu-arrow kokopu-arrowDraggable kokopu-dragging" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-				stroke={colorset[this.props.editedArrowColor]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
+				stroke={colorset.marker[this.props.editedArrowColor]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
 			/>
 		);
 	}
@@ -335,7 +336,7 @@ export default class Chessboard extends React.Component {
 		let result = [];
 		Object.entries(sqm).forEach(([ sq, color ]) => {
 			let { x, y } = this.getSquareCoordinates(squareSize, sq);
-			result.push(<rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset[color]} />);
+			result.push(<rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={squareSize} height={squareSize} fill={colorset.marker[color]} />);
 		});
 		return result;
 	}
@@ -348,7 +349,7 @@ export default class Chessboard extends React.Component {
 			y += squareSize / 2;
 			result.push(
 				<g key={'txtm-' + sq} className="kokopu-annotation">
-					<TextSymbol x={x} y={y} size={squareSize} symbol={value.symbol} color={colorset[value.color]} />
+					<TextSymbol x={x} y={y} size={squareSize} symbol={value.symbol} color={colorset.marker[value.color]} />
 				</g>
 			);
 		});
@@ -376,7 +377,7 @@ export default class Chessboard extends React.Component {
 			result.push(
 				<line
 					key={'arm-' + vect} className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
-					stroke={colorset[color]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
+					stroke={colorset.marker[color]} strokeWidth={strokeWidth} markerEnd={`url(#${arrowTipId})`}
 				/>
 			);
 		});
@@ -399,14 +400,14 @@ export default class Chessboard extends React.Component {
 		let y = yTo * alpha + yFrom * (1 - alpha);
 		return (
 			<line
-				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset['highlight']}
-				strokeWidth={squareSize * STROKE_THICKNESS_FACTOR} markerEnd={`url(#${this.getArrowTipId('highlight')})`}
+				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset.marker.b}
+				strokeWidth={squareSize * STROKE_THICKNESS_FACTOR} markerEnd={`url(#${this.getArrowTipId('b')})`}
 			/>
 		);
 	}
 
 	renderArrowTip(colorset, color) {
-		return <ArrowTip id={this.getArrowTipId(color)} color={colorset[color]} />;
+		return <ArrowTip id={this.getArrowTipId(color)} color={colorset.marker[color]} />;
 	}
 
 	renderTurnFlag(turn, squareSize, pieceset) {
@@ -735,7 +736,7 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Available colorsets for theming.
 	 *
-	 * @returns {Object.<string, {w: string, b: string, g: string, r: string, y: string, highlight: string}>}
+	 * @returns {Object.<string, { w: string, b: string, marker: { b: string, g: string, r: string, y: string } }>}
 	 * @public
 	 */
 	static colorsets() {
@@ -745,8 +746,8 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Available piecesets for theming.
 	 *
-	 * @returns {Object.<string, {bb: string, bk: string, bn: string, bp: string, bq: string, br: string, bx: string,
-	 *                            wb: string, wk: string, wn: string, wp: string, wq: string, wr: string, wx: string}>}
+	 * @returns {Object.<string, { bb: string, bk: string, bn: string, bp: string, bq: string, br: string, bx: string,
+	 *                             wb: string, wk: string, wn: string, wp: string, wq: string, wr: string, wx: string }>}
 	 * @public
 	 */
 	static piecesets() {
@@ -881,7 +882,7 @@ Chessboard.propTypes = {
 	/**
 	 * Color of the edited arrow (only used if `interactionMode` is set to `'editArrows'`).
 	 */
-	editedArrowColor: PropTypes.oneOf([ 'g', 'r', 'y' ]),
+	editedArrowColor: PropTypes.oneOf([ 'b', 'g', 'r', 'y' ]),
 
 	/**
 	 * Callback invoked when a piece is moved through drag&drop (only if `interactionMode` is set to `'movePieces'`).

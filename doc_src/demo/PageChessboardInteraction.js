@@ -165,9 +165,10 @@ export default class Page extends React.Component {
 		let colorset = Chessboard.colorsets()['original'];
 		return (
 			<ToggleButtonGroup value={this.state[attributeName]} exclusive size="small" onChange={(_, newColor) => this.setIfNonNull(attributeName, newColor)}>
-				<ToggleButton className="kokopu-fixTextTransform" value="g">{this.renderColorButtonLabel(colorset.g)}</ToggleButton>
-				<ToggleButton className="kokopu-fixTextTransform" value="r">{this.renderColorButtonLabel(colorset.r)}</ToggleButton>
-				<ToggleButton className="kokopu-fixTextTransform" value="y">{this.renderColorButtonLabel(colorset.y)}</ToggleButton>
+				<ToggleButton className="kokopu-fixTextTransform" value="b">{this.renderColorButtonLabel(colorset.marker.b)}</ToggleButton>
+				<ToggleButton className="kokopu-fixTextTransform" value="g">{this.renderColorButtonLabel(colorset.marker.g)}</ToggleButton>
+				<ToggleButton className="kokopu-fixTextTransform" value="r">{this.renderColorButtonLabel(colorset.marker.r)}</ToggleButton>
+				<ToggleButton className="kokopu-fixTextTransform" value="y">{this.renderColorButtonLabel(colorset.marker.y)}</ToggleButton>
 			</ToggleButtonGroup>
 		);
 	}
