@@ -24,8 +24,9 @@ const path = require('path');
 
 module.exports = {
 	mode: 'development',
+	devtool: 'inline-source-map',
 	entry: {
-		index: './src/index.js',
+		index: './src/index',
 	},
 	output: {
 		path: path.resolve(__dirname, '../build/test_headless'),

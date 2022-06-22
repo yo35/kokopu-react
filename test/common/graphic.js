@@ -34,8 +34,8 @@ const coverageDir = rootDir + '/build/.nyc_output';
 const UNREACHABLE_TEST_CLIENT_MESSAGE =
 	'Cannot reach the dockerized selenium webbrowser used for graphic tests (probably because the test environment is not running).\n' +
 	'\n' +
-	'Use command `npm run start_test_env` to start the test environment.\n' +
-	'Do not forget to run `npm run stop_test_env` when finished.\n';
+	'Use command `npm run test_env:start` to start the test environment.\n' +
+	'Do not forget to run `npm run test_env:stop` when finished.\n';
 
 
 /**

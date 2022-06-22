@@ -25,11 +25,11 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// List all the JS files in /test/graphic, each of them corresponding to a entry.
+// List all the JS files in /graphic_test_app, each of them corresponding to a entry.
 var items = fs.readdirSync('./graphic_test_app').filter(filename => path.extname(filename) === '.js').map(filename => path.basename(filename, '.js')).sort();
 var entries = {};
 items.forEach(item => {
-	entries[item] = `./graphic_test_app/${item}.js`;
+	entries[item] = `./graphic_test_app/${item}`;
 });
 
 // Define the outputs.
@@ -47,9 +47,10 @@ plugins.push(new CopyWebpackPlugin({
 
 module.exports = {
 	mode: 'development',
+	devtool: 'inline-source-map',
 	entry: entries,
 	output: {
-		path: path.resolve(__dirname, '../../build/test_graphic'),
+		path: path.resolve(__dirname, '../build/test_graphic'),
 		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
 	},
 	plugins: plugins,

@@ -10,10 +10,10 @@ services:
   - docker
 
 before_script:
-  - npm run start_test_env
+  - npm run test_env:start
 
 after_script:
-  - npm run stop_test_env
+  - npm run test_env:stop
 
 after_success:
   - npm run publish_coverage

@@ -5,10 +5,10 @@ services:
     image: selenium/standalone-firefox:4.1.4-20220427
     shm_size: '2gb'
     ports:
-      - 4444:4444 # Driver (http://localhost:4444)
-      - 7900:7900 # VNC (http://localhost:7900, pass: secret)
+      - 4444:4444 # http://localhost:4444 (driver)
+      - 7900:7900 # http://localhost:7900 (VNC, pass: secret)
     volumes:
       - type: bind
-        source: ../..
+        source: ..
         target: /app
         read_only: true

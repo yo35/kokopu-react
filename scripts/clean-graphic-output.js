@@ -22,7 +22,7 @@
 
 const fs = require('fs');
 
-const rootDir = __dirname + '/../..';
+const rootDir = __dirname + '/..';
 const outputDir = rootDir + '/build/graphic_output';
 
 // Erase the directory in which the screenshots are generated.
