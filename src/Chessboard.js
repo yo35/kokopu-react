@@ -213,7 +213,7 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
-		let color = this.props.interactionMode === 'editArrows' ? this.props.editedArrowColor : 'b';
+		let color = this.props.interactionMode === 'editArrows' ? this.props.editedArrowColor : this.props.moveArrowColor;
 		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset.marker[color]} strokeWidth={thickness} />;
 	}
 
@@ -398,10 +398,11 @@ export default class Chessboard extends React.Component {
 		yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
 		let x = xTo * alpha + xFrom * (1 - alpha);
 		let y = yTo * alpha + yFrom * (1 - alpha);
+		let color = this.props.moveArrowColor;
 		return (
 			<line
-				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset.marker.b}
-				strokeWidth={squareSize * STROKE_THICKNESS_FACTOR} markerEnd={`url(#${this.getArrowTipId('b')})`}
+				className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} stroke={colorset.marker[color]}
+				strokeWidth={squareSize * STROKE_THICKNESS_FACTOR} markerEnd={`url(#${this.getArrowTipId(color)})`}
 			/>
 		);
 	}
@@ -836,6 +837,11 @@ Chessboard.propTypes = {
 	moveArrowVisible: PropTypes.bool,
 
 	/**
+	 * Color of the move arrow.
+	 */
+	moveArrowColor: PropTypes.oneOf([ 'b', 'g', 'r', 'y' ]),
+
+	/**
 	 * Whether moves are animated or not.
 	 */
 	animated: PropTypes.bool,
@@ -922,6 +928,7 @@ Chessboard.defaultProps = {
 	squareSize: 40,
 	coordinateVisible: true,
 	moveArrowVisible: true,
+	moveArrowColor: 'b',
 	animated: false,
 	colorset: 'original',
 	pieceset: 'cburnett',

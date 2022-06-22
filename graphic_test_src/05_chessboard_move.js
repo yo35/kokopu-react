@@ -33,9 +33,9 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard move="Nf3" moveArrowVisible={false} animated={false} />,
 	<Chessboard move="Nf4" animated={false} />,
 	<Chessboard position="rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2" move="Bb4+" moveArrowVisible={true} flipped={true} animated={false} />,
-	<Chessboard position={pos} move={move} animated={false} />,
-	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={false} />,
-	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={false} />,
-	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={false} />,
+	<Chessboard position={pos} move={move} animated={false} moveArrowColor="g" />,
+	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={false} moveArrowColor="r" />,
+	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={false} moveArrowColor="y" />,
+	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={false} moveArrowColor="b" />,
 	<Chessboard move={42} animated={false} />,
 ]); /* eslint-enable react/jsx-key */

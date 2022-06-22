@@ -23,7 +23,7 @@
 import React from 'react';
 import kokopu from 'kokopu';
 
-import { Chessboard } from '../../src/index';
+import { Chessboard, ArrowMarkerIcon } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
 import Box from '@mui/material/Box';
@@ -33,8 +33,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import './demo.css';
+
+const COLOR_ICON_SIZE = 16;
 
 
 export default class Page extends React.Component {
@@ -49,6 +53,7 @@ export default class Page extends React.Component {
 			positionAfter: positionAfter, // non-null only if a valid move has been played
 			flipped: false,
 			moveArrowVisible: true,
+			moveArrowColor: 'b',
 			animated: true,
 			editedMove: 'Nf6',
 			playedMove: 'e4',
@@ -71,12 +76,13 @@ export default class Page extends React.Component {
 				<FormControlLabel label="Flip"
 					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
 				/>
-				<FormControlLabel label="Show move arrow" disabled={!this.state.positionAfter}
-					control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.set('moveArrowVisible', !this.state.moveArrowVisible)} color="primary" />}
-				/>
 				<FormControlLabel label="Animation" disabled={!this.state.positionAfter}
 					control={<Switch checked={this.state.animated} onChange={() => this.set('animated', !this.state.animated)} color="primary" />}
 				/>
+				<FormControlLabel label="Show move arrow" disabled={!this.state.positionAfter}
+					control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.set('moveArrowVisible', !this.state.moveArrowVisible)} color="primary" />}
+				/>
+				{this.renderColorSelector()}
 			</Stack>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<TextField label="Move" variant="standard" value={this.state.editedMove} onChange={evt => this.set('editedMove', evt.target.value)} />
@@ -89,6 +95,21 @@ export default class Page extends React.Component {
 		</>);
 	}
 
+	renderColorSelector() {
+		if (!this.state.moveArrowVisible) {
+			return undefined;
+		}
+		let colorset = Chessboard.colorsets()['original'];
+		return (
+			<ToggleButtonGroup value={this.state.moveArrowColor} exclusive size="small" disabled={!this.state.positionAfter} onChange={(_, newColor) => this.setMoveColor(newColor)}>
+				<ToggleButton className="kokopu-fixOpacity" value="b"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.b} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="g"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.g} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="r"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.r} /></ToggleButton>
+				<ToggleButton className="kokopu-fixOpacity" value="y"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.marker.y} /></ToggleButton>
+			</ToggleButtonGroup>
+		);
+	}
+
 	renderChessboard() {
 		return (
 			<Box>
@@ -97,6 +118,7 @@ export default class Page extends React.Component {
 					move={this.state.playedMove}
 					flipped={this.state.flipped}
 					moveArrowVisible={this.state.moveArrowVisible}
+					moveArrowColor={this.state.moveArrowColor}
 					animated={this.state.animated}
 				/>
 			</Box>
@@ -112,8 +134,11 @@ export default class Page extends React.Component {
 		if (this.state.flipped) {
 			attributes.push('flipped');
 		}
-		attributes.push(`moveArrowVisible={${this.state.moveArrowVisible}}`);
 		attributes.push(`animated={${this.state.animated}}`);
+		attributes.push(`moveArrowVisible={${this.state.moveArrowVisible}}`);
+		if (this.state.moveArrowVisible) {
+			attributes.push(`moveArrowColor={${this.state.moveArrowColor}}`);
+		}
 		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;
 	}
 
@@ -121,6 +146,12 @@ export default class Page extends React.Component {
 		let newState = {};
 		newState[attributeName] = newValue;
 		this.setState(newState);
+	}
+
+	setMoveColor(newValue) {
+		if (newValue !== null) {
+			this.set('moveArrowColor', newValue);
+		}
 	}
 
 	setPosition(newPosition) {

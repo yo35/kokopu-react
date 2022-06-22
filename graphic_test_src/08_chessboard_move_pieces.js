@@ -31,6 +31,6 @@ function onPieceMoved(from, to) {
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} />,
 	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} flipped
-		squareMarkers="Gc4" textMarkers="RAh3" arrowMarkers="Gc8a4" />,
+		squareMarkers="Gc4" textMarkers="BAh3" arrowMarkers="Gc8a4" moveArrowColor="r" />,
 	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} move="e4" animated={false} />,
 ]); /* eslint-enable react/jsx-key */

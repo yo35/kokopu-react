@@ -33,6 +33,10 @@
 	text-transform: none;
 }
 
+.MuiToggleButton-root.Mui-disabled.kokopu-fixOpacity .kokopu-arrowMarkerIcon {
+	opacity: 0.3;
+}
+
 .kokopu-fixedPopup {
 	position: fixed;
 	bottom: 20px;
