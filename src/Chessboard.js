@@ -213,7 +213,7 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, this.state.hoveredSquare);
 		let thickness = Math.max(2, Math.round(HOVER_MARKER_THICKNESS_FACTOR * squareSize));
 		let size = squareSize - thickness;
-		let color = this.props.interactionMode === 'editArrows' ? this.props.editedArrowColor : this.props.moveArrowColor;
+		let color = this.isEditArrowModeEnabled() ? this.props.editedArrowColor : this.props.moveArrowColor;
 		return <rect className="kokopu-hoveredSquare" x={x + thickness/2} y={y + thickness/2} width={size} height={size} stroke={colorset['c' + color]} strokeWidth={thickness} />;
 	}
 
