@@ -30,11 +30,13 @@
 		".eslint.yml",
 		".nycrc.yml"
 	],
+	"peerDependencies": {
+		"kokopu": "^2.6.0",
+		"react": "17.x.x || 18.x.x"
+	},
 	"dependencies": {
 		"htmlparser2": "^8.0.1",
-		"kokopu": "^2.9.0",
 		"prop-types": "^15.8.1",
-		"react": "^18.2.0",
 		"react-draggable": "^4.4.5",
 		"react-motion": "^0.5.2"
 	},
@@ -55,9 +57,11 @@
 		"eslint-plugin-react": "^7.30.0",
 		"html-webpack-plugin": "^5.5.0",
 		"img-diff-js": "^0.5.2",
+		"kokopu": "^2.9.0",
 		"mocha": "^10.0.0",
 		"null-loader": "^4.0.1",
 		"nyc": "^15.1.0",
+		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-styleguidist": "^11.2.0",
 		"selenium-webdriver": "^4.1.2",
