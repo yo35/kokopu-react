@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.7.1 (June 23, 2022)
+---------------------
+* `React` and `kokopu` declared as peer dependencies.
+* Minor fixes.
+
 1.7.0 (June 22, 2022)
 ---------------------
 * Upgrade React to React 18.
