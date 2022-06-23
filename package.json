@@ -64,7 +64,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-styleguidist": "^11.2.0",
-		"selenium-webdriver": "^4.1.2",
+		"selenium-webdriver": "^4.2.0",
 		"ssh2-sftp-client": "^9.0.1",
 		"style-loader": "^3.3.1",
 		"unit.js": "^2.1.1",
