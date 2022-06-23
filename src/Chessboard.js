@@ -791,7 +791,7 @@ Chessboard.propTypes = {
 	 * Square markers, defined as a "square -> color" struct (e.g. `{ e4: 'g', d5: 'r' }`) or as a comma-separated CSL string (e.g. `'Rd5,Ge4'`).
 	 */
 	squareMarkers: PropTypes.oneOfType([
-		PropTypes.objectOf(PropTypes.oneOf([ 'g', 'r', 'y' ])),
+		PropTypes.objectOf(PropTypes.oneOf([ 'b', 'g', 'r', 'y' ])),
 		PropTypes.string
 	]),
 
@@ -802,7 +802,7 @@ Chessboard.propTypes = {
 	textMarkers: PropTypes.oneOfType([
 		PropTypes.objectOf(PropTypes.shape({
 			symbol: PropTypes.string.isRequired,
-			color: PropTypes.oneOf([ 'g', 'r', 'y' ]).isRequired
+			color: PropTypes.oneOf([ 'b', 'g', 'r', 'y' ]).isRequired
 		})),
 		PropTypes.string
 	]),
@@ -812,7 +812,7 @@ Chessboard.propTypes = {
 	 * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
 	 */
 	arrowMarkers: PropTypes.oneOfType([
-		PropTypes.objectOf(PropTypes.oneOf([ 'g', 'r', 'y' ])),
+		PropTypes.objectOf(PropTypes.oneOf([ 'b', 'g', 'r', 'y' ])),
 		PropTypes.string
 	]),
 
