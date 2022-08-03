@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.7.2 (August 3, 2022)
+----------------------
+* Fix URLs in documentation.
+* Upgrade dependencies.
+
 1.7.1 (June 23, 2022)
 ---------------------
 * `React` and `kokopu` declared as peer dependencies.
