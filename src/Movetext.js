@@ -482,8 +482,8 @@ export default class Movetext extends React.Component {
 Movetext.propTypes = {
 
 	/**
-	 * Displayed position. Can be a [kokopu.Game](https://kokopu.yo35.org/docs/Game.html) object,
-	 * a [kokopu.Database](https://kokopu.yo35.org/docs/Database.html) object,
+	 * Displayed position. Can be a [kokopu.Game](https://kokopu.yo35.org/docs/current/Game.html) object,
+	 * a [kokopu.Database](https://kokopu.yo35.org/docs/current/Database.html) object,
 	 * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation).
 	 */
 	game: PropTypes.oneOfType([
@@ -493,7 +493,7 @@ Movetext.propTypes = {
 	]),
 
 	/**
-	 * Index of the game to display (only if attribute `game` is a [kokopu.Database](https://kokopu.yo35.org/docs/Database.html)
+	 * Index of the game to display (only if attribute `game` is a [kokopu.Database](https://kokopu.yo35.org/docs/current/Database.html)
 	 * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation)): `0` for the first game of the database/PGN, `1` for the second one, etc.
 	 * If omitted, the first game of the database/PGN is displayed.
 	 */
@@ -542,7 +542,7 @@ Movetext.propTypes = {
 
 	/**
 	 * ID of the selected move (or `'start'` for the beginning of the main variation).
-	 * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/Node.html#id) to get the ID of a game move.
+	 * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/current/Node.html#id) to get the ID of a game move.
 	 */
 	selection: PropTypes.string,
 
@@ -556,7 +556,7 @@ Movetext.propTypes = {
 	/**
 	 * Callback invoked when the user selects a move (only if `interactionMode` is set to `'selectMove'`).
 	 *
-	 * @param {string?} nodeId ID of the selected move (as returned by [kokopu.Node#id](https://kokopu.yo35.org/docs/Node.html#id)),
+	 * @param {string?} nodeId ID of the selected move (as returned by [kokopu.Node#id](https://kokopu.yo35.org/docs/current/Node.html#id)),
 	 *                         `'start'` for the beginning of the main variation, or `undefined` if the user unselects the previously selected move.
 	 * @param {string} evtOrigin Origin of the event. Can be:
 	 *                        - `'key-first'`: the event has been triggered by the "go-to-first-move" key (aka. the home key),

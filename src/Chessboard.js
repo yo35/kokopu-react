@@ -760,12 +760,12 @@ export default class Chessboard extends React.Component {
 Chessboard.propTypes = {
 
 	/**
-	 * Displayed position. Can be a [kokopu.Position](https://kokopu.yo35.org/docs/Position.html) object,
+	 * Displayed position. Can be a [kokopu.Position](https://kokopu.yo35.org/docs/current/Position.html) object,
 	 * a [FEN string](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
 	 * `'start'` (usual starting position), or `'empty'` (empty board).
 	 *
 	 * Optionally, the FEN string can be prefixed with `'variant:'`, `variant` corresponding to one of the
-	 * [game variant](https://kokopu.yo35.org/docs/global.html#GameVariant) supported by Kokopu. For instance:
+	 * [game variant](https://kokopu.yo35.org/docs/current/global.html#GameVariant) supported by Kokopu. For instance:
 	 * `'chess960:nrkbqrbn/pppppppp/8/8/8/8/PPPPPPPP/NRKBQRBN w KQkq - 0 1'`.
 	 */
 	position: PropTypes.oneOfType([
@@ -774,7 +774,7 @@ Chessboard.propTypes = {
 	]),
 
 	/**
-	 * Displayed move (optional), defined either as a [kokopu.MoveDescriptor](https://kokopu.yo35.org/docs/MoveDescriptor.html) object
+	 * Displayed move (optional), defined either as a [kokopu.MoveDescriptor](https://kokopu.yo35.org/docs/current/MoveDescriptor.html) object
 	 * or as a [SAN string](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) (e.g. `'Nf3'`). In both cases, it must represent
 	 * a legal move in position defined in attribute `position`.
 	 */
