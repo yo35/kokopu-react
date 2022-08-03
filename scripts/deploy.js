@@ -66,7 +66,14 @@ promptPassword(`Pass for ${USER}@${HOST}: `, pass => {
 
 		// Upload the documentation.
 		console.log('Upload documentation...');
-		return client.uploadDir('dist/docs', `${ROOT_DIR}/docs`);
+		return client.uploadDir('dist/docs', `${ROOT_DIR}/docs/${version}`);
+
+	}).then(() => {
+
+		// Redirect /docs/current to the directory corresponding to latest documentation version.
+		console.log(`Redirect /docs/current to /docs/${version}...`);
+		let htaccess = Readable.from([ `Redirect "/docs/current" "/docs/${version}"` ]);
+		return client.put(htaccess, `${ROOT_DIR}/docs/.htaccess`, { mode: 0o644 });
 
 	}).then(() => console.log('Done.')).catch(() => console.log(err)).finally(() => client.end());
 });
