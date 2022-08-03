@@ -23,7 +23,9 @@
 'use strict';
 
 const readline = require('readline');
+const { Readable } = require('stream');
 const Client = require('ssh2-sftp-client');
+const { version } = require('../package.json');
 
 function promptPassword(prompt, callback) {
 
