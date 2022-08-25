@@ -36,6 +36,7 @@ const i18n = {
 	ANNOTATED_BY: 'Annotated by {0}',
 	INVALID_PGN_ERROR_TITLE: 'Invalid PGN string.',
 	INVALID_GAME_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "game" attribute.',
+	INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE: 'Invalid "game index" attribute.',
 };
 
 export default i18n;

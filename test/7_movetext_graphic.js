@@ -36,7 +36,7 @@ describe('Movetext graphic', function() {
 	});
 
 	itChecksScreenshots(browserContext, '12_movetext_simple', [ 'game-0', 'game-1', 'game-2', 'game-3' ]);
-	itChecksScreenshots(browserContext, '13_movetext_error', [ 'wrong-game-index', 'pgn-parsing-error-1', 'pgn-parsing-error-2', 'wrong type' ]);
+	itChecksScreenshots(browserContext, '13_movetext_error', [ 'wrong-game-index-1', 'wrong-game-index-2', 'pgn-parsing-error-1', 'pgn-parsing-error-2', 'wrong type' ]);
 	itChecksScreenshots(browserContext, '14_movetext_html', [ 'html-in-headers', 'html-in-comments', 'filtered-tags-and-attributes' ]);
 	itChecksScreenshots(browserContext, '15_movetext_options', [ 'localized-piece-symbols', 'custom-piece-symbols', 'figurine-piece-symbols-and-diagram-options',
 		'hidden-diagrams' ]);

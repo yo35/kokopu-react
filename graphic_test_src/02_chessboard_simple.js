@@ -21,7 +21,7 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
+import { Position } from 'kokopu';
 import testApp from './common/test_app';
 import { Chessboard } from '../src/index';
 
@@ -30,6 +30,6 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard position="empty" />,
 	<Chessboard position="something invalid" />,
 	<Chessboard position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-	<Chessboard position={new kokopu.Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
+	<Chessboard position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
 	<Chessboard position={42} />,
 ]); /* eslint-enable react/jsx-key */

@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
 import { Motion, spring } from 'react-motion';
-import kokopu from 'kokopu';
+import { exception, MoveDescriptor, Position, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
 
 import colorsets from './impl/colorsets';
 import piecesets from './impl/piecesets';
@@ -102,7 +102,7 @@ export default class Chessboard extends React.Component {
 
 		// Render the squares.
 		let squares = [];
-		kokopu.forEachSquare(sq => squares.push(this.renderSquare(squareSize, colorset, sq)));
+		forEachSquare(sq => squares.push(this.renderSquare(squareSize, colorset, sq)));
 
 		// Render coordinates.
 		let rankCoordinates = [];
@@ -155,12 +155,12 @@ export default class Chessboard extends React.Component {
 	 */
 	renderBoardContentAnimated(positionBefore, move, alpha, squareSize, colorset, pieceset) {
 		let pieces = [];
-		kokopu.forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, alpha, squareSize, pieceset, sq)));
+		forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, alpha, squareSize, pieceset, sq)));
 		return (
 			<>
 				{pieces}
 				{this.renderMoveArrow(move, alpha, squareSize, colorset)}
-				{this.renderTurnFlag(kokopu.oppositeColor(positionBefore.turn()), squareSize, pieceset)}
+				{this.renderTurnFlag(oppositeColor(positionBefore.turn()), squareSize, pieceset)}
 			</>
 		);
 	}
@@ -178,7 +178,7 @@ export default class Chessboard extends React.Component {
 		// Render the square-related objects.
 		let pieces = [];
 		let handles = [];
-		kokopu.forEachSquare(sq => {
+		forEachSquare(sq => {
 			pieces.push(this.renderPiece(position, squareSize, pieceset, sq));
 			if (this.props.interactionMode) {
 				handles.push(this.renderSquareHandle(position,  squareSize, sq));
@@ -203,7 +203,7 @@ export default class Chessboard extends React.Component {
 
 	renderSquare(squareSize, colorset, sq) {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		return <rect key={sq} x={x} y={y} width={squareSize} height={squareSize} fill={colorset[kokopu.squareColor(sq)]} />;
+		return <rect key={sq} x={x} y={y} width={squareSize} height={squareSize} fill={colorset[squareColor(sq)]} />;
 	}
 
 	renderHoveredSquare(squareSize, colorset) {
@@ -575,7 +575,7 @@ export default class Chessboard extends React.Component {
 	 * Return the (x,y) coordinates of the given square in the SVG canvas.
 	 */
 	getSquareCoordinates(squareSize, sq) {
-		let { file, rank } = kokopu.squareToCoordinates(sq);
+		let { file, rank } = squareToCoordinates(sq);
 		let x = this.props.flipped ? (7 - file) * squareSize : file * squareSize;
 		let y = this.props.flipped ? rank * squareSize : (7 - rank) * squareSize;
 		return { x: x, y: y };
@@ -604,7 +604,7 @@ export default class Chessboard extends React.Component {
 		}
 
 		// Compute the position after the move and return the result.
-		let positionAfter = new kokopu.Position(positionInfo.position);
+		let positionAfter = new Position(positionInfo.position);
 		positionAfter.play(moveInfo.move);
 		return { positionError: false, moveError: false, positionBefore: positionInfo.position, move: moveInfo.move, position: positionAfter };
 	}
@@ -615,7 +615,7 @@ export default class Chessboard extends React.Component {
 	getSquareAt(squareSize, x, y) {
 		let file = this.props.flipped ? 7 - Math.floor(x / squareSize) : Math.floor(x / squareSize);
 		let rank = this.props.flipped ? Math.floor(y / squareSize) : 7 - Math.floor(y / squareSize);
-		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? kokopu.coordinatesToSquare(file, rank) : '-';
+		return file >= 0 && file < 8 && rank >= 0 && rank < 8 ? coordinatesToSquare(file, rank) : '-';
 	}
 
 	/**
@@ -769,7 +769,7 @@ Chessboard.propTypes = {
 	 * `'chess960:nrkbqrbn/pppppppp/8/8/8/8/PPPPPPPP/NRKBQRBN w KQkq - 0 1'`.
 	 */
 	position: PropTypes.oneOfType([
-		PropTypes.instanceOf(kokopu.Position),
+		PropTypes.instanceOf(Position),
 		PropTypes.string
 	]),
 
@@ -779,11 +779,7 @@ Chessboard.propTypes = {
 	 * a legal move in position defined in attribute `position`.
 	 */
 	move: PropTypes.oneOfType([
-		function(props, propName, componentName) {
-			if (!kokopu.isMoveDescriptor(props[propName])) {
-				return new Error(`Invalid prop ${propName} supplied to ${componentName}. Validation failed.`);
-			}
-		},
+		PropTypes.instanceOf(MoveDescriptor),
 		PropTypes.string
 	]),
 
@@ -961,16 +957,16 @@ function computeCoordinateFontSize(squareSize) {
  * Try to interpret the given object as a chess position.
  */
 function parsePosition(position) {
-	if (position instanceof kokopu.Position) {
+	if (position instanceof Position) {
 		return { error: false, position: position };
 	}
 	else if (typeof position === 'string') {
 		try {
-			return { error: false, position: new kokopu.Position(position) };
+			return { error: false, position: new Position(position) };
 		}
 		catch (e) {
 			// istanbul ignore else
-			if (e instanceof kokopu.exception.InvalidFEN) {
+			if (e instanceof exception.InvalidFEN) {
 				return { error: true, message: e.message };
 			}
 			else {
@@ -988,7 +984,7 @@ function parsePosition(position) {
  * Try to interpret the given object `move` as a move descriptor based on the given position.
  */
 function parseMove(position, move) {
-	if (kokopu.isMoveDescriptor(move)) {
+	if (move instanceof MoveDescriptor) {
 		return { error: false, move: move };
 	}
 	else if (typeof move === 'string') {
@@ -997,7 +993,7 @@ function parseMove(position, move) {
 		}
 		catch (e) {
 			// istanbul ignore else
-			if (e instanceof kokopu.exception.InvalidNotation) {
+			if (e instanceof exception.InvalidNotation) {
 				return { error: true, message: e.message };
 			}
 			else {

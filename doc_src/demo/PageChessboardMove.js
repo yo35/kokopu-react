@@ -21,7 +21,7 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
+import { exception, Position } from 'kokopu';
 
 import { Chessboard, ArrowMarkerIcon } from '../../src/index';
 import { buildComponentDemoCode } from './util';
@@ -45,8 +45,8 @@ export default class Page extends React.Component {
 
 	constructor(props) {
 		super(props);
-		let position = new kokopu.Position();
-		let positionAfter = new kokopu.Position(position);
+		let position = new Position();
+		let positionAfter = new Position(position);
 		positionAfter.play('e4');
 		this.state = {
 			position: position,
@@ -88,8 +88,8 @@ export default class Page extends React.Component {
 				<TextField label="Move" variant="standard" value={this.state.editedMove} onChange={evt => this.set('editedMove', evt.target.value)} />
 				<Button color="primary" size="small" variant="contained" onClick={() => this.handlePlayClicked()}>Play</Button>
 				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.setPosition(new kokopu.Position('empty'))}>Clear</Button>
-					<Button onClick={() => this.setPosition(new kokopu.Position())}>Reset</Button>
+					<Button onClick={() => this.setPosition(new Position('empty'))}>Clear</Button>
+					<Button onClick={() => this.setPosition(new Position())}>Reset</Button>
 				</ButtonGroup>
 			</Stack>
 		</>);
@@ -164,7 +164,7 @@ export default class Page extends React.Component {
 
 	handlePlayClicked() {
 		let newState = {};
-		let currentPosition = new kokopu.Position(this.state.positionAfter ? this.state.positionAfter : this.state.position);
+		let currentPosition = new Position(this.state.positionAfter ? this.state.positionAfter : this.state.position);
 		let move = this.state.editedMove.trim();
 		if (move === '') {
 			newState.position = currentPosition;
@@ -176,11 +176,11 @@ export default class Page extends React.Component {
 				let moveDescriptor = currentPosition.notation(move);
 				newState.position = currentPosition;
 				newState.playedMove = currentPosition.notation(moveDescriptor);
-				newState.positionAfter = new kokopu.Position(currentPosition);
+				newState.positionAfter = new Position(currentPosition);
 				newState.positionAfter.play(moveDescriptor);
 			}
 			catch (e) {
-				if (e instanceof kokopu.exception.InvalidNotation) {
+				if (e instanceof exception.InvalidNotation) {
 					newState.position = currentPosition;
 					newState.playedMove = move;
 					newState.positionAfter = null;

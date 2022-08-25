@@ -21,7 +21,7 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
+import { pgnRead } from 'kokopu';
 
 import { Chessboard, Movetext } from '../../src/index';
 import { buildComponentDemoCode } from './util';
@@ -143,7 +143,7 @@ export default class Page extends React.Component {
 	}
 
 	getCurrentPositionAndAnnotations() {
-		let game = kokopu.pgnRead(this.state.pgn, 0);
+		let game = pgnRead(this.state.pgn, 0);
 		if (this.state.selection === 'start') {
 			let mainVariation = game.mainVariation();
 			return { position: mainVariation.initialPosition(), csl: mainVariation.tag('csl'), cal: mainVariation.tag('cal') };

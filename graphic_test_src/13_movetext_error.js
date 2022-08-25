@@ -21,18 +21,19 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
+import { pgnRead } from 'kokopu';
 import testApp from './common/test_app';
 import { Movetext } from '../src/index';
 
 import pgn from './common/games.pgn';
 import dummyPgn from './common/dummy.pgn';
 
-let database = kokopu.pgnRead(pgn);
+let database = pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
+	<Movetext game={pgn} gameIndex={99} />,
 	<Movetext game={database} gameIndex={99} />,
 	<Movetext game={dummyPgn} />,
-	<Movetext game={kokopu.pgnRead(dummyPgn)} gameIndex={1} />,
+	<Movetext game={pgnRead(dummyPgn)} gameIndex={1} />,
 	<Movetext game={42} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

@@ -21,17 +21,17 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
+import { Game, pgnRead } from 'kokopu';
 import testApp from './common/test_app';
 import { Movetext } from '../src/index';
 
 import pgn from './common/games.pgn';
 
-let game = new kokopu.Game();
+let game = new Game();
 game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
 game.result('1-0');
 
-let database = kokopu.pgnRead(pgn);
+let database = pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={game} />,

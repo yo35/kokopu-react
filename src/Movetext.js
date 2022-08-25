@@ -22,7 +22,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import kokopu from 'kokopu';
+import { exception, Database, Game, nagSymbol, pgnRead } from 'kokopu';
 
 import HtmlSanitizer from './impl/HtmlSanitizer';
 import Chessboard from './Chessboard';
@@ -255,7 +255,7 @@ export default class Movetext extends React.Component {
 		let notationText = notationTextBuilder(node.notation());
 
 		// NAGs
-		let nagElements = node.nags().map(nag => <span className="kokopu-nag" key={nag}>{kokopu.nagSymbol(nag)}</span>);
+		let nagElements = node.nags().map(nag => <span className="kokopu-nag" key={nag}>{nagSymbol(nag)}</span>);
 
 		// Class
 		let nodeId = node.id();
@@ -487,8 +487,8 @@ Movetext.propTypes = {
 	 * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation).
 	 */
 	game: PropTypes.oneOfType([
-		PropTypes.instanceOf(kokopu.Game),
-		PropTypes.instanceOf(kokopu.Database),
+		PropTypes.instanceOf(Game),
+		PropTypes.instanceOf(Database),
 		PropTypes.string
 	]),
 
@@ -570,7 +570,7 @@ Movetext.propTypes = {
 
 
 Movetext.defaultProps = {
-	game: new kokopu.Game(),
+	game: new Game(),
 	gameIndex: 0,
 	diagramOptions: {},
 	pieceSymbols: 'native',
@@ -643,17 +643,27 @@ function sanitizeHtml(text, sanitizer) {
  * Try to interpret the given object as a chess game.
  */
 function parseGame(game, gameIndex) {
-	if (game instanceof kokopu.Game) {
+	if (game instanceof Game) {
 		return { error: false, game: game };
 	}
-	else if (game instanceof kokopu.Database || typeof game === 'string') {
+	else if (game instanceof Database || typeof game === 'string') {
+		if (!Number.isInteger(gameIndex) || gameIndex < 0) {
+			return { error: true, message: i18n.INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE };
+		}
 		try {
-			let result = game instanceof kokopu.Database ? game.game(gameIndex) : kokopu.pgnRead(game, gameIndex);
-			return { error: false, game: result };
+			if (game instanceof Database) {
+				if (gameIndex >= game.gameCount()) {
+					return { error: true, message: i18n.INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE }; // TODO more specific error message
+				}
+				return { error: false, game: game.game(gameIndex) };
+			}
+			else {
+				return { error: false, game: pgnRead(game, gameIndex) };
+			}
 		}
 		catch (e) {
 			// istanbul ignore else
-			if (e instanceof kokopu.exception.InvalidPGN) {
+			if (e instanceof exception.InvalidPGN) {
 				return { error: true, message: e.message, text: e.pgn, errorIndex: e.index, lineNumber: e.lineNumber };
 			}
 			else {

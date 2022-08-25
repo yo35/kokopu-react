@@ -21,7 +21,7 @@
 
 
 import React from 'react';
-import kokopu from 'kokopu';
+import { Position, oppositeColor } from 'kokopu';
 
 import { Chessboard, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers } from '../../src/index';
 import { buildComponentDemoCode } from './util';
@@ -53,7 +53,7 @@ export default class Page extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			position: new kokopu.Position(),
+			position: new Position(),
 			flipped: false,
 			interactionMode: 'movePieces',
 			pieceEditMode: 'wp',
@@ -83,12 +83,12 @@ export default class Page extends React.Component {
 				<FormControlLabel label="Flip"
 					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
 				/>
-				<Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(kokopu.oppositeColor(this.state.position.turn()))}>
+				<Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(oppositeColor(this.state.position.turn()))}>
 					Change turn
 				</Button>
 				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.set('position', new kokopu.Position('empty'))}>Clear</Button>
-					<Button onClick={() => this.set('position', new kokopu.Position())}>Reset</Button>
+					<Button onClick={() => this.set('position', new Position('empty'))}>Clear</Button>
+					<Button onClick={() => this.set('position', new Position())}>Reset</Button>
 				</ButtonGroup>
 			</Stack>
 			<Box>
@@ -266,20 +266,20 @@ export default class Page extends React.Component {
 	}
 
 	handleTurnClicked(newTurn) {
-		let newPosition = new kokopu.Position(this.state.position);
+		let newPosition = new Position(this.state.position);
 		newPosition.turn(newTurn);
 		this.set('position', newPosition);
 	}
 
 	handlePieceMoved(from, to) {
-		let newPosition = new kokopu.Position(this.state.position);
+		let newPosition = new Position(this.state.position);
 		newPosition.square(to, newPosition.square(from));
 		newPosition.square(from, '-');
 		this.set('position', newPosition);
 	}
 
 	handleMovePlayed(move) {
-		let newPosition = new kokopu.Position(this.state.position);
+		let newPosition = new Position(this.state.position);
 		newPosition.play(move);
 		this.set('position', newPosition);
 	}
@@ -318,7 +318,7 @@ export default class Page extends React.Component {
 			this.set('textMarkers', newTextMarkers);
 		}
 		else if (this.state.interactionMode === 'addRemovePieces') {
-			let newPosition = new kokopu.Position(this.state.position);
+			let newPosition = new Position(this.state.position);
 			newPosition.square(sq, newPosition.square(sq) === this.state.pieceEditMode ? '-' : this.state.pieceEditMode);
 			this.set('position', newPosition);
 		}
