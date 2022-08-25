@@ -22,9 +22,10 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { exception, Database, Game, nagSymbol, pgnRead } from 'kokopu';
+import { exception, i18n as kkpI18n, Database, Game, nagSymbol, pgnRead } from 'kokopu';
 
 import HtmlSanitizer from './impl/HtmlSanitizer';
+import { fillPlaceholder } from './impl/util';
 import Chessboard from './Chessboard';
 import ErrorBox from './ErrorBox';
 import { moveFormatter } from './formatmove';
@@ -128,7 +129,7 @@ export default class Movetext extends React.Component {
 		if (annotator === undefined) {
 			return undefined;
 		}
-		annotator = i18n.ANNOTATED_BY.replace(/\{0\}/g, annotator);
+		annotator = fillPlaceholder(i18n.ANNOTATED_BY, annotator);
 		return <div className="kokopu-header-annotator" key="annotator">{sanitizeHtml(annotator)}</div>;
 	}
 
@@ -653,7 +654,7 @@ function parseGame(game, gameIndex) {
 		try {
 			if (game instanceof Database) {
 				if (gameIndex >= game.gameCount()) {
-					return { error: true, message: i18n.INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE }; // TODO more specific error message
+					return { error: true, message: fillPlaceholder(kkpI18n.INVALID_GAME_INDEX, gameIndex, game.gameCount()) };
 				}
 				return { error: false, game: game.game(gameIndex) };
 			}

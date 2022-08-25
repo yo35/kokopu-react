@@ -35,6 +35,14 @@ export function generateRandomId() {
 }
 
 
+export function fillPlaceholder(message, ...placeholderValues) {
+	return message.replace(/{(\d+)}/g, (match, placeholder) => {
+		const placeholderIndex = Number(placeholder);
+		return placeholderIndex < placeholderValues.length ? placeholderValues[placeholderIndex] : match;
+	});
+}
+
+
 export function sanitizeInteger(input, min, max) {
 	return Math.min(Math.max(Math.round(input), min), max);
 }

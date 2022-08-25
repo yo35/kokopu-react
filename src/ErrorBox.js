@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import i18n from './i18n';
+import { fillPlaceholder } from './impl/util';
 
 import './css/error_box.css';
 
@@ -125,7 +126,7 @@ function ellipsisAt(text, pos, backwardCharacters, forwardCharacters, lineNumber
 	excerpt = excerpt.replace(/\n|\r|\t/g, ' ');
 	let secondLine = Array(1 + e1.length + pos - p1).join(' ') + '^';
 	if (lineNumber) {
-		secondLine += ' (' + i18n.LINE.replace(/\{0\}/g, lineNumber) + ')';
+		secondLine += ` (${fillPlaceholder(i18n.LINE, lineNumber)})`;
 	}
 	return excerpt + '\n' + secondLine;
 }
