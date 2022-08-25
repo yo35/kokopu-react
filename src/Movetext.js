@@ -86,7 +86,7 @@ export default class Movetext extends React.Component {
 		let colorTag = <span className="kokopu-colorTag"></span>;
 		let playerNameElement = <span className="kokopu-header-playerName">{sanitizeHtml(playerName)}</span>;
 		let titleElement = title === undefined ? undefined : <span className="kokopu-header-playerTitle">{sanitizeHtml(title)}</span>;
-		let ratingElement = rating === undefined ? undefined : <span className="kokopu-header-playerRating">{sanitizeHtml(rating)}</span>;
+		let ratingElement = rating === undefined ? undefined : <span className="kokopu-header-playerRating">{rating}</span>;
 		let separator = title === undefined || rating === undefined ? undefined : '\u00a0'; // \u00a0 == &nbsp;
 		let titleRatingGroup = title === undefined && rating === undefined ? undefined : <span className="kokopu-headerGroup-titleRating">{titleElement}{separator}{ratingElement}</span>;
 		return <div className={classNames.join(' ')} key={'player-' + color}>{colorTag}{playerNameElement}{titleRatingGroup}</div>;

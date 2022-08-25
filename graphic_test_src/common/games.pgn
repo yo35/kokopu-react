@@ -87,8 +87,8 @@ probably to assure himself that the combination was sound and that he had a forc
 [White "1<sup>st</sup> <em>player</em>"]
 [Black "2<sub>nd</sub> <i>player</i>"]
 [Result "*"]
-[WhiteElo "<ins>2800</ins>"]
-[BlackElo "<del>1010</del>"]
+[WhiteElo "2800"]
+[BlackElo "1010"]
 [WhiteTitle "<span class=\"myClass\">GM</span>"]
 [BlackTitle "<span id=\"myId\">no-GM</span>"]
 
@@ -104,7 +104,7 @@ probably to assure himself that the combination was sound and that he had a forc
 [Black "?"]
 [Result "*"]
 
-{I'm a <strong><ins>comment</ins></strong> with some <em class="myClass">HTML content</em> in it.<br/>
+{I'm a <strong><ins>comment</ins></strong> with <del>some</del> <em class="myClass">HTML content</em> in it.<br/>
 Lists are supported:
 <ul>
 <li>1<sup>st</sup> point</li>
