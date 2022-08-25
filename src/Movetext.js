@@ -22,7 +22,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { exception, i18n as kkpI18n, Database, Game, nagSymbol, pgnRead } from 'kokopu';
+import { exception, Database, Game, nagSymbol, pgnRead } from 'kokopu';
 
 import HtmlSanitizer from './impl/HtmlSanitizer';
 import { fillPlaceholder } from './impl/util';
@@ -652,15 +652,8 @@ function parseGame(game, gameIndex) {
 			return { error: true, message: i18n.INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE };
 		}
 		try {
-			if (game instanceof Database) {
-				if (gameIndex >= game.gameCount()) {
-					return { error: true, message: fillPlaceholder(kkpI18n.INVALID_GAME_INDEX, gameIndex, game.gameCount()) };
-				}
-				return { error: false, game: game.game(gameIndex) };
-			}
-			else {
-				return { error: false, game: pgnRead(game, gameIndex) };
-			}
+			const result = game instanceof Database ? game.game(gameIndex) : pgnRead(game, gameIndex);
+			return { error: false, game: result };
 		}
 		catch (e) {
 			// istanbul ignore else
