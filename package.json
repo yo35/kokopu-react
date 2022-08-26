@@ -31,7 +31,7 @@
 		".nycrc.yml"
 	],
 	"peerDependencies": {
-		"kokopu": "^2.6.0",
+		"kokopu": "^3.0.0",
 		"react": "17.x.x || 18.x.x"
 	},
 	"dependencies": {
@@ -57,7 +57,7 @@
 		"eslint-plugin-react": "^7.30.1",
 		"html-webpack-plugin": "^5.5.0",
 		"img-diff-js": "^0.5.2",
-		"kokopu": "^2.9.2",
+		"kokopu": "^3.0.0",
 		"mocha": "^10.0.0",
 		"null-loader": "^4.0.1",
 		"nyc": "^15.1.0",
