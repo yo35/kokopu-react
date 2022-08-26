@@ -19,7 +19,6 @@
 		"dist/lib",
 		"doc_src",
 		"graphic_test_src",
-		"graphics",
 		"scripts/clean-graphic-output.js",
 		"scripts/docker-compose.yml",
 		"scripts/test-graphic.webpack.config.js",
