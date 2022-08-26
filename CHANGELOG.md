@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.8.0 (August 26, 2022)
+-----------------------
+* Upgrade Kokopu to Kokopu 3.0.
+* Upgrade dependencies.
+
 1.7.2 (August 3, 2022)
 ----------------------
 * Fix URLs in documentation.
