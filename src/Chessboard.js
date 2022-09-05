@@ -67,15 +67,18 @@ export default class Chessboard extends React.Component {
 			windowWidth: window.innerWidth,
 		};
 		this.arrowTipIdSuffix = generateRandomId();
-		this.windowResizeListener = () => this.handleWindowResize();
 	}
 
 	componentDidMount() {
+		this.windowResizeListener = () => this.handleWindowResize();
 		window.addEventListener('resize', this.windowResizeListener);
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('resize', this.windowResizeListener);
+		if (this.windowResizeListener) {
+			window.removeEventListener('resize', this.windowResizeListener);
+			this.windowResizeListener = null;
+		}
 	}
 
 	render() {
