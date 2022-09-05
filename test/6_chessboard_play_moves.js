@@ -36,7 +36,7 @@ describe('Chessboard play moves', function() {
 	});
 
 	function itCheckPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
-		itCustom(browserContext, '10_chessboard_play_moves', itemIndex, label, async function(element) {
+		itCustom(browserContext, '11_chessboard_play_moves', itemIndex, label, async function(element) {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
@@ -55,7 +55,7 @@ describe('Chessboard play moves', function() {
 	itCheckPlayMove(3, 'chess960 ambiguous king move', 275, 375, 320, 375, 'chess960_ambiguous_king_move', 'move played: Kg1');
 
 	function itCheckNonPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
-		itCustom(browserContext, '10_chessboard_play_moves', itemIndex, label, async function(element) {
+		itCustom(browserContext, '11_chessboard_play_moves', itemIndex, label, async function(element) {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
@@ -75,7 +75,7 @@ describe('Chessboard play moves', function() {
 	itCheckNonPlayMove(3, 'chess960 non-KxR castling', 275, 375, 130, 375, 'chess960_non_kxr_castling');
 
 	function itCheckPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName, expectedText) {
-		itCustom(browserContext, '11_chessboard_play_promotions', itemIndex, label, async function(element) {
+		itCustom(browserContext, '12_chessboard_play_promotions', itemIndex, label, async function(element) {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).release().perform();
@@ -91,7 +91,7 @@ describe('Chessboard play moves', function() {
 	itCheckPlayPromotion(2, 'antichess promotion', 325, 325, 325, 375, 325, 175, 'antichess_promotion', 'promotion move played: b8=K');
 
 	function itCheckNonPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName) {
-		itCustom(browserContext, '11_chessboard_play_promotions', itemIndex, label, async function(element) {
+		itCustom(browserContext, '12_chessboard_play_promotions', itemIndex, label, async function(element) {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();

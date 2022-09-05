@@ -36,7 +36,7 @@ describe('Chessboard interaction', function() {
 	});
 
 	function itCheckClickSquare(itemIndex, label, targets) {
-		itCustom(browserContext, '07_chessboard_click_squares', itemIndex, label, async function(element) {
+		itCustom(browserContext, '08_chessboard_click_squares', itemIndex, label, async function(element) {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			for (let i = 0; i < targets.length; ++i) {
@@ -63,7 +63,7 @@ describe('Chessboard interaction', function() {
 	]);
 
 	function itCheckMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
-		itCustom(browserContext, '08_chessboard_move_pieces', itemIndex, label, async function(element) {
+		itCustom(browserContext, '09_chessboard_move_pieces', itemIndex, label, async function(element) {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
@@ -83,7 +83,7 @@ describe('Chessboard interaction', function() {
 	itCheckMovePiece(2, 'after move', 225, 225, 75, 260, 'after_move', 'piece moved: e4 -> b3');
 
 	function itCheckNonMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
-		itCustom(browserContext, '08_chessboard_move_pieces', itemIndex, label, async function(element) {
+		itCustom(browserContext, '09_chessboard_move_pieces', itemIndex, label, async function(element) {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
@@ -100,7 +100,7 @@ describe('Chessboard interaction', function() {
 	itCheckNonMovePiece(0, 'out of board', 175, 25, 500, 210, 'out_of_board');
 
 	function itCheckEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
-		itCustom(browserContext, '09_chessboard_edit_arrows', itemIndex, label, async function(element) {
+		itCustom(browserContext, '10_chessboard_edit_arrows', itemIndex, label, async function(element) {
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
@@ -117,7 +117,7 @@ describe('Chessboard interaction', function() {
 	itCheckEditArrow(1, 'over arrow marker', 40, 110, 125, 290, 'over_arrow_marker', 'arrow edited: h3 -> f6');
 
 	function itCheckNonEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
-		itCustom(browserContext, '09_chessboard_edit_arrows', itemIndex, label, async function(element) {
+		itCustom(browserContext, '10_chessboard_edit_arrows', itemIndex, label, async function(element) {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
 			let actions = browserContext.driver.actions({ async: true });
 			let area = await element.getRect();

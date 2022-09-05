@@ -44,6 +44,6 @@ describe('Chessboard graphic', function() {
 	itChecksScreenshots(browserContext, '06a_chessboard_animated_move', [ 'move 1', 'move 2', 'capture', 'castling move', 'en-pssant', 'promotion' ]);
 	itChecksScreenshots(browserContext, '06b_chessboard_animated_move', [ 'move 1', 'move 2', 'capture', 'castling move', 'en-pssant', 'promotion' ]);
 	itChecksScreenshots(browserContext, '06c_chessboard_animated_move', [ 'move 1', 'move 2', 'capture', 'castling move', 'en-pssant', 'promotion' ]);
-	itChecksScreenshots(browserContext, '06_chessboard_theme', [ 'default', 'large', 'small', 'custom 1', 'custom 2', 'custom 3',
+	itChecksScreenshots(browserContext, '07_chessboard_theme', [ 'default', 'large', 'small', 'custom 1', 'custom 2', 'custom 3',
 		'custom 4', 'custom 5', 'custom 6' ]);
 });

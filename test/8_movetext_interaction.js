@@ -37,7 +37,7 @@ describe('Movetext interaction', function() {
 	});
 
 	function itCheckClickMove(itemIndex, label, targets) {
-		itCustom(browserContext, '16_movetext_interaction', itemIndex, label, async function(element) {
+		itCustom(browserContext, '17_movetext_interaction', itemIndex, label, async function(element) {
 			let actions = browserContext.driver.actions({ async: true });
 			await setSandbox(browserContext, '');
 			for (let i = 0; i < targets.length; ++i) {
@@ -72,7 +72,7 @@ describe('Movetext interaction', function() {
 	]);
 
 	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast) {
-		itCustom(browserContext, '16_movetext_interaction', itemIndex, label, async function(element) {
+		itCustom(browserContext, '17_movetext_interaction', itemIndex, label, async function(element) {
 			let focusFieldElement = await element.findElement(By.className('kokopu-focusField'));
 
 			await setSandbox(browserContext, '');
