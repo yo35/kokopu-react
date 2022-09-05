@@ -23,6 +23,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const DEBUG_KEY = '__kokopu_debug_freeze_motion';
+
 
 /**
  * Wrap some animated content.
@@ -35,6 +37,12 @@ export default class Motion extends React.Component {
 			cursor: 0,
 		};
 		this.animationFrameId = null;
+		this.cursorStop = 1;
+
+		// WARNING: this hack exists only for testing purposes. DO NOT USE IT IN PRODUCTION.
+		if (typeof window[DEBUG_KEY] === 'number' && window[DEBUG_KEY] >= 0 && window[DEBUG_KEY] <= 1) {
+			this.cursorStop = window[DEBUG_KEY];
+		}
 	}
 
 	componentDidMount() {
@@ -58,13 +66,13 @@ export default class Motion extends React.Component {
 		if (cursor < 0) {
 			cursor = 0;
 		}
-		else if (cursor > 1) {
-			cursor = 1;
+		else if (cursor > this.cursorStop) {
+			cursor = this.cursorStop;
 		}
 		this.setState({ cursor: cursor });
 
 		// Schedule the next animation frame if necessary.
-		if (cursor === 1) {
+		if (cursor === this.cursorStop) {
 			this.animationFrameId = null;
 		}
 		else {

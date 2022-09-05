@@ -38,6 +38,9 @@ const UNREACHABLE_TEST_CLIENT_MESSAGE =
 	'Do not forget to run `npm run test_env:stop` when finished.\n';
 
 
+const ANIMATION_DELAY = 200;
+
+
 /**
  * Open a browser in the client (+ ensure everything else is ready to execute graphic tests).
  */
@@ -111,6 +114,9 @@ async function fetchTestCase(browserContext, testCaseName) {
 	// Fetch the new page.
 	await browserContext.driver.get(`file:///app/build/test_graphic/${testCaseName}/index.html`);
 	browserContext.latestTestCase = testCaseName;
+
+	// Wait until the end of the animations.
+	await new Promise(resolve => setTimeout(resolve, ANIMATION_DELAY));
 }
 
 
