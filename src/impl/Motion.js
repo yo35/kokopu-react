@@ -38,7 +38,7 @@ export default class Motion extends React.Component {
 	}
 
 	componentDidMount() {
-		this.animationFrameId = window.requestAnimationFrame(timestamp => this.handleAnimationStep(timestamp));
+		this.animationFrameId = window.requestAnimationFrame(ts => this.handleAnimationStep(ts));
 	}
 
 	componentWillUnmount() {
@@ -82,10 +82,10 @@ Motion.propTypes = {
 	/**
 	 * Duration of the animation. Must be > 0.
 	 */
-	duration: PropTypes.number,
+	duration: PropTypes.number.isRequired,
 
 	/**
 	 * Factory for the content being animated. The animation cursor is guaranteed to be valued between 0 and 1 inclusive.
 	 */
-	children: PropTypes.func,
+	children: PropTypes.func.isRequired,
 };
