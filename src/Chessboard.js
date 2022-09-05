@@ -23,12 +23,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
-import { Motion, spring } from 'react-motion';
 import { exception, MoveDescriptor, Position, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
 
 import colorsets from './impl/colorsets';
 import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
+import Motion from './impl/Motion';
 import TextSymbol from './impl/TextSymbol';
 import ErrorBox from './ErrorBox';
 import i18n from './i18n';
@@ -45,7 +45,7 @@ const HOVER_MARKER_THICKNESS_FACTOR = 0.1;
 const STROKE_THICKNESS_FACTOR = 0.15;
 const ARROW_TIP_OFFSET_FACTOR = 0.3;
 
-const ANIMATION_SPEED = { stiffness: 700, damping: 40 };
+const MOTION_DURATION = 150;
 
 const RANK_LABELS = '12345678';
 const FILE_LABELS = 'abcdefgh';
@@ -138,10 +138,11 @@ export default class Chessboard extends React.Component {
 
 	renderBoardContent(position, positionBefore, move, squareSize, colorset, pieceset) {
 		if (move && this.props.animated) {
+			let key = positionBefore.variant() + '|' + positionBefore.fen() + '|' + move.toString();
 			return (
-				<Motion key={move.toString()} defaultStyle={{ alpha: 0 }} style={{ alpha: spring(1, ANIMATION_SPEED) }}>
-					{currentStyle => (currentStyle.alpha >= 1 ? this.renderBoardContentStill(position, move, squareSize, colorset, pieceset)
-						: this.renderBoardContentAnimated(positionBefore, move, currentStyle.alpha, squareSize, colorset, pieceset))}
+				<Motion key={key} duration={MOTION_DURATION}>
+					{motionCursor => (motionCursor === 1 ? this.renderBoardContentStill(position, move, squareSize, colorset, pieceset)
+						: this.renderBoardContentAnimated(positionBefore, move, motionCursor, squareSize, colorset, pieceset))}
 				</Motion>
 			);
 		}
@@ -153,13 +154,13 @@ export default class Chessboard extends React.Component {
 	/**
 	 * Render the board content during the animation.
 	 */
-	renderBoardContentAnimated(positionBefore, move, alpha, squareSize, colorset, pieceset) {
+	renderBoardContentAnimated(positionBefore, move, motionCursor, squareSize, colorset, pieceset) {
 		let pieces = [];
-		forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, alpha, squareSize, pieceset, sq)));
+		forEachSquare(sq => pieces.push(this.renderPieceAnimated(positionBefore, move, motionCursor, squareSize, pieceset, sq)));
 		return (
 			<>
 				{pieces}
-				{this.renderMoveArrow(move, alpha, squareSize, colorset)}
+				{this.renderMoveArrow(move, motionCursor, squareSize, colorset)}
 				{this.renderTurnFlag(oppositeColor(positionBefore.turn()), squareSize, pieceset)}
 			</>
 		);
@@ -226,7 +227,7 @@ export default class Chessboard extends React.Component {
 		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
 
-	renderPieceAnimated(positionBefore, move, alpha, squareSize,  pieceset, sq) {
+	renderPieceAnimated(positionBefore, move, motionCursor, squareSize,  pieceset, sq) {
 		let cp = positionBefore.square(sq);
 		if (cp === '-' || move.to() === sq || (move.isEnPassant() && move.enPassantSquare() === sq)) {
 			return undefined;
@@ -234,16 +235,16 @@ export default class Chessboard extends React.Component {
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
 		if (sq === move.from()) {
 			let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.to());
-			x = xTo * alpha + x * (1 - alpha);
-			y = yTo * alpha + y * (1 - alpha);
-			if (move.isPromotion() && alpha > 0.8) {
+			x = xTo * motionCursor + x * (1 - motionCursor);
+			y = yTo * motionCursor + y * (1 - motionCursor);
+			if (move.isPromotion() && motionCursor > 0.8) {
 				cp = move.coloredPromotion();
 			}
 		}
 		else if (move.isCastling() && sq === move.rookFrom()) {
 			let { x: xTo, y: yTo } = this.getSquareCoordinates(squareSize, move.rookTo());
-			x = xTo * alpha + x * (1 - alpha);
-			y = yTo * alpha + y * (1 - alpha);
+			x = xTo * motionCursor + x * (1 - motionCursor);
+			y = yTo * motionCursor + y * (1 - motionCursor);
 		}
 		return <image key={'piece-' + sq} x={x} y={y} width={squareSize} height={squareSize} href={pieceset[cp]} />;
 	}
@@ -384,8 +385,8 @@ export default class Chessboard extends React.Component {
 		return result;
 	}
 
-	renderMoveArrow(move, alpha, squareSize, colorset) {
-		if (!move || alpha < 0.1 || !this.props.moveArrowVisible || move.from() === move.to()) {
+	renderMoveArrow(move, motionCursor, squareSize, colorset) {
+		if (!move || motionCursor < 0.1 || !this.props.moveArrowVisible || move.from() === move.to()) {
 			return undefined;
 		}
 		let { x: xFrom, y: yFrom } = this.getSquareCoordinates(squareSize, move.from());
@@ -396,8 +397,8 @@ export default class Chessboard extends React.Component {
 		yTo += squareSize / 2;
 		xTo += Math.sign(xFrom - xTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
 		yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * squareSize;
-		let x = xTo * alpha + xFrom * (1 - alpha);
-		let y = yTo * alpha + yFrom * (1 - alpha);
+		let x = xTo * motionCursor + xFrom * (1 - motionCursor);
+		let y = yTo * motionCursor + yFrom * (1 - motionCursor);
 		let color = this.props.moveArrowColor;
 		return (
 			<line

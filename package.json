@@ -36,8 +36,7 @@
 	"dependencies": {
 		"htmlparser2": "^8.0.1",
 		"prop-types": "^15.8.1",
-		"react-draggable": "^4.4.5",
-		"react-motion": "^0.5.2"
+		"react-draggable": "^4.4.5"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.18.10",
