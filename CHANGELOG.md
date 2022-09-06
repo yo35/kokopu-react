@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.9.0 (September 6, 2022)
+-------------------------
+* Remove dependency on react-motion (unmaintained package).
+* Upgrade dependencies.
+
 1.8.0 (August 26, 2022)
 -----------------------
 * Upgrade Kokopu to Kokopu 3.0.
