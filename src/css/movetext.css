@@ -115,3 +115,7 @@ div.kokopu-subVariation {
 	height: 0px;
 	overflow: hidden;
 }
+
+.kokopu-focusField {
+	position: absolute; /* see #1 */
+}
