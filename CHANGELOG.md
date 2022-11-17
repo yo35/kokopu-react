@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.9.1 (November 17, 2022)
+-------------------------
+* Fix scroll issue on iOS (see [#1](https://github.com/yo35/kokopu-react/issues/1))
+* Upgrade dependencies.
+
 1.9.0 (September 6, 2022)
 -------------------------
 * Remove dependency on react-motion (unmaintained package).
