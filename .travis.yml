@@ -4,7 +4,7 @@ dist: focal
 
 language: node_js
 node_js:
-  - node
+  - 18 # FIXME: use the latest stable node release instead
 
 services:
   - docker
