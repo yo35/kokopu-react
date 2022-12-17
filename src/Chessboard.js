@@ -67,6 +67,9 @@ export default class Chessboard extends React.Component {
 			windowWidth: window.innerWidth,
 		};
 		this.arrowTipIdSuffix = generateRandomId();
+
+		this.handleRef = {};
+		forEachSquare(sq => { this.handleRef[sq] = React.createRef(); });
 	}
 
 	componentDidMount() {
@@ -315,11 +318,12 @@ export default class Chessboard extends React.Component {
 			return (
 				<Draggable
 					key={'handle-' + sq} position={dragPosition}
+					nodeRef={this.handleRef[sq]}
 					onStart={evt => this.handleDragStart(sq, evt)}
 					onDrag={(_, dragData) => this.handleDrag(sq, dragData)}
 					onStop={(_, dragData) => this.handleDragStop(sq, dragData)}
 				>
-					<rect className={classNames.join(' ')} x={x} y={y} width={squareSize} height={squareSize} />
+					<rect ref={this.handleRef[sq]} className={classNames.join(' ')} x={x} y={y} width={squareSize} height={squareSize} />
 				</Draggable>
 			);
 		}
