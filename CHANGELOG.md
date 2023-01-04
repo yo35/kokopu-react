@@ -1,30 +1,29 @@
 ChangeLog
 =========
 
+1.10.0 (January 4, 2022)
+------------------------
+* Upgrade Kokopu to Kokopu 4.0.
+
 1.9.2 (December 17, 2022)
 -------------------------
 * Fix use of findDOMNode (deprecated React feature) by react-draggable (see [#2](https://github.com/yo35/kokopu-react/issues/2)).
-* Upgrade dependencies.
 
 1.9.1 (November 17, 2022)
 -------------------------
 * Fix scroll issue on iOS (see [#1](https://github.com/yo35/kokopu-react/issues/1)).
-* Upgrade dependencies.
 
 1.9.0 (September 6, 2022)
 -------------------------
 * Remove dependency on react-motion (unmaintained package).
-* Upgrade dependencies.
 
 1.8.0 (August 26, 2022)
 -----------------------
 * Upgrade Kokopu to Kokopu 3.0.
-* Upgrade dependencies.
 
 1.7.2 (August 3, 2022)
 ----------------------
 * Fix URLs in documentation.
-* Upgrade dependencies.
 
 1.7.1 (June 23, 2022)
 ---------------------
