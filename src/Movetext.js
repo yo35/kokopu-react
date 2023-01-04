@@ -100,8 +100,8 @@ export default class Movetext extends React.Component {
 		if (evt === undefined) {
 			return undefined;
 		}
-		let round = game.round();
-		let roundElement = round === undefined ? undefined : <span className="kokopu-header-round">{sanitizeHtml(round)}</span>;
+		let fullRound = game.fullRound();
+		let roundElement = fullRound === undefined ? undefined : <span className="kokopu-header-round">{fullRound}</span>;
 		let evtElement = <span className="kokopu-header-event">{sanitizeHtml(evt)}</span>;
 		return <div className="kokopu-headerGroup-eventRound" key="event-round">{evtElement}{roundElement}</div>;
 	}

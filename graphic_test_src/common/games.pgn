@@ -81,9 +81,9 @@ probably to assure himself that the combination was sound and that he had a forc
 
 
 [Event "HTML in <b>all</b> headers"]
-[Site "Maybe on <a href=\"https://www.wikipedia.org/\">Wikipedia</a>, maybe somewhere else..."]
+[Site "Maybe on <a href=\"https://www.wikipedia.org/\">Wikipedia</a>, maybe <strong>somewhere</strong> else..."]
 [Date "????.??.??"]
-[Round "<strong>3</strong>.2"]
+[Round "3.?.2"]
 [White "1<sup>st</sup> <em>player</em>"]
 [Black "2<sub>nd</sub> <i>player</i>"]
 [Result "*"]
