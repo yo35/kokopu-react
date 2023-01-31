@@ -1,0 +1,22 @@
+name: 'Build'
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+      - run: npm ci
+      - run: docker-compose -f scripts/docker-compose.yml up -d
+      - run: npm test
+      - run: docker-compose -f scripts/docker-compose.yml down
+        if: ${{ always() }}
+      # TODO replug publish coverage
