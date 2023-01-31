@@ -5,7 +5,7 @@ ChangeLog
 -------------------------
 * Continuous integration with GitHub Actions instead of Travis-CI.
 
-1.10.0 (January 4, 2022)
+1.10.0 (January 4, 2023)
 ------------------------
 * Upgrade Kokopu to Kokopu 4.0.
 
