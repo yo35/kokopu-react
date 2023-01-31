@@ -4,6 +4,7 @@ report-dir: ./build/coverage
 reporter:
   - text
   - html
+  - lcovonly
 
 check-coverage: true
 
