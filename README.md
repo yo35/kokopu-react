@@ -10,7 +10,7 @@ and [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) formats...).
 
 https://www.npmjs.com/package/kokopu-react
 
-[![Build Status](https://app.travis-ci.com/yo35/kokopu-react.svg?branch=master)](https://app.travis-ci.com/yo35/kokopu-react)
+[![Build Status](https://github.com/yo35/kokopu-react/actions/workflows/main.yml/badge.svg)](https://github.com/yo35/kokopu-react/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/yo35/kokopu-react/badge.svg?branch=master)](https://coveralls.io/github/yo35/kokopu-react?branch=master)
 
 
