@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+1.11.1 (February 1, 2023)
+-------------------------
+* Fix drag-drop vs scroll conflict on mobile devices.
+
 1.11.0 (February 1, 2023)
 -------------------------
 * Remove dependency on react-draggable.
