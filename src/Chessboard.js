@@ -315,6 +315,7 @@ export default class Chessboard extends React.Component {
 					onDragStart={(x0, y0) => this.handleDragStart(sq, x0, y0)}
 					onDrag={(dx, dy) => this.handleDrag(sq, dx, dy)}
 					onDragStop={(dx, dy) => this.handleDragStop(sq, dx, dy)}
+					onDragCanceled={() => this.handleDragCanceled()}
 				/>
 			);
 		}
@@ -505,6 +506,14 @@ export default class Chessboard extends React.Component {
 					break;
 			}
 		}
+	}
+
+	handleDragCanceled() {
+		this.setState({
+			inhibitedSquare: '-',
+			draggedSquare: '-',
+			hoveredSquare: '-',
+		});
 	}
 
 	handleDrawerCancelButtonClicked() {
