@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+1.11.0 (February 1, 2023)
+-------------------------
+* Remove dependency on react-draggable.
+* Add support for drag-drop on mobile devices.
+
 1.10.1 (January 31, 2023)
 -------------------------
 * Continuous integration with GitHub Actions instead of Travis-CI.
