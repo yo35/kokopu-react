@@ -32,20 +32,25 @@ export default class DraggableHandle extends React.Component {
 	constructor(props) {
 		super(props);
 		this.dragData = null;
+		this.innerRef = React.createRef();
 	}
 
 	componentDidMount() {
 		if (!this.windowListeners) {
 			this.windowListeners = {
+				mouseDown: evt => this.handleMouseDown(evt),
 				mouseMove: evt => this.handleMouseMove(evt),
 				mouseUp: evt => this.handleMouseUp(evt),
+				touchStart: evt => this.handleTouchStart(evt),
 				touchMove: evt => this.handleTouchMove(evt),
 				touchEnd: evt => this.handleTouchEnd(evt),
 				touchCancel: evt => this.handleTouchCancel(evt),
 			};
+			this.innerRef.current.addEventListener('mousedown', this.windowListeners.mouseDown);
 			window.addEventListener('mousemove', this.windowListeners.mouseMove);
 			window.addEventListener('mouseup', this.windowListeners.mouseUp);
-			window.addEventListener('touchmove', this.windowListeners.touchMove);
+			this.innerRef.current.addEventListener('touchstart', this.windowListeners.touchStart, { passive: false });
+			window.addEventListener('touchmove', this.windowListeners.touchMove, { passive: false });
 			window.addEventListener('touchend', this.windowListeners.touchEnd);
 			window.addEventListener('touchcancel', this.windowListeners.touchCancel);
 		}
@@ -54,8 +59,10 @@ export default class DraggableHandle extends React.Component {
 
 	componentWillUnmount() {
 		if (this.windowListeners) {
+			this.innerRef.current.removeEventListener('mousedown', this.windowListeners.mouseDown);
 			window.removeEventListener('mousemove', this.windowListeners.mouseMove);
 			window.removeEventListener('mouseup', this.windowListeners.mouseUp);
+			this.innerRef.current.removeEventListener('touchstart', this.windowListeners.touchStart);
 			window.removeEventListener('touchmove', this.windowListeners.touchMove);
 			window.removeEventListener('touchend', this.windowListeners.touchEnd);
 			window.removeEventListener('touchcancel', this.windowListeners.touchCancel);
@@ -65,11 +72,7 @@ export default class DraggableHandle extends React.Component {
 
 	render() {
 		let classNames = [ 'kokopu-handle', this.props.isArrowHandle ? 'kokopu-arrowDraggable' : 'kokopu-pieceDraggable' ];
-		return (
-			<rect className={classNames.join(' ')} x={this.props.x} y={this.props.y} width={this.props.width} height={this.props.height}
-				onMouseDown={evt => this.handleMouseDown(evt)} onTouchStart={evt => this.handleTouchStart(evt)}
-			/>
-		);
+		return <rect ref={this.innerRef} className={classNames.join(' ')} x={this.props.x} y={this.props.y} width={this.props.width} height={this.props.height} />;
 	}
 
 	handleTouchStart(evt) {
