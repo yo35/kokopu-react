@@ -22,12 +22,12 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Draggable from 'react-draggable';
 import { exception, MoveDescriptor, Position, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
 
 import colorsets from './impl/colorsets';
 import piecesets from './impl/piecesets';
 import ArrowTip from './impl/ArrowTip';
+import DraggableHandle from './impl/DraggableHandle';
 import Motion from './impl/Motion';
 import TextSymbol from './impl/TextSymbol';
 import ErrorBox from './ErrorBox';
@@ -67,9 +67,6 @@ export default class Chessboard extends React.Component {
 			windowWidth: window.innerWidth,
 		};
 		this.arrowTipIdSuffix = generateRandomId();
-
-		this.handleRef = {};
-		forEachSquare(sq => { this.handleRef[sq] = React.createRef(); });
 	}
 
 	componentDidMount() {
@@ -313,18 +310,12 @@ export default class Chessboard extends React.Component {
 		let dragEnabledForEditArrows = this.isEditArrowModeEnabled();
 		let dragEnabledForPlayMoves = this.isPlayMoveModeEnabled() && position.isLegal() && position.square(sq).startsWith(position.turn()) && !this.state.promotionDrawer;
 		if (dragEnabledForMovePieces || dragEnabledForEditArrows || dragEnabledForPlayMoves) {
-			let dragPosition = this.state.draggedSquare === sq ? this.state.dragPosition : { x: 0, y: 0 };
-			let classNames = [ 'kokopu-handle', this.isEditArrowModeEnabled() ? 'kokopu-arrowDraggable' : 'kokopu-pieceDraggable' ];
 			return (
-				<Draggable
-					key={'handle-' + sq} position={dragPosition}
-					nodeRef={this.handleRef[sq]}
-					onStart={evt => this.handleDragStart(sq, evt)}
-					onDrag={(_, dragData) => this.handleDrag(sq, dragData)}
-					onStop={(_, dragData) => this.handleDragStop(sq, dragData)}
-				>
-					<rect ref={this.handleRef[sq]} className={classNames.join(' ')} x={x} y={y} width={squareSize} height={squareSize} />
-				</Draggable>
+				<DraggableHandle key={'handle-' + sq} x={x} y={y} width={squareSize} height={squareSize} isArrowHandle={this.isEditArrowModeEnabled()}
+					onDragStart={(x0, y0) => this.handleDragStart(sq, x0, y0)}
+					onDrag={(dx, dy) => this.handleDrag(sq, dx, dy)}
+					onDragStop={(dx, dy) => this.handleDragStop(sq, dx, dy)}
+				/>
 			);
 		}
 		else if (this.props.interactionMode === 'clickSquares') {
@@ -443,31 +434,30 @@ export default class Chessboard extends React.Component {
 		this.setState({ windowWidth: window.innerWidth });
 	}
 
-	handleDragStart(sq, evt) {
-		let squareBoundary = evt.target.getBoundingClientRect();
+	handleDragStart(sq, x0, y0) {
 		this.setState({
 			inhibitedSquare: this.isMovePieceModeEnabled() || this.isPlayMoveModeEnabled() ? sq : '-',
 			draggedSquare: sq,
 			hoveredSquare: sq,
-			cursorOffset: { x: evt.clientX - squareBoundary.left, y: evt.clientY - squareBoundary.top },
+			cursorOffset: { x: x0, y: y0 },
 			dragPosition: { x: 0, y: 0 },
 		});
 	}
 
-	handleDrag(sq, dragData) {
+	handleDrag(sq, dx, dy) {
 		let squareSize = this.getSquareSize();
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
+		let targetSq = this.getSquareAt(squareSize, x + dx + this.state.cursorOffset.x, y + dy + this.state.cursorOffset.y);
 		this.setState({
 			hoveredSquare: targetSq,
-			dragPosition: { x: dragData.x, y: dragData.y },
+			dragPosition: { x: dx, y: dy },
 		});
 	}
 
-	handleDragStop(sq, dragData) {
+	handleDragStop(sq, dx, dy) {
 		let squareSize = this.getSquareSize();
 		let { x, y } = this.getSquareCoordinates(squareSize, sq);
-		let targetSq = this.getSquareAt(squareSize, x + dragData.x + this.state.cursorOffset.x, y + dragData.y + this.state.cursorOffset.y);
+		let targetSq = this.getSquareAt(squareSize, x + dx + this.state.cursorOffset.x, y + dy + this.state.cursorOffset.y);
 		this.setState({
 			inhibitedSquare: '-',
 			draggedSquare: '-',
