@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,53 +17,10 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import * as PropTypes from 'prop-types';
-import * as React from 'react';
-
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, isValidSymbol } from './impl/util';
-import TextSymbol from './impl/TextSymbol';
-
-
-/**
- * SVG icon representing a text marker.
- */
-export default function TextMarkerIcon(props) {
-	let size = sanitizeInteger(props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-	if (isNaN(size) || !isValidSymbol(props.symbol)) {
-		return undefined;
-	}
-	let viewBox = `0 0 ${size} ${size}`;
-	return (
-		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<TextSymbol x={size / 2} y={size / 2} size={size} symbol={props.symbol} color={props.color} />
-		</svg>
-	);
+declare module '*.png' {
+	const path: string;
+	export default path;
 }
-
-TextMarkerIcon.propTypes = {
-
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: PropTypes.number.isRequired,
-
-	/**
-	 * Symbol to represent on the icon. Must be one of:
-	 *  - any letter from A to Z (either upper-case or lower-case),
-	 *  - any digit from 0 to 9,
-	 *  - any symbol code among `'plus'`, `'times'`, `'dot'`, or `'circle'`.
-	 */
-	symbol: PropTypes.string.isRequired,
-
-	/**
-	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: PropTypes.string,
-};
-
-TextMarkerIcon.defaultProps = {
-	color: 'currentcolor',
-};

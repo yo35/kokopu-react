@@ -20,17 +20,49 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+import * as React from 'react';
 
-export { Colorset, Pieceset } from './types';
+import { IllegalArgument } from './exception';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger } from './impl/util';
 
-export { SquareMarkerIcon } from './SquareMarkerIcon';
-export { TextMarkerIcon } from './TextMarkerIcon';
-export { ArrowMarkerIcon } from './ArrowMarkerIcon';
+const SQUARE_MARGIN_FACTOR = 0.1;
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { formatMove, moveFormatter } from './formatmove';
-export { default as Chessboard } from './Chessboard';
-export { default as ErrorBox } from './ErrorBox';
-export { default as Movetext } from './Movetext';
+
+interface SquareMarkerIconProps {
+
+	/**
+	 * Width and height (in pixels) of the icon.
+	 */
+	size: number;
+
+	/**
+	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: string;
+}
+
+
+const defaultProps: Partial<SquareMarkerIconProps> = {
+	color: 'currentcolor',
+};
+
+
+/**
+ * SVG icon representing a square marker.
+ */
+export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
+	size = sanitizeInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+	color = String(color);
+	if (isNaN(size)) {
+		throw new IllegalArgument('SquareMarkerIcon');
+	}
+	const margin = Math.round(size * SQUARE_MARGIN_FACTOR);
+	const viewBox = `0 0 ${size} ${size}`;
+	return (
+		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<rect x={margin} y={margin} width={size - margin * 2} height={size - margin * 2} fill={color} />
+		</svg>
+	);
+}
+
+SquareMarkerIcon.defaultProps = defaultProps;

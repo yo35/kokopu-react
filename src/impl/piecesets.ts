@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,8 +17,10 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
+
+import { Pieceset } from '../types';
 
 /* eslint-disable camelcase */
 
@@ -118,101 +120,110 @@ import fantasy_wx from '../sprites/fantasy-wx.png';
 import skulls_bx from '../sprites/skulls-bx.png';
 import skulls_wx from '../sprites/skulls-wx.png';
 
-export default {
-	cburnett: {
-		bb: cburnett_bb,
-		bk: cburnett_bk,
-		bn: cburnett_bn,
-		bp: cburnett_bp,
-		bq: cburnett_bq,
-		br: cburnett_br,
-		bx: cburnett_bx,
-		wb: cburnett_wb,
-		wk: cburnett_wk,
-		wn: cburnett_wn,
-		wp: cburnett_wp,
-		wq: cburnett_wq,
-		wr: cburnett_wr,
-		wx: cburnett_wx,
-	},
-	celtic: {
-		bb: celtic_bb,
-		bk: celtic_bk,
-		bn: celtic_bn,
-		bp: celtic_bp,
-		bq: celtic_bq,
-		br: celtic_br,
-		bx: celtic_bx,
-		wb: celtic_wb,
-		wk: celtic_wk,
-		wn: celtic_wn,
-		wp: celtic_wp,
-		wq: celtic_wq,
-		wr: celtic_wr,
-		wx: celtic_wx,
-	},
-	eyes: {
-		bb: eyes_bb,
-		bk: eyes_bk,
-		bn: eyes_bn,
-		bp: eyes_bp,
-		bq: eyes_bq,
-		br: eyes_br,
-		bx: eyes_spatial_bx,
-		wb: eyes_wb,
-		wk: eyes_wk,
-		wn: eyes_wn,
-		wp: eyes_wp,
-		wq: eyes_wq,
-		wr: eyes_wr,
-		wx: eyes_spatial_wx,
-	},
-	fantasy: {
-		bb: fantasy_bb,
-		bk: fantasy_bk,
-		bn: fantasy_bn,
-		bp: fantasy_bp,
-		bq: fantasy_bq,
-		br: fantasy_br,
-		bx: fantasy_bx,
-		wb: fantasy_wb,
-		wk: fantasy_wk,
-		wn: fantasy_wn,
-		wp: fantasy_wp,
-		wq: fantasy_wq,
-		wr: fantasy_wr,
-		wx: fantasy_wx,
-	},
-	skulls: {
-		bb: skulls_bb,
-		bk: skulls_bk,
-		bn: skulls_bn,
-		bp: skulls_bp,
-		bq: skulls_bq,
-		br: skulls_br,
-		bx: skulls_bx,
-		wb: skulls_wb,
-		wk: skulls_wk,
-		wn: skulls_wn,
-		wp: skulls_wp,
-		wq: skulls_wq,
-		wr: skulls_wr,
-		wx: skulls_wx,
-	},
-	spatial: {
-		bb: spatial_bb,
-		bk: spatial_bk,
-		bn: spatial_bn,
-		bp: spatial_bp,
-		bq: spatial_bq,
-		br: spatial_br,
-		bx: eyes_spatial_bx,
-		wb: spatial_wb,
-		wk: spatial_wk,
-		wn: spatial_wn,
-		wp: spatial_wp,
-		wq: spatial_wq,
-		wr: spatial_wr,
-		wx: eyes_spatial_wx,
-	},
+
+/**
+ * Available piecesets.
+ */
+export const piecesets: Record<string, Pieceset> = {};
+
+piecesets.cburnett = {
+	bb: cburnett_bb,
+	bk: cburnett_bk,
+	bn: cburnett_bn,
+	bp: cburnett_bp,
+	bq: cburnett_bq,
+	br: cburnett_br,
+	bx: cburnett_bx,
+	wb: cburnett_wb,
+	wk: cburnett_wk,
+	wn: cburnett_wn,
+	wp: cburnett_wp,
+	wq: cburnett_wq,
+	wr: cburnett_wr,
+	wx: cburnett_wx,
+};
+
+piecesets.celtic = {
+	bb: celtic_bb,
+	bk: celtic_bk,
+	bn: celtic_bn,
+	bp: celtic_bp,
+	bq: celtic_bq,
+	br: celtic_br,
+	bx: celtic_bx,
+	wb: celtic_wb,
+	wk: celtic_wk,
+	wn: celtic_wn,
+	wp: celtic_wp,
+	wq: celtic_wq,
+	wr: celtic_wr,
+	wx: celtic_wx,
+};
+
+piecesets.eyes = {
+	bb: eyes_bb,
+	bk: eyes_bk,
+	bn: eyes_bn,
+	bp: eyes_bp,
+	bq: eyes_bq,
+	br: eyes_br,
+	bx: eyes_spatial_bx,
+	wb: eyes_wb,
+	wk: eyes_wk,
+	wn: eyes_wn,
+	wp: eyes_wp,
+	wq: eyes_wq,
+	wr: eyes_wr,
+	wx: eyes_spatial_wx,
+};
+
+piecesets.fantasy = {
+	bb: fantasy_bb,
+	bk: fantasy_bk,
+	bn: fantasy_bn,
+	bp: fantasy_bp,
+	bq: fantasy_bq,
+	br: fantasy_br,
+	bx: fantasy_bx,
+	wb: fantasy_wb,
+	wk: fantasy_wk,
+	wn: fantasy_wn,
+	wp: fantasy_wp,
+	wq: fantasy_wq,
+	wr: fantasy_wr,
+	wx: fantasy_wx,
+};
+
+piecesets.skulls = {
+	bb: skulls_bb,
+	bk: skulls_bk,
+	bn: skulls_bn,
+	bp: skulls_bp,
+	bq: skulls_bq,
+	br: skulls_br,
+	bx: skulls_bx,
+	wb: skulls_wb,
+	wk: skulls_wk,
+	wn: skulls_wn,
+	wp: skulls_wp,
+	wq: skulls_wq,
+	wr: skulls_wr,
+	wx: skulls_wx,
+};
+
+piecesets.spatial = {
+	bb: spatial_bb,
+	bk: spatial_bk,
+	bn: spatial_bn,
+	bp: spatial_bp,
+	bq: spatial_bq,
+	br: spatial_br,
+	bx: eyes_spatial_bx,
+	wb: spatial_wb,
+	wk: spatial_wk,
+	wn: spatial_wn,
+	wp: spatial_wp,
+	wq: spatial_wq,
+	wr: spatial_wr,
+	wx: eyes_spatial_wx,
 };

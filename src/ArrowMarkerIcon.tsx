@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,62 +17,66 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
 import './css/arrow.css';
 
-import ArrowTip from './impl/ArrowTip';
+import { IllegalArgument } from './exception';
+import { ArrowTip } from './impl/ArrowTip';
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId } from './impl/util';
 
 const ARROW_THICKNESS_FACTOR = 0.2;
 
 
+interface ArrowMarkerIconProps {
+
+	/**
+	 * Width and height (in pixels) of the icon.
+	 */
+	size: number;
+
+	/**
+	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: string;
+}
+
+
 /**
  * SVG icon representing an arrow marker.
  */
-export default class ArrowMarkerIcon extends React.Component {
+export class ArrowMarkerIcon extends React.Component<ArrowMarkerIconProps> {
 
-	constructor(props) {
+	static defaultProps: Partial<ArrowMarkerIconProps> = {
+		color: 'currentcolor',
+	};
+
+	private arrowTipId: string;
+
+	constructor(props: ArrowMarkerIconProps) {
 		super(props);
 		this.arrowTipId = generateRandomId();
 	}
 
 	render() {
-		let size = sanitizeInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		const size = sanitizeInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		const color = String(this.props.color);
 		if (isNaN(size)) {
-			return undefined;
+			throw new IllegalArgument('ArrowMarkerIcon');
 		}
-		let halfThickness = size * ARROW_THICKNESS_FACTOR / 2;
-		let viewBox = `0 0 ${size} ${size}`;
+		const halfThickness = size * ARROW_THICKNESS_FACTOR / 2;
+		const viewBox = `0 0 ${size} ${size}`;
 		return (
 			<svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
 				<defs>
 					<ArrowTip id={this.arrowTipId} color={this.props.color} />
 				</defs>
-				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={this.props.color}
+				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={color}
 					strokeWidth={halfThickness * 2} markerEnd={`url(#${this.arrowTipId})`} />
 			</svg>
 		);
 	}
 }
-
-ArrowMarkerIcon.propTypes = {
-
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: PropTypes.number.isRequired,
-
-	/**
-	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: PropTypes.string,
-};
-
-ArrowMarkerIcon.defaultProps = {
-	color: 'currentcolor',
-};

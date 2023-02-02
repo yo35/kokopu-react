@@ -43,8 +43,8 @@ export function fillPlaceholder(message: string, ...placeholderValues: unknown[]
 }
 
 
-export function sanitizeInteger(input: number, min: number, max: number) {
-	return Math.min(Math.max(Math.round(input), min), max);
+export function sanitizeInteger(input: unknown, min: number, max: number) {
+	return Math.min(Math.max(Math.round(Number(input)), min), max);
 }
 
 
@@ -55,14 +55,4 @@ export function isValidSquare(sq: string) {
 
 export function isValidVector(vect: string) {
 	return /^[a-h][1-8][a-h][1-8]$/.test(vect);
-}
-
-
-export function isValidColor(color: string) {
-	return color === 'b' || color === 'g' || color === 'r' || color === 'y';
-}
-
-
-export function isValidSymbol(symbol: string) {
-	return /^(?:[A-Za-z0-9]|plus|times|dot|circle)$/.test(symbol);
 }

@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,47 +17,31 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
-
-
-import * as PropTypes from 'prop-types';
-import * as React from 'react';
-
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger } from './impl/util';
-
-const SQUARE_MARGIN_FACTOR = 0.1;
+ * -------------------------------------------------------------------------- */
 
 
 /**
- * SVG icon representing a square marker.
+ * This module defines the localizable strings used by the library.
  */
-export default function SquareMarkerIcon(props) {
-	let size = sanitizeInteger(props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-	if (isNaN(size)) {
-		return undefined;
-	}
-	let margin = Math.round(size * SQUARE_MARGIN_FACTOR);
-	let viewBox = `0 0 ${size} ${size}`;
-	return (
-		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<rect x={margin} y={margin} width={size - margin*2} height={size - margin*2} fill={props.color} />
-		</svg>
-	);
+export namespace i18n {
+
+/* eslint-disable prefer-const */
+// WARNING: all those constants must be declared with "let" to allow them to be re-defined if necessary by consumer codes.
+
+// Error box
+export let LINE = 'line {0}';
+
+// Chessboard
+export let INVALID_FEN_ERROR_TITLE = 'Invalid FEN string.';
+export let INVALID_NOTATION_ERROR_TITLE = 'Invalid move notation.';
+export let INVALID_POSITION_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "position" attribute.';
+export let INVALID_MOVE_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "move" attribute.';
+
+// Movetext
+export let PIECE_SYMBOLS = { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' };
+export let ANNOTATED_BY = 'Annotated by {0}';
+export let INVALID_PGN_ERROR_TITLE = 'Invalid PGN string.';
+export let INVALID_GAME_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "game" attribute.';
+export let INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "game index" attribute.';
+
 }
-
-SquareMarkerIcon.propTypes = {
-
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: PropTypes.number.isRequired,
-
-	/**
-	 * Color to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: PropTypes.string,
-};
-
-SquareMarkerIcon.defaultProps = {
-	color: 'currentcolor',
-};

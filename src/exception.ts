@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,33 +17,31 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
-
-
-import * as PropTypes from 'prop-types';
-import * as React from 'react';
+ * -------------------------------------------------------------------------- */
 
 
 /**
- * Tip of the arrow markers.
+ * This module contains the exceptions used by the library.
+ * @module
  */
-export default function ArrowTip(props) {
-	return (
-		<marker id={props.id} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto">
-			<path fill={props.color} d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
-		</marker>
-	);
+
+
+/**
+ * Exception thrown when an invalid argument is passed to a function or a component.
+ */
+export class IllegalArgument {
+
+	/** Name of the function or component that raises the exception. */
+	functionOrComponentName: string;
+
+	constructor(functionOrComponentName: string) {
+		this.functionOrComponentName = functionOrComponentName;
+	}
+
+	/**
+	 * @ignore
+	 */
+	toString(): string {
+		return `Illegal argument in function or component ${this.functionOrComponentName}`;
+	}
 }
-
-ArrowTip.propTypes = {
-
-	/**
-	 * ID of the element.
-	 */
-	id: PropTypes.string.isRequired,
-
-	/**
-	 * Color to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: PropTypes.string.isRequired,
-};

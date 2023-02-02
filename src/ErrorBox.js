@@ -23,7 +23,7 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import i18n from './i18n';
+import { i18n } from './i18n';
 import { fillPlaceholder } from './impl/util';
 
 import './css/error_box.css';

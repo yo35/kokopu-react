@@ -20,17 +20,53 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+import * as React from 'react';
 
-export { Colorset, Pieceset } from './types';
+import { IllegalArgument } from './exception';
+import { AnnotationSymbol, isAnnotationSymbol } from './types';
+import { AnnotationSymbolShape } from './impl/AnnotationSymbolShape';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger } from './impl/util';
 
-export { SquareMarkerIcon } from './SquareMarkerIcon';
-export { TextMarkerIcon } from './TextMarkerIcon';
-export { ArrowMarkerIcon } from './ArrowMarkerIcon';
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
-export { formatMove, moveFormatter } from './formatmove';
-export { default as Chessboard } from './Chessboard';
-export { default as ErrorBox } from './ErrorBox';
-export { default as Movetext } from './Movetext';
+interface TextMarkerIconProps {
+
+	/**
+	 * Width and height (in pixels) of the icon.
+	 */
+	size: number;
+
+	/**
+	 * Symbol to represent on the icon.
+	 */
+	symbol: AnnotationSymbol;
+
+	/**
+	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: string;
+}
+
+
+const defaultProps: Partial<TextMarkerIconProps> = {
+	color: 'currentcolor',
+};
+
+
+/**
+ * SVG icon representing a text marker.
+ */
+export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
+	size = sanitizeInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+	color = String(color);
+	if (isNaN(size) || !isAnnotationSymbol(symbol)) {
+		throw new IllegalArgument('TextMarkerIcon');
+	}
+	const viewBox = `0 0 ${size} ${size}`;
+	return (
+		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<AnnotationSymbolShape x={size / 2} y={size / 2} size={size} symbol={symbol} color={color} />
+		</svg>
+	);
+}
+
+TextMarkerIcon.defaultProps = defaultProps;

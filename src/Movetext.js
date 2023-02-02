@@ -29,7 +29,7 @@ import { fillPlaceholder } from './impl/util';
 import Chessboard from './Chessboard';
 import ErrorBox from './ErrorBox';
 import { moveFormatter } from './formatmove';
-import i18n from './i18n';
+import { i18n } from './i18n';
 
 import './css/movetext.css';
 

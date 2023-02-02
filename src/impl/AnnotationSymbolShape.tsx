@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,60 +17,62 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
 import '../css/symbol.css';
+
+import { AnnotationSymbol } from '../types';
 
 const SHAPE_THICKNESS_FACTOR = 0.1;
 const DOT_RADIUS_FACTOR = 0.15;
 const CIRCLE_RADIUS_FACTOR = 0.425;
 
 
-/**
- * Symbol of a text marker.
- */
-export default function TextSymbol(props) {
-	if (props.symbol === 'dot') {
-		return <circle cx={props.x} cy={props.y} r={props.size * DOT_RADIUS_FACTOR} fill={props.color} />;
-	}
-	else if (props.symbol === 'circle') {
-		let thickness = props.size * SHAPE_THICKNESS_FACTOR;
-		return <circle className="kokopu-symbolCircle" cx={props.x} cy={props.y} r={props.size * CIRCLE_RADIUS_FACTOR} stroke={props.color} strokeWidth={thickness} />;
-	}
-	else {
-		let symbol = props.symbol === 'plus' ? '+' : props.symbol === 'times' ? '\u00d7' : props.symbol;
-		return <text className="kokopu-symbolText" x={props.x} y={props.y} fill={props.color} fontSize={props.size}>{symbol}</text>;
-	}
-}
-
-TextSymbol.propTypes = {
+interface AnnotationSymbolShapeProps {
 
 	/**
 	 * X-coordinate of the center of the symbol.
 	 */
-	x: PropTypes.number.isRequired,
+	x: number;
 
 	/**
 	 * Y-coordinate of the center of the symbol.
 	 */
-	y: PropTypes.number.isRequired,
+	y: number;
 
 	/**
 	 * Size of the symbol (i.e. size of square in which the symbol is rendered).
 	 */
-	size: PropTypes.number.isRequired,
+	size: number;
 
 	/**
 	 * Symbol code.
 	 */
-	symbol: PropTypes.string.isRequired,
+	symbol: AnnotationSymbol;
 
 	/**
-	 * Color to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
+	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
 	 */
-	color: PropTypes.string.isRequired,
-};
+	color: string;
+}
+
+
+/**
+ * Symbol of a text marker.
+ */
+export function AnnotationSymbolShape({ x, y, size, symbol, color }: AnnotationSymbolShapeProps) {
+	if (symbol === 'dot') {
+		return <circle cx={x} cy={y} r={size * DOT_RADIUS_FACTOR} fill={color} />;
+	}
+	else if (symbol === 'circle') {
+		const thickness = size * SHAPE_THICKNESS_FACTOR;
+		return <circle className="kokopu-symbolCircle" cx={x} cy={y} r={size * CIRCLE_RADIUS_FACTOR} stroke={color} strokeWidth={thickness} />;
+	}
+	else {
+		const text = symbol === 'plus' ? '+' : symbol === 'times' ? '\u00d7' : symbol;
+		return <text className="kokopu-symbolText" x={x} y={y} fill={color} fontSize={size}>{text}</text>;
+	}
+}

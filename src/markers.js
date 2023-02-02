@@ -20,7 +20,8 @@
  ******************************************************************************/
 
 
-import { isValidSquare, isValidVector, isValidColor, isValidSymbol } from './impl/util';
+import { isAnnotationSymbol, isAnnotationColor } from './types';
+import { isValidSquare, isValidVector } from './impl/util';
 
 
 /**
@@ -31,7 +32,7 @@ import { isValidSquare, isValidVector, isValidColor, isValidSymbol } from './imp
  */
 export function flattenSquareMarkers(markers) {
 	return Object.entries(markers)
-		.filter(([ sq, color ]) => isValidSquare(sq) && isValidColor(color))
+		.filter(([ sq, color ]) => isValidSquare(sq) && isAnnotationColor(color))
 		.sort((a, b) => a[0].localeCompare(b[0]))
 		.map(([ sq, color ]) => color.toUpperCase() + sq)
 		.join(',');
@@ -46,7 +47,7 @@ export function flattenSquareMarkers(markers) {
  */
 export function flattenTextMarkers(markers) {
 	return Object.entries(markers)
-		.filter(([ sq, desc ]) => isValidSquare(sq) && desc && isValidColor(desc.color) && isValidSymbol(desc.symbol))
+		.filter(([ sq, desc ]) => isValidSquare(sq) && desc && isAnnotationColor(desc.color) && isAnnotationSymbol(desc.symbol))
 		.sort((a, b) => a[0].localeCompare(b[0]))
 		.map(([ sq, desc ]) => desc.color.toUpperCase() + (desc.symbol.length === 1 ? desc.symbol : '(' + desc.symbol + ')') + sq)
 		.join(',');
@@ -61,7 +62,7 @@ export function flattenTextMarkers(markers) {
  */
 export function flattenArrowMarkers(markers) {
 	return Object.entries(markers)
-		.filter(([ vect, color ]) => isValidVector(vect) && isValidColor(color))
+		.filter(([ vect, color ]) => isValidVector(vect) && isAnnotationColor(color))
 		.sort((a, b) => a[0].localeCompare(b[0]))
 		.map(([ vect, color ]) => color.toUpperCase() + vect)
 		.join(',');
