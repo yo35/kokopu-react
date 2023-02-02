@@ -22,7 +22,7 @@
 
 import React from 'react';
 import testApp from './common/test_app';
-import { Movetext, i18n } from '../src/index';
+import { Movetext, i18n } from '../dist/lib/index';
 
 import pgn from './common/games.pgn';
 

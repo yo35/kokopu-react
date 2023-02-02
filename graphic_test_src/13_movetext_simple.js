@@ -23,7 +23,7 @@
 import React from 'react';
 import { Game, pgnRead } from 'kokopu';
 import testApp from './common/test_app';
-import { Movetext } from '../src/index';
+import { Movetext } from '../dist/lib/index';
 
 import pgn from './common/games.pgn';
 

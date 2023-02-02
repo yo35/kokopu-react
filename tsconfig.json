@@ -1,0 +1,15 @@
+{
+	"include": [ "./src/**/*" ],
+	"compilerOptions": {
+		"outDir": "./dist/lib",
+		"module": "es2020",
+		"target": "es2020",
+		"jsx": "react",
+		"sourceMap": true,
+		"declaration": true,
+		"allowJs": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node"
+	}
+}

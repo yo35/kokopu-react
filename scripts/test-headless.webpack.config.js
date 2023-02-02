@@ -26,7 +26,7 @@ module.exports = {
 	mode: 'development',
 	devtool: 'inline-source-map',
 	entry: {
-		index: './src/index',
+		index: './dist/lib/index',
 	},
 	output: {
 		path: path.resolve(__dirname, '../build/test_headless'),
@@ -55,5 +55,5 @@ module.exports = {
 				use: 'null-loader',
 			},
 		],
-	}
+	},
 };

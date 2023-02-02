@@ -22,7 +22,7 @@
 
 import React from 'react';
 import testApp from './common/test_app';
-import { Chessboard } from '../src/index';
+import { Chessboard } from '../dist/lib/index';
 
 window['__kokopu_debug_freeze_motion'] = 0.09;
 

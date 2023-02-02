@@ -22,7 +22,7 @@
 
 import React from 'react';
 import testApp from './common/test_app';
-import { Chessboard } from '../src/index';
+import { Chessboard } from '../dist/lib/index';
 
 let squareMarkers1 = 'Ba1,Ba2,Gb1,Gb2,Rc1,Rc2,Yd1,Yd2';
 let arrowMarkers1 = 'Ba8b6,Gb8c6,Re8f6,Yf8g6';

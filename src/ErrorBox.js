@@ -20,8 +20,8 @@
  ******************************************************************************/
 
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
 
 import i18n from './i18n';
 import { fillPlaceholder } from './impl/util';

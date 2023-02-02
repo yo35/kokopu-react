@@ -3,6 +3,7 @@ env:
   mocha: true
 
 rules:
-  no-shadow: [ error, { builtinGlobals: true, allow: [ test ] }]
-  prefer-arrow-callback: [ off ] # arrow functions are discouraged in Mocha
-  no-invalid-this: [ off ] # the rule is incompatible with the use of Mocha contexts
+  '@typescript-eslint/no-shadow':       [ error, { builtinGlobals: true, allow: [ test ] }]
+  '@typescript-eslint/no-var-requires': [ off ]
+  prefer-arrow-callback:                [ off ] # TODO unplug
+  no-invalid-this:                      [ off ] # the rule is incompatible with the use of Mocha contexts

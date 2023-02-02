@@ -22,7 +22,7 @@
 
 import React from 'react';
 import testApp, { setSandbox } from './common/test_app';
-import { Chessboard } from '../src/index';
+import { Chessboard } from '../dist/lib/index';
 
 function onPieceMoved(from, to) {
 	setSandbox(`piece moved: ${from} -> ${to}`);

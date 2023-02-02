@@ -67,7 +67,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
+				use: [ 'style-loader', 'css-loader' ],
 			},
 			{
 				test: /\.(png|woff|woff2|txt)$/i,
@@ -78,5 +78,5 @@ module.exports = {
 				type: 'asset/source',
 			},
 		],
-	}
+	},
 };

@@ -2,22 +2,24 @@ env:
   browser: true
   es2021: true
 
-extends:
-  - 'eslint:recommended'
-  - 'plugin:react/recommended'
-
-parserOptions:
-  ecmaFeatures:
-    jsx: true
-  ecmaVersion: 12
-  sourceType: module
-
 plugins:
+  - '@typescript-eslint'
   - react
 
 settings:
   react:
     version: 18.2.0
+
+extends:
+  - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'plugin:react/recommended'
+
+parser: '@typescript-eslint/parser'
+
+parserOptions:
+  ecmaVersion: 12
+  sourceType: module
 
 rules:
 
@@ -36,7 +38,9 @@ rules:
   curly:                        [ error, all ]
   eqeqeq:                       [ error, always ]
   no-alert:                     [ error ]
+  no-confusing-arrow:           [ error ]
   no-constructor-return:        [ error ]
+  no-duplicate-imports:         [ error ]
   no-eval:                      [ error ]
   no-extend-native:             [ error ]
   no-floating-decimal:          [ error ]
@@ -56,24 +60,25 @@ rules:
   no-throw-literal:             [ error ]
   no-unmodified-loop-condition: [ error ]
   no-unused-expressions:        [ error ]
+  no-useless-computed-key:      [ error ]
   no-useless-concat:            [ error ]
+  no-useless-rename:            [ error ]
   no-useless-return:            [ error ]
+  no-var:                       [ error ]
   no-warning-comments:          [ warn, { location: anywhere, terms: [ TODO ] }]
+  prefer-arrow-callback:        [ error ]
+  # TODO replug prefer-const:                 [ error ]
   prefer-regex-literals:        [ error ]
+  prefer-rest-params:           [ error ]
+  rest-spread-spacing:          [ error ]
 
-  # Additional rules (variables)
-  no-shadow: [ error, { builtinGlobals: true }]
-
-  # Additional rules (ES6)
-  no-confusing-arrow:      [ error ]
-  no-duplicate-imports:    [ error ]
-  no-useless-computed-key: [ error ]
-  no-useless-constructor:  [ error ]
-  no-useless-rename:       [ error ]
-  no-var:                  [ error ]
-  prefer-arrow-callback:   [ error ]
-  prefer-rest-params:      [ error ]
-  rest-spread-spacing:     [ error ]
+  # Additional rules (typescript)
+  '@typescript-eslint/no-shadow': [ error, { builtinGlobals: true }]
 
   # Relaxed rules
   no-constant-condition: [ error, { checkLoops: false }]
+
+  # Relaxed rules (typescript)
+  '@typescript-eslint/no-non-null-assertion': [ off ]
+  '@typescript-eslint/no-namespace':          [ off ]
+  '@typescript-eslint/no-empty-function':     [ error, { allow: [ private-constructors, protected-constructors ] }]

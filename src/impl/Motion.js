@@ -20,8 +20,8 @@
  ******************************************************************************/
 
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
 
 const DEBUG_KEY = '__kokopu_debug_freeze_motion';
 

@@ -20,8 +20,8 @@
  ******************************************************************************/
 
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
 
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, isValidSymbol } from './impl/util';
 import TextSymbol from './impl/TextSymbol';

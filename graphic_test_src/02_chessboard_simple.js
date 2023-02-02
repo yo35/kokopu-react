@@ -23,7 +23,7 @@
 import React from 'react';
 import { Position } from 'kokopu';
 import testApp from './common/test_app';
-import { Chessboard } from '../src/index';
+import { Chessboard } from '../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard />,

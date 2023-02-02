@@ -22,7 +22,7 @@
 
 import React from 'react';
 import testApp from './common/test_app';
-import { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../src/index';
+import { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
 	<SquareMarkerIcon size={40} />,

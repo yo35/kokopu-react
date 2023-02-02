@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 
-import React from 'react';
+import * as React from 'react';
 import * as htmlparser2 from 'htmlparser2';
 
 

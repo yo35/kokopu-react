@@ -20,8 +20,8 @@
  ******************************************************************************/
 
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
 import { exception, MoveDescriptor, Position, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
 
 import colorsets from './impl/colorsets';

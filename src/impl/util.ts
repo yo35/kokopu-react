@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,7 +17,7 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 export const MIN_SQUARE_SIZE = 12;
@@ -25,7 +25,7 @@ export const MAX_SQUARE_SIZE = 96;
 
 
 export function generateRandomId() {
-	let buffer = new Uint32Array(8);
+	const buffer = new Uint32Array(8);
 	crypto.getRandomValues(buffer);
 	let result = '';
 	for (let i = 0; i < buffer.length; ++i) {
@@ -35,34 +35,34 @@ export function generateRandomId() {
 }
 
 
-export function fillPlaceholder(message, ...placeholderValues) {
+export function fillPlaceholder(message: string, ...placeholderValues: unknown[]) {
 	return message.replace(/{(\d+)}/g, (match, placeholder) => {
 		const placeholderIndex = Number(placeholder);
-		return placeholderIndex < placeholderValues.length ? placeholderValues[placeholderIndex] : match;
+		return placeholderIndex < placeholderValues.length ? String(placeholderValues[placeholderIndex]) : match;
 	});
 }
 
 
-export function sanitizeInteger(input, min, max) {
+export function sanitizeInteger(input: number, min: number, max: number) {
 	return Math.min(Math.max(Math.round(input), min), max);
 }
 
 
-export function isValidSquare(sq) {
+export function isValidSquare(sq: string) {
 	return /^[a-h][1-8]$/.test(sq);
 }
 
 
-export function isValidVector(vect) {
+export function isValidVector(vect: string) {
 	return /^[a-h][1-8][a-h][1-8]$/.test(vect);
 }
 
 
-export function isValidColor(color) {
+export function isValidColor(color: string) {
 	return color === 'b' || color === 'g' || color === 'r' || color === 'y';
 }
 
 
-export function isValidSymbol(symbol) {
+export function isValidSymbol(symbol: string) {
 	return /^(?:[A-Za-z0-9]|plus|times|dot|circle)$/.test(symbol);
 }
