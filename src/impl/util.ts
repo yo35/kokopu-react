@@ -46,13 +46,3 @@ export function fillPlaceholder(message: string, ...placeholderValues: unknown[]
 export function sanitizeInteger(input: unknown, min: number, max: number) {
 	return Math.min(Math.max(Math.round(Number(input)), min), max);
 }
-
-
-export function isValidSquare(sq: string) {
-	return /^[a-h][1-8]$/.test(sq);
-}
-
-
-export function isValidVector(vect: string) {
-	return /^[a-h][1-8][a-h][1-8]$/.test(vect);
-}

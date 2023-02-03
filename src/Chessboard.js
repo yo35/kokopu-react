@@ -22,7 +22,7 @@
 
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { exception, MoveDescriptor, Position, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
+import { exception, MoveDescriptor, Position, isSquare, isSquareCouple, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
 
 import { colorsets } from './impl/colorsets';
 import { piecesets } from './impl/piecesets';
@@ -32,9 +32,8 @@ import DraggableHandle from './impl/DraggableHandle';
 import Motion from './impl/Motion';
 import ErrorBox from './ErrorBox';
 import { i18n } from './i18n';
-import { parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './markers';
-import { isAnnotationSymbol, isAnnotationColor } from './types';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId, isValidSquare, isValidVector } from './impl/util';
+import { isAnnotationSymbol, isAnnotationColor, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId } from './impl/util';
 
 import './css/chessboard.css';
 import './css/arrow.css';
@@ -176,9 +175,9 @@ export default class Chessboard extends React.Component {
 	renderBoardContentStill(position, move, squareSize, colorset, pieceset) {
 
 		// Compute the annotations.
-		let sqm = parseMarkers(this.props.squareMarkers, parseSquareMarkers, isValidSquare, isAnnotationColor);
-		let txtm = parseMarkers(this.props.textMarkers, parseTextMarkers, isValidSquare, value => value && isAnnotationSymbol(value.symbol) && isAnnotationColor(value.color));
-		let arm = parseMarkers(this.props.arrowMarkers, parseArrowMarkers, isValidVector, isAnnotationColor);
+		let sqm = parseMarkers(this.props.squareMarkers, parseSquareMarkers, isSquare, isAnnotationColor);
+		let txtm = parseMarkers(this.props.textMarkers, parseTextMarkers, isSquare, value => value && isAnnotationSymbol(value.symbol) && isAnnotationColor(value.color));
+		let arm = parseMarkers(this.props.arrowMarkers, parseArrowMarkers, isSquareCouple, isAnnotationColor);
 
 		// Render the square-related objects.
 		let pieces = [];

@@ -30,7 +30,7 @@
 		".nycrc.yml"
 	],
 	"peerDependencies": {
-		"kokopu": "^4.0.1",
+		"kokopu": "^4.3.0",
 		"react": "17.x.x || 18.x.x"
 	},
 	"dependencies": {

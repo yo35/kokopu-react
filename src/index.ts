@@ -23,13 +23,13 @@
 export { i18n } from './i18n';
 export * as exception from './exception';
 
-export { Colorset, Pieceset } from './types';
+export { Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, isAnnotationColor, isAnnotationSymbol,
+	flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
 
 export { SquareMarkerIcon } from './SquareMarkerIcon';
 export { TextMarkerIcon } from './TextMarkerIcon';
 export { ArrowMarkerIcon } from './ArrowMarkerIcon';
 
-export { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } from './markers';
 export { formatMove, moveFormatter } from './formatmove';
 export { default as Chessboard } from './Chessboard';
 export { default as ErrorBox } from './ErrorBox';
