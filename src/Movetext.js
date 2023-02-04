@@ -27,7 +27,7 @@ import { exception, Database, Game, nagSymbol, pgnRead } from 'kokopu';
 import HtmlSanitizer from './impl/HtmlSanitizer';
 import { fillPlaceholder } from './impl/util';
 import Chessboard from './Chessboard';
-import ErrorBox from './ErrorBox';
+import { ErrorBox } from './ErrorBox';
 import { moveFormatter } from './formatmove';
 import { i18n } from './i18n';
 

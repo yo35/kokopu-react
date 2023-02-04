@@ -23,7 +23,8 @@
 import * as React from 'react';
 
 import { IllegalArgument } from './exception';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger } from './impl/util';
+import { sanitizeString, sanitizeBoundedInteger } from './sanitization';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './types';
 
 const SQUARE_MARGIN_FACTOR = 0.1;
 
@@ -51,11 +52,12 @@ const defaultProps: Partial<SquareMarkerIconProps> = {
  * SVG icon representing a square marker.
  */
 export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
-	size = sanitizeInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-	color = String(color);
-	if (isNaN(size)) {
-		throw new IllegalArgument('SquareMarkerIcon');
-	}
+
+	// Sanitize the inputs.
+	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon'));
+	color = sanitizeString(color);
+
+	// Render the component.
 	const margin = Math.round(size * SQUARE_MARGIN_FACTOR);
 	const viewBox = `0 0 ${size} ${size}`;
 	return (

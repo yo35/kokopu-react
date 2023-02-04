@@ -25,8 +25,11 @@ import * as React from 'react';
 import './css/arrow.css';
 
 import { IllegalArgument } from './exception';
+import { sanitizeString, sanitizeBoundedInteger } from './sanitization';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './types';
+
 import { ArrowTip } from './impl/ArrowTip';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId } from './impl/util';
+import { generateRandomId } from './impl/util';
 
 const ARROW_THICKNESS_FACTOR = 0.2;
 
@@ -62,11 +65,12 @@ export class ArrowMarkerIcon extends React.Component<ArrowMarkerIconProps> {
 	}
 
 	render() {
-		const size = sanitizeInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-		const color = String(this.props.color);
-		if (isNaN(size)) {
-			throw new IllegalArgument('ArrowMarkerIcon');
-		}
+
+		// Sanitize the inputs.
+		const size = sanitizeBoundedInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ArrowMarkerIcon'));
+		const color = sanitizeString(this.props.color);
+
+		// Render the component.
 		const halfThickness = size * ARROW_THICKNESS_FACTOR / 2;
 		const viewBox = `0 0 ${size} ${size}`;
 		return (

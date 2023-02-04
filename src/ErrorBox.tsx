@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,13 +17,15 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
+import { IllegalArgument } from './exception';
 import { i18n } from './i18n';
+import { sanitizeString, sanitizeInteger, sanitizeOptional } from './sanitization';
+
 import { fillPlaceholder } from './impl/util';
 
 import './css/error_box.css';
@@ -32,70 +34,79 @@ const BACKWARD_CHARACTERS = 5;
 const FORWARD_CHARACTERS = 36;
 
 
+interface ErrorBoxProps {
+
+	/**
+	 * Title of the error box.
+	 */
+	title: string;
+
+	/**
+	 * Additional message providing details about the error.
+	 */
+	message: string;
+
+	/**
+	 * Raw text whose processing results in the error.
+	 */
+	text?: string;
+
+	/**
+	 * Index of the character within `text` that results in the error.
+	 */
+	errorIndex?: number;
+
+	/**
+	 * Index (1-based) of the line in which is the character that results in the error.
+	 */
+	lineNumber?: number;
+}
+
 
 /**
  * Display an error message.
  */
-export default function ErrorBox(props) {
-	let excerpt = typeof props.text === 'string' && props.errorIndex >= 0 && props.errorIndex < props.text.length ?
-		<div className="kokopu-errorExcerpt">{ellipsisAt(props.text, props.errorIndex, BACKWARD_CHARACTERS, FORWARD_CHARACTERS, props.lineNumber)}</div> : undefined;
+export function ErrorBox({ title, message, text, errorIndex, lineNumber }: ErrorBoxProps) {
+
+	// Sanitize the inputs.
+	title = sanitizeString(title);
+	message = sanitizeString(message);
+	text = sanitizeOptional(text, sanitizeString);
+	errorIndex = sanitizeOptional(errorIndex, val => sanitizeInteger(val, () => new IllegalArgument('ErrorBox')));
+	lineNumber = sanitizeOptional(lineNumber, val => sanitizeInteger(val, () => new IllegalArgument('ErrorBox')));
+
+	// Render the component.
+	let excerpt = undefined;
+	if (text && errorIndex && errorIndex >= 0 && errorIndex < text.length) {
+		excerpt = <div className="kokopu-errorExcerpt">{ellipsisAt(text, errorIndex, BACKWARD_CHARACTERS, FORWARD_CHARACTERS, lineNumber)}</div>;
+	}
 	return (
 		<div className="kokopu-errorBox">
-			<div className="kokopu-errorTitle">{props.title}</div>
-			<div className="kokopu-errorMessage">{props.message}</div>
+			<div className="kokopu-errorTitle">{title}</div>
+			<div className="kokopu-errorMessage">{message}</div>
 			{excerpt}
 		</div>
 	);
 }
 
 
-ErrorBox.propTypes = {
-
-	/**
-	 * Title of the error box.
-	 */
-	title: PropTypes.string.isRequired,
-
-	/**
-	 * Additional message providing details about the error.
-	 */
-	message: PropTypes.string.isRequired,
-
-	/**
-	 * Raw text whose processing results in the error.
-	 */
-	text: PropTypes.string,
-
-	/**
-	 * Index of the character within `text` that results in the error.
-	 */
-	errorIndex: PropTypes.number,
-
-	/**
-	 * Index (1-based) of the line in which is the character that results in the error.
-	 */
-	lineNumber: PropTypes.number,
-};
-
-
 /**
  * Ellipsis function.
  *
- * Example: if `text` is `0123456789`, then `ellipsis(text, 5, 1, 3)` returns
+ * Example: if `text` is `0123456789`, then `ellipsis(text, 5, 1, 3, 42)` returns
  * the following string:
  *
  * ```
  * ...45678...
- *     ^
+ *     ^ (line 42)
  * ```
  *
- * @param {string} text Text from a substring must be extracted.
- * @param {number} pos Index of the character in `text` around which the substring must be extracted.
- * @param {number} backwardCharacters Number of characters to keep before `pos`.
- * @param {number} forwardCharacters Number of characters to keep after `pos`.
- * @returns {string}
+ * @param text - Text from a substring must be extracted.
+ * @param pos - Index of the character in `text` around which the substring must be extracted.
+ * @param backwardCharacters - Number of characters to keep before `pos`.
+ * @param forwardCharacters - Number of characters to keep after `pos`.
  */
-function ellipsisAt(text, pos, backwardCharacters, forwardCharacters, lineNumber) {
+function ellipsisAt(text: string, pos: number, backwardCharacters: number, forwardCharacters: number, lineNumber?: number) {
 
 	// p1 => begin of the extracted sub-string
 	let p1 = pos;

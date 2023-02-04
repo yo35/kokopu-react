@@ -26,6 +26,17 @@ import { IllegalArgument } from './exception';
 
 
 /**
+ * Minimum square size in a {@link Chessboard} component.
+ */
+export const MIN_SQUARE_SIZE = 12;
+
+/**
+ * Maximum square size in a {@link Chessboard} component.
+ */
+export const MAX_SQUARE_SIZE = 96;
+
+
+/**
  * Set of parameters describing the colors to use to render a {@link Chessboard} component.
  *
  * Each color is defined as string, that must be interpreted as a [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).

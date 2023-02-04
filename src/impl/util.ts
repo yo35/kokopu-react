@@ -20,10 +20,6 @@
  * -------------------------------------------------------------------------- */
 
 
-export const MIN_SQUARE_SIZE = 12;
-export const MAX_SQUARE_SIZE = 96;
-
-
 export function generateRandomId() {
 	const buffer = new Uint32Array(8);
 	crypto.getRandomValues(buffer);
@@ -40,9 +36,4 @@ export function fillPlaceholder(message: string, ...placeholderValues: unknown[]
 		const placeholderIndex = Number(placeholder);
 		return placeholderIndex < placeholderValues.length ? String(placeholderValues[placeholderIndex]) : match;
 	});
-}
-
-
-export function sanitizeInteger(input: unknown, min: number, max: number) {
-	return Math.min(Math.max(Math.round(Number(input)), min), max);
 }

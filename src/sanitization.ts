@@ -20,18 +20,33 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+import { IllegalArgument } from './exception';
 
-export { Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, isAnnotationColor, isAnnotationSymbol,
-	flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
 
-export { SquareMarkerIcon } from './SquareMarkerIcon';
-export { TextMarkerIcon } from './TextMarkerIcon';
-export { ArrowMarkerIcon } from './ArrowMarkerIcon';
+export function sanitizeString(input: string): string {
+	return String(input);
+}
 
-export { ErrorBox } from './ErrorBox';
 
-export { formatMove, moveFormatter } from './formatmove';
-export { default as Chessboard } from './Chessboard';
-export { default as Movetext } from './Movetext';
+export function sanitizeBoolean(input: boolean): boolean {
+	return Boolean(input);
+}
+
+
+export function sanitizeInteger(input: number, exceptionBuilder: () => IllegalArgument): number {
+	const val = Math.round(Number(input));
+	if (!Number.isInteger(val)) {
+		throw exceptionBuilder;
+	}
+	return val;
+}
+
+
+export function sanitizeBoundedInteger(input: number, min: number, max: number, exceptionBuilder: () => IllegalArgument) {
+	return Math.min(Math.max(sanitizeInteger(input, exceptionBuilder), min), max);
+}
+
+
+export function sanitizeOptional<T>(input: T | undefined, sanitizationFunction: (val: T) => T): T | undefined {
+	return input === undefined || input === null ? undefined : sanitizationFunction(input);
+}

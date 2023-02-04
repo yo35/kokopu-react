@@ -23,9 +23,10 @@
 import * as React from 'react';
 
 import { IllegalArgument } from './exception';
-import { AnnotationSymbol, isAnnotationSymbol } from './types';
+import { sanitizeString, sanitizeBoundedInteger } from './sanitization';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, AnnotationSymbol, isAnnotationSymbol } from './types';
+
 import { AnnotationSymbolShape } from './impl/AnnotationSymbolShape';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger } from './impl/util';
 
 
 interface TextMarkerIconProps {
@@ -56,11 +57,15 @@ const defaultProps: Partial<TextMarkerIconProps> = {
  * SVG icon representing a text marker.
  */
 export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
-	size = sanitizeInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
-	color = String(color);
-	if (isNaN(size) || !isAnnotationSymbol(symbol)) {
+
+	// Sanitize the inputs.
+	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon'));
+	if (!isAnnotationSymbol(symbol)) {
 		throw new IllegalArgument('TextMarkerIcon');
 	}
+	color = sanitizeString(color);
+
+	// Render the component.
 	const viewBox = `0 0 ${size} ${size}`;
 	return (
 		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>

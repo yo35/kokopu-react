@@ -30,10 +30,11 @@ import { AnnotationSymbolShape } from './impl/AnnotationSymbolShape';
 import { ArrowTip } from './impl/ArrowTip';
 import DraggableHandle from './impl/DraggableHandle';
 import Motion from './impl/Motion';
-import ErrorBox from './ErrorBox';
+import { ErrorBox } from './ErrorBox';
 import { i18n } from './i18n';
-import { isAnnotationSymbol, isAnnotationColor, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, sanitizeInteger, generateRandomId } from './impl/util';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, isAnnotationSymbol, isAnnotationColor, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+import { sanitizeBoundedInteger } from './sanitization';
+import { generateRandomId } from './impl/util';
 
 import './css/chessboard.css';
 import './css/arrow.css';
@@ -565,9 +566,9 @@ export default class Chessboard extends React.Component {
 	 * Return the (sanitized) square size.
 	 */
 	getSquareSize() {
-		let squareSize = sanitizeInteger(this.props.squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
+		let squareSize = sanitizeBoundedInteger(this.props.squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE);
 		let limit = computeSmallScreenLimits('squareSize', this.props.smallScreenLimits, this.state.windowWidth);
-		return isNaN(limit) ? squareSize : sanitizeInteger(limit, MIN_SQUARE_SIZE, squareSize);
+		return isNaN(limit) ? squareSize : sanitizeBoundedInteger(limit, MIN_SQUARE_SIZE, squareSize);
 	}
 
 	/**
@@ -648,7 +649,7 @@ export default class Chessboard extends React.Component {
 			let squareSizeLimit = computeSmallScreenLimits('squareSize', smallScreenLimits, window.innerWidth);
 			let coordinateVisibleLimit = computeSmallScreenLimits('coordinateVisible', smallScreenLimits, window.innerWidth);
 			if (!isNaN(squareSizeLimit)) {
-				squareSize = sanitizeInteger(squareSizeLimit, MIN_SQUARE_SIZE, squareSize);
+				squareSize = sanitizeBoundedInteger(squareSizeLimit, MIN_SQUARE_SIZE, squareSize);
 			}
 			coordinateVisible = coordinateVisible && (coordinateVisibleLimit === undefined || coordinateVisibleLimit);
 		}
@@ -682,7 +683,7 @@ export default class Chessboard extends React.Component {
 			let squareSizeLimit = computeSmallScreenLimits('squareSize', smallScreenLimits, window.innerWidth);
 			let coordinateVisibleLimit = computeSmallScreenLimits('coordinateVisible', smallScreenLimits, window.innerWidth);
 			if (!isNaN(squareSizeLimit)) {
-				maxSquareSize = sanitizeInteger(squareSizeLimit, MIN_SQUARE_SIZE, maxSquareSize);
+				maxSquareSize = sanitizeBoundedInteger(squareSizeLimit, MIN_SQUARE_SIZE, maxSquareSize);
 			}
 			coordinateVisible = coordinateVisible && (coordinateVisibleLimit === undefined || coordinateVisibleLimit);
 		}
