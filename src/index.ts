@@ -32,6 +32,7 @@ export { ArrowMarkerIcon } from './ArrowMarkerIcon';
 
 export { ErrorBox } from './ErrorBox';
 
+export { Chessboard } from './Chessboard';
+
 export { formatMove, moveFormatter } from './formatmove';
-export { default as Chessboard } from './Chessboard';
 export { default as Movetext } from './Movetext';

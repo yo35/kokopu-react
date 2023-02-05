@@ -26,7 +26,7 @@ import { exception, Database, Game, nagSymbol, pgnRead } from 'kokopu';
 
 import HtmlSanitizer from './impl/HtmlSanitizer';
 import { fillPlaceholder } from './impl/util';
-import Chessboard from './Chessboard';
+import { Chessboard } from './Chessboard';
 import { ErrorBox } from './ErrorBox';
 import { moveFormatter } from './formatmove';
 import { i18n } from './i18n';
@@ -503,13 +503,13 @@ Movetext.propTypes = {
 	/**
 	 * Options applicable to the diagrams in the comments. See [Chessboard](#/Components/Chessboard) for more details about each option.
 	 */
-	diagramOptions: PropTypes.shape({
-		flipped: Chessboard.propTypes.flipped,
-		squareSize: Chessboard.propTypes.squareSize,
-		coordinateVisible: Chessboard.propTypes.coordinateVisible,
-		smallScreenLimits: Chessboard.propTypes.smallScreenLimits,
-		colorset: Chessboard.propTypes.colorset,
-		pieceset: Chessboard.propTypes.pieceset,
+	diagramOptions: PropTypes.shape({ // TODO replug
+		//flipped: Chessboard.propTypes.flipped,
+		//squareSize: Chessboard.propTypes.squareSize,
+		//coordinateVisible: Chessboard.propTypes.coordinateVisible,
+		//smallScreenLimits: Chessboard.propTypes.smallScreenLimits,
+		//colorset: Chessboard.propTypes.colorset,
+		//pieceset: Chessboard.propTypes.pieceset,
 	}),
 
 	/**

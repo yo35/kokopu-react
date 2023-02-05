@@ -25,10 +25,35 @@ import { createRoot } from 'react-dom/client';
 import './test_app.css';
 
 
+class TestItemContainer extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = { hasError: false };
+	}
+
+	static getDerivedStateFromError() {
+		return { hasError: true };
+	}
+
+	render() {
+		return (
+			<div className="test-item-container">
+				<div className="test-item" id={'test-item-' + this.props.index}>{this.renderContent()}</div>
+			</div>
+		);
+	}
+
+	renderContent() {
+		return this.state.hasError ? <span className="test-item-error">Exception thrown</span> : this.props.children;
+	}
+}
+
+
 function flattenMultiElements(elements, containerClassName) {
 	let items = [];
 	for (let i = 0; i < elements.length; ++i) {
-		items.push(<div key={i} className="test-item-container"><div className="test-item" id={'test-item-' + i}>{elements[i]}</div></div>);
+		items.push(<TestItemContainer key={i} index={i}>{elements[i]}</TestItemContainer>);
 	}
 	return <div className={Array.isArray(containerClassName) ? containerClassName.join(' ') : containerClassName}>{items}</div>;
 }
