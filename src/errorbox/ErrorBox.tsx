@@ -22,13 +22,12 @@
 
 import * as React from 'react';
 
-import { IllegalArgument } from './exception';
-import { i18n } from './i18n';
-import { sanitizeString, sanitizeInteger, sanitizeOptional } from './sanitization';
+import { IllegalArgument } from '../exception';
+import { i18n } from '../i18n';
+import { sanitizeString, sanitizeInteger, sanitizeOptional } from '../sanitization';
+import { fillPlaceholder } from '../util';
 
-import { fillPlaceholder } from './impl/util';
-
-import './css/error_box.css';
+import './ErrorBox.css';
 
 const BACKWARD_CHARACTERS = 5;
 const FORWARD_CHARACTERS = 36;

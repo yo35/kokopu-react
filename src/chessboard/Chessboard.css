@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,18 +17,43 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-@font-face {
-	font-family: 'Chess Alpha';
-	src:
-		url('../fonts/chessalpha.woff2') format('woff2'),
-		url('../fonts/chessalpha.woff') format('woff');
-	font-weight: normal;
+.kokopu-coordinate {
+	fill: currentcolor;
 	font-style: normal;
+	font-family: sans-serif;
+	text-anchor: middle;
+	dominant-baseline: central;
+	letter-spacing: 0px;
 }
 
-.kokopu-font-alpha {
-	font-family: 'Chess Alpha', sans-serif;
+.kokopu-annotation {
+	opacity: 0.8;
+}
+
+.kokopu-hoveredSquare,
+.kokopu-handle {
+	fill: transparent;
+}
+
+.kokopu-clickable {
+	cursor: pointer;
+}
+
+.kokopu-pieceDraggable {
+	cursor: grab;
+}
+
+.kokopu-pieceDraggable.kokopu-dragging {
+	cursor: grabbing;
+}
+
+.kokopu-arrowDraggable {
+	cursor: crosshair;
+}
+
+.kokopu-drawerMask {
+	opacity: 0.5;
 }

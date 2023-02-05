@@ -24,20 +24,16 @@ import * as React from 'react';
 
 import { exception as kokopuException, MoveDescriptor, Position, Square, isSquare, isSquareCouple } from 'kokopu';
 
-import { IllegalArgument } from './exception';
-import { i18n } from './i18n';
-import { sanitizeString, sanitizeBoolean, sanitizeInteger, sanitizeBoundedInteger, sanitizeOptional } from './sanitization';
+import { IllegalArgument } from '../exception';
+import { i18n } from '../i18n';
+import { sanitizeString, sanitizeBoolean, sanitizeInteger, sanitizeBoundedInteger, sanitizeOptional } from '../sanitization';
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
-	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from '../types';
 
+import { colorsets } from './colorsets';
+import { piecesets } from './piecesets';
 import { ChessboardImpl, chessboardSize } from './ChessboardImpl';
-import { ErrorBox } from './ErrorBox';
-
-import { colorsets } from './impl/colorsets';
-import { piecesets } from './impl/piecesets';
-
-import './css/chessboard.css';
-import './css/arrow.css';
+import { ErrorBox } from '../errorbox/ErrorBox';
 
 
 /**

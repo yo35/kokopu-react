@@ -22,14 +22,14 @@
 
 import * as React from 'react';
 
-import './css/arrow.css';
+import { IllegalArgument } from '../exception';
+import { sanitizeString, sanitizeBoundedInteger } from '../sanitization';
+import { generateRandomId } from '../util';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../types';
 
-import { IllegalArgument } from './exception';
-import { sanitizeString, sanitizeBoundedInteger } from './sanitization';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './types';
+import { ArrowTip } from './ArrowTip';
 
-import { ArrowTip } from './impl/ArrowTip';
-import { generateRandomId } from './impl/util';
+import './arrow.css';
 
 const ARROW_THICKNESS_FACTOR = 0.2;
 

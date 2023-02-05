@@ -22,57 +22,56 @@
 
 import * as React from 'react';
 
-import '../css/symbol.css';
+import { IllegalArgument } from '../exception';
+import { sanitizeString, sanitizeBoundedInteger } from '../sanitization';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, AnnotationSymbol, isAnnotationSymbol } from '../types';
 
-import { AnnotationSymbol } from '../types';
-
-const SHAPE_THICKNESS_FACTOR = 0.1;
-const DOT_RADIUS_FACTOR = 0.15;
-const CIRCLE_RADIUS_FACTOR = 0.425;
+import { AnnotationSymbolShape } from './AnnotationSymbolShape';
 
 
-interface AnnotationSymbolShapeProps {
+interface TextMarkerIconProps {
 
 	/**
-	 * X-coordinate of the center of the symbol.
-	 */
-	x: number;
-
-	/**
-	 * Y-coordinate of the center of the symbol.
-	 */
-	y: number;
-
-	/**
-	 * Size of the symbol (i.e. size of square in which the symbol is rendered).
+	 * Width and height (in pixels) of the icon.
 	 */
 	size: number;
 
 	/**
-	 * Symbol code.
+	 * Symbol to represent on the icon.
 	 */
 	symbol: AnnotationSymbol;
 
 	/**
-	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
+	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
 	 */
 	color: string;
 }
 
 
+const defaultProps: Partial<TextMarkerIconProps> = {
+	color: 'currentcolor',
+};
+
+
 /**
- * Symbol of a text marker.
+ * SVG icon representing a text marker.
  */
-export function AnnotationSymbolShape({ x, y, size, symbol, color }: AnnotationSymbolShapeProps) {
-	if (symbol === 'dot') {
-		return <circle cx={x} cy={y} r={size * DOT_RADIUS_FACTOR} fill={color} />;
+export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
+
+	// Sanitize the inputs.
+	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon'));
+	if (!isAnnotationSymbol(symbol)) {
+		throw new IllegalArgument('TextMarkerIcon');
 	}
-	else if (symbol === 'circle') {
-		const thickness = size * SHAPE_THICKNESS_FACTOR;
-		return <circle className="kokopu-symbolCircle" cx={x} cy={y} r={size * CIRCLE_RADIUS_FACTOR} stroke={color} strokeWidth={thickness} />;
-	}
-	else {
-		const text = symbol === 'plus' ? '+' : symbol === 'times' ? '\u00d7' : symbol;
-		return <text className="kokopu-symbolText" x={x} y={y} fill={color} fontSize={size}>{text}</text>;
-	}
+	color = sanitizeString(color);
+
+	// Render the component.
+	const viewBox = `0 0 ${size} ${size}`;
+	return (
+		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<AnnotationSymbolShape x={size / 2} y={size / 2} size={size} symbol={symbol} color={color} />
+		</svg>
+	);
 }
+
+TextMarkerIcon.defaultProps = defaultProps;

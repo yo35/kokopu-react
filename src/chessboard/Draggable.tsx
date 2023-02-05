@@ -23,7 +23,7 @@
 import * as React from 'react';
 
 
-interface DraggableHandleProps {
+interface DraggableProps {
 
 	/**
 	 * Initial X coordinate of the handle.
@@ -104,13 +104,13 @@ interface ClientCoordinates {
 /**
  * Invisible SVG rectangular handle that captures drag events.
  */
-export class DraggableHandle extends React.Component<DraggableHandleProps> {
+export class Draggable extends React.Component<DraggableProps> {
 
 	private innerRef: React.RefObject<SVGRectElement>;
 	private innerListeners?: InnerListeners;
 	private dragData?: DragData;
 
-	constructor(props: DraggableHandleProps) {
+	constructor(props: DraggableProps) {
 		super(props);
 		this.innerRef = React.createRef();
 	}

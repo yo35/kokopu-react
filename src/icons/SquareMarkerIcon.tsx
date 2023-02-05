@@ -22,24 +22,19 @@
 
 import * as React from 'react';
 
-import { IllegalArgument } from './exception';
-import { sanitizeString, sanitizeBoundedInteger } from './sanitization';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, AnnotationSymbol, isAnnotationSymbol } from './types';
+import { IllegalArgument } from '../exception';
+import { sanitizeString, sanitizeBoundedInteger } from '../sanitization';
+import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../types';
 
-import { AnnotationSymbolShape } from './impl/AnnotationSymbolShape';
+const SQUARE_MARGIN_FACTOR = 0.1;
 
 
-interface TextMarkerIconProps {
+interface SquareMarkerIconProps {
 
 	/**
 	 * Width and height (in pixels) of the icon.
 	 */
 	size: number;
-
-	/**
-	 * Symbol to represent on the icon.
-	 */
-	symbol: AnnotationSymbol;
 
 	/**
 	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
@@ -48,30 +43,28 @@ interface TextMarkerIconProps {
 }
 
 
-const defaultProps: Partial<TextMarkerIconProps> = {
+const defaultProps: Partial<SquareMarkerIconProps> = {
 	color: 'currentcolor',
 };
 
 
 /**
- * SVG icon representing a text marker.
+ * SVG icon representing a square marker.
  */
-export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
+export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
 
 	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon'));
-	if (!isAnnotationSymbol(symbol)) {
-		throw new IllegalArgument('TextMarkerIcon');
-	}
+	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon'));
 	color = sanitizeString(color);
 
 	// Render the component.
+	const margin = Math.round(size * SQUARE_MARGIN_FACTOR);
 	const viewBox = `0 0 ${size} ${size}`;
 	return (
-		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<AnnotationSymbolShape x={size / 2} y={size / 2} size={size} symbol={symbol} color={color} />
+		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
+			<rect x={margin} y={margin} width={size - margin * 2} height={size - margin * 2} fill={color} />
 		</svg>
 	);
 }
 
-TextMarkerIcon.defaultProps = defaultProps;
+SquareMarkerIcon.defaultProps = defaultProps;

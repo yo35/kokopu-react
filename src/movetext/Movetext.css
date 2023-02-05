@@ -20,51 +20,102 @@
  * -------------------------------------------------------------------------- */
 
 
-import * as React from 'react';
-
-import { IllegalArgument } from './exception';
-import { sanitizeString, sanitizeBoundedInteger } from './sanitization';
-import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from './types';
-
-const SQUARE_MARGIN_FACTOR = 0.1;
-
-
-interface SquareMarkerIconProps {
-
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: number;
-
-	/**
-	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: string;
+.kokopu-colorTag {
+	width : 1.2em;
+	height: 1.2em;
+	vertical-align: middle;
+	display: inline-block;
+	border: 1px solid black;
+	margin-right: 0.25em;
 }
 
+.kokopu-headerGroup-whitePlayer .kokopu-colorTag {
+	background-color: white;
+} 
 
-const defaultProps: Partial<SquareMarkerIconProps> = {
-	color: 'currentcolor',
-};
-
-
-/**
- * SVG icon representing a square marker.
- */
-export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
-
-	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon'));
-	color = sanitizeString(color);
-
-	// Render the component.
-	const margin = Math.round(size * SQUARE_MARGIN_FACTOR);
-	const viewBox = `0 0 ${size} ${size}`;
-	return (
-		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<rect x={margin} y={margin} width={size - margin * 2} height={size - margin * 2} fill={color} />
-		</svg>
-	);
+.kokopu-headerGroup-blackPlayer .kokopu-colorTag {
+	background-color: black;
 }
 
-SquareMarkerIcon.defaultProps = defaultProps;
+.kokopu-headerGroup-titleRating:before,
+.kokopu-header-round:before {
+	content: "\a0("; /* \a0 == &nbsp; */
+}
+
+.kokopu-headerGroup-titleRating:after,
+.kokopu-header-round:after {
+	content: ")";
+}
+
+.kokopu-header-round,
+.kokopu-header-annotator {
+	font-style: italic;
+}
+
+* + .kokopu-move:before,
+* + .kokopu-gameResult:before,
+* + span.kokopu-comment:before {
+	content: " ";
+}
+
+span.kokopu-variation:before {
+	content: " (";
+}
+
+span.kokopu-variation:after {
+	content: ")";
+}
+
+* + .kokopu-nag:before {
+	content: "\a0"; /* \a0 == &nbsp; */
+}
+
+div.kokopu-subVariation {
+	margin-left: 1.5em;
+}
+
+.kokopu-move,
+.kokopu-gameResult {
+	font-weight: bold;
+}
+
+.kokopu-subVariation .kokopu-move {
+	font-weight: inherit;
+}
+
+.kokopu-diagram {
+	text-align: center;
+	line-height: 0px;
+}
+
+.kokopu-moveContent {
+	display: inline-block;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+.kokopu-selectedMove .kokopu-moveContent {
+	background-color: currentcolor;
+}
+
+.kokopu-selectedMove .kokopu-moveContent > * {
+	filter: invert(1);
+}
+
+.kokopu-clickableMove .kokopu-moveContent:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.kokopu-focusFieldContainer {
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+}
+
+.kokopu-focusField {
+	position: absolute; /* see #1 */
+}

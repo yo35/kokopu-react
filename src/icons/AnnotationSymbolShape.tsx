@@ -20,19 +20,59 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+import * as React from 'react';
 
-export { Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, isAnnotationColor, isAnnotationSymbol,
-	flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+import { AnnotationSymbol } from '../types';
 
-export { ErrorBox } from './errorbox/ErrorBox';
+import './AnnotationSymbolShape.css';
 
-export { SquareMarkerIcon } from './icons/SquareMarkerIcon';
-export { TextMarkerIcon } from './icons/TextMarkerIcon';
-export { ArrowMarkerIcon } from './icons/ArrowMarkerIcon';
+const SHAPE_THICKNESS_FACTOR = 0.1;
+const DOT_RADIUS_FACTOR = 0.15;
+const CIRCLE_RADIUS_FACTOR = 0.425;
 
-export { Chessboard } from './chessboard/Chessboard';
 
-export { formatMove, moveFormatter } from './movetext/formatmove';
-export { default as Movetext } from './movetext/Movetext';
+interface AnnotationSymbolShapeProps {
+
+	/**
+	 * X-coordinate of the center of the symbol.
+	 */
+	x: number;
+
+	/**
+	 * Y-coordinate of the center of the symbol.
+	 */
+	y: number;
+
+	/**
+	 * Size of the symbol (i.e. size of square in which the symbol is rendered).
+	 */
+	size: number;
+
+	/**
+	 * Symbol code.
+	 */
+	symbol: AnnotationSymbol;
+
+	/**
+	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
+	 */
+	color: string;
+}
+
+
+/**
+ * Symbol of a text marker.
+ */
+export function AnnotationSymbolShape({ x, y, size, symbol, color }: AnnotationSymbolShapeProps) {
+	if (symbol === 'dot') {
+		return <circle cx={x} cy={y} r={size * DOT_RADIUS_FACTOR} fill={color} />;
+	}
+	else if (symbol === 'circle') {
+		const thickness = size * SHAPE_THICKNESS_FACTOR;
+		return <circle className="kokopu-symbolCircle" cx={x} cy={y} r={size * CIRCLE_RADIUS_FACTOR} stroke={color} strokeWidth={thickness} />;
+	}
+	else {
+		const text = symbol === 'plus' ? '+' : symbol === 'times' ? '\u00d7' : symbol;
+		return <text className="kokopu-symbolText" x={x} y={y} fill={color} fontSize={size}>{text}</text>;
+	}
+}

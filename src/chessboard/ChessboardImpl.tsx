@@ -24,16 +24,16 @@ import * as React from 'react';
 
 import { Color, Piece, ColoredPiece, Square, MoveDescriptor, Position, coordinatesToSquare, forEachSquare, oppositeColor, squareColor, squareToCoordinates } from 'kokopu';
 
-import { Colorset, Pieceset, AnnotationColor, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet } from './types';
+import { generateRandomId } from '../util';
+import { Colorset, Pieceset, AnnotationColor, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet } from '../types';
 
-import { generateRandomId } from './impl/util';
-import { AnnotationSymbolShape } from './impl/AnnotationSymbolShape';
-import { ArrowTip } from './impl/ArrowTip';
-import { DraggableHandle } from './impl/DraggableHandle';
-import { Motion } from './impl/Motion';
+import { AnnotationSymbolShape } from '../icons/AnnotationSymbolShape';
+import { ArrowTip } from '../icons/ArrowTip';
+import { Draggable } from './Draggable';
+import { Motion } from './Motion';
 
-import './css/chessboard.css';
-import './css/arrow.css';
+import '../icons/arrow.css';
+import './Chessboard.css';
 
 const TURN_FLAG_SPACING_FACTOR = 0.1;
 const RANK_COORDINATE_WIDTH_FACTOR = 1;
@@ -325,7 +325,7 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
 			positionStill.square(sq).startsWith(positionStill.turn());
 		if (dragEnabledForMovePieces || dragEnabledForEditArrows || dragEnabledForPlayMoves) {
 			return (
-				<DraggableHandle
+				<Draggable
 					key={'handle-' + sq} x={x} y={y} width={this.props.squareSize} height={this.props.squareSize} isArrowHandle={dragEnabledForEditArrows}
 					onDragStart={(x0, y0) => this.handleDragStart(sq, x0, y0)}
 					onDrag={(dx, dy) => this.handleDrag(sq, dx, dy)}
