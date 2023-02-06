@@ -133,8 +133,7 @@ export class Movetext extends React.Component<MovetextProps> {
 			return (
 				<ErrorBox
 					title={i18n.INVALID_PGN_ERROR_TITLE} message={info.pgnException.message} text={info.pgnException.pgn}
-					errorIndex={info.pgnException.index >= 0 ? info.pgnException.index : undefined}
-					lineNumber={info.pgnException.lineNumber >= 0 ? info.pgnException.lineNumber : undefined}
+					errorIndex={info.pgnException.index} lineNumber={info.pgnException.lineNumber}
 				/>
 			);
 		}

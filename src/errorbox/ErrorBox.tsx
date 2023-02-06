@@ -22,9 +22,8 @@
 
 import * as React from 'react';
 
-import { IllegalArgument } from '../exception';
 import { i18n } from '../i18n';
-import { sanitizeString, sanitizeInteger, sanitizeOptional } from '../sanitization';
+import { sanitizeString, sanitizeOptional } from '../sanitization';
 import { fillPlaceholder } from '../util';
 
 import './ErrorBox.css';
@@ -71,11 +70,11 @@ export function ErrorBox({ title, message, text, errorIndex, lineNumber }: Error
 	title = sanitizeString(title);
 	message = sanitizeString(message);
 	text = sanitizeOptional(text, sanitizeString);
-	errorIndex = sanitizeOptional(errorIndex, val => sanitizeInteger(val, () => new IllegalArgument('ErrorBox')));
-	lineNumber = sanitizeOptional(lineNumber, val => sanitizeInteger(val, () => new IllegalArgument('ErrorBox')));
+	errorIndex = Number.isInteger(errorIndex) ? errorIndex : undefined;
+	lineNumber = Number.isInteger(lineNumber) ? lineNumber : undefined;
 
 	// Render the component.
-	let excerpt = undefined;
+	let excerpt: React.ReactNode = undefined;
 	if (text && errorIndex && errorIndex >= 0 && errorIndex < text.length) {
 		excerpt = <div className="kokopu-errorExcerpt">{ellipsisAt(text, errorIndex, BACKWARD_CHARACTERS, FORWARD_CHARACTERS, lineNumber)}</div>;
 	}
@@ -135,7 +134,7 @@ function ellipsisAt(text: string, pos: number, backwardCharacters: number, forwa
 	let excerpt = e1 + text.substring(p1, p2 + 1) + e2;
 	excerpt = excerpt.replace(/\n|\r|\t/g, ' ');
 	let secondLine = Array(1 + e1.length + pos - p1).join(' ') + '^';
-	if (lineNumber) {
+	if (lineNumber && lineNumber >= 1) {
 		secondLine += ` (${fillPlaceholder(i18n.LINE, lineNumber)})`;
 	}
 	return excerpt + '\n' + secondLine;
