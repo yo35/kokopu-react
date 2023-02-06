@@ -27,7 +27,7 @@ const { imgDiff } = require('img-diff-js');
 const test = require('unit.js');
 
 const rootDir = __dirname + '/../..';
-const referenceDir = rootDir + '/test/references';
+const referenceDir = rootDir + '/test/graphic_references';
 const outputDir = rootDir + '/build/graphic_output';
 const coverageDir = rootDir + '/build/.nyc_output';
 
