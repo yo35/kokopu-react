@@ -25,23 +25,23 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// List all the JS files in /graphic_test_src, each of them corresponding to a entry.
-var items = fs.readdirSync('./graphic_test_src').filter(filename => path.extname(filename) === '.js').map(filename => path.basename(filename, '.js')).sort();
-var entries = {};
+// List all the JS files in /test/graphic_test_app, each of them corresponding to a entry.
+const items = fs.readdirSync('./test/graphic_test_app').filter(filename => path.extname(filename) === '.tsx').map(filename => path.basename(filename, '.tsx')).sort();
+const entries = {};
 items.forEach(item => {
-	entries[item] = `./graphic_test_src/${item}`;
+	entries[item] = `./test/graphic_test_app/${item}`;
 });
 
 // Define the outputs.
-var plugins = items.map(item => new HtmlWebpackPlugin({
+const plugins = items.map(item => new HtmlWebpackPlugin({
 	title: 'Test ' + item,
 	chunks: [ item ],
 	filename: item + '/index.html',
 }));
 plugins.push(new CopyWebpackPlugin({
 	patterns: [
-		{ from: './graphic_test_src/common/heartbeat.txt', to: 'heartbeat.txt' },
-		{ from: './graphic_test_src/common/smiley.png', to: 'smiley.png' },
+		{ from: './test/graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' },
+		{ from: './test/graphic_test_app/common/smiley.png', to: 'smiley.png' },
 	],
 }));
 
@@ -52,25 +52,33 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, '../build/test_graphic'),
 		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
+		clean: true,
 	},
 	plugins: plugins,
 	module: {
 		rules: [
 			{
 				test: /\.js$/i,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						plugins: [ 'istanbul' ],
+				use: 'coverage-istanbul-loader',
+			},
+			{
+				test: /\.tsx?$/i,
+				use: [
+					'coverage-istanbul-loader',
+					{
+						loader: 'ts-loader',
+						options: {
+							configFile: path.resolve(__dirname, 'test-graphic.tsconfig.json'),
+						},
 					},
-				},
+				],
 			},
 			{
 				test: /\.css$/i,
 				use: [ 'style-loader', 'css-loader' ],
 			},
 			{
-				test: /\.(png|woff|woff2|txt)$/i,
+				test: /\.(png|woff|woff2)$/i,
 				type: 'asset/resource',
 			},
 			{
@@ -78,5 +86,8 @@ module.exports = {
 				type: 'asset/source',
 			},
 		],
+	},
+	resolve: {
+		extensions: [ '.js', '.ts', '.tsx' ],
 	},
 };

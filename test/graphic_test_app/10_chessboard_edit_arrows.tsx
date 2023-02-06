@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,23 +17,21 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp from './common/test_app';
-import { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../dist/lib/index';
+import * as React from 'react';
+import { Square } from 'kokopu';
+import { testApp, setSandbox } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
+
+function onArrowEdited(from: Square, to: Square) {
+	setSandbox(`arrow edited: ${from} -> ${to}`);
+}
 
 testApp([ /* eslint-disable react/jsx-key */
-	<SquareMarkerIcon size={40} />,
-	<SquareMarkerIcon size={45} color="green" />,
-	<div style={{ color: 'purple' }}><SquareMarkerIcon size={31} /></div>,
-	<TextMarkerIcon size={41} symbol="A" />,
-	<TextMarkerIcon size={29} symbol="b" color="#0ff" />,
-	<div style={{ color: 'red' }}><TextMarkerIcon size={53} symbol="5" /></div>,
-	<ArrowMarkerIcon size={40} />,
-	<ArrowMarkerIcon size={24} color="#888" />,
-	<div style={{ color: '#f70' }}><ArrowMarkerIcon size={48} /></div>,
-	<TextMarkerIcon size={47} symbol="dot" color="#00f" />,
-	<div style={{ color: 'pink' }}><TextMarkerIcon size={48} symbol="circle" /></div>,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="g" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
+		squareMarkers="Gc5" arrowMarkers="Yh3f6" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} />,
 ]); /* eslint-enable react/jsx-key */

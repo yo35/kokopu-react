@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,25 +17,23 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import { Game, pgnRead } from 'kokopu';
-import testApp from './common/test_app';
-import { Movetext } from '../dist/lib/index';
+import * as React from 'react';
+import { pgnRead } from 'kokopu';
+import { testApp } from './common/test_app';
+import { Movetext } from '../../dist/lib/index';
 
 import pgn from './common/games.pgn';
+import dummyPgn from './common/dummy.pgn';
 
-let game = new Game();
-game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
-game.result('1-0');
-
-let database = pgnRead(pgn);
+const database = pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={game} />,
-	<Movetext game={database} />,
-	<Movetext game={pgn} gameIndex={1} />,
-	<Movetext game={database} gameIndex={3} />,
+	<Movetext game={pgn} gameIndex={99} />,
+	<Movetext game={database} gameIndex={99} />,
+	<Movetext game={dummyPgn} />,
+	<Movetext game={pgnRead(dummyPgn)} gameIndex={1} />,
+	<Movetext game={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

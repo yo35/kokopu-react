@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,19 +17,21 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import { Position } from 'kokopu';
-import testApp from './common/test_app';
-import { Chessboard } from '../dist/lib/index';
+import * as React from 'react';
+import { Square } from 'kokopu';
+import { testApp, setSandbox } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
+
+function onSquareClicked(sq: Square) {
+	setSandbox(`square clicked: ${sq}`);
+}
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard />,
-	<Chessboard position="empty" />,
-	<Chessboard position="something invalid" />,
-	<Chessboard position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-	<Chessboard position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
-	<Chessboard position={42} />,
+	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} />,
+	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} flipped coordinateVisible={false} />,
+	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} position="empty"
+		squareMarkers="Ga8" arrowMarkers="Ra6d6" textMarkers="YAb4" />,
 ]); /* eslint-enable react/jsx-key */

@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,21 +17,21 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp from './common/test_app';
-import { Chessboard } from '../dist/lib/index';
+import * as React from 'react';
+import { testApp } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
 
-let pos1 = '2qb1rk1/3n1p1p/2p3p1/2Pp4/p2P1BQ1/8/P1N2PPP/R5K1 b - - 0 1';
-let mv1 = 'Ba5';
+const pos1 = '2qb1rk1/3n1p1p/2p3p1/2Pp4/p2P1BQ1/8/P1N2PPP/R5K1 b - - 0 1';
+const mv1 = 'Ba5';
 
-let pos2 = 'start';
-let mv2 = 'e4';
+const pos2 = 'start';
+const mv2 = 'e4';
 
-let sm = 'Ba8,Ba7,Gb8,Gb7,Rc8,Rc7,Yd8,Yd7';
-let am = 'Ba1a3,Gb1b3,Rc1c3,Yd1d3';
+const sm = 'Ba8,Ba7,Gb8,Gb7,Rc8,Rc7,Yd8,Yd7';
+const am = 'Ba1a3,Gb1b3,Rc1c3,Yd1d3';
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} animated={false} />,

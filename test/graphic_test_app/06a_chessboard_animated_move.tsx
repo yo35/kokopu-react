@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,40 +17,20 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-.test-item,
-.test-item-container,
-#test-app {
-	display: inline-block;
-}
+import * as React from 'react';
+import { testApp } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
 
-body {
-	background-color: lightgray;
-}
+window['__kokopu_debug_freeze_motion'] = 0.09;
 
-.test-item-container {
-	margin: 2px;
-	padding: 3px;
-	background-color: white;
-}
-
-.test-item-error {
-	display: inline-block;
-	border: solid 1px #999;
-	background-color: #eee;
-	font-family: sans-serif;
-	font-size: 12px;
-	padding: 0.5em;
-}
-
-#sandbox {
-	padding: 3px;
-	background-color: lightgoldenrodyellow;
-	height: 100px;
-}
-
-.width-600 .test-item {
-	width: 600px;
-}
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard move="e4" animated={true} />,
+	<Chessboard move="Nf3" animated={true} moveArrowVisible={false} />,
+	<Chessboard position="r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2" move="Bxa6" animated={true} flipped />,
+	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={true} />,
+	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={true} />,
+	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={true} />,
+]); /* eslint-enable react/jsx-key */

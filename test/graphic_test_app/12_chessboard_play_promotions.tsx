@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,18 +17,19 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import { Position } from 'kokopu';
-import testApp from './common/test_app';
-import { Chessboard } from '../dist/lib/index';
+import * as React from 'react';
+import { testApp, setSandbox } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
+
+function onMovePlayed(move: string) {
+	setSandbox(`promotion move played: ${move}`);
+}
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard flipped={true} />,
-	<Chessboard flipped={true} position="empty" />,
-	<Chessboard flipped={true} position="something invalid" />,
-	<Chessboard flipped={true} position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-	<Chessboard flipped={true} position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/1P6/8/8/7k/8/5K2/8 w - - 0 1" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/8/8/8/7k/8/1p3K2/R7 b - - 0 1" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} flipped position="antichess:8/1P6/8/8/7r/8/5K2/8 w - - 0 1" />,
 ]); /* eslint-enable react/jsx-key */

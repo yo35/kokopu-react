@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,24 +17,33 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp from './common/test_app';
-import { Chessboard } from '../dist/lib/index';
+import * as React from 'react';
+import { testApp } from './common/test_app';
+import { Chessboard, AnnotationColor, AnnotationSymbol } from '../../dist/lib/index';
 
-let squareMarkers1 = 'Ba1,Ba2,Gb1,Gb2,Rc1,Rc2,Yd1,Yd2';
-let arrowMarkers1 = 'Ba8b6,Gb8c6,Re8f6,Yf8g6';
-let textMarkers1 = 'B(circle)e1,B(plus)e2,GAf1,Gaf2,RZg1,Rzg2,Y2h1,Y8h2';
+const squareMarkers1 = 'Ba1,Ba2,Gb1,Gb2,Rc1,Rc2,Yd1,Yd2';
+const arrowMarkers1 = 'Ba8b6,Gb8c6,Re8f6,Yf8g6';
+const textMarkers1 = 'B(circle)e1,B(plus)e2,GAf1,Gaf2,RZg1,Rzg2,Y2h1,Y8h2';
 
-let squareMarkers2 = { e4: 'g', g5: 'r', g1: 'y', h4: 'b' };
-let arrowMarkers2 = { c3a2: 'b', c4a4: 'g', c5a6: 'r', c6a8: 'y', d6c8: 'b', e6e8: 'g', f6g8: 'r' };
-let textMarkers2 = { g3: { symbol: 'H', color: 'r' }, g5: { symbol: 'M', color: 'g' }, h4: { symbol: 'times', color: 'y' } };
+const B: AnnotationColor = 'b';
+const G: AnnotationColor = 'g';
+const R: AnnotationColor = 'r';
+const Y: AnnotationColor = 'y';
 
-let squareMarkers3 = { b5: 'r', e4: 'g', h5: 'y', e2: 'b' };
-let arrowMarkers3 = { d1h5: 'g', a5f4: 'r', c7c3: 'y', g7g7: 'g' };
-let textMarkers3 = 'G5c6,R(plus)a1,G(times)b1,B(dot)a2,Y(circle)b2';
+const SYMBOL_H: AnnotationSymbol = 'H';
+const SYMBOL_M: AnnotationSymbol = 'M';
+const SYMBOL_TIMES: AnnotationSymbol = 'times';
+
+const squareMarkers2 = { e4: G, g5: R, g1: Y, h4: B };
+const arrowMarkers2 = { c3a2: B, c4a4: G, c5a6: R, c6a8: Y, d6c8: B, e6e8: G, f6g8: R };
+const textMarkers2 = { g3: { symbol: SYMBOL_H, color: R }, g5: { symbol: SYMBOL_M, color: G }, h4: { symbol: SYMBOL_TIMES, color: Y } };
+
+const squareMarkers3 = { b5: R, e4: G, h5: Y, e2: B };
+const arrowMarkers3 = { d1h5: G, a5f4: R, c7c3: Y, g7g7: G };
+const textMarkers3 = 'G5c6,R(plus)a1,G(times)b1,B(dot)a2,Y(circle)b2';
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard squareMarkers={squareMarkers1} arrowMarkers={arrowMarkers1} textMarkers={textMarkers1} flipped={false} coordinateVisible={true} />,

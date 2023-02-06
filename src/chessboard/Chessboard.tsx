@@ -486,8 +486,8 @@ function parseMove(position: Position, move: MoveDescriptor | string | undefined
 /**
  * Try to interpret the given object as a list of markers.
  */
-function parseMarkers<K extends string, V>(markers: Record<K, V> | string | undefined, parse: (m: string) => Record<K, V>,
-	isValidKey: (k: unknown) => k is K, isValidValue: (v: unknown) => v is V): Record<K, V> | undefined {
+function parseMarkers<K extends string, V>(markers: Partial<Record<K, V>> | string | undefined, parse: (m: string) => Partial<Record<K, V>>,
+	isValidKey: (k: unknown) => k is K, isValidValue: (v: unknown) => v is V): Partial<Record<K, V>> | undefined {
 
 	if (markers === undefined || markers === null) {
 		return undefined;
@@ -496,7 +496,7 @@ function parseMarkers<K extends string, V>(markers: Record<K, V> | string | unde
 		return parse(markers);
 	}
 	else if (typeof markers === 'object') {
-		const result = {} as Record<K, V>;
+		const result: Partial<Record<K, V>> = {};
 		Object.entries(markers).forEach(([ key, value ]) => {
 			if (isValidKey(key) && isValidValue(value)) {
 				result[key] = value;

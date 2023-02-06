@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,16 +17,16 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp, { setSandbox } from './common/test_app';
-import { Movetext } from '../dist/lib/index';
+import * as React from 'react';
+import { testApp, setSandbox } from './common/test_app';
+import { Movetext } from '../../dist/lib/index';
 
 import pgn from './common/games.pgn';
 
-function onMoveSelected(nodeId, evtOrigin) {
+function onMoveSelected(nodeId: string | undefined, evtOrigin: string) {
 	setSandbox(`move selected: ${nodeId}\norigin: ${evtOrigin}`);
 }
 

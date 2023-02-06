@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,22 +17,24 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp from './common/test_app';
-import { Movetext, i18n } from '../dist/lib/index';
+import * as React from 'react';
+import { testApp } from './common/test_app';
+import { Movetext } from '../../dist/lib/index';
 
 import pgn from './common/games.pgn';
 
-// Localization for French
-i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
-
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} pieceSymbols="localized" />,
-	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
-	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
-		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
-	<Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
+	<Movetext game={pgn} gameIndex={4} />,
+	<Movetext game={pgn} gameIndex={5} />,
+	<Movetext game={pgn} gameIndex={6} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
+
+const customCSS = document.createElement('style');
+customCSS.innerText = `
+	.myClass { font-weight: bold; color: green; }
+	#myId { font-weight: bold; color: red; }
+`;
+document.head.appendChild(customCSS);

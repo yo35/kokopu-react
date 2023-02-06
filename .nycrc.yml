@@ -10,5 +10,4 @@ check-coverage: true
 
 exclude:
   - build/**
-  - graphic_test_src/**
   - test/**

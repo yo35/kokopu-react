@@ -177,19 +177,19 @@ export function isAnnotationColor(color: unknown): color is AnnotationColor {
 /**
  * Set of square markers (i.e. colorized squares in a {@link Chessboard}).
  */
-export type SquareMarkerSet = Record<Square, AnnotationColor>;
+export type SquareMarkerSet = Partial<Record<Square, AnnotationColor>>;
 
 
 /**
  * Set of text markers (i.e. colorized symbols that can decorate the squares of a {@link Chessboard}).
  */
-export type TextMarkerSet = Record<Square, { symbol: AnnotationSymbol, color: AnnotationColor }>;
+export type TextMarkerSet = Partial<Record<Square, { symbol: AnnotationSymbol, color: AnnotationColor }>>;
 
 
 /**
  * Set of arrow markers (i.e. colorized arrows between two squares in a {@link Chessboard}).
  */
-export type ArrowMarkerSet = Record<SquareCouple, AnnotationColor>;
+export type ArrowMarkerSet = Partial<Record<SquareCouple, AnnotationColor>>;
 
 
 /**
@@ -300,8 +300,8 @@ export function parseArrowMarkers(markers: string): ArrowMarkerSet {
 }
 
 
-function parseMarkers<K extends string, V>(markers: string, tokenParser: (token: string) => { key: K, value: V } | undefined): Record<K, V> {
-	const result = {} as Record<K, V>;
+function parseMarkers<K extends string, V>(markers: string, tokenParser: (token: string) => { key: K, value: V } | undefined): Partial<Record<K, V>> {
+	const result: Partial<Record<K, V>> = {};
 	markers.split(',').map(token => tokenParser(token.trim())).forEach(marker => {
 		if (marker) {
 			result[marker.key] = marker.value;

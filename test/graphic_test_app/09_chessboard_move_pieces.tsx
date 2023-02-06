@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,39 +17,21 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-const path = require('path');
+import * as React from 'react';
+import { Square } from 'kokopu';
+import { testApp, setSandbox } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
 
-module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	entry: {
-		index: './dist/lib/index',
-	},
-	output: {
-		path: path.resolve(__dirname, '../build/test_headless'),
-		library: {
-			type: 'commonjs2',
-		},
-		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
-		clean: true,
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/i,
-				use: 'coverage-istanbul-loader',
-			},
-			{
-				test: /\.css$/i,
-				use: 'null-loader',
-			},
-			{
-				test: /\.(png|woff|woff2)$/i,
-				use: 'null-loader',
-			},
-		],
-	},
-};
+function onPieceMoved(from: Square, to: Square) {
+	setSandbox(`piece moved: ${from} -> ${to}`);
+}
+
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} flipped
+		squareMarkers="Gc4" textMarkers="BAh3" arrowMarkers="Gc8a4" moveArrowColor="r" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} move="e4" animated={false} />,
+]); /* eslint-enable react/jsx-key */

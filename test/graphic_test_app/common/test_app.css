@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,20 +17,40 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp, { setSandbox } from './common/test_app';
-import { Chessboard } from '../dist/lib/index';
-
-function onArrowEdited(from, to) {
-	setSandbox(`arrow edited: ${from} -> ${to}`);
+.test-item,
+.test-item-container,
+#test-app {
+	display: inline-block;
 }
 
-testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="g" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
-		squareMarkers="Gc5" arrowMarkers="Yh3f6" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} />,
-]); /* eslint-enable react/jsx-key */
+body {
+	background-color: lightgray;
+}
+
+.test-item-container {
+	margin: 2px;
+	padding: 3px;
+	background-color: white;
+}
+
+.test-item-error {
+	display: inline-block;
+	border: solid 1px #999;
+	background-color: #eee;
+	font-family: sans-serif;
+	font-size: 12px;
+	padding: 0.5em;
+}
+
+#sandbox {
+	padding: 3px;
+	background-color: lightgoldenrodyellow;
+	height: 100px;
+}
+
+.width-600 .test-item {
+	width: 600px;
+}

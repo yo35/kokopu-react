@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,20 +17,23 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import testApp from './common/test_app';
-import { Chessboard } from '../dist/lib/index';
+import * as React from 'react';
+import { testApp, setSandbox } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
 
-window['__kokopu_debug_freeze_motion'] = 0.7;
+function onMovePlayed(move: string) {
+	setSandbox(`move played: ${move}`);
+}
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard move="e4" animated={true} />,
-	<Chessboard move="Nf3" animated={true} moveArrowVisible={false} />,
-	<Chessboard position="r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2" move="Bxa6" animated={true} flipped />,
-	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={true} />,
-	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={true} />,
-	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={true} />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+		flipped position="rnbqk2r/ppp2ppp/3p1n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 1" move="Bg5" animated={false} moveArrowColor="g" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+		position="rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+		position="chess960:1r3k1r/pppppppp/8/8/8/8/PPPPPPPP/1R3K1R w BHbh - 0 1" />,
 ]); /* eslint-enable react/jsx-key */

@@ -1,0 +1,5 @@
+env:
+  node: false
+  mocha: false
+  browser: true
+  es2021: true
