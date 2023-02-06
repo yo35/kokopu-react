@@ -106,14 +106,9 @@ interface ClientCoordinates {
  */
 export class Draggable extends React.Component<DraggableProps> {
 
-	private innerRef: React.RefObject<SVGRectElement>;
+	private innerRef: React.RefObject<SVGRectElement> = React.createRef();
 	private innerListeners?: InnerListeners;
 	private dragData?: DragData;
-
-	constructor(props: DraggableProps) {
-		super(props);
-		this.innerRef = React.createRef();
-	}
 
 	componentDidMount() {
 		if (!this.innerListeners) {

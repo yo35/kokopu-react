@@ -57,12 +57,7 @@ export class ArrowMarkerIcon extends React.Component<ArrowMarkerIconProps> {
 		color: 'currentcolor',
 	};
 
-	private arrowTipId: string;
-
-	constructor(props: ArrowMarkerIconProps) {
-		super(props);
-		this.arrowTipId = generateRandomId();
-	}
+	private arrowTipId = generateRandomId();
 
 	render() {
 
