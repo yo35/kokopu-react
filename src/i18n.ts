@@ -34,14 +34,10 @@ export let LINE = 'line {0}';
 // Chessboard
 export let INVALID_FEN_ERROR_TITLE = 'Invalid FEN string.';
 export let INVALID_NOTATION_ERROR_TITLE = 'Invalid move notation.';
-export let INVALID_POSITION_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "position" attribute.';
-export let INVALID_MOVE_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "move" attribute.';
 
 // Movetext
 export let PIECE_SYMBOLS = { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' };
 export let ANNOTATED_BY = 'Annotated by {0}';
 export let INVALID_PGN_ERROR_TITLE = 'Invalid PGN string.';
-export let INVALID_GAME_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "game" attribute.';
-export let INVALID_GAME_INDEX_ATTRIBUTE_ERROR_MESSAGE = 'Invalid "game index" attribute.';
 
 }
