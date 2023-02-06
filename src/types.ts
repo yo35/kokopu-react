@@ -115,6 +115,35 @@ export type Pieceset = {
 
 
 /**
+ * Set of aliases for chess pieces symbols.
+ */
+export type PieceSymbolMapping = {
+	K: string;
+	Q: string;
+	R: string;
+	B: string;
+	N: string;
+	P: string;
+};
+
+
+/**
+ * Whether the given object is a {@link PieceSymbolMapping} or not.
+ */
+export function isPieceSymbolMapping(mapping: unknown): mapping is PieceSymbolMapping {
+	if (typeof mapping !== 'object' || mapping === null) {
+		return false;
+	}
+	return typeof (mapping as PieceSymbolMapping).K === 'string' &&
+		typeof (mapping as PieceSymbolMapping).Q === 'string' &&
+		typeof (mapping as PieceSymbolMapping).R === 'string' &&
+		typeof (mapping as PieceSymbolMapping).B === 'string' &&
+		typeof (mapping as PieceSymbolMapping).N === 'string' &&
+		typeof (mapping as PieceSymbolMapping).P === 'string';
+}
+
+
+/**
  * Symbol that can be chosen to decorate a square in a {@link Chessboard}.
  */
 export type AnnotationSymbol = 'plus' | 'times' | 'dot' | 'circle' |

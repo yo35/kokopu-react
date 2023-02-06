@@ -46,7 +46,7 @@ interface SmallScreenLimit {
 }
 
 
-interface ChessboardProps {
+export interface ChessboardProps {
 
 	/**
 	 * Displayed position. Can be a [kokopu.Position](https://kokopu.yo35.org/docs/current/classes/Position.html) object,

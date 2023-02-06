@@ -23,8 +23,8 @@
 export { i18n } from './i18n';
 export * as exception from './exception';
 
-export { Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, isAnnotationColor, isAnnotationSymbol,
-	flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+export { Colorset, Pieceset, PieceSymbolMapping, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, isPieceSymbolMapping,
+	isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
 
 export { ErrorBox } from './errorbox/ErrorBox';
 
@@ -34,5 +34,5 @@ export { ArrowMarkerIcon } from './icons/ArrowMarkerIcon';
 
 export { Chessboard } from './chessboard/Chessboard';
 
-export { formatMove, moveFormatter } from './movetext/formatmove';
-export { default as Movetext } from './movetext/Movetext';
+export { formatMove, moveFormatter } from './movetext/moveFormatter';
+export { Movetext } from './movetext/Movetext';
