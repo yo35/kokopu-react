@@ -35,7 +35,7 @@ describe('Chessboard graphic', () => {
 		await closeBrowser(browserContext);
 	});
 
-	itChecksScreenshots(browserContext, '02_chessboard_simple', [
+	itChecksScreenshots(browserContext, '04_chessboard_simple', [
 		'default',
 		'empty',
 		'parsing error',
@@ -43,14 +43,14 @@ describe('Chessboard graphic', () => {
 		'from Kokopu object',
 		'wrong type',
 	]);
-	itChecksScreenshots(browserContext, '03_chessboard_flipped', [
+	itChecksScreenshots(browserContext, '05_chessboard_flipped', [
 		'default',
 		'empty',
 		'parsing error',
 		'from FEN',
 		'from Kokopu object',
 	]);
-	itChecksScreenshots(browserContext, '04_chessboard_annotations', [
+	itChecksScreenshots(browserContext, '06_chessboard_annotations', [
 		'with coordinates',
 		'with coordinates and flip',
 		'without coordinates',
@@ -58,7 +58,7 @@ describe('Chessboard graphic', () => {
 		'overlap',
 		'overlap and flip',
 	]);
-	itChecksScreenshots(browserContext, '05_chessboard_move', [
+	itChecksScreenshots(browserContext, '07_chessboard_move', [
 		'default',
 		'no move arrow',
 		'parsing error',
@@ -69,7 +69,7 @@ describe('Chessboard graphic', () => {
 		'promotion',
 		'wrong type',
 	]);
-	itChecksScreenshots(browserContext, '06a_chessboard_animated_move', [
+	itChecksScreenshots(browserContext, '08a_chessboard_animated_move', [
 		'move 1',
 		'move 2',
 		'capture',
@@ -77,7 +77,7 @@ describe('Chessboard graphic', () => {
 		'en-passant',
 		'promotion',
 	]);
-	itChecksScreenshots(browserContext, '06b_chessboard_animated_move', [
+	itChecksScreenshots(browserContext, '08b_chessboard_animated_move', [
 		'move 1',
 		'move 2',
 		'capture',
@@ -85,7 +85,7 @@ describe('Chessboard graphic', () => {
 		'en-passant',
 		'promotion',
 	]);
-	itChecksScreenshots(browserContext, '06c_chessboard_animated_move', [
+	itChecksScreenshots(browserContext, '08c_chessboard_animated_move', [
 		'move 1',
 		'move 2',
 		'capture',
@@ -93,7 +93,7 @@ describe('Chessboard graphic', () => {
 		'en-passant',
 		'promotion',
 	]);
-	itChecksScreenshots(browserContext, '07_chessboard_theme', [
+	itChecksScreenshots(browserContext, '09_chessboard_theme', [
 		'default',
 		'large',
 		'small',

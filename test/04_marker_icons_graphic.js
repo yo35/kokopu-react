@@ -20,33 +20,40 @@
  * -------------------------------------------------------------------------- */
 
 
-import { IllegalArgument } from './exception';
+const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-export function sanitizeString(input: string): string {
-	return String(input);
-}
+describe('Marker icons graphic', () => {
 
+	const browserContext = {};
 
-export function sanitizeBoolean(input: boolean): boolean {
-	return Boolean(input);
-}
+	before(async function() {
+		await openBrowser(this, browserContext);
+	});
 
+	after(async () => {
+		await closeBrowser(browserContext);
+	});
 
-export function sanitizeInteger(input: number, exceptionBuilder: () => IllegalArgument): number {
-	const val = Math.round(Number(input));
-	if (!Number.isInteger(val)) {
-		throw exceptionBuilder();
-	}
-	return val;
-}
+	itChecksScreenshots(browserContext, '03_marker_icons', [
 
+		'default square',
+		'colorized square',
+		'wrapped square',
+		'invalid square size',
 
-export function sanitizeBoundedInteger(input: number, min: number, max: number, exceptionBuilder: () => IllegalArgument) {
-	return Math.min(Math.max(sanitizeInteger(input, exceptionBuilder), min), max);
-}
+		'default text',
+		'colorized text',
+		'wrapped text',
+		'colorized symbol',
+		'wrapped symbol',
+		'invalid text size',
+		'invalid symbol',
 
+		'default arrow',
+		'colorized arrow',
+		'wrapped arrow',
+		'invalid arrow size',
+	]);
 
-export function sanitizeOptional<T>(input: T | undefined, sanitizationFunction: (val: T) => T): T | undefined {
-	return input === undefined || input === null ? undefined : sanitizationFunction(input);
-}
+});

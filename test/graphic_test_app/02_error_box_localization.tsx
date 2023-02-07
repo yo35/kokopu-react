@@ -20,44 +20,13 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+import * as React from 'react';
+import { testApp } from './common/test_app';
+import { ErrorBox, i18n } from '../../dist/lib/index';
 
+// Checking localization...
+i18n.LINE = 'ligne {0} (+ invalid placeholder {1})';
 
-describe('Movetext graphic', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
-
-	itChecksScreenshots(browserContext, '13_movetext_simple', [
-		'game 1',
-		'game 2',
-		'game 3',
-		'game 4',
-	]);
-	itChecksScreenshots(browserContext, '14_movetext_error', [
-		'wrong game index 1',
-		'wrong game index 2',
-		'pgn parsing error 1',
-		'pgn parsing error 2',
-		'wrong type',
-	]);
-	itChecksScreenshots(browserContext, '15_movetext_html', [
-		'html in headers',
-		'html in comments',
-		'filtered tags and attributes',
-	]);
-	itChecksScreenshots(browserContext, '16_movetext_options', [
-		'localized piece symbols',
-		'custom piece symbols',
-		'figurine piece symbols and diagram options',
-		'hidden diagrams',
-	]);
-
-});
+testApp([ /* eslint-disable react/jsx-key */
+	<ErrorBox title="The title" message="The message" text="| x <- error is here" errorIndex={2} lineNumber={42} />,
+]); /* eslint-enable react/jsx-key */

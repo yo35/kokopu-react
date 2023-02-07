@@ -20,33 +20,44 @@
  * -------------------------------------------------------------------------- */
 
 
-import { IllegalArgument } from './exception';
+const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-export function sanitizeString(input: string): string {
-	return String(input);
-}
+describe('Movetext graphic', () => {
 
+	const browserContext = {};
 
-export function sanitizeBoolean(input: boolean): boolean {
-	return Boolean(input);
-}
+	before(async function() {
+		await openBrowser(this, browserContext);
+	});
 
+	after(async () => {
+		await closeBrowser(browserContext);
+	});
 
-export function sanitizeInteger(input: number, exceptionBuilder: () => IllegalArgument): number {
-	const val = Math.round(Number(input));
-	if (!Number.isInteger(val)) {
-		throw exceptionBuilder();
-	}
-	return val;
-}
+	itChecksScreenshots(browserContext, '15_movetext_simple', [
+		'game 1',
+		'game 2',
+		'game 3',
+		'game 4',
+	]);
+	itChecksScreenshots(browserContext, '16_movetext_error', [
+		'wrong game index 1',
+		'wrong game index 2',
+		'pgn parsing error 1',
+		'pgn parsing error 2',
+		'wrong type',
+	]);
+	itChecksScreenshots(browserContext, '17_movetext_html', [
+		'html in headers',
+		'html in comments',
+		'filtered tags and attributes',
+	]);
+	itChecksScreenshots(browserContext, '18_movetext_options', [
+		'localized piece symbols',
+		'custom piece symbols',
+		'figurine piece symbols and diagram options',
+		'hidden diagrams',
+	]);
 
-
-export function sanitizeBoundedInteger(input: number, min: number, max: number, exceptionBuilder: () => IllegalArgument) {
-	return Math.min(Math.max(sanitizeInteger(input, exceptionBuilder), min), max);
-}
-
-
-export function sanitizeOptional<T>(input: T | undefined, sanitizationFunction: (val: T) => T): T | undefined {
-	return input === undefined || input === null ? undefined : sanitizationFunction(input);
-}
+});

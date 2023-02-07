@@ -23,7 +23,7 @@
 const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describe('Marker icons graphic', () => {
+describe('Error box graphic', () => {
 
 	const browserContext = {};
 
@@ -35,18 +35,21 @@ describe('Marker icons graphic', () => {
 		await closeBrowser(browserContext);
 	});
 
-	itChecksScreenshots(browserContext, '01_marker_icons', [
-		'default square',
-		'colorized square',
-		'wrapped square',
-		'default text',
-		'colorized text',
-		'wrapped text',
-		'default arrow',
-		'colorized arrow',
-		'wrapped arrow',
-		'colorized symbol',
-		'wrapped symbol',
+	itChecksScreenshots(browserContext, '01_error_box', [
+		'minimal',
+		'full',
+		'missing error index',
+		'missing error text',
+		'negative error index',
+		'too large error index',
+		'error index not integer',
+		'cut end of text',
+		'cut beginning of text',
+		'cut on line breaks',
+		'single character text',
+	]);
+	itChecksScreenshots(browserContext, '02_error_box_localization', [
+		'default'
 	]);
 
 });

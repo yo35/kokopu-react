@@ -28,8 +28,9 @@ import { fillPlaceholder } from '../util';
 
 import './ErrorBox.css';
 
-const BACKWARD_CHARACTERS = 5;
-const FORWARD_CHARACTERS = 36;
+const BACKWARD_CHARACTER_COUNT = 5;
+const FORWARD_CHARACTER_COUNT = 36;
+const ELLIPSIS_SYMBOL_LENGTH = 4; // Symbol is ... + space (before or after)
 
 
 interface ErrorBoxProps {
@@ -75,8 +76,8 @@ export function ErrorBox({ title, message, text, errorIndex, lineNumber }: Error
 
 	// Render the component.
 	let excerpt: React.ReactNode = undefined;
-	if (text && errorIndex && errorIndex >= 0 && errorIndex < text.length) {
-		excerpt = <div className="kokopu-errorExcerpt">{ellipsisAt(text, errorIndex, BACKWARD_CHARACTERS, FORWARD_CHARACTERS, lineNumber)}</div>;
+	if (text && errorIndex !== undefined && errorIndex >= 0 && errorIndex < text.length) {
+		excerpt = <div className="kokopu-errorExcerpt">{ellipsisAt(text, errorIndex, lineNumber)}</div>;
 	}
 	return (
 		<div className="kokopu-errorBox">
@@ -89,51 +90,38 @@ export function ErrorBox({ title, message, text, errorIndex, lineNumber }: Error
 
 
 /**
- * Ellipsis function.
- *
- * Example: if `text` is `0123456789`, then `ellipsis(text, 5, 1, 3, 42)` returns
- * the following string:
- *
- * ```
- * ...45678...
- *     ^ (line 42)
- * ```
- *
- * @param text - Text from a substring must be extracted.
- * @param pos - Index of the character in `text` around which the substring must be extracted.
- * @param backwardCharacters - Number of characters to keep before `pos`.
- * @param forwardCharacters - Number of characters to keep after `pos`.
+ * Cut the given text around character at position `pos`, keeping `BACKWARD_CHARACTER_COUNT` before it, and `FORWARD_CHARACTER_COUNT` after.
  */
-function ellipsisAt(text: string, pos: number, backwardCharacters: number, forwardCharacters: number, lineNumber?: number) {
+function ellipsisAt(text: string, pos: number, lineNumber?: number) {
 
-	// p1 => begin of the extracted sub-string
-	let p1 = pos;
-	let e1 = '... ';
-	while (p1 > pos - backwardCharacters) {
-		--p1;
-		if (p1 < 0 || text.charAt(p1) === '\n' || text.charAt(p1) === '\r') {
-			++p1;
-			e1 = '';
+	// Compute the number of characters to keep before `pos`.
+	let cutBeginningAt = pos - BACKWARD_CHARACTER_COUNT;
+	let isBeginningEllipsed = true;
+	for (let keptCharacterCount = 0; keptCharacterCount <= BACKWARD_CHARACTER_COUNT + ELLIPSIS_SYMBOL_LENGTH; ++keptCharacterCount) {
+		const p = pos - keptCharacterCount - 1;
+		if (p < 0 || text.charAt(p) === '\n' || text.charAt(p) === '\r') {
+			cutBeginningAt = p + 1;
+			isBeginningEllipsed = false;
 			break;
 		}
 	}
 
-	// p2 => one character after the end of the extracted sub-string
-	let p2 = pos;
-	let e2 = ' ...';
-	while (p2 < pos + forwardCharacters) {
-		++p2;
-		if (p2 >= text.length || text.charAt(p2) === '\n' || text.charAt(p2) === '\r') {
-			--p2;
-			e2 = '';
+	// Compute the number of characters to keep after `pos`.
+	let cutEndAt = pos + FORWARD_CHARACTER_COUNT;
+	let isEndEllipsed = true;
+	for (let keptCharacterCount = 0; keptCharacterCount <= FORWARD_CHARACTER_COUNT + ELLIPSIS_SYMBOL_LENGTH; ++keptCharacterCount) {
+		const p = pos + keptCharacterCount + 1;
+		if (p >= text.length || text.charAt(p) === '\n' || text.charAt(p) === '\r') {
+			cutEndAt = p - 1;
+			isEndEllipsed = false;
 			break;
 		}
 	}
 
 	// Extract the sub-string around the requested position.
-	let excerpt = e1 + text.substring(p1, p2 + 1) + e2;
-	excerpt = excerpt.replace(/\n|\r|\t/g, ' ');
-	let secondLine = Array(1 + e1.length + pos - p1).join(' ') + '^';
+	let excerpt = (isBeginningEllipsed ? '... ' : '') + text.substring(cutBeginningAt, cutEndAt + 1) + (isEndEllipsed ? ' ...' : '');
+	excerpt = excerpt.replace(/\s/g, ' ');
+	let secondLine = ' '.repeat(pos - cutBeginningAt + (isBeginningEllipsed ? ELLIPSIS_SYMBOL_LENGTH : 0)) + '^';
 	if (lineNumber && lineNumber >= 1) {
 		secondLine += ` (${fillPlaceholder(i18n.LINE, lineNumber)})`;
 	}
