@@ -20,20 +20,10 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describe('Movetext graphic', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
+describeWithBrowser('Movetext graphic', browserContext => {
 
 	itChecksScreenshots(browserContext, '15_movetext_simple', [
 		'game 1',
@@ -41,6 +31,7 @@ describe('Movetext graphic', () => {
 		'game 3',
 		'game 4',
 	]);
+
 	itChecksScreenshots(browserContext, '16_movetext_error', [
 		'wrong game index 1',
 		'wrong game index 2',
@@ -48,11 +39,13 @@ describe('Movetext graphic', () => {
 		'pgn parsing error 2',
 		'wrong type',
 	]);
+
 	itChecksScreenshots(browserContext, '17_movetext_html', [
 		'html in headers',
 		'html in comments',
 		'filtered tags and attributes',
 	]);
+
 	itChecksScreenshots(browserContext, '18_movetext_options', [
 		'localized piece symbols',
 		'custom piece symbols',

@@ -20,20 +20,10 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describe('Marker icons graphic', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
+describeWithBrowser('Marker icons graphic', browserContext => {
 
 	itChecksScreenshots(browserContext, '03_marker_icons', [
 

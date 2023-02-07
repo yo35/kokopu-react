@@ -20,21 +20,11 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
+const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
 const { By, Key } = require('selenium-webdriver');
 
 
-describe('Movetext interaction', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
+describeWithBrowser('Movetext interaction', browserContext => {
 
 	function itCheckClickMove(itemIndex, label, targets) {
 		itCustom(browserContext, '19_movetext_interaction', itemIndex, label, async element => {

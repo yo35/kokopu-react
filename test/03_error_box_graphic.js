@@ -20,20 +20,10 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describe('Error box graphic', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
+describeWithBrowser('Error box graphic', browserContext => {
 
 	itChecksScreenshots(browserContext, '01_error_box', [
 		'minimal',
@@ -48,6 +38,7 @@ describe('Error box graphic', () => {
 		'cut on line breaks',
 		'single character text',
 	]);
+
 	itChecksScreenshots(browserContext, '02_error_box_localization', [
 		'default'
 	]);

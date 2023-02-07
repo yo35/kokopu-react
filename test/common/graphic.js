@@ -32,7 +32,7 @@ const outputDir = rootDir + '/build/graphic_output';
 const coverageDir = rootDir + '/build/.nyc_output';
 
 const UNREACHABLE_TEST_CLIENT_MESSAGE =
-	'Cannot reach the dockerized selenium webbrowser used for graphic tests (probably because the test environment is not running).\n' +
+	'Cannot reach the Dockerized Selenium webbrowser used for graphic tests (probably because the test environment is not running).\n' +
 	'\n' +
 	'Use command `npm run test_env:start` to start the test environment.\n' +
 	'Do not forget to run `npm run test_env:stop` when finished.\n';
@@ -42,12 +42,35 @@ const ANIMATION_DELAY = 200;
 
 
 /**
- * Open a browser in the client (+ ensure everything else is ready to execute graphic tests).
+ * Create a Mocha test-suite that runs graphic tests in Dockerized Selenium webbrowser.
  */
-exports.openBrowser = async function(mochaContext, browserContext) {
+exports.describeWithBrowser = function(suiteLabel, testFactory) {
+	describe(suiteLabel, function() {
 
-	// The initialization process may take a while, thus increase the timeout threshold.
-	mochaContext.timeout(10000);
+		// Fetching a new page in the browser may take a while, thus increase the timeout threshold.
+		this.timeout(10000);
+
+		// Configure the browser context.
+		const browserContext = {};
+
+		before(async () => {
+			await openBrowser(browserContext);
+		});
+
+		after(async () => {
+			await closeBrowser(browserContext);
+		});
+
+		// Register the tests.
+		testFactory(browserContext);
+	});
+};
+
+
+/**
+ * Open a browser in the client.
+ */
+async function openBrowser(browserContext) {
 
 	// Start the browser and ensure it can fetch something.
 	const capabilities = Capabilities.firefox();
@@ -58,13 +81,13 @@ exports.openBrowser = async function(mochaContext, browserContext) {
 
 	// Initialize the browser context
 	browserContext.driver = driver;
-};
+}
 
 
 /**
  * Close the given browser.
  */
-exports.closeBrowser = async function(browserContext) {
+async function closeBrowser(browserContext) {
 	if (browserContext.driver) {
 
 		// Save the coverage data before closing the browser.
@@ -75,7 +98,7 @@ exports.closeBrowser = async function(browserContext) {
 		delete browserContext.driver;
 		delete browserContext.latestTestCase;
 	}
-};
+}
 
 
 /**

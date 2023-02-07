@@ -20,20 +20,10 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
+const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
 
 
-describe('Chessboard interaction', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
+describeWithBrowser('Chessboard interaction', browserContext => {
 
 	function itCheckClickSquare(itemIndex, label, targets) {
 		itCustom(browserContext, '10_chessboard_click_squares', itemIndex, label, async element => {

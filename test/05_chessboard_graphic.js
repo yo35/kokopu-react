@@ -20,20 +20,10 @@
  * -------------------------------------------------------------------------- */
 
 
-const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
+const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describe('Chessboard graphic', () => {
-
-	const browserContext = {};
-
-	before(async function() {
-		await openBrowser(this, browserContext);
-	});
-
-	after(async () => {
-		await closeBrowser(browserContext);
-	});
+describeWithBrowser('Chessboard graphic', browserContext => {
 
 	itChecksScreenshots(browserContext, '04_chessboard_simple', [
 		'default',
@@ -43,6 +33,7 @@ describe('Chessboard graphic', () => {
 		'from Kokopu object',
 		'wrong type',
 	]);
+
 	itChecksScreenshots(browserContext, '05_chessboard_flipped', [
 		'default',
 		'empty',
@@ -50,6 +41,7 @@ describe('Chessboard graphic', () => {
 		'from FEN',
 		'from Kokopu object',
 	]);
+
 	itChecksScreenshots(browserContext, '06_chessboard_annotations', [
 		'with coordinates',
 		'with coordinates and flip',
@@ -58,6 +50,7 @@ describe('Chessboard graphic', () => {
 		'overlap',
 		'overlap and flip',
 	]);
+
 	itChecksScreenshots(browserContext, '07_chessboard_move', [
 		'default',
 		'no move arrow',
@@ -69,6 +62,7 @@ describe('Chessboard graphic', () => {
 		'promotion',
 		'wrong type',
 	]);
+
 	itChecksScreenshots(browserContext, '08a_chessboard_animated_move', [
 		'move 1',
 		'move 2',
@@ -77,6 +71,7 @@ describe('Chessboard graphic', () => {
 		'en-passant',
 		'promotion',
 	]);
+
 	itChecksScreenshots(browserContext, '08b_chessboard_animated_move', [
 		'move 1',
 		'move 2',
@@ -85,6 +80,7 @@ describe('Chessboard graphic', () => {
 		'en-passant',
 		'promotion',
 	]);
+
 	itChecksScreenshots(browserContext, '08c_chessboard_animated_move', [
 		'move 1',
 		'move 2',
@@ -93,6 +89,7 @@ describe('Chessboard graphic', () => {
 		'en-passant',
 		'promotion',
 	]);
+
 	itChecksScreenshots(browserContext, '09_chessboard_theme', [
 		'default',
 		'large',
