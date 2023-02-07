@@ -24,9 +24,9 @@
 		"scripts/test-headless.webpack.config.js",
 		"src",
 		"test",
-		"tsconfig.json",
-		".eslint.yml",
-		".nycrc.yml"
+		".eslintrc.yml",
+		".nycrc.yml",
+		"tsconfig.json"
 	],
 	"peerDependencies": {
 		"kokopu": "^4.3.0",
