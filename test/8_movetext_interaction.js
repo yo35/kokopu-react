@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,14 +17,14 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 const { openBrowser, closeBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
 const { By, Key } = require('selenium-webdriver');
 
 
-describe('Movetext interaction', function() {
+describe('Movetext interaction', () => {
 
 	const browserContext = {};
 
@@ -32,17 +32,17 @@ describe('Movetext interaction', function() {
 		await openBrowser(this, browserContext);
 	});
 
-	after(async function() {
+	after(async () => {
 		await closeBrowser(browserContext);
 	});
 
 	function itCheckClickMove(itemIndex, label, targets) {
-		itCustom(browserContext, '17_movetext_interaction', itemIndex, label, async function(element) {
-			let actions = browserContext.driver.actions({ async: true });
+		itCustom(browserContext, '17_movetext_interaction', itemIndex, label, async element => {
+			const actions = browserContext.driver.actions({ async: true });
 			await setSandbox(browserContext, '');
 			for (let i = 0; i < targets.length; ++i) {
-				let target = targets[i];
-				let moveElement = await element.findElement(By.xpath(`.//span[text()='${target.searchedText}']`));
+				const target = targets[i];
+				const moveElement = await element.findElement(By.xpath(`.//span[text()='${target.searchedText}']`));
 				await actions.move({ origin: moveElement }).click().perform();
 				if (i === 0) {
 					await takeScreenshot(browserContext, itemIndex, element);
@@ -72,8 +72,8 @@ describe('Movetext interaction', function() {
 	]);
 
 	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast) {
-		itCustom(browserContext, '17_movetext_interaction', itemIndex, label, async function(element) {
-			let focusFieldElement = await element.findElement(By.className('kokopu-focusField'));
+		itCustom(browserContext, '17_movetext_interaction', itemIndex, label, async element => {
+			const focusFieldElement = await element.findElement(By.className('kokopu-focusField'));
 
 			await setSandbox(browserContext, '');
 			await focusFieldElement.sendKeys(Key.HOME);
@@ -105,4 +105,5 @@ describe('Movetext interaction', function() {
 	itCheckKeyboardActions(6, 'key on last selected', tpl('start', 'key-first'), tpl('6w', 'key-previous'), '', '');
 	itCheckKeyboardActions(7, 'key on invalid selection', '', '', '', '');
 	itCheckKeyboardActions(8, 'key on sub-variation selected', tpl('start', 'key-first'), tpl('1w', 'key-previous'), tpl('1b-v0-1b', 'key-next'), tpl('1b-v0-3w', 'key-last'));
+
 });

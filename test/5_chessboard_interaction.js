@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,13 +17,13 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 const { openBrowser, closeBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
 
 
-describe('Chessboard interaction', function() {
+describe('Chessboard interaction', () => {
 
 	const browserContext = {};
 
@@ -31,16 +31,16 @@ describe('Chessboard interaction', function() {
 		await openBrowser(this, browserContext);
 	});
 
-	after(async function() {
+	after(async () => {
 		await closeBrowser(browserContext);
 	});
 
 	function itCheckClickSquare(itemIndex, label, targets) {
-		itCustom(browserContext, '08_chessboard_click_squares', itemIndex, label, async function(element) {
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+		itCustom(browserContext, '08_chessboard_click_squares', itemIndex, label, async element => {
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			for (let i = 0; i < targets.length; ++i) {
-				let target = targets[i];
+				const target = targets[i];
 				await actions.move({ x: area.x + target.x, y: area.y + target.y }).click().perform();
 				await compareSandbox(browserContext, target.expectedText);
 			}
@@ -63,9 +63,9 @@ describe('Chessboard interaction', function() {
 	]);
 
 	function itCheckMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
-		itCustom(browserContext, '09_chessboard_move_pieces', itemIndex, label, async function(element) {
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+		itCustom(browserContext, '09_chessboard_move_pieces', itemIndex, label, async element => {
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
@@ -83,10 +83,10 @@ describe('Chessboard interaction', function() {
 	itCheckMovePiece(2, 'after move', 225, 225, 75, 260, 'after_move', 'piece moved: e4 -> b3');
 
 	function itCheckNonMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
-		itCustom(browserContext, '09_chessboard_move_pieces', itemIndex, label, async function(element) {
+		itCustom(browserContext, '09_chessboard_move_pieces', itemIndex, label, async element => {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
@@ -100,9 +100,9 @@ describe('Chessboard interaction', function() {
 	itCheckNonMovePiece(0, 'out of board', 175, 25, 500, 210, 'out_of_board');
 
 	function itCheckEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
-		itCustom(browserContext, '10_chessboard_edit_arrows', itemIndex, label, async function(element) {
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+		itCustom(browserContext, '10_chessboard_edit_arrows', itemIndex, label, async element => {
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
@@ -117,10 +117,10 @@ describe('Chessboard interaction', function() {
 	itCheckEditArrow(1, 'over arrow marker', 40, 110, 125, 290, 'over_arrow_marker', 'arrow edited: h3 -> f6');
 
 	function itCheckNonEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
-		itCustom(browserContext, '10_chessboard_edit_arrows', itemIndex, label, async function(element) {
+		itCustom(browserContext, '10_chessboard_edit_arrows', itemIndex, label, async element => {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
@@ -132,4 +132,5 @@ describe('Chessboard interaction', function() {
 	itCheckNonEditArrow(2, 'edit color not set', 125, 175, 325, 225, 'edit_color_not_set');
 	itCheckNonEditArrow(0, 'from == to', 275, 225, 290, 210, 'null_vector');
 	itCheckNonEditArrow(0, 'out of board', 175, 225, 500, 280, 'out_of_board');
+
 });

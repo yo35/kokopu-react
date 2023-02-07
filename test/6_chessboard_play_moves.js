@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,13 +17,13 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 const { openBrowser, closeBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
 
 
-describe('Chessboard play moves', function() {
+describe('Chessboard play moves', () => {
 
 	const browserContext = {};
 
@@ -31,14 +31,14 @@ describe('Chessboard play moves', function() {
 		await openBrowser(this, browserContext);
 	});
 
-	after(async function() {
+	after(async () => {
 		await closeBrowser(browserContext);
 	});
 
 	function itCheckPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName, expectedText) {
-		itCustom(browserContext, '11_chessboard_play_moves', itemIndex, label, async function(element) {
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+		itCustom(browserContext, '11_chessboard_play_moves', itemIndex, label, async element => {
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
@@ -55,10 +55,10 @@ describe('Chessboard play moves', function() {
 	itCheckPlayMove(3, 'chess960 ambiguous king move', 275, 375, 320, 375, 'chess960_ambiguous_king_move', 'move played: Kg1');
 
 	function itCheckNonPlayMove(itemIndex, label, xFrom, yFrom, xTo, yTo, imageBaseName) {
-		itCustom(browserContext, '11_chessboard_play_moves', itemIndex, label, async function(element) {
+		itCustom(browserContext, '11_chessboard_play_moves', itemIndex, label, async element => {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.release().perform();
@@ -75,9 +75,9 @@ describe('Chessboard play moves', function() {
 	itCheckNonPlayMove(3, 'chess960 non-KxR castling', 275, 375, 130, 375, 'chess960_non_kxr_castling');
 
 	function itCheckPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName, expectedText) {
-		itCustom(browserContext, '12_chessboard_play_promotions', itemIndex, label, async function(element) {
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+		itCustom(browserContext, '12_chessboard_play_promotions', itemIndex, label, async element => {
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).release().perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.move({ x: area.x + xPromo, y: area.y + yPromo }).click().perform();
@@ -91,10 +91,10 @@ describe('Chessboard play moves', function() {
 	itCheckPlayPromotion(2, 'antichess promotion', 325, 325, 325, 375, 325, 175, 'antichess_promotion', 'promotion move played: b8=K');
 
 	function itCheckNonPlayPromotion(itemIndex, label, xFrom, yFrom, xTo, yTo, xPromo, yPromo, imageBaseName) {
-		itCustom(browserContext, '12_chessboard_play_promotions', itemIndex, label, async function(element) {
+		itCustom(browserContext, '12_chessboard_play_promotions', itemIndex, label, async element => {
 			await setSandbox(browserContext, imageBaseName); // can be any value as long as it is unique among other test-cases
-			let actions = browserContext.driver.actions({ async: true });
-			let area = await element.getRect();
+			const actions = browserContext.driver.actions({ async: true });
+			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).release().perform();
 			await takeScreenshot(browserContext, imageBaseName, element);
 			await actions.move({ x: area.x + xPromo, y: area.y + yPromo }).click().perform();
@@ -104,4 +104,5 @@ describe('Chessboard play moves', function() {
 	}
 
 	itCheckNonPlayPromotion(1, 'cancel promotion', 75, 325, 75, 375, 190, 220, 'cancel_promotion');
+
 });

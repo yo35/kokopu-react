@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,7 +17,7 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 const fs = require('fs');
@@ -50,8 +50,8 @@ exports.openBrowser = async function(mochaContext, browserContext) {
 	mochaContext.timeout(10000);
 
 	// Start the browser and ensure it can fetch something.
-	let capabilities = Capabilities.firefox();
-	let driver = new Builder().usingServer('http://localhost:4444').withCapabilities(capabilities).build();
+	const capabilities = Capabilities.firefox();
+	const driver = new Builder().usingServer('http://localhost:4444').withCapabilities(capabilities).build();
 	await driver.get('file:///app/build/test_graphic/heartbeat.txt').catch(reason => {
 		return Promise.reject(reason.message.includes('ECONNREFUSED') ? new Error(UNREACHABLE_TEST_CLIENT_MESSAGE) : reason);
 	});
@@ -95,7 +95,7 @@ async function saveCoverage(browserContext) {
 	} while (fs.existsSync(coverageFile));
 
 	// Retrieve and save the coverage data.
-	let coverageData = await browserContext.driver.executeScript('return JSON.stringify(window.__coverage__)');
+	const coverageData = await browserContext.driver.executeScript('return JSON.stringify(window.__coverage__)');
 	fs.writeFileSync(coverageFile, coverageData);
 }
 
@@ -123,12 +123,12 @@ async function fetchTestCase(browserContext, testCaseName) {
 /**
  * Take a screenshot of the element identified by the given CSS target.
  */
-let takeScreenshot = exports.takeScreenshot = async function(browserContext, imageBaseName, element) {
+const takeScreenshot = exports.takeScreenshot = async function(browserContext, imageBaseName, element) {
 
-	let actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	const actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
 
 	// Take a screenshot of the targeted element.
-	let image = await element.takeScreenshot();
+	const image = await element.takeScreenshot();
 	fs.mkdirSync(path.dirname(actualFilename), { recursive: true });
 	fs.writeFileSync(actualFilename, image, 'base64');
 };
@@ -137,14 +137,14 @@ let takeScreenshot = exports.takeScreenshot = async function(browserContext, ima
 /**
  * Compare a screenshot to its reference.
  */
-let compareScreenshot = exports.compareScreenshot = async function(browserContext, imageBaseName) {
+const compareScreenshot = exports.compareScreenshot = async function(browserContext, imageBaseName) {
 
-	let actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
-	let expectedFilename = `${referenceDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
-	let differenceFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.diff.png`;
+	const actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	const expectedFilename = `${referenceDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
+	const differenceFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.diff.png`;
 
 	// Compare the current screenshot to the reference.
-	let result = await imgDiff({
+	const result = await imgDiff({
 		actualFilename: actualFilename,
 		expectedFilename: expectedFilename,
 		diffFilename: differenceFilename,
@@ -157,7 +157,7 @@ let compareScreenshot = exports.compareScreenshot = async function(browserContex
  * Compare content of the sandbox to the expected text.
  */
 exports.compareSandbox = async function(browserContext, expectedText) {
-	let actualText = await browserContext.driver.findElement(By.id('sandbox')).getText();
+	const actualText = await browserContext.driver.findElement(By.id('sandbox')).getText();
 	test.value(actualText).is(expectedText);
 };
 
@@ -174,10 +174,10 @@ exports.setSandbox = async function(browserContext, value) {
 /**
  * Open the page corresponding to the given test-case, and execute the given scenario.
  */
-let itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {
-	it(testCaseName + ' - ' + itemName, async function() {
+const itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {
+	it(testCaseName + ' - ' + itemName, async () => {
 		await fetchTestCase(browserContext, testCaseName);
-		let element = await browserContext.driver.findElement(By.id('test-item-' + itemIndex));
+		const element = await browserContext.driver.findElement(By.id('test-item-' + itemIndex));
 		await scenario(element);
 	});
 };
@@ -188,7 +188,7 @@ let itCustom = exports.itCustom = function(browserContext, testCaseName, itemInd
  */
 exports.itChecksScreenshots = function(browserContext, testCaseName, itemNames) {
 	for (let i = 0; i < itemNames.length; ++i) {
-		itCustom(browserContext, testCaseName, i, itemNames[i], async function(element) {
+		itCustom(browserContext, testCaseName, i, itemNames[i], async element => {
 			await takeScreenshot(browserContext, i, element);
 			await compareScreenshot(browserContext, i);
 		});

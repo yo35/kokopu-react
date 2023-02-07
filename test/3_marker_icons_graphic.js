@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,13 +17,13 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 const { openBrowser, closeBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describe('Marker icons graphic', function() {
+describe('Marker icons graphic', () => {
 
 	const browserContext = {};
 
@@ -31,10 +31,22 @@ describe('Marker icons graphic', function() {
 		await openBrowser(this, browserContext);
 	});
 
-	after(async function() {
+	after(async () => {
 		await closeBrowser(browserContext);
 	});
 
-	itChecksScreenshots(browserContext, '01_marker_icons', [ 'default square', 'colorized square', 'wrapped square', 'default text', 'colorized text', 'wrapped text',
-		'default arrow', 'colorized arrow', 'wrapped arrow', 'colorized symbol', 'wrapped symbol' ]);
+	itChecksScreenshots(browserContext, '01_marker_icons', [
+		'default square',
+		'colorized square',
+		'wrapped square',
+		'default text',
+		'colorized text',
+		'wrapped text',
+		'default arrow',
+		'colorized arrow',
+		'wrapped arrow',
+		'colorized symbol',
+		'wrapped symbol',
+	]);
+
 });

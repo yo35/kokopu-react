@@ -5,5 +5,4 @@ env:
 rules:
   '@typescript-eslint/no-shadow':       [ error, { builtinGlobals: true, allow: [ test ] }]
   '@typescript-eslint/no-var-requires': [ off ]
-  prefer-arrow-callback:                [ off ] # TODO unplug
   no-invalid-this:                      [ off ] # the rule is incompatible with the use of Mocha contexts

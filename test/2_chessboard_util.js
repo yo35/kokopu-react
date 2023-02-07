@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,24 +17,24 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-let { Chessboard } = require('../build/test_headless/index');
-let test = require('unit.js');
+const { Chessboard } = require('../build/test_headless/index');
+const test = require('unit.js');
 
 
 function testAdaptSquareSize(expectedSquareSize, width, height, coordinateVisible, smallScreenLimits) {
 	test.value(Chessboard.adaptSquareSize(width, height, coordinateVisible, smallScreenLimits)).is(expectedSquareSize);
 
-	let actualSize = Chessboard.size(expectedSquareSize, coordinateVisible, smallScreenLimits);
+	const actualSize = Chessboard.size(expectedSquareSize, coordinateVisible, smallScreenLimits);
 	test.value(actualSize.width <= width && actualSize.height <= height).isTrue();
 }
 
 function testAdaptSquareSizeWithIncrement(expectedSquareSize, width, height, coordinateVisible, smallScreenLimits) {
 	testAdaptSquareSize(expectedSquareSize, width, height, coordinateVisible, smallScreenLimits);
 
-	let actualSizeIncremented = Chessboard.size(expectedSquareSize + 1, coordinateVisible, smallScreenLimits);
+	const actualSizeIncremented = Chessboard.size(expectedSquareSize + 1, coordinateVisible, smallScreenLimits);
 	test.value(actualSizeIncremented.width > width || actualSizeIncremented.height > height).isTrue();
 }
 
@@ -55,7 +55,7 @@ describe('Adapt square-size', () => {
 
 describe('Adapt square-size with small-screen limits', () => {
 
-	let limits = [
+	const limits = [
 		{ width: 470, squareSize: 12, coordinateVisible: false },
 		{ width: 540, squareSize: 16, coordinateVisible: false },
 		{ width: 620, squareSize: 24, coordinateVisible: false },
