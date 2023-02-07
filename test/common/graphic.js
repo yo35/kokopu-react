@@ -125,6 +125,7 @@ async function fetchTestCase(browserContext, testCaseName) {
  */
 const takeScreenshot = exports.takeScreenshot = async function(browserContext, imageBaseName, element) {
 
+	imageBaseName = imageBaseName.replaceAll(' ', '_').toLowerCase();
 	const actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
 
 	// Take a screenshot of the targeted element.
@@ -139,6 +140,7 @@ const takeScreenshot = exports.takeScreenshot = async function(browserContext, i
  */
 const compareScreenshot = exports.compareScreenshot = async function(browserContext, imageBaseName) {
 
+	imageBaseName = imageBaseName.replaceAll(' ', '_').toLowerCase();
 	const actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
 	const expectedFilename = `${referenceDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
 	const differenceFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.diff.png`;
@@ -166,7 +168,9 @@ exports.compareSandbox = async function(browserContext, expectedText) {
  * Set the content of the sandbox to the given value.
  */
 exports.setSandbox = async function(browserContext, value) {
-	value = value.replace(/\W/g, '');
+	if (/[^\w \-=]/.test(value)) {
+		throw new Error('Invalid characters found in the sandox message.');
+	}
 	await browserContext.driver.executeScript(`document.getElementById("sandbox").innerText = "${value}"`);
 };
 
@@ -175,7 +179,7 @@ exports.setSandbox = async function(browserContext, value) {
  * Open the page corresponding to the given test-case, and execute the given scenario.
  */
 const itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {
-	it(testCaseName + ' - ' + itemName, async () => {
+	it(`${testCaseName} - ${itemName}`, async () => {
 		await fetchTestCase(browserContext, testCaseName);
 		const element = await browserContext.driver.findElement(By.id('test-item-' + itemIndex));
 		await scenario(element);
@@ -188,9 +192,10 @@ const itCustom = exports.itCustom = function(browserContext, testCaseName, itemI
  */
 exports.itChecksScreenshots = function(browserContext, testCaseName, itemNames) {
 	for (let i = 0; i < itemNames.length; ++i) {
-		itCustom(browserContext, testCaseName, i, itemNames[i], async element => {
-			await takeScreenshot(browserContext, i, element);
-			await compareScreenshot(browserContext, i);
+		const itemName = itemNames[i];
+		itCustom(browserContext, testCaseName, i, itemName, async element => {
+			await takeScreenshot(browserContext, itemName, element);
+			await compareScreenshot(browserContext, itemName);
 		});
 	}
 };

@@ -38,7 +38,7 @@ describe('Chessboard graphic', () => {
 	itChecksScreenshots(browserContext, '02_chessboard_simple', [
 		'default',
 		'empty',
-		'invalid',
+		'parsing error',
 		'from FEN',
 		'from Kokopu object',
 		'wrong type',
@@ -46,23 +46,23 @@ describe('Chessboard graphic', () => {
 	itChecksScreenshots(browserContext, '03_chessboard_flipped', [
 		'default',
 		'empty',
-		'invalid',
+		'parsing error',
 		'from FEN',
 		'from Kokopu object',
 	]);
 	itChecksScreenshots(browserContext, '04_chessboard_annotations', [
 		'with coordinates',
-		'with coordinates & flip',
+		'with coordinates and flip',
 		'without coordinates',
-		'without coordinates & flip',
+		'without coordinates and flip',
 		'overlap',
-		'overlap & flip',
+		'overlap and flip',
 	]);
 	itChecksScreenshots(browserContext, '05_chessboard_move', [
 		'default',
 		'no move arrow',
-		'invalid',
-		'with forced move arrow & flip',
+		'parsing error',
+		'with forced move arrow and flip',
 		'capture',
 		'castling move',
 		'en-passant',
@@ -74,7 +74,7 @@ describe('Chessboard graphic', () => {
 		'move 2',
 		'capture',
 		'castling move',
-		'en-pssant',
+		'en-passant',
 		'promotion',
 	]);
 	itChecksScreenshots(browserContext, '06b_chessboard_animated_move', [
@@ -82,7 +82,7 @@ describe('Chessboard graphic', () => {
 		'move 2',
 		'capture',
 		'castling move',
-		'en-pssant',
+		'en-passant',
 		'promotion',
 	]);
 	itChecksScreenshots(browserContext, '06c_chessboard_animated_move', [
@@ -90,7 +90,7 @@ describe('Chessboard graphic', () => {
 		'move 2',
 		'capture',
 		'castling move',
-		'en-pssant',
+		'en-passant',
 		'promotion',
 	]);
 	itChecksScreenshots(browserContext, '07_chessboard_theme', [

@@ -45,8 +45,8 @@ describe('Movetext interaction', () => {
 				const moveElement = await element.findElement(By.xpath(`.//span[text()='${target.searchedText}']`));
 				await actions.move({ origin: moveElement }).click().perform();
 				if (i === 0) {
-					await takeScreenshot(browserContext, itemIndex, element);
-					await compareScreenshot(browserContext, itemIndex);
+					await takeScreenshot(browserContext, label, element);
+					await compareScreenshot(browserContext, label);
 				}
 				await compareSandbox(browserContext, target.expectedText);
 			}
@@ -66,7 +66,7 @@ describe('Movetext interaction', () => {
 		{ searchedText: 'cxd5', expectedText: tpl('5w', 'click') },
 	]);
 
-	itCheckClickMove(2, 'click on with variations 1', [
+	itCheckClickMove(2, 'click on with variations', [
 		{ searchedText: 'Bb5', expectedText: tpl(undefined, 'click') },
 		{ searchedText: 'Nc6', expectedText: tpl('1b-v0-2b', 'click') },
 	]);
