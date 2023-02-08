@@ -20,8 +20,69 @@
  * -------------------------------------------------------------------------- */
 
 
-const { flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers, flattenArrowMarkers, parseArrowMarkers } = require('../build/test_headless/index');
+const { exception, isPieceSymbolMapping, isAnnotationSymbol, isAnnotationColor, flattenSquareMarkers, parseSquareMarkers, flattenTextMarkers, parseTextMarkers,
+	flattenArrowMarkers, parseArrowMarkers } = require('../build/test_headless/index');
 const test = require('unit.js');
+
+
+describe('Is piece symbol mapping', () => {
+
+	function itIsPieceSymbolMapping(label, value, expected) {
+		it(label, () => {
+			test.value(isPieceSymbolMapping(value)).is(expected);
+		});
+	}
+
+	itIsPieceSymbolMapping('French localization', { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' } , true);
+	itIsPieceSymbolMapping('Additional fields', { K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_', Z: 'whatever', val: 42 }, true);
+	itIsPieceSymbolMapping('Missing fields', { K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_' }, false);
+	itIsPieceSymbolMapping('Non-string valued fields', { K: 42, Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }, false);
+
+	itIsPieceSymbolMapping('String', 'whatever', false);
+	itIsPieceSymbolMapping('null', null, false);
+	itIsPieceSymbolMapping('undefined', undefined, false);
+});
+
+
+describe('Is Annotation symbol', () => {
+
+	function itIsAnnotationSymbol(label, value, expected) {
+		it(label, () => {
+			test.value(isAnnotationSymbol(value)).is(expected);
+		});
+	}
+
+	itIsAnnotationSymbol('Upper case letter', 'A', true);
+	itIsAnnotationSymbol('Lower case letter', 'z', true);
+	itIsAnnotationSymbol('Digit character', '0', true);
+	itIsAnnotationSymbol('Special token 1', 'plus', true);
+	itIsAnnotationSymbol('Special token 2', 'circle', true);
+
+	itIsAnnotationSymbol('Non-special token', 'whatever', false);
+	itIsAnnotationSymbol('Number', 0, false);
+	itIsAnnotationSymbol('null', null, false);
+	itIsAnnotationSymbol('undefined', undefined, false);
+});
+
+
+describe('Is Annotation color', () => {
+
+	function itIsAnnotationColor(label, value, expected) {
+		it(label, () => {
+			test.value(isAnnotationColor(value)).is(expected);
+		});
+	}
+
+	itIsAnnotationColor('b', 'b', true);
+	itIsAnnotationColor('g', 'g', true);
+	itIsAnnotationColor('r', 'r', true);
+	itIsAnnotationColor('y', 'y', true);
+
+	itIsAnnotationColor('Not a color', 'z', false);
+	itIsAnnotationColor('Number', 42, false);
+	itIsAnnotationColor('null', null, false);
+	itIsAnnotationColor('undefined', undefined, false);
+});
 
 
 describe('Flatten square markers', () => {
@@ -33,6 +94,10 @@ describe('Flatten square markers', () => {
 
 	it('Wrong square', () => { test.value(flattenSquareMarkers({ e1: 'r', k9: 'g', whatever: 'y' })).is('Re1'); });
 	it('Wrong color', () => { test.value(flattenSquareMarkers({ a2: 'g', b5: 'R', c4: 42, h8: 'yellow' })).is('Ga2'); });
+
+	it('Wrong type (not an object)', () => { test.exception(() => flattenSquareMarkers('whatever')).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (null)', () => { test.exception(() => flattenSquareMarkers(null)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (undefined)', () => { test.exception(() => flattenSquareMarkers(undefined)).isInstanceOf(exception.IllegalArgument); });
 });
 
 
@@ -48,6 +113,10 @@ describe('Parse square markers', () => {
 	it('Duplicated square', () => { test.value(parseSquareMarkers('Ra3,Ya3')).is({ a3: 'y' }); });
 	it('Wrong color', () => { test.value(parseSquareMarkers('Ga6,Cg5')).is({ a6: 'g' }); });
 	it('Wrong format', () => { test.value(parseSquareMarkers('Something Ra2 invalid, Ye4, G g3')).is({ e4: 'y' }); });
+
+	it('Wrong type (not a string)', () => { test.exception(() => parseSquareMarkers(42)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (null)', () => { test.exception(() => parseSquareMarkers(null)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (undefined)', () => { test.exception(() => parseSquareMarkers(undefined)).isInstanceOf(exception.IllegalArgument); });
 });
 
 
@@ -94,6 +163,10 @@ describe('Flatten text markers', () => {
 		a2: { symbol: '0', color: 'g' },
 		b5: { symbol: 'whatever', color: 'r' },
 	})).is('G0a2'); });
+
+	it('Wrong type (not an object)', () => { test.exception(() => flattenTextMarkers('whatever')).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (null)', () => { test.exception(() => flattenTextMarkers(null)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (undefined)', () => { test.exception(() => flattenTextMarkers(undefined)).isInstanceOf(exception.IllegalArgument); });
 });
 
 
@@ -127,6 +200,10 @@ describe('Parse text markers', () => {
 	it('Wrong symbol', () => { test.value(parseTextMarkers('Rb2,RAg5,G.d3,Yabcde7')).is({ g5: { symbol: 'A', color: 'r' } }); });
 	it('Wrong multi-character symbol', () => { test.value(parseTextMarkers('RZb2,Y(whatever)e4')).is({ b2: { symbol: 'Z', color: 'r' } }); });
 	it('Wrong format', () => { test.value(parseTextMarkers('Something RHa2 invalid, Yqe4, G g3')).is({ e4: { symbol: 'q', color: 'y' } }); });
+
+	it('Wrong type (not a string)', () => { test.exception(() => parseTextMarkers(42)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (null)', () => { test.exception(() => parseTextMarkers(null)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (undefined)', () => { test.exception(() => parseTextMarkers(undefined)).isInstanceOf(exception.IllegalArgument); });
 });
 
 
@@ -140,6 +217,10 @@ describe('Flatten arrow markers', () => {
 
 	it('Wrong vector', () => { test.value(flattenArrowMarkers({ e1c2: 'r', a1b9: 'g', c0d2: 'r', i3d4: 'r', f2k3: 'g', whatever: 'y' })).is('Re1c2'); });
 	it('Wrong color', () => { test.value(flattenArrowMarkers({ a2b3: 'g', b5c1: 'R', c4d8: 42, h8g1: 'yellow' })).is('Ga2b3'); });
+
+	it('Wrong type (not an object)', () => { test.exception(() => flattenArrowMarkers('whatever')).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (null)', () => { test.exception(() => flattenArrowMarkers(null)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (undefined)', () => { test.exception(() => flattenArrowMarkers(undefined)).isInstanceOf(exception.IllegalArgument); });
 });
 
 
@@ -156,4 +237,8 @@ describe('Parse arrow markers', () => {
 	it('Duplicated vector', () => { test.value(parseArrowMarkers('Ya3b4,Ra3b4')).is({ a3b4: 'r' }); });
 	it('Wrong color', () => { test.value(parseArrowMarkers('Ga6c5,Cg5e2')).is({ a6c5: 'g' }); });
 	it('Wrong format', () => { test.value(parseArrowMarkers('Something Rb1a2 invalid, Ye4c7, G g3b1')).is({ e4c7: 'y' }); });
+
+	it('Wrong type (not a string)', () => { test.exception(() => parseArrowMarkers(42)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (null)', () => { test.exception(() => parseArrowMarkers(null)).isInstanceOf(exception.IllegalArgument); });
+	it('Wrong type (undefined)', () => { test.exception(() => parseArrowMarkers(undefined)).isInstanceOf(exception.IllegalArgument); });
 });
