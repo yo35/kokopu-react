@@ -23,56 +23,34 @@
 const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describeWithBrowser('Chessboard graphic', browserContext => {
+describeWithBrowser('Movetext graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '04_chessboard_simple', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
+	itChecksScreenshots(browserContext, '16_movetext_simple', [
+		'game 1',
+		'game 2',
+		'game 3',
+		'game 4',
+	]);
+
+	itChecksScreenshots(browserContext, '17_movetext_error', [
+		'wrong game index 1',
+		'wrong game index 2',
+		'pgn parsing error 1',
+		'pgn parsing error 2',
 		'wrong type',
 	]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_flipped', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
+	itChecksScreenshots(browserContext, '18_movetext_html', [
+		'html in headers',
+		'html in comments',
+		'filtered tags and attributes',
 	]);
 
-	itChecksScreenshots(browserContext, '06_chessboard_annotations', [
-		'with coordinates',
-		'with coordinates and flip',
-		'without coordinates',
-		'without coordinates and flip',
-		'overlap',
-		'overlap and flip',
-	]);
-
-	itChecksScreenshots(browserContext, '07_chessboard_move', [
-		'default',
-		'no move arrow',
-		'parsing error',
-		'with forced move arrow and flip',
-		'capture',
-		'castling move',
-		'en-passant',
-		'promotion',
-		'wrong type',
-	]);
-
-	itChecksScreenshots(browserContext, '08_chessboard_theme', [
-		'default',
-		'large',
-		'small',
-		'custom 1',
-		'custom 2',
-		'custom 3',
-		'custom 4',
-		'custom 5',
-		'custom 6',
+	itChecksScreenshots(browserContext, '19_movetext_options', [
+		'localized piece symbols',
+		'custom piece symbols',
+		'figurine piece symbols and diagram options',
+		'hidden diagrams',
 	]);
 
 });

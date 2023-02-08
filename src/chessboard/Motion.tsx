@@ -85,7 +85,8 @@ export class Motion extends React.Component<MotionProps, MotionState> {
 
 		// Compute the animation cursor and update the state.
 		let cursor = (timestamp - this.initialTimestamp) / this.props.duration;
-		if (cursor < 0) {
+		// istanbul ignore if
+		if (cursor < 0) { // This case is not supposed to happen if timestamps are generated with a monotonic clock.
 			cursor = 0;
 		}
 		else if (cursor > this.cursorStop) {

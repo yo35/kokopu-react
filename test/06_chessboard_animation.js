@@ -20,37 +20,52 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
+const { describeWithBrowser, itChecksScreenshots, itCustom, takeScreenshot, compareScreenshot, waitForAnimation } = require('./common/graphic');
+const { By } = require('selenium-webdriver');
 
 
-describeWithBrowser('Movetext graphic', browserContext => {
+describeWithBrowser('Chessboard animation', browserContext => {
 
-	itChecksScreenshots(browserContext, '15_movetext_simple', [
-		'game 1',
-		'game 2',
-		'game 3',
-		'game 4',
+	itChecksScreenshots(browserContext, '09a_chessboard_animated_move', [
+		'move 1',
+		'move 2',
+		'capture',
+		'castling move',
+		'en-passant',
+		'promotion',
 	]);
 
-	itChecksScreenshots(browserContext, '16_movetext_error', [
-		'wrong game index 1',
-		'wrong game index 2',
-		'pgn parsing error 1',
-		'pgn parsing error 2',
-		'wrong type',
+	itChecksScreenshots(browserContext, '09b_chessboard_animated_move', [
+		'move 1',
+		'move 2',
+		'capture',
+		'castling move',
+		'en-passant',
+		'promotion',
 	]);
 
-	itChecksScreenshots(browserContext, '17_movetext_html', [
-		'html in headers',
-		'html in comments',
-		'filtered tags and attributes',
+	itChecksScreenshots(browserContext, '09c_chessboard_animated_move', [
+		'move 1',
+		'move 2',
+		'capture',
+		'castling move',
+		'en-passant',
+		'promotion',
 	]);
 
-	itChecksScreenshots(browserContext, '18_movetext_options', [
-		'localized piece symbols',
-		'custom piece symbols',
-		'figurine piece symbols and diagram options',
-		'hidden diagrams',
-	]);
+	itCustom(browserContext, '10_chessboard_animation_on_redraw', 0, 'default', async element => {
+
+		// Run the scenario.
+		await takeScreenshot(browserContext, 'initial state', element);
+		const actions = browserContext.driver.actions({ async: true });
+		const button = await element.findElement(By.id('chessboard-action-button'));
+		await actions.move({ origin: button }).click().perform();
+		await waitForAnimation();
+		await takeScreenshot(browserContext, 'final state', element);
+
+		// Check the screenshots.
+		await compareScreenshot(browserContext, 'initial state');
+		await compareScreenshot(browserContext, 'final state');
+	});
 
 });

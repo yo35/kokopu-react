@@ -137,10 +137,16 @@ async function fetchTestCase(browserContext, testCaseName) {
 	// Fetch the new page.
 	await browserContext.driver.get(`file:///app/build/test_graphic/${testCaseName}/index.html`);
 	browserContext.latestTestCase = testCaseName;
-
-	// Wait until the end of the animations.
-	await new Promise(resolve => setTimeout(resolve, ANIMATION_DELAY));
+	await waitForAnimation();
 }
+
+
+/**
+ * Wait until the end of the chessboard animations.
+ */
+const waitForAnimation = exports.waitForAnimation = async function() {
+	await new Promise(resolve => setTimeout(resolve, ANIMATION_DELAY));
+};
 
 
 /**

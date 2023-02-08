@@ -259,8 +259,12 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		const interactionMode = this.getInteractionModeAndValidateEditedArrowColor();
 		const { onPieceMoved, onSquareClicked, onArrowEdited, onMovePlayed } = this.props;
 
+		// Build a key so that a new `ChessboardImpl` component is instantiated each time the position or the move changes
+		// (mandatory to ensure that the move animation works properly and that the internal state of the component remains consistent).
+		const key = `${position.variant()}|${position.fen()}|${move ? position.notation(move) : ''}`;
+
 		return (
-			<ChessboardImpl
+			<ChessboardImpl key={key}
 				position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm}
 				flipped={flipped} squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} moveArrowVisible={moveArrowVisible}
 				moveArrowColor={this.props.moveArrowColor} animated={animated} colorset={colorset} pieceset={pieceset}

@@ -20,59 +20,30 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
+import * as React from 'react';
+import { testApp } from './common/test_app';
+import { Chessboard } from '../../dist/lib/index';
+
+function TestComponent() {
+
+	const [ clicked, setClicked ] = React.useState(false);
+	const position = clicked ? 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+	const move = clicked ? 'Nf6' : 'e4';
+
+	function onClick() {
+		window['__kokopu_debug_freeze_motion'] = 0.6;
+		setClicked(true);
+	}
+
+	return (<>
+		<div>
+			<Chessboard position={position} move={move} animated={true} />
+		</div>
+		{clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
+	</>);
+}
 
 
-describeWithBrowser('Chessboard graphic', browserContext => {
-
-	itChecksScreenshots(browserContext, '04_chessboard_simple', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
-		'wrong type',
-	]);
-
-	itChecksScreenshots(browserContext, '05_chessboard_flipped', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
-	]);
-
-	itChecksScreenshots(browserContext, '06_chessboard_annotations', [
-		'with coordinates',
-		'with coordinates and flip',
-		'without coordinates',
-		'without coordinates and flip',
-		'overlap',
-		'overlap and flip',
-	]);
-
-	itChecksScreenshots(browserContext, '07_chessboard_move', [
-		'default',
-		'no move arrow',
-		'parsing error',
-		'with forced move arrow and flip',
-		'capture',
-		'castling move',
-		'en-passant',
-		'promotion',
-		'wrong type',
-	]);
-
-	itChecksScreenshots(browserContext, '08_chessboard_theme', [
-		'default',
-		'large',
-		'small',
-		'custom 1',
-		'custom 2',
-		'custom 3',
-		'custom 4',
-		'custom 5',
-		'custom 6',
-	]);
-
-});
+testApp([ /* eslint-disable react/jsx-key */
+	<TestComponent />,
+]); /* eslint-enable react/jsx-key */

@@ -26,7 +26,7 @@ const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreensho
 describeWithBrowser('Chessboard interaction', browserContext => {
 
 	function itCheckClickSquare(itemIndex, label, targets) {
-		itCustom(browserContext, '10_chessboard_click_squares', itemIndex, label, async element => {
+		itCustom(browserContext, '11_chessboard_click_squares', itemIndex, label, async element => {
 			const actions = browserContext.driver.actions({ async: true });
 			const area = await element.getRect();
 			for (let i = 0; i < targets.length; ++i) {
@@ -53,7 +53,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
 	]);
 
 	function itCheckMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo, expectedText) {
-		itCustom(browserContext, '11_chessboard_move_pieces', itemIndex, label, async element => {
+		itCustom(browserContext, '12_chessboard_move_pieces', itemIndex, label, async element => {
 			const actions = browserContext.driver.actions({ async: true });
 			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
@@ -73,7 +73,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
 	itCheckMovePiece(2, 'after move', 225, 225, 75, 260, 'piece moved: e4 -> b3');
 
 	function itCheckNonMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo) {
-		itCustom(browserContext, '11_chessboard_move_pieces', itemIndex, label, async element => {
+		itCustom(browserContext, '12_chessboard_move_pieces', itemIndex, label, async element => {
 			await setSandbox(browserContext, label); // can be any value as long as it is unique among other test-cases
 			const actions = browserContext.driver.actions({ async: true });
 			const area = await element.getRect();
@@ -90,7 +90,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
 	itCheckNonMovePiece(0, 'out of board', 175, 25, 500, 210);
 
 	function itCheckEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo, expectedText) {
-		itCustom(browserContext, '12_chessboard_edit_arrows', itemIndex, label, async element => {
+		itCustom(browserContext, '13_chessboard_edit_arrows', itemIndex, label, async element => {
 			const actions = browserContext.driver.actions({ async: true });
 			const area = await element.getRect();
 			await actions.move({ x: area.x + xFrom, y: area.y + yFrom }).press().move({ x: area.x + xTo, y: area.y + yTo }).perform();
@@ -107,7 +107,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
 	itCheckEditArrow(1, 'over arrow marker', 40, 110, 125, 290, 'arrow edited: h3 -> f6');
 
 	function itCheckNonEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo) {
-		itCustom(browserContext, '12_chessboard_edit_arrows', itemIndex, label, async element => {
+		itCustom(browserContext, '13_chessboard_edit_arrows', itemIndex, label, async element => {
 			await setSandbox(browserContext, label); // can be any value as long as it is unique among other test-cases
 			const actions = browserContext.driver.actions({ async: true });
 			const area = await element.getRect();
