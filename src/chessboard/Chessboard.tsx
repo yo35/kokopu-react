@@ -358,6 +358,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 
 	/**
 	 * Minimum square size (inclusive).
+	 *
+	 * @public
 	 */
 	static minSquareSize(): number {
 		return MIN_SQUARE_SIZE;
@@ -365,6 +367,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 
 	/**
 	 * Maximum square size (inclusive).
+	 *
+	 * @public
 	 */
 	static maxSquareSize(): number {
 		return MAX_SQUARE_SIZE;
@@ -372,6 +376,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 
 	/**
 	 * Available colorsets for theming.
+	 *
+	 * @public
 	 */
 	static colorsets(): Record<string, Colorset> {
 		return colorsets;
@@ -379,6 +385,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 
 	/**
 	 * Available piecesets for theming.
+	 *
+	 * @public
 	 */
 	static piecesets(): Record<string, Pieceset> {
 		return piecesets;

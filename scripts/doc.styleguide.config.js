@@ -59,7 +59,7 @@ const demoPages = [
 
 // Generate the Markdown file corresponding to each demo page.
 demoPages.forEach(demoPage => {
-	let filename = `${tmpDir}/${demoPage.id}.md`;
+	const filename = `${tmpDir}/${demoPage.id}.md`;
 	fs.writeFileSync(path.resolve(__dirname, filename),
 		'```js\n' +
 		`<Page${demoPage.id} />\n` +
@@ -70,21 +70,21 @@ demoPages.forEach(demoPage => {
 
 // Generate the table of contents for each sections with sub-sections.
 function generateTableOfContents(parentName, itemNames) {
-	let text = itemNames.map(itemName => {
+	const text = itemNames.map(itemName => {
 		itemName = path.basename(itemName);
-		let link = `#/${parentName}/${itemName}`.replace(/ /g, '%20');
+		const link = `#/${parentName}/${itemName}`.replace(/ /g, '%20');
 		return `- [${itemName}](${link})\n`;
 	}).join('');
-	let filename = `${tmpDir}/Header_${parentName.replace(/ /g, '_')}.md`;
+	const filename = `${tmpDir}/Header_${parentName.replace(/ /g, '_')}.md`;
 	fs.writeFileSync(path.resolve(__dirname, filename), text);
 	return filename;
 }
-let componentsTocFilename = generateTableOfContents(componentSectionTitle, components);
-let demoTocFilename = generateTableOfContents(demoSectionTitle, demoPages.map(demoPage => demoPage.title));
+const componentsTocFilename = generateTableOfContents(componentSectionTitle, components);
+const demoTocFilename = generateTableOfContents(demoSectionTitle, demoPages.map(demoPage => demoPage.title));
 
 // Define the symbols available for example blocks in documentation.
-let componentContext = Object.fromEntries(components.map(componentName => [ componentName, path.resolve(__dirname, `${srcDir}/${componentName}`) ]));
-let demoContext = Object.fromEntries(demoPages.map(demoPage => [ 'Page' + demoPage.id, path.resolve(__dirname, `${docSrcDir}/demo/Page${demoPage.id}`) ]));
+const componentContext = Object.fromEntries(components.map(componentName => [ path.basename(componentName), path.resolve(__dirname, `${srcDir}/${componentName}`) ]));
+const demoContext = Object.fromEntries(demoPages.map(demoPage => [ 'Page' + demoPage.id, path.resolve(__dirname, `${docSrcDir}/demo/Page${demoPage.id}`) ]));
 
 
 // Styleguidist config.
@@ -175,4 +175,4 @@ module.exports = {
 	},
 	title: 'Kokopu-React documentation',
 	version: version,
-}
+};

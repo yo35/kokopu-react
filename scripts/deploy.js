@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,11 +17,10 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-'use strict';
-
+const process = require('process');
 const readline = require('readline');
 const { Readable } = require('stream');
 const Client = require('ssh2-sftp-client');
@@ -64,7 +63,7 @@ promptPassword(`Pass for ${USER}@${HOST}: `, pass => {
 		host: HOST,
 		username: USER,
 		password: pass,
-	}).then(function() {
+	}).then(() => {
 
 		// Upload the documentation.
 		console.log('Upload documentation...');
@@ -77,5 +76,5 @@ promptPassword(`Pass for ${USER}@${HOST}: `, pass => {
 		let htaccess = Readable.from([ `Redirect "/docs/current" "/docs/${version}"` ]);
 		return client.put(htaccess, `${ROOT_DIR}/docs/.htaccess`, { mode: 0o644 });
 
-	}).then(() => console.log('Done.')).catch(() => console.log(err)).finally(() => client.end());
+	}).then(() => console.log('Done.')).catch(err => { console.error(err); process.exitCode = 1; }).finally(() => client.end());
 });
