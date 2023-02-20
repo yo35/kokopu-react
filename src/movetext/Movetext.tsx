@@ -37,6 +37,12 @@ import { MovetextImpl, firstNodeIdImpl, previousNodeIdImpl, nextNodeIdImpl, last
 import './Movetext.css';
 
 
+/**
+ * Origin of a "move-selected" event in {@link Movetext}. See {@link MovetextProps.onMoveSelected} for more details.
+ */
+export type MoveSelectEventOrigin = 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'click';
+
+
 export interface MovetextProps {
 
 	/**
@@ -105,7 +111,7 @@ export interface MovetextProps {
 	 *                    - `'key-last'`: the event has been triggered by the "go-to-last-move" key (aka. the end key),
 	 *                    - `'click'`: the event has been triggered by a mouse click on a move.
 	 */
-	onMoveSelected?: (nodeId: string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'click') => void;
+	onMoveSelected?: (nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) => void;
 }
 
 

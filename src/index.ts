@@ -35,4 +35,4 @@ export { ArrowMarkerIcon, ArrowMarkerIconProps } from './icons/ArrowMarkerIcon';
 export { Chessboard, ChessboardProps, SmallScreenLimit } from './chessboard/Chessboard';
 
 export { formatMove, moveFormatter } from './movetext/moveFormatter';
-export { Movetext, MovetextProps } from './movetext/Movetext';
+export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';

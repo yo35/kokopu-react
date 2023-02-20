@@ -23,7 +23,7 @@
 import * as React from 'react';
 import { pgnRead, Node as GameNode } from 'kokopu';
 
-import { Chessboard, Movetext, MovetextProps } from '../../src/index';
+import { Chessboard, Movetext, MovetextProps, MoveSelectEventOrigin } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
 import Box from '@mui/material/Box';
@@ -134,7 +134,7 @@ export default class Page extends React.Component<object, PageState> {
 		return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
 	}
 
-	private handleMoveSelected(nodeId: string | undefined, evtOrigin: string) {
+	private handleMoveSelected(nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) {
 		if (nodeId) {
 			this.setState({ selection: nodeId, withMove: evtOrigin === 'key-next' });
 		}
