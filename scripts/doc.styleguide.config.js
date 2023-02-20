@@ -68,6 +68,12 @@ demoPages.forEach(demoPage => {
 	demoPage.filename = filename;
 });
 
+// Generate the changelog page.
+const changelog = fs.readFileSync(path.resolve(__dirname, '../CHANGELOG.md'), { encoding: 'utf8' }).split('\n').slice(2);
+changelog.unshift('<div id="changelog">');
+changelog.push('</div>');
+fs.writeFileSync(path.resolve(__dirname, `${tmpDir}/changelog.md`), changelog.join('\n'));
+
 // Generate the table of contents for each sections with sub-sections.
 function generateTableOfContents(parentName, itemNames) {
 	const text = itemNames.map(itemName => {
@@ -162,6 +168,10 @@ module.exports = {
 		{
 			name: 'Kokopu core library documentation',
 			href: 'https://kokopu.yo35.org/',
+		},
+		{
+			name: 'ChangeLog',
+			content: `${tmpDir}/changelog.md`,
 		},
 	],
 	styleguideComponents: {
