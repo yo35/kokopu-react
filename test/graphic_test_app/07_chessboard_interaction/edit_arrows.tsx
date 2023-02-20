@@ -21,26 +21,17 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { ErrorBox } from '../../dist/lib/index';
+import { Square } from 'kokopu';
+import { testApp, setSandbox } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
+
+function onArrowEdited(from: Square, to: Square) {
+	setSandbox(`arrow edited: ${from} -> ${to}`);
+}
 
 testApp([ /* eslint-disable react/jsx-key */
-
-	<ErrorBox title="I'm the title" message="I'm the message" />,
-	<ErrorBox title="The title" message="Keep both the beginning and the end" text="| Error: x <- is here" errorIndex={9} lineNumber={1} />,
-
-	<ErrorBox title="No error index" message="Nothing below" text="You will not see this..." />,
-	<ErrorBox title="No error text" message="Nothing below" errorIndex={1} />,
-	<ErrorBox title="Negative error index" message="Nothing below" text="You will not see this..." errorIndex={-1} />,
-	<ErrorBox title="Too large error index" message="Nothing below" text="You will not see this..." errorIndex={100} />,
-	<ErrorBox title="Error index not an integer" message="Nothing below" text="You will not see this..." errorIndex={2.3} />,
-
-	<ErrorBox title="Cut the end of the text" message="and keep all the beginning" text="| x <- the error is there and the rest of the line is cut because too long"
-		errorIndex={2} />,
-	<ErrorBox title="Cut the beginning of the text" message="and keep all the end" text="The error is there -> x 234567890 234567890 234567890 234567890"
-		errorIndex={22} lineNumber={0} />,
-	<ErrorBox title="Cut on line breaks" message="both at the beginning and at the end" text={'This is the first line\n| x |\nThis is the third line'}
-		errorIndex={25} lineNumber={2} />,
-	<ErrorBox title="Single character text" message="The text is 1-character long" text="x" errorIndex={0} lineNumber={1.1} />,
-
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="g" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
+		squareMarkers="Gc5" arrowMarkers="Yh3f6" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} />,
 ]); /* eslint-enable react/jsx-key */

@@ -21,17 +21,29 @@
 
 
 import * as React from 'react';
-import { Square } from 'kokopu';
-import { testApp, setSandbox } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
-function onPieceMoved(from: Square, to: Square) {
-	setSandbox(`piece moved: ${from} -> ${to}`);
+function TestComponent() {
+
+	const [ clicked, setClicked ] = React.useState(false);
+	const position = clicked ? 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+	const move = clicked ? 'Nf6' : 'e4';
+
+	function onClick() {
+		window['__kokopu_debug_freeze_motion'] = 0.6;
+		setClicked(true);
+	}
+
+	return (<>
+		<div>
+			<Chessboard position={position} move={move} animated={true} />
+		</div>
+		{clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
+	</>);
 }
 
+
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} flipped
-		squareMarkers="Gc4" textMarkers="BAh3" arrowMarkers="Gc8a4" moveArrowColor="r" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} move="e4" animated={false} />,
+	<TestComponent />,
 ]); /* eslint-enable react/jsx-key */

@@ -21,15 +21,20 @@
 
 
 import * as React from 'react';
-import { testApp, setSandbox } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Movetext } from '../../../dist/lib/index';
 
-function onMovePlayed(move: string) {
-	setSandbox(`promotion move played: ${move}`);
-}
+import pgn from '../common/games.pgn';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/1P6/8/8/7k/8/5K2/8 w - - 0 1" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/8/8/8/7k/8/1p3K2/R7 b - - 0 1" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} flipped position="antichess:8/1P6/8/8/7r/8/5K2/8 w - - 0 1" />,
-]); /* eslint-enable react/jsx-key */
+	<Movetext game={pgn} gameIndex={4} />,
+	<Movetext game={pgn} gameIndex={5} />,
+	<Movetext game={pgn} gameIndex={6} />,
+], 'width-600'); /* eslint-enable react/jsx-key */
+
+const customCSS = document.createElement('style');
+customCSS.innerText = `
+	.myClass { font-weight: bold; color: green; }
+	#myId { font-weight: bold; color: red; }
+`;
+document.head.appendChild(customCSS);

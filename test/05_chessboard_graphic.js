@@ -25,7 +25,7 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Chessboard graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '04_chessboard_simple', [
+	itChecksScreenshots(browserContext, '05_chessboard_graphic/base', [
 		'default',
 		'empty',
 		'parsing error',
@@ -34,7 +34,7 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'wrong type',
 	]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_flipped', [
+	itChecksScreenshots(browserContext, '05_chessboard_graphic/flipped', [
 		'default',
 		'empty',
 		'parsing error',
@@ -42,7 +42,7 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'from Kokopu object',
 	]);
 
-	itChecksScreenshots(browserContext, '06_chessboard_annotations', [
+	itChecksScreenshots(browserContext, '05_chessboard_graphic/annotations', [
 		'with coordinates',
 		'with coordinates and flip',
 		'without coordinates',
@@ -51,7 +51,7 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'overlap and flip',
 	]);
 
-	itChecksScreenshots(browserContext, '07_chessboard_move', [
+	itChecksScreenshots(browserContext, '05_chessboard_graphic/move', [
 		'default',
 		'no move arrow',
 		'parsing error',
@@ -63,7 +63,7 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'wrong type',
 	]);
 
-	itChecksScreenshots(browserContext, '08_chessboard_theme', [
+	itChecksScreenshots(browserContext, '05_chessboard_graphic/theme', [
 		'default',
 		'large',
 		'small',

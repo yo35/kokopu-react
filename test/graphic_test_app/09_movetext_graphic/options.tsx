@@ -21,19 +21,18 @@
 
 
 import * as React from 'react';
-import { testApp, setSandbox } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Movetext, i18n } from '../../../dist/lib/index';
 
-function onMovePlayed(move: string) {
-	setSandbox(`move played: ${move}`);
-}
+import pgn from '../common/games.pgn';
+
+// Localization for French
+i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
-		flipped position="rnbqk2r/ppp2ppp/3p1n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 1" move="Bg5" animated={false} moveArrowColor="g" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
-		position="rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
-		position="chess960:1r3k1r/pppppppp/8/8/8/8/PPPPPPPP/1R3K1R w BHbh - 0 1" />,
-]); /* eslint-enable react/jsx-key */
+	<Movetext game={pgn} pieceSymbols="localized" />,
+	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
+	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
+		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
+	<Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
+], 'width-600'); /* eslint-enable react/jsx-key */

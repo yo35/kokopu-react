@@ -27,7 +27,7 @@ const { By, Key } = require('selenium-webdriver');
 describeWithBrowser('Movetext interaction', browserContext => {
 
 	function itCheckClickMove(itemIndex, label, targets) {
-		itCustom(browserContext, '20_movetext_interaction', itemIndex, label, async element => {
+		itCustom(browserContext, '10_movetext_interaction/select_moves', itemIndex, label, async element => {
 			const actions = browserContext.driver.actions({ async: true });
 			await setSandbox(browserContext, '');
 			for (let i = 0; i < targets.length; ++i) {
@@ -62,7 +62,7 @@ describeWithBrowser('Movetext interaction', browserContext => {
 	]);
 
 	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast) {
-		itCustom(browserContext, '20_movetext_interaction', itemIndex, label, async element => {
+		itCustom(browserContext, '10_movetext_interaction/select_moves', itemIndex, label, async element => {
 			const focusFieldElement = await element.findElement(By.className('kokopu-focusField'));
 
 			await setSandbox(browserContext, '');

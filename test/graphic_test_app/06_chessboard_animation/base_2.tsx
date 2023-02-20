@@ -21,29 +21,16 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
-function TestComponent() {
-
-	const [ clicked, setClicked ] = React.useState(false);
-	const position = clicked ? 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-	const move = clicked ? 'Nf6' : 'e4';
-
-	function onClick() {
-		window['__kokopu_debug_freeze_motion'] = 0.6;
-		setClicked(true);
-	}
-
-	return (<>
-		<div>
-			<Chessboard position={position} move={move} animated={true} />
-		</div>
-		{clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
-	</>);
-}
-
+window['__kokopu_debug_freeze_motion'] = 0.7;
 
 testApp([ /* eslint-disable react/jsx-key */
-	<TestComponent />,
+	<Chessboard move="e4" animated={true} />,
+	<Chessboard move="Nf3" animated={true} moveArrowVisible={false} />,
+	<Chessboard position="r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2" move="Bxa6" animated={true} flipped />,
+	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={true} />,
+	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={true} />,
+	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={true} />,
 ]); /* eslint-enable react/jsx-key */

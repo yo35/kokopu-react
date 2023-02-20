@@ -25,14 +25,14 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Movetext graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '16_movetext_simple', [
+	itChecksScreenshots(browserContext, '09_movetext_graphic/base', [
 		'game 1',
 		'game 2',
 		'game 3',
 		'game 4',
 	]);
 
-	itChecksScreenshots(browserContext, '17_movetext_error', [
+	itChecksScreenshots(browserContext, '09_movetext_graphic/error', [
 		'wrong game index 1',
 		'wrong game index 2',
 		'pgn parsing error 1',
@@ -40,13 +40,13 @@ describeWithBrowser('Movetext graphic', browserContext => {
 		'wrong type',
 	]);
 
-	itChecksScreenshots(browserContext, '18_movetext_html', [
+	itChecksScreenshots(browserContext, '09_movetext_graphic/html', [
 		'html in headers',
 		'html in comments',
 		'filtered tags and attributes',
 	]);
 
-	itChecksScreenshots(browserContext, '19_movetext_options', [
+	itChecksScreenshots(browserContext, '09_movetext_graphic/options', [
 		'localized piece symbols',
 		'custom piece symbols',
 		'figurine piece symbols and diagram options',

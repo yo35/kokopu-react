@@ -21,8 +21,8 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
 

@@ -110,7 +110,7 @@ Lists are supported:
 <li>1<sup>st</sup> point</li>
 <li>2<sup>nd</sup> point</li>
 </ul>
-... and so are images: <img src="../smiley.png" alt="smiley" />}
+... and so are images: <img src="../../smiley.png" alt="smiley" />}
 
 *
 

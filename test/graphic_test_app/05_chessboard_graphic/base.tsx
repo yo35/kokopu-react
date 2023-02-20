@@ -21,12 +21,15 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { ErrorBox, i18n } from '../../dist/lib/index';
-
-// Checking localization...
-i18n.LINE = 'ligne {0} (+ invalid placeholder {1})';
+import { Position } from 'kokopu';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<ErrorBox title="The title" message="The message" text="| x <- error is here" errorIndex={2} lineNumber={42} />,
+	<Chessboard />,
+	<Chessboard position="empty" />,
+	<Chessboard position="something invalid" />,
+	<Chessboard position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
+	<Chessboard position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
+	<Chessboard position={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
 ]); /* eslint-enable react/jsx-key */

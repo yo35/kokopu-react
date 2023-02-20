@@ -113,7 +113,7 @@ async function saveCoverage(browserContext) {
 	let pageIndex = 0;
 	let coverageFile = '';
 	do {
-		coverageFile = `${coverageDir}/${browserContext.latestTestCase}-${pageIndex}.json`;
+		coverageFile = `${coverageDir}/${browserContext.latestTestCase.replaceAll('/', '__')}-${pageIndex}.json`;
 		++pageIndex;
 	} while (fs.existsSync(coverageFile));
 

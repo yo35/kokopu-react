@@ -21,8 +21,8 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { Chessboard, AnnotationColor, AnnotationSymbol } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Chessboard, AnnotationColor, AnnotationSymbol } from '../../../dist/lib/index';
 
 const squareMarkers1 = 'Ba1,Ba2,Gb1,Gb2,Rc1,Rc2,Yd1,Yd2';
 const arrowMarkers1 = 'Ba8b6,Gb8c6,Re8f6,Yf8g6';

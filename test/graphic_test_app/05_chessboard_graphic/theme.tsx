@@ -21,16 +21,26 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
-window['__kokopu_debug_freeze_motion'] = 0.09;
+const pos1 = '2qb1rk1/3n1p1p/2p3p1/2Pp4/p2P1BQ1/8/P1N2PPP/R5K1 b - - 0 1';
+const mv1 = 'Ba5';
+
+const pos2 = 'start';
+const mv2 = 'e4';
+
+const sm = 'Ba8,Ba7,Gb8,Gb7,Rc8,Rc7,Yd8,Yd7';
+const am = 'Ba1a3,Gb1b3,Rc1c3,Yd1d3';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard move="e4" animated={true} />,
-	<Chessboard move="Nf3" animated={true} moveArrowVisible={false} />,
-	<Chessboard position="r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2" move="Bxa6" animated={true} flipped />,
-	<Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={true} />,
-	<Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={true} />,
-	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={true} />,
+	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} animated={false} />,
+	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={60} animated={false} />,
+	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={29} coordinateVisible={false} flipped={true} animated={false} />,
+	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={47} coordinateVisible={true} flipped={true} colorset="scid" animated={false} />,
+	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} coordinateVisible={false} colorset="marine" pieceset="eyes" animated={false} />,
+	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} coordinateVisible={false} pieceset="fantasy" animated={false} />,
+	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} colorset="emerald" pieceset="skulls" animated={false} />,
+	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={91} flipped={true} colorset="gray" pieceset="spatial" animated={false} />,
+	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={17} colorset="dusk" animated={false} />,
 ]); /* eslint-enable react/jsx-key */

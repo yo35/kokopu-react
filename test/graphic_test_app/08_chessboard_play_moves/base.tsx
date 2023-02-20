@@ -21,15 +21,19 @@
 
 
 import * as React from 'react';
-import { Position } from 'kokopu';
-import { testApp } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp, setSandbox } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
+
+function onMovePlayed(move: string) {
+	setSandbox(`move played: ${move}`);
+}
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard />,
-	<Chessboard position="empty" />,
-	<Chessboard position="something invalid" />,
-	<Chessboard position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-	<Chessboard position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
-	<Chessboard position={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+		flipped position="rnbqk2r/ppp2ppp/3p1n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 1" move="Bg5" animated={false} moveArrowColor="g" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+		position="rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1" />,
+	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+		position="chess960:1r3k1r/pppppppp/8/8/8/8/PPPPPPPP/1R3K1R w BHbh - 0 1" />,
 ]); /* eslint-enable react/jsx-key */

@@ -21,21 +21,14 @@
 
 
 import * as React from 'react';
-import { Game, pgnRead } from 'kokopu';
-import { testApp } from './common/test_app';
-import { Movetext } from '../../dist/lib/index';
-
-import pgn from './common/games.pgn';
-
-const game = new Game();
-game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
-game.result('1-0');
-
-const database = pgnRead(pgn);
+import { Position } from 'kokopu';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={game} />,
-	<Movetext game={database} />,
-	<Movetext game={pgn} gameIndex={1} />,
-	<Movetext game={database} gameIndex={3} />,
-], 'width-600'); /* eslint-enable react/jsx-key */
+	<Chessboard flipped={true} />,
+	<Chessboard flipped={true} position="empty" />,
+	<Chessboard flipped={true} position="something invalid" />,
+	<Chessboard flipped={true} position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
+	<Chessboard flipped={true} position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} />,
+]); /* eslint-enable react/jsx-key */

@@ -21,23 +21,21 @@
 
 
 import * as React from 'react';
-import { testApp, setSandbox } from './common/test_app';
-import { Movetext } from '../../dist/lib/index';
+import { Game, pgnRead } from 'kokopu';
+import { testApp } from '../common/test_app';
+import { Movetext } from '../../../dist/lib/index';
 
-import pgn from './common/games.pgn';
+import pgn from '../common/games.pgn';
 
-function onMoveSelected(nodeId: string | undefined, evtOrigin: string) {
-	setSandbox(`move selected: ${nodeId}\norigin: ${evtOrigin}`);
-}
+const game = new Game();
+game.mainVariation().play('e4').play('e5').play('Bc4').play('Nc6').play('Qh5').play('Nf6').play('Qxf7#');
+game.result('1-0');
+
+const database = pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} selection="4w" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" />,
-	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-3w-v0-3w" />,
-	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-2b" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="start" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1w" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="6b" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="invalid-id" />,
-	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-start" />,
+	<Movetext game={game} />,
+	<Movetext game={database} />,
+	<Movetext game={pgn} gameIndex={1} />,
+	<Movetext game={database} gameIndex={3} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

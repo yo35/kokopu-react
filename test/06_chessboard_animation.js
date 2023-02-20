@@ -26,7 +26,7 @@ const { By } = require('selenium-webdriver');
 
 describeWithBrowser('Chessboard animation', browserContext => {
 
-	itChecksScreenshots(browserContext, '09a_chessboard_animated_move', [
+	itChecksScreenshots(browserContext, '06_chessboard_animation/base_1', [
 		'move 1',
 		'move 2',
 		'capture',
@@ -35,7 +35,7 @@ describeWithBrowser('Chessboard animation', browserContext => {
 		'promotion',
 	]);
 
-	itChecksScreenshots(browserContext, '09b_chessboard_animated_move', [
+	itChecksScreenshots(browserContext, '06_chessboard_animation/base_2', [
 		'move 1',
 		'move 2',
 		'capture',
@@ -44,7 +44,7 @@ describeWithBrowser('Chessboard animation', browserContext => {
 		'promotion',
 	]);
 
-	itChecksScreenshots(browserContext, '09c_chessboard_animated_move', [
+	itChecksScreenshots(browserContext, '06_chessboard_animation/base_3', [
 		'move 1',
 		'move 2',
 		'capture',
@@ -53,7 +53,7 @@ describeWithBrowser('Chessboard animation', browserContext => {
 		'promotion',
 	]);
 
-	itCustom(browserContext, '10_chessboard_animation_on_redraw', 0, 'default', async element => {
+	itCustom(browserContext, '06_chessboard_animation/on_redraw', 0, 'default', async element => {
 
 		// Run the scenario.
 		await takeScreenshot(browserContext, 'initial state', element);

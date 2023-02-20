@@ -21,10 +21,10 @@
 
 
 import * as React from 'react';
-import { testApp } from './common/test_app';
-import { Chessboard } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
-window['__kokopu_debug_freeze_motion'] = 0.7;
+window['__kokopu_debug_freeze_motion'] = 0.91;
 
 testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard move="e4" animated={true} />,

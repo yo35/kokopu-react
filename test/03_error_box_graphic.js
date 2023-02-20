@@ -25,7 +25,7 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Error box graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '01_error_box', [
+	itChecksScreenshots(browserContext, '03_error_box_graphic/base', [
 		'minimal',
 		'full',
 		'missing error index',
@@ -39,7 +39,7 @@ describeWithBrowser('Error box graphic', browserContext => {
 		'single character text',
 	]);
 
-	itChecksScreenshots(browserContext, '02_error_box_localization', [
+	itChecksScreenshots(browserContext, '03_error_box_graphic/localization', [
 		'default'
 	]);
 

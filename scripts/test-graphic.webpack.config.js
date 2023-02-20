@@ -25,8 +25,13 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// List all the JS files in /test/graphic_test_app, each of them corresponding to a entry.
-const items = fs.readdirSync('./test/graphic_test_app').filter(filename => path.extname(filename) === '.tsx').map(filename => path.basename(filename, '.tsx')).sort();
+// List all the files corresponding to /test/graphic_test_app/{number}_*/*.tsx, each of them corresponding to a entry.
+const items = fs.readdirSync('./test/graphic_test_app', { withFileTypes: true })
+	.filter(file => file.isDirectory() && /^\d+_/.test(file.name))
+	.flatMap(file => fs.readdirSync(`./test/graphic_test_app/${file.name}`)
+		.filter(subFile => path.extname(subFile) === '.tsx')
+		.map(subFile => `${file.name}/${path.basename(subFile, '.tsx')}`)
+	);
 const entries = {};
 items.forEach(item => {
 	entries[item] = `./test/graphic_test_app/${item}`;

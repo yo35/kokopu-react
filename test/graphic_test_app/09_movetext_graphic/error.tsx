@@ -22,11 +22,11 @@
 
 import * as React from 'react';
 import { pgnRead } from 'kokopu';
-import { testApp } from './common/test_app';
-import { Movetext } from '../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Movetext } from '../../../dist/lib/index';
 
-import pgn from './common/games.pgn';
-import dummyPgn from './common/dummy.pgn';
+import pgn from '../common/games.pgn';
+import dummyPgn from '../common/dummy.pgn';
 
 const database = pgnRead(pgn);
 
