@@ -20,7 +20,7 @@
  * -------------------------------------------------------------------------- */
 
 
-const { Chessboard } = require('../build/test_headless/index');
+const { exception, Chessboard } = require('../build/test_headless/index');
 const test = require('unit.js');
 
 
@@ -51,6 +51,15 @@ describe('Adapt square-size', () => {
 	it('Size 375x500 without coordinates', () => testAdaptSquareSizeWithIncrement(41, 375, 500, false));
 	it('Size 600x450 with coordinates', () => testAdaptSquareSizeWithIncrement(54, 600, 450, true));
 	it('Size 600x450 without coordinates', () => testAdaptSquareSizeWithIncrement(56, 600, 450, false));
+
+	function itInvalidArgument(label, action) {
+		it(label, () => { test.exception(action).isInstanceOf(exception.IllegalArgument); });
+	}
+
+	itInvalidArgument('Width <null>', () => Chessboard.adaptSquareSize(null, 400, true));
+	itInvalidArgument('Width not-a-number', () => Chessboard.adaptSquareSize('500', 400, false));
+	itInvalidArgument('Height <undefined>', () => Chessboard.adaptSquareSize(500, undefined, false));
+	itInvalidArgument('Height object', () => Chessboard.adaptSquareSize(500, {}, true));
 });
 
 describe('Adapt square-size with small-screen limits', () => {

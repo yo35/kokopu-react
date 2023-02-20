@@ -20,7 +20,7 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
+const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot, itChecksScreenshots } = require('./common/graphic');
 const { By, Key } = require('selenium-webdriver');
 
 
@@ -95,5 +95,9 @@ describeWithBrowser('Movetext interaction', browserContext => {
 	itCheckKeyboardActions(6, 'key on last selected', tpl('start', 'key-first'), tpl('6w', 'key-previous'), '', '');
 	itCheckKeyboardActions(7, 'key on invalid selection', '', '', '', '');
 	itCheckKeyboardActions(8, 'key on sub-variation selected', tpl('start', 'key-first'), tpl('1w', 'key-previous'), tpl('1b-v0-1b', 'key-next'), tpl('1b-v0-3w', 'key-last'));
+
+	itChecksScreenshots(browserContext, '10_movetext_interaction/error', [
+		'wrong interaction mode',
+	]);
 
 });

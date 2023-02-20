@@ -36,4 +36,5 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={dummyPgn} />,
 	<Movetext game={pgnRead(dummyPgn)} gameIndex={1} />,
 	<Movetext game={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+	<Movetext game={pgn} gameIndex={-1} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

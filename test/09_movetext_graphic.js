@@ -37,7 +37,8 @@ describeWithBrowser('Movetext graphic', browserContext => {
 		'wrong game index 2',
 		'pgn parsing error 1',
 		'pgn parsing error 2',
-		'wrong type',
+		'wrong game type',
+		'wrong game index type',
 	]);
 
 	itChecksScreenshots(browserContext, '09_movetext_graphic/html', [
@@ -51,6 +52,8 @@ describeWithBrowser('Movetext graphic', browserContext => {
 		'custom piece symbols',
 		'figurine piece symbols and diagram options',
 		'hidden diagrams',
+		'wrong diagram options 1',
+		'wrong diagram options 2',
 	]);
 
 });

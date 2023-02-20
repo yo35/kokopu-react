@@ -34,11 +34,10 @@ export function sanitizeBoolean(input: boolean): boolean {
 
 
 export function sanitizeInteger(input: number, exceptionBuilder: () => IllegalArgument): number {
-	const val = Math.round(Number(input));
-	if (!Number.isInteger(val)) {
+	if (typeof input !== 'number' || !Number.isFinite(input)) {
 		throw exceptionBuilder();
 	}
-	return val;
+	return Math.round(input);
 }
 
 

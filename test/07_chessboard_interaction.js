@@ -20,7 +20,7 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot } = require('./common/graphic');
+const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot, itChecksScreenshots } = require('./common/graphic');
 
 
 describeWithBrowser('Chessboard interaction', browserContext => {
@@ -119,8 +119,12 @@ describeWithBrowser('Chessboard interaction', browserContext => {
 		});
 	}
 
-	itCheckNonEditArrow(2, 'edit color not set', 125, 175, 325, 225);
 	itCheckNonEditArrow(0, 'from == to', 275, 225, 290, 210);
 	itCheckNonEditArrow(0, 'out of board', 175, 225, 500, 280);
+
+	itChecksScreenshots(browserContext, '07_chessboard_interaction/error', [
+		'wrong interaction mode',
+		'edit color not set',
+	]);
 
 });

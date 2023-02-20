@@ -21,16 +21,11 @@
 
 
 import * as React from 'react';
-import { Square } from 'kokopu';
-import { testApp, setSandbox } from '../common/test_app';
-import { Chessboard } from '../../../dist/lib/index';
+import { testApp } from '../common/test_app';
+import { Movetext } from '../../../dist/lib/index';
 
-function onArrowEdited(from: Square, to: Square) {
-	setSandbox(`arrow edited: ${from} -> ${to}`);
-}
+import pgn from '../common/games.pgn';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="g" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
-		squareMarkers="Gc5" arrowMarkers="Yh3f6" />,
-]); /* eslint-enable react/jsx-key */
+	<Movetext game={pgn} gameIndex={7} interactionMode={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'whatever' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+], 'width-600'); /* eslint-enable react/jsx-key */

@@ -31,7 +31,7 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'parsing error',
 		'from FEN',
 		'from Kokopu object',
-		'wrong type',
+		'wrong position type',
 	]);
 
 	itChecksScreenshots(browserContext, '05_chessboard_graphic/flipped', [
@@ -60,7 +60,8 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'castling move',
 		'en-passant',
 		'promotion',
-		'wrong type',
+		'wrong move type',
+		'wrong move arrow color type',
 	]);
 
 	itChecksScreenshots(browserContext, '05_chessboard_graphic/theme', [
@@ -73,6 +74,9 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'custom 4',
 		'custom 5',
 		'custom 6',
+		'wrong square size type',
+		'wrong colorset',
+		'wrong pieceset',
 	]);
 
 	itChecksScreenshots(browserContext, '05_chessboard_graphic/chess_variants', [

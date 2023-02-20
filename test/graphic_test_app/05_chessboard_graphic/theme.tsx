@@ -43,4 +43,7 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} colorset="emerald" pieceset="skulls" animated={false} />,
 	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={91} flipped={true} colorset="gray" pieceset="spatial" animated={false} />,
 	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={17} colorset="dusk" animated={false} />,
+	<Chessboard squareSize={ /* eslint-disable @typescript-eslint/no-explicit-any */ '24' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+	<Chessboard colorset="not-a-colorset" />,
+	<Chessboard pieceset="not-a-pieceset" />,
 ]); /* eslint-enable react/jsx-key */
