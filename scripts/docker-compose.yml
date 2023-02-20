@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   web-client:
-    image: selenium/standalone-firefox:4.8.0-20230131 # https://github.com/SeleniumHQ/docker-selenium to get the latest version
+    image: selenium/standalone-firefox:4.8.0-20230210 # https://github.com/SeleniumHQ/docker-selenium to get the latest version
     shm_size: '2gb'
     ports:
       - 4444:4444 # http://localhost:4444 (driver)
