@@ -26,13 +26,13 @@ export * as exception from './exception';
 export { Colorset, Pieceset, PieceSymbolMapping, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, isPieceSymbolMapping,
 	isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
 
-export { ErrorBox } from './errorbox/ErrorBox';
+export { ErrorBox, ErrorBoxProps } from './errorbox/ErrorBox';
 
-export { SquareMarkerIcon } from './icons/SquareMarkerIcon';
-export { TextMarkerIcon } from './icons/TextMarkerIcon';
-export { ArrowMarkerIcon } from './icons/ArrowMarkerIcon';
+export { SquareMarkerIcon, SquareMarkerIconProps } from './icons/SquareMarkerIcon';
+export { TextMarkerIcon, TextMarkerIconProps } from './icons/TextMarkerIcon';
+export { ArrowMarkerIcon, ArrowMarkerIconProps } from './icons/ArrowMarkerIcon';
 
-export { Chessboard } from './chessboard/Chessboard';
+export { Chessboard, ChessboardProps, SmallScreenLimit } from './chessboard/Chessboard';
 
 export { formatMove, moveFormatter } from './movetext/moveFormatter';
-export { Movetext } from './movetext/Movetext';
+export { Movetext, MovetextProps } from './movetext/Movetext';

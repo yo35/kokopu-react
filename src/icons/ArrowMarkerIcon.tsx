@@ -34,7 +34,7 @@ import './arrow.css';
 const ARROW_THICKNESS_FACTOR = 0.2;
 
 
-interface ArrowMarkerIconProps {
+export interface ArrowMarkerIconProps {
 
 	/**
 	 * Width and height (in pixels) of the icon.

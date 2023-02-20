@@ -29,7 +29,7 @@ import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE } from '../types';
 const SQUARE_MARGIN_FACTOR = 0.1;
 
 
-interface SquareMarkerIconProps {
+export interface SquareMarkerIconProps {
 
 	/**
 	 * Width and height (in pixels) of the icon.

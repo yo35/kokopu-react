@@ -33,7 +33,7 @@ const FORWARD_CHARACTER_COUNT = 36;
 const ELLIPSIS_SYMBOL_LENGTH = 4; // Symbol is ... + space (before or after)
 
 
-interface ErrorBoxProps {
+export interface ErrorBoxProps {
 
 	/**
 	 * Title of the error box.

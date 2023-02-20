@@ -29,7 +29,7 @@ import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, AnnotationSymbol, isAnnotationSymbol 
 import { AnnotationSymbolShape } from './AnnotationSymbolShape';
 
 
-interface TextMarkerIconProps {
+export interface TextMarkerIconProps {
 
 	/**
 	 * Width and height (in pixels) of the icon.

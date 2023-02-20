@@ -37,7 +37,7 @@ import { MovetextImpl, firstNodeIdImpl, previousNodeIdImpl, nextNodeIdImpl, last
 import './Movetext.css';
 
 
-interface MovetextProps {
+export interface MovetextProps {
 
 	/**
 	 * Displayed position. Can be a [kokopu.Game](https://kokopu.yo35.org/docs/current/classes/Game.html) object,

@@ -39,7 +39,7 @@ import { ErrorBox } from '../errorbox/ErrorBox';
 /**
  * Define a limit applicable to the parameters of a {@link Chessboard} on small-screen devices.
  */
-interface SmallScreenLimit {
+export interface SmallScreenLimit {
 	width: number;
 	squareSize?: number;
 	coordinateVisible?: boolean;
