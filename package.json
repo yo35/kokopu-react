@@ -36,6 +36,8 @@
 		"htmlparser2": "^8.0.1"
 	},
 	"devDependencies": {
+		"@babel/preset-env": "^7.20.2",
+		"@babel/preset-react": "^7.18.6",
 		"@emotion/react": "^11.10.6",
 		"@emotion/styled": "^11.10.6",
 		"@mui/material": "^5.11.9",
@@ -43,6 +45,7 @@
 		"@types/react-dom": "^18.0.11",
 		"@typescript-eslint/eslint-plugin": "^5.52.0",
 		"@typescript-eslint/parser": "^5.52.0",
+		"babel-loader": "^9.1.2",
 		"copy-webpack-plugin": "^11.0.0",
 		"copyfiles": "^2.4.1",
 		"coverage-istanbul-loader": "^3.0.5",
@@ -56,6 +59,7 @@
 		"null-loader": "^4.0.1",
 		"nyc": "^15.1.0",
 		"react": "^18.2.0",
+		"react-docgen-typescript": "^2.2.2",
 		"react-dom": "^18.2.0",
 		"react-styleguidist": "^13.1.1",
 		"rimraf": "^4.1.2",
@@ -76,8 +80,9 @@
 		"test_env:start": "docker-compose -p kokopu-react-test-env -f scripts/docker-compose.yml up -d",
 		"test_env:stop": "docker-compose -p kokopu-react-test-env -f scripts/docker-compose.yml down",
 		"build": "make -f scripts/build.mk",
+		"build:doc": "rimraf dist/docs && styleguidist build --config scripts/doc.styleguide.config.js && copyfiles -u 2 'doc_src/theming/*.png' dist/docs",
 		"build:lib": "rimraf dist/lib && tsc && copyfiles -u 1 'src/**/*.{css,png,woff,woff2}' dist/lib",
-		"start": "styleguidist server --open --config scripts/styleguide.config.js",
+		"start": "styleguidist server --open --config scripts/doc.styleguide.config.js",
 		"clean": "rimraf build dist",
 		"predeploy": "npm run test && npm run build",
 		"deploy": "npm publish && node scripts/deploy.js"

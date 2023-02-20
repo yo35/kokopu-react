@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,9 +17,15 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-export function buildComponentDemoCode(componentName, attributes) {
-	return attributes.length === 0 ? `<${componentName} />` : `<${componentName} ${attributes.join(' ')} />`;
+declare module '*.pgn' {
+	const pgnText: string;
+	export default pgnText;
+}
+
+declare module '*.png' {
+	const path: string;
+	export default path;
 }

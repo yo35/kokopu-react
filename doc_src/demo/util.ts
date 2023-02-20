@@ -18,12 +18,8 @@
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
  * -------------------------------------------------------------------------- */
- 
- 
-.kokopu-logo {
-	text-align: center;
-}
 
-footer {
-	display: none !important;
+
+export function buildComponentDemoCode(componentName: string, attributes: string[]) {
+	return attributes.length === 0 ? `<${componentName} />` : `<${componentName} ${attributes.join(' ')} />`;
 }

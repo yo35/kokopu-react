@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,12 +17,12 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
+import * as React from 'react';
 
-import { Chessboard } from '../../src/index';
+import { Chessboard, SmallScreenLimit } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
 import Box from '@mui/material/Box';
@@ -32,9 +32,18 @@ import Typography from '@mui/material/Typography';
 import './demo.css';
 
 
-export default class Page extends React.Component {
+interface PageState {
+	squareSize: number;
+	windowWidth: number;
+	limits: SmallScreenLimit[];
+}
 
-	constructor(props) {
+
+export default class Page extends React.Component<object, PageState> {
+
+	private windowResizeListener = () => this.handleWindowResize();
+
+	constructor(props: object) {
 		super(props);
 		this.state = {
 			squareSize: 56,
@@ -51,7 +60,6 @@ export default class Page extends React.Component {
 				{ width: 860, squareSize: 44 },
 			],
 		};
-		this.windowResizeListener = () => this.handleWindowResize();
 	}
 
 	componentDidMount() {
@@ -72,7 +80,7 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderControls() {
+	private renderControls() {
 		return (
 			<Box>
 				<Typography>Resize the browser to see the chessboard adapt its size...</Typography>
@@ -81,7 +89,7 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderChessboard() {
+	private renderChessboard() {
 		return (
 			<Box>
 				<Chessboard squareSize={this.state.squareSize} smallScreenLimits={this.state.limits} />
@@ -89,17 +97,17 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderCode() {
+	private renderCode() {
 
-		let limits = this.state.limits.map(limit => {
-			let limitAttributes = [`width: ${limit.width}`, `squareSize: ${limit.squareSize}`];
+		const limits = this.state.limits.map(limit => {
+			const limitAttributes = [`width: ${limit.width}`, `squareSize: ${limit.squareSize}`];
 			if ('coordinateVisible' in limit) {
 				limitAttributes.push(`coordinateVisible: ${limit.coordinateVisible}`);
 			}
 			return `    { ${limitAttributes.join(', ')} },\n`;
 		});
 
-		let attributes = [];
+		const attributes: string[] = [];
 		attributes.push(`squareSize={${this.state.squareSize}}`);
 		attributes.push('smallScreenLimits={limits}');
 		return (
@@ -114,7 +122,8 @@ export default class Page extends React.Component {
 		);
 	}
 
-	handleWindowResize() {
+	private handleWindowResize() {
 		this.setState({ windowWidth: window.innerWidth });
 	}
+
 }

@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,16 +17,16 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 import React from 'react';
 import Styled from 'react-styleguidist/lib/client/rsg-components/Styled';
 
-import logo from './kokopu-react-logo.png';
-
 import './theming.css';
 
+
+/* eslint-disable react/prop-types */
 
 const styles = ({ color, fontFamily, fontSize }) => ({
 	logo: {
@@ -41,7 +41,7 @@ const styles = ({ color, fontFamily, fontSize }) => ({
 function LogoRenderer({ classes, children }) {
 	return (<>
 		<div className="kokopu-logo">
-			<img src={logo} />
+			<img src="kokopu-react-logo.png" />
 		</div>
 		<h1 className={classes.logo}>{children}</h1>
 	</>);

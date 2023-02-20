@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,13 +17,14 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
 const fs = require('fs');
 const path = require('path');
 const version = require('../package.json').version;
 
+const reactDocgenTypescript = require('react-docgen-typescript');
 
 const docSrcDir = '../doc_src';
 const srcDir = '../src';
@@ -36,7 +37,7 @@ fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 // -------------------------------
 
 const componentSectionTitle = 'Components';
-const components = fs.readdirSync(path.resolve(__dirname, srcDir)).filter(filename => /^[A-Z].*\.js$/.test(filename)).map(filename => path.basename(filename, '.js'));
+const components = [ 'errorbox/ErrorBox', 'icons/SquareMarkerIcon', 'icons/TextMarkerIcon', 'icons/ArrowMarkerIcon', 'chessboard/Chessboard', 'movetext/Movetext' ];
 
 
 // Demo section configuration
@@ -70,6 +71,7 @@ demoPages.forEach(demoPage => {
 // Generate the table of contents for each sections with sub-sections.
 function generateTableOfContents(parentName, itemNames) {
 	let text = itemNames.map(itemName => {
+		itemName = path.basename(itemName);
 		let link = `#/${parentName}/${itemName}`.replace(/ /g, '%20');
 		return `- [${itemName}](${link})\n`;
 	}).join('');
@@ -93,11 +95,25 @@ module.exports = {
 			rules: [
 				{
 					test: /\.js$/i,
-					loader: 'babel-loader',
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: [ '@babel/preset-env', '@babel/preset-react' ],
+						},
+					}
+				},
+				{
+					test: /\.tsx?$/i,
+					use: {
+						loader: 'ts-loader',
+						options: {
+							configFile: path.resolve(__dirname, 'doc.tsconfig.json'),
+						},
+					},
 				},
 				{
 					test: /\.css$/i,
-					use: ['style-loader', 'css-loader'],
+					use: [ 'style-loader', 'css-loader' ],
 				},
 				{
 					test: /\.(png|woff|woff2)$/i,
@@ -108,13 +124,17 @@ module.exports = {
 					type: 'asset/source',
 				},
 			],
-		}
+		},
+		resolve: {
+			extensions: [ '*.js', '*.ts', '*.tsx' ],
+		},
 	},
+	propsParser: (filePath, source, resolver, handlers) => reactDocgenTypescript.parse(filePath, source, resolver, handlers),
 	usageMode: 'expand',
 	exampleMode: 'expand',
 	context: Object.assign({}, componentContext, demoContext),
-	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.js')} } from 'kokopu-react';`,
-	getExampleFilename: componentPath => path.resolve(__dirname, `${docSrcDir}/examples/${path.basename(componentPath, '.js')}.md`),
+	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.tsx')} } from 'kokopu-react';`,
+	getExampleFilename: componentPath => path.resolve(__dirname, `${docSrcDir}/examples/${path.basename(componentPath, '.tsx')}.md`),
 	pagePerSection: true,
 	sections: [
 		{
@@ -124,7 +144,7 @@ module.exports = {
 		{
 			name: componentSectionTitle,
 			content: componentsTocFilename,
-			components: components.map(componentName => `${srcDir}/${componentName}.js`),
+			components: components.map(componentName => `${srcDir}/${componentName}.tsx`),
 			sectionDepth: 1
 		},
 		{
@@ -148,7 +168,7 @@ module.exports = {
 		LogoRenderer: path.resolve(__dirname, `${docSrcDir}/theming/LogoRenderer`),
 	},
 	template: {
-		favicon: 'favicon.png',
+		favicon: 'kokopu-react-favicon.png',
 	},
 	theme: {
 		sidebarWidth: 300,

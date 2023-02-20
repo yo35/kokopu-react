@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,10 +17,10 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
+import * as React from 'react';
 
 import { Chessboard } from '../../src/index';
 import { buildComponentDemoCode } from './util';
@@ -45,9 +45,20 @@ const SQUARE_MARKERS = 'Gc4,Gc5,Re4,Re5,Yg4,Yg5';
 const ARROW_MARKERS = 'Gd3b6,Rf3d6,Yh3f6';
 
 
-export default class Page extends React.Component {
+interface PageState {
+	position: string;
+	flipped: boolean;
+	squareSize: number;
+	coordinateVisible: boolean;
+	annotationVisible: boolean;
+	colorset: string;
+	pieceset: string;
+}
 
-	constructor(props) {
+
+export default class Page extends React.Component<object, PageState> {
+
+	constructor(props: object) {
 		super(props);
 		this.state = {
 			position: 'start',
@@ -70,50 +81,50 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderControls() {
+	private renderControls() {
 		return (<>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControlLabel label="Flip"
-					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
+					control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
 				/>
 				<FormControlLabel label="Show coordinates"
-					control={<Switch checked={this.state.coordinateVisible} onChange={() => this.set('coordinateVisible', !this.state.coordinateVisible)} color="primary" />}
+					control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
 				/>
 				<FormControlLabel label="Show annotations"
-					control={<Switch checked={this.state.annotationVisible} onChange={() => this.set('annotationVisible', !this.state.annotationVisible)} color="primary" />}
+					control={<Switch checked={this.state.annotationVisible} onChange={() => this.setState({ annotationVisible: !this.state.annotationVisible })} color="primary" />}
 				/>
 			</Stack>
 			<Box>
 				<Typography gutterBottom>Square size</Typography>
 				<Slider
-					value={this.state.squareSize} onChange={(_, newValue) => this.set('squareSize', newValue)}
+					value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
 					min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
 				/>
 			</Box>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControl variant="standard">
 					<InputLabel id="colorset-label">Colorset</InputLabel>
-					<Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.set('colorset', evt.target.value)}>
+					<Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
 						{Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
 					</Select>
 				</FormControl>
 				<FormControl variant="standard">
 					<InputLabel id="pieceset-label">Pieceset</InputLabel>
-					<Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.set('pieceset', evt.target.value)}>
+					<Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
 						{Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
 					</Select>
 				</FormControl>
 				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.set('position', 'empty')}>Clear</Button>
-					<Button onClick={() => this.set('position', 'start')}>Reset</Button>
-					<Button onClick={() => this.set('position', '8/8/8/8/8/4k3/q7/4K3 b - - 0 1')}>Set FEN</Button>
-					<Button onClick={() => this.set('position', 'I\'m an invalid FEN string')}>Set ill-formed FEN</Button>
+					<Button onClick={() => this.setState({ position: 'empty' })}>Clear</Button>
+					<Button onClick={() => this.setState({ position: 'start' })}>Reset</Button>
+					<Button onClick={() => this.setState({ position: '8/8/8/8/8/4k3/q7/4K3 b - - 0 1' })}>Set FEN</Button>
+					<Button onClick={() => this.setState({ position: 'I\'m an invalid FEN string' })}>Set ill-formed FEN</Button>
 				</ButtonGroup>
 			</Stack>
 		</>);
 	}
 
-	renderChessboard() {
+	private renderChessboard() {
 		return (
 			<Box>
 				<Chessboard
@@ -130,8 +141,8 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderCode() {
-		let attributes = [];
+	private renderCode() {
+		const attributes: string[] = [];
 		if (this.state.position !== 'start') {
 			attributes.push(`position="${this.state.position}"`);
 		}
@@ -149,9 +160,4 @@ export default class Page extends React.Component {
 		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;
 	}
 
-	set(attributeName, newValue) {
-		let newState = {};
-		newState[attributeName] = newValue;
-		this.setState(newState);
-	}
 }

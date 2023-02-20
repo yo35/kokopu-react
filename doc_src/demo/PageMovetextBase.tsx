@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,12 +17,12 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
+import * as React from 'react';
 
-import { Chessboard, Movetext } from '../../src/index';
+import { Chessboard, Movetext, PieceSymbolMapping } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
 import Box from '@mui/material/Box';
@@ -45,9 +45,25 @@ import game2 from './game-2.pgn';
 import invalidGame from './game-invalid.pgn';
 
 
-export default class Page extends React.Component {
+interface PageState {
+	pgn: string;
+	headerVisible: boolean;
+	diagramVisible: boolean;
+	pieceSymbols: 'native' | 'figurines' | 'custom';
+	customSymbols: PieceSymbolMapping;
+	diagramOptions: {
+		flipped: boolean;
+		squareSize: number;
+		coordinateVisible: boolean;
+		colorset: string;
+		pieceset: string;
+	};
+}
 
-	constructor(props) {
+
+export default class Page extends React.Component<object, PageState> {
+
+	constructor(props: object) {
 		super(props);
 		this.state = {
 			pgn: game1,
@@ -75,26 +91,28 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderControls() {
-		let opts = this.state.diagramOptions;
+	private renderControls() {
+		const opts = this.state.diagramOptions;
 		return (<>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.set('pgn', game1)}>Game 1</Button>
-					<Button onClick={() => this.set('pgn', game2)}>Game 2</Button>
-					<Button onClick={() => this.set('pgn', invalidGame)}>Invalid game</Button>
+					<Button onClick={() => this.setState({ pgn: game1 })}>Game 1</Button>
+					<Button onClick={() => this.setState({ pgn: game2 })}>Game 2</Button>
+					<Button onClick={() => this.setState({ pgn: invalidGame })}>Invalid game</Button>
 				</ButtonGroup>
 				<FormControlLabel label="Show headers"
-					control={<Switch checked={this.state.headerVisible} onChange={() => this.set('headerVisible', !this.state.headerVisible)} color="primary" />}
+					control={<Switch checked={this.state.headerVisible} onChange={() => this.setState({ headerVisible: !this.state.headerVisible })} color="primary" />}
 				/>
 				<FormControlLabel label="Show diagrams"
-					control={<Switch checked={this.state.diagramVisible} onChange={() => this.set('diagramVisible', !this.state.diagramVisible)} color="primary" />}
+					control={<Switch checked={this.state.diagramVisible} onChange={() => this.setState({ diagramVisible: !this.state.diagramVisible })} color="primary" />}
 				/>
 			</Stack>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControl variant="standard">
 					<InputLabel id="piecesymbols-label">Piece symbols</InputLabel>
-					<Select labelId="piecesymbols-label" sx={{ width: '8em' }} value={this.state.pieceSymbols} onChange={evt => this.set('pieceSymbols', evt.target.value)}>
+					<Select labelId="piecesymbols-label" sx={{ width: '8em' }} value={this.state.pieceSymbols}
+						onChange={evt => this.setState({ pieceSymbols: evt.target.value as PageState['pieceSymbols'] })}
+					>
 						<MenuItem value="native">Native</MenuItem>
 						<MenuItem value="figurines">Figurines</MenuItem>
 						<MenuItem value="custom">Custom</MenuItem>
@@ -104,20 +122,20 @@ export default class Page extends React.Component {
 			</Stack>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControlLabel label="Flip diagram(s)"
-					control={<Switch checked={opts.flipped} onChange={() => this.setDiagramOption('flipped', !opts.flipped)} color="primary" />}
+					control={<Switch checked={opts.flipped} onChange={() => this.setDiagramOption({ flipped: !opts.flipped })} color="primary" />}
 				/>
 				<FormControlLabel label="Show coordinates in diagram(s)"
-					control={<Switch checked={opts.coordinateVisible} onChange={() => this.setDiagramOption('coordinateVisible', !opts.coordinateVisible)} color="primary" />}
+					control={<Switch checked={opts.coordinateVisible} onChange={() => this.setDiagramOption({ coordinateVisible: !opts.coordinateVisible })} color="primary" />}
 				/>
 				<FormControl variant="standard">
 					<InputLabel id="colorset-label">Colorset</InputLabel>
-					<Select labelId="colorset-label" sx={{ width: '8em' }} value={opts.colorset} onChange={evt => this.setDiagramOption('colorset', evt.target.value)}>
+					<Select labelId="colorset-label" sx={{ width: '8em' }} value={opts.colorset} onChange={evt => this.setDiagramOption({ colorset: evt.target.value })}>
 						{Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
 					</Select>
 				</FormControl>
 				<FormControl variant="standard">
 					<InputLabel id="pieceset-label">Pieceset</InputLabel>
-					<Select labelId="pieceset-label" sx={{ width: '8em' }} value={opts.pieceset} onChange={evt => this.setDiagramOption('pieceset', evt.target.value)}>
+					<Select labelId="pieceset-label" sx={{ width: '8em' }} value={opts.pieceset} onChange={evt => this.setDiagramOption({ pieceset: evt.target.value })}>
 						{Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
 					</Select>
 				</FormControl>
@@ -125,29 +143,29 @@ export default class Page extends React.Component {
 			<Box>
 				<Typography gutterBottom>Diagram square size</Typography>
 				<Slider
-					value={opts.squareSize} onChange={(_, newValue) => this.setDiagramOption('squareSize', newValue)}
+					value={opts.squareSize} onChange={(_, newValue) => this.setDiagramOption({ squareSize: newValue as number })}
 					min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
 				/>
 			</Box>
 		</>);
 	}
 
-	renderCustomSymbolSelector() {
+	private renderCustomSymbolSelector() {
 		if (this.state.pieceSymbols !== 'custom') {
 			return undefined;
 		}
-		let symbols = this.state.customSymbols;
+		const symbols = this.state.customSymbols;
 		return (<>
-			<TextField variant="standard" sx={{ width: '3em' }} label="King" value={symbols.K} onChange={evt => this.setCustomSymbol('K', evt.target.value)} />
-			<TextField variant="standard" sx={{ width: '3em' }} label="Queen" value={symbols.Q} onChange={evt => this.setCustomSymbol('Q', evt.target.value)} />
-			<TextField variant="standard" sx={{ width: '3em' }} label="Rook" value={symbols.R} onChange={evt => this.setCustomSymbol('R', evt.target.value)} />
-			<TextField variant="standard" sx={{ width: '3em' }} label="Bishop" value={symbols.B} onChange={evt => this.setCustomSymbol('B', evt.target.value)} />
-			<TextField variant="standard" sx={{ width: '3em' }} label="Knight" value={symbols.N} onChange={evt => this.setCustomSymbol('N', evt.target.value)} />
-			<TextField variant="standard" sx={{ width: '3em' }} label="Pawn" value={symbols.P} onChange={evt => this.setCustomSymbol('P', evt.target.value)} />
+			<TextField variant="standard" sx={{ width: '3em' }} label="King" value={symbols.K} onChange={evt => this.handleCustomSymbolChanged('K', evt.target.value)} />
+			<TextField variant="standard" sx={{ width: '3em' }} label="Queen" value={symbols.Q} onChange={evt => this.handleCustomSymbolChanged('Q', evt.target.value)} />
+			<TextField variant="standard" sx={{ width: '3em' }} label="Rook" value={symbols.R} onChange={evt => this.handleCustomSymbolChanged('R', evt.target.value)} />
+			<TextField variant="standard" sx={{ width: '3em' }} label="Bishop" value={symbols.B} onChange={evt => this.handleCustomSymbolChanged('B', evt.target.value)} />
+			<TextField variant="standard" sx={{ width: '3em' }} label="Knight" value={symbols.N} onChange={evt => this.handleCustomSymbolChanged('N', evt.target.value)} />
+			<TextField variant="standard" sx={{ width: '3em' }} label="Pawn" value={symbols.P} onChange={evt => this.handleCustomSymbolChanged('P', evt.target.value)} />
 		</>);
 	}
 
-	renderMovetext() {
+	private renderMovetext() {
 		return (
 			<Box>
 				<Movetext
@@ -161,32 +179,32 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderCode() {
-		let attributes = [];
+	private renderCode() {
+		const attributes: string[] = [];
 		attributes.push('game={pgn}');
 		attributes.push(`headerVisible={${this.state.headerVisible}}`);
 		attributes.push(`pieceSymbols=${this.getPieceSymbolsAsText()}`);
 		attributes.push(`diagramVisible={${this.state.diagramVisible}}`);
 		attributes.push(`diagramOptions={{ ${this.getDiagramAttributesAsText()} }}`);
-		let pgnDeclaration = 'const pgn = `\n' + this.state.pgn.trim() + '`;\n\n';
+		const pgnDeclaration = 'const pgn = `\n' + this.state.pgn.trim() + '`;\n\n';
 		return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('Movetext', attributes)}</pre>;
 	}
 
-	set(attributeName, newValue) {
-		let newState = {};
-		newState[attributeName] = newValue;
-		this.setState(newState);
-	}
-
-	setCustomSymbol(key, value) {
-		let symbols = {...this.state.customSymbols};
+	private handleCustomSymbolChanged(key: keyof PieceSymbolMapping, value: string) {
+		const symbols = { ...this.state.customSymbols };
 		symbols[key] = value;
-		this.set('customSymbols', symbols);
+		this.setState({ customSymbols: symbols });
 	}
 
-	getPieceSymbolsAsText() {
+	private setDiagramOption(opts: Partial<PageState['diagramOptions']>) {
+		const diagramOptions = { ...this.state.diagramOptions };
+		Object.assign(diagramOptions, opts);
+		this.setState({ diagramOptions: diagramOptions });
+	}
+
+	private getPieceSymbolsAsText() {
 		if (this.state.pieceSymbols === 'custom') {
-			let symbols = this.state.customSymbols;
+			const symbols = this.state.customSymbols;
 			return `{{ K:'${symbols.K}', Q:'${symbols.Q}', R:'${symbols.R}', B:'${symbols.B}', N:'${symbols.N}', P:'${symbols.P}' }}`;
 		}
 		else {
@@ -194,14 +212,8 @@ export default class Page extends React.Component {
 		}
 	}
 
-	setDiagramOption(key, value) {
-		let diagramOptions = {...this.state.diagramOptions};
-		diagramOptions[key] = value;
-		this.set('diagramOptions', diagramOptions);
-	}
-
-	getDiagramAttributesAsText() {
-		let attributes = [];
+	private getDiagramAttributesAsText() {
+		const attributes: string[] = [];
 		if (this.state.diagramOptions.flipped) {
 			attributes.push('flipped:true');
 		}
@@ -211,4 +223,5 @@ export default class Page extends React.Component {
 		attributes.push(`pieceset:'${this.state.diagramOptions.pieceset}'`);
 		return attributes.join(', ');
 	}
+
 }

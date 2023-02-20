@@ -1,4 +1,4 @@
-/******************************************************************************
+/* -------------------------------------------------------------------------- *
  *                                                                            *
  *    This file is part of Kokopu-React, a JavaScript chess library.          *
  *    Copyright (C) 2021-2023  Yoann Le Montagner <yo35 -at- melix.net>       *
@@ -17,13 +17,14 @@
  *    Public License along with this program. If not, see                     *
  *    <http://www.gnu.org/licenses/>.                                         *
  *                                                                            *
- ******************************************************************************/
+ * -------------------------------------------------------------------------- */
 
 
-import React from 'react';
-import { Position, oppositeColor } from 'kokopu';
+import * as React from 'react';
+import { Position, Color, ColoredPiece, Square, SquareCouple, oppositeColor } from 'kokopu';
 
-import { Chessboard, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers } from '../../src/index';
+import { AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet, Chessboard, ChessboardProps, SquareMarkerIcon, TextMarkerIcon, ArrowMarkerIcon,
+	flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
 import Box from '@mui/material/Box';
@@ -48,9 +49,24 @@ const COLOR_ICON_SIZE = 16;
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 
-export default class Page extends React.Component {
+interface PageState {
+	position: Position;
+	flipped: boolean;
+	interactionMode: 'none' | 'addRemovePieces' | 'movePieces' | 'playMoves' | 'editSquareMarkers' | 'editTextMarkers' | 'editArrowMarkers';
+	pieceEditMode: ColoredPiece;
+	squareMarkerColor: AnnotationColor;
+	textMarkerColor: AnnotationColor;
+	textMarkerSymbol: AnnotationSymbol;
+	arrowMarkerColor: AnnotationColor;
+	squareMarkers: SquareMarkerSet;
+	textMarkers: TextMarkerSet;
+	arrowMarkers: ArrowMarkerSet;
+}
 
-	constructor(props) {
+
+export default class Page extends React.Component<object, PageState> {
+
+	constructor(props: object) {
 		super(props);
 		this.state = {
 			position: new Position(),
@@ -77,24 +93,24 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderControls() {
+	private renderControls() {
 		return (<>
 			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControlLabel label="Flip"
-					control={<Switch checked={this.state.flipped} onChange={() => this.set('flipped', !this.state.flipped)} color="primary" />}
+					control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
 				/>
 				<Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(oppositeColor(this.state.position.turn()))}>
 					Change turn
 				</Button>
 				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.set('position', new Position('empty'))}>Clear</Button>
-					<Button onClick={() => this.set('position', new Position())}>Reset</Button>
+					<Button onClick={() => this.setState({ position: new Position('empty') })}>Clear</Button>
+					<Button onClick={() => this.setState({ position: new Position() })}>Reset</Button>
 				</ButtonGroup>
 			</Stack>
 			<Box>
 				<Typography gutterBottom>Interaction mode</Typography>
-				<RadioGroup value={this.state.interactionMode} onChange={evt => this.set('interactionMode', evt.target.value)}>
-					<FormControlLabel value="" control={<Radio color="primary" />} label="None" />
+				<RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
+					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
 					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label="Add/remove pieces" />
 						{this.renderPieceSelector()}
@@ -103,30 +119,30 @@ export default class Page extends React.Component {
 					<FormControlLabel value="playMoves" control={<Radio color="primary" />} label="Move pieces (obeying chess rules)" />
 					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label="Edit square annotations" />
-						{this.renderMarkerColorSelector('squareMarkerColor', 'editSquareMarkers')}
+						{this.renderMarkerColorSelector('editSquareMarkers', this.state.squareMarkerColor, newColor => this.handleSquareMarkerColorChanged(newColor))}
 					</Stack>
 					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label="Edit text annotations" />
-						{this.renderMarkerColorSelector('textMarkerColor', 'editTextMarkers')}
+						{this.renderMarkerColorSelector('editTextMarkers', this.state.textMarkerColor, newColor => this.handleTextMarkerColorChanged(newColor))}
 						{this.renderTextMarkerSymbolSelector()}
 					</Stack>
 					<Stack direction="row" spacing={2} alignItems="center">
 						<FormControlLabel value="editArrowMarkers" control={<Radio color="primary" />} label="Edit arrow annotations" />
-						{this.renderMarkerColorSelector('arrowMarkerColor', 'editArrowMarkers')}
+						{this.renderMarkerColorSelector('editArrowMarkers', this.state.arrowMarkerColor, newColor => this.handleArrowMarkerColorChanged(newColor))}
 					</Stack>
 				</RadioGroup>
 			</Box>
 		</>);
 	}
 
-	renderPieceSelector() {
+	private renderPieceSelector() {
 		if (this.state.interactionMode !== 'addRemovePieces') {
 			return undefined;
 		}
-		let pieceset = Chessboard.piecesets()['cburnett'];
+		const pieceset = Chessboard.piecesets()['cburnett'];
 		return (
 			<Stack spacing={0.5}>
-				<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.setIfNonNull('pieceEditMode', newMode)}>
+				<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
 					<ToggleButton value="wk"><img src={pieceset.wk} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
 					<ToggleButton value="wq"><img src={pieceset.wq} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
 					<ToggleButton value="wr"><img src={pieceset.wr} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
@@ -134,7 +150,7 @@ export default class Page extends React.Component {
 					<ToggleButton value="wn"><img src={pieceset.wn} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
 					<ToggleButton value="wp"><img src={pieceset.wp} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
 				</ToggleButtonGroup>
-				<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.setIfNonNull('pieceEditMode', newMode)}>
+				<ToggleButtonGroup value={this.state.pieceEditMode} exclusive size="small" onChange={(_, newMode) => this.handlePieceEditModeChanged(newMode)}>
 					<ToggleButton value="bk"><img src={pieceset.bk} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
 					<ToggleButton value="bq"><img src={pieceset.bq} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
 					<ToggleButton value="br"><img src={pieceset.br} width={PIECE_ICON_SIZE} height={PIECE_ICON_SIZE} /></ToggleButton>
@@ -146,25 +162,25 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderTextMarkerSymbolSelector() {
+	private renderTextMarkerSymbolSelector() {
 		if (this.state.interactionMode !== 'editTextMarkers') {
 			return undefined;
 		}
-		let availableSymbols = [ 'plus', 'times', 'dot', 'circle' ].concat([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
+		const availableSymbols = [ 'plus', 'times', 'dot', 'circle' ].concat([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
 		return (
-			<Select variant="standard" value={this.state.textMarkerSymbol} onChange={evt => this.set('textMarkerSymbol', evt.target.value)}>
+			<Select variant="standard" value={this.state.textMarkerSymbol} onChange={evt => this.setState({ textMarkerSymbol: evt.target.value as AnnotationSymbol })}>
 				{availableSymbols.map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
 			</Select>
 		);
 	}
 
-	renderMarkerColorSelector(attributeName, expectedInterationMode) {
+	private renderMarkerColorSelector(expectedInterationMode: PageState['interactionMode'], currentColor: AnnotationColor, onChange: (newColor: AnnotationColor | null) => void) {
 		if (this.state.interactionMode !== expectedInterationMode) {
 			return undefined;
 		}
-		let colorset = Chessboard.colorsets()['original'];
+		const colorset = Chessboard.colorsets()['original'];
 		return (
-			<ToggleButtonGroup value={this.state[attributeName]} exclusive size="small" onChange={(_, newColor) => this.setIfNonNull(attributeName, newColor)}>
+			<ToggleButtonGroup value={currentColor} exclusive size="small" onChange={(_, newColor) => onChange(newColor)}>
 				<ToggleButton className="kokopu-fixTextTransform" value="b">{this.renderColorButtonLabel(colorset.cb)}</ToggleButton>
 				<ToggleButton className="kokopu-fixTextTransform" value="g">{this.renderColorButtonLabel(colorset.cg)}</ToggleButton>
 				<ToggleButton className="kokopu-fixTextTransform" value="r">{this.renderColorButtonLabel(colorset.cr)}</ToggleButton>
@@ -173,8 +189,8 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderColorButtonLabel(color) {
-		switch(this.state.interactionMode) {
+	private renderColorButtonLabel(color: string) {
+		switch (this.state.interactionMode) {
 			case 'editSquareMarkers':
 				return <SquareMarkerIcon size={COLOR_ICON_SIZE} color={color} />;
 			case 'editTextMarkers':
@@ -186,7 +202,7 @@ export default class Page extends React.Component {
 		}
 	}
 
-	renderChessboard() {
+	private renderChessboard() {
 		return (
 			<Box>
 				<Chessboard
@@ -206,18 +222,18 @@ export default class Page extends React.Component {
 		);
 	}
 
-	renderCode() {
-		let attributes = [];
-		let fen = this.state.position.fen();
+	private renderCode() {
+		const attributes: string[] = [];
+		const fen = this.state.position.fen();
 		if (fen !== DEFAULT_FEN) {
 			attributes.push(`position="${fen}"`);
 		}
 		if (this.state.flipped) {
 			attributes.push('flipped');
 		}
-		let squareMarkers = flattenSquareMarkers(this.state.squareMarkers);
-		let textMarkers = flattenTextMarkers(this.state.textMarkers);
-		let arrowMarkers = flattenArrowMarkers(this.state.arrowMarkers);
+		const squareMarkers = flattenSquareMarkers(this.state.squareMarkers);
+		const textMarkers = flattenTextMarkers(this.state.textMarkers);
+		const arrowMarkers = flattenArrowMarkers(this.state.arrowMarkers);
 		if (squareMarkers !== '') {
 			attributes.push(`squareMarkers="${squareMarkers}"`);
 		}
@@ -227,7 +243,7 @@ export default class Page extends React.Component {
 		if (arrowMarkers !== '') {
 			attributes.push(`arrowMarkers="${arrowMarkers}"`);
 		}
-		switch(this.state.interactionMode) {
+		switch (this.state.interactionMode) {
 			case 'addRemovePieces':
 			case 'editSquareMarkers':
 			case 'editTextMarkers':
@@ -253,79 +269,91 @@ export default class Page extends React.Component {
 		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;
 	}
 
-	set(attributeName, newValue) {
-		let newState = {};
-		newState[attributeName] = newValue;
-		this.setState(newState);
-	}
-
-	setIfNonNull(attributeName, newValue) {
-		if (newValue !== null) {
-			this.set(attributeName, newValue);
+	private handlePieceEditModeChanged(newPieceEditMode: ColoredPiece | null) {
+		if (newPieceEditMode !== null) {
+			this.setState({ pieceEditMode: newPieceEditMode });
 		}
 	}
 
-	handleTurnClicked(newTurn) {
-		let newPosition = new Position(this.state.position);
-		newPosition.turn(newTurn);
-		this.set('position', newPosition);
+	private handleSquareMarkerColorChanged(newColor: AnnotationColor | null) {
+		if (newColor !== null) {
+			this.setState({ squareMarkerColor: newColor });
+		}
 	}
 
-	handlePieceMoved(from, to) {
-		let newPosition = new Position(this.state.position);
+	private handleTextMarkerColorChanged(newColor: AnnotationColor | null) {
+		if (newColor !== null) {
+			this.setState({ textMarkerColor: newColor });
+		}
+	}
+
+	private handleArrowMarkerColorChanged(newColor: AnnotationColor | null) {
+		if (newColor !== null) {
+			this.setState({ arrowMarkerColor: newColor });
+		}
+	}
+
+	private handleTurnClicked(newTurn: Color) {
+		const newPosition = new Position(this.state.position);
+		newPosition.turn(newTurn);
+		this.setState({ position: newPosition });
+	}
+
+	private handlePieceMoved(from: Square, to: Square) {
+		const newPosition = new Position(this.state.position);
 		newPosition.square(to, newPosition.square(from));
 		newPosition.square(from, '-');
-		this.set('position', newPosition);
+		this.setState({ position: newPosition });
 	}
 
-	handleMovePlayed(move) {
-		let newPosition = new Position(this.state.position);
+	private handleMovePlayed(move: string) {
+		const newPosition = new Position(this.state.position);
 		newPosition.play(move);
-		this.set('position', newPosition);
+		this.setState({ position: newPosition });
 	}
 
-	handleArrowEdited(from, to) {
-		let newArrowMarkers = {...this.state.arrowMarkers};
-		let key = from + to;
+	private handleArrowEdited(from: Square, to: Square) {
+		const newArrowMarkers = { ...this.state.arrowMarkers };
+		const key = from + to as SquareCouple;
 		if (newArrowMarkers[key] === this.state.arrowMarkerColor) {
 			delete newArrowMarkers[key];
 		}
 		else {
 			newArrowMarkers[key] = this.state.arrowMarkerColor;
 		}
-		this.set('arrowMarkers', newArrowMarkers);
+		this.setState({ arrowMarkers: newArrowMarkers });
 	}
 
-	handleSquareClicked(sq) {
+	private handleSquareClicked(sq: Square) {
 		if (this.state.interactionMode === 'editSquareMarkers') {
-			let newSquareMarkers = {...this.state.squareMarkers};
+			const newSquareMarkers = { ...this.state.squareMarkers };
 			if (newSquareMarkers[sq] === this.state.squareMarkerColor) {
 				delete newSquareMarkers[sq];
 			}
 			else {
 				newSquareMarkers[sq] = this.state.squareMarkerColor;
 			}
-			this.set('squareMarkers', newSquareMarkers);
+			this.setState({ squareMarkers: newSquareMarkers });
 		}
 		else if (this.state.interactionMode === 'editTextMarkers') {
-			let newTextMarkers = {...this.state.textMarkers};
-			if (newTextMarkers[sq] && newTextMarkers[sq].color === this.state.textMarkerColor && newTextMarkers[sq].symbol === this.state.textMarkerSymbol) {
+			const newTextMarkers = { ...this.state.textMarkers };
+			if (newTextMarkers[sq] && newTextMarkers[sq]!.color === this.state.textMarkerColor && newTextMarkers[sq]!.symbol === this.state.textMarkerSymbol) {
 				delete newTextMarkers[sq];
 			}
 			else {
 				newTextMarkers[sq] = { color: this.state.textMarkerColor, symbol: this.state.textMarkerSymbol };
 			}
-			this.set('textMarkers', newTextMarkers);
+			this.setState({ textMarkers:  newTextMarkers });
 		}
 		else if (this.state.interactionMode === 'addRemovePieces') {
-			let newPosition = new Position(this.state.position);
+			const newPosition = new Position(this.state.position);
 			newPosition.square(sq, newPosition.square(sq) === this.state.pieceEditMode ? '-' : this.state.pieceEditMode);
-			this.set('position', newPosition);
+			this.setState({ position: newPosition });
 		}
 	}
 
-	getChessboardInterationMode() {
-		switch(this.state.interactionMode) {
+	private getChessboardInterationMode(): ChessboardProps['interactionMode'] {
+		switch (this.state.interactionMode) {
 			case 'addRemovePieces':
 			case 'editSquareMarkers':
 			case 'editTextMarkers':
@@ -339,4 +367,5 @@ export default class Page extends React.Component {
 				return undefined;
 		}
 	}
+
 }
