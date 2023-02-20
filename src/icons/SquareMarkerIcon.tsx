@@ -54,7 +54,7 @@ const defaultProps: Partial<SquareMarkerIconProps> = {
 export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
 
 	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon'));
+	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon', 'size'));
 	color = sanitizeString(color);
 
 	// Render the component.

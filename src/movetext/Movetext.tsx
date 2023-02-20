@@ -140,7 +140,7 @@ export class Movetext extends React.Component<MovetextProps> {
 
 		// Validate the appearance attributes.
 		if (typeof this.props.diagramOptions !== 'object' || this.props.diagramOptions === null) {
-			throw new IllegalArgument('Movetext');
+			throw new IllegalArgument('Movetext', 'diagramOptions');
 		}
 		const formatter = moveFormatter(this.props.pieceSymbols);
 		const diagramVisible = sanitizeBoolean(this.props.diagramVisible);
@@ -166,7 +166,7 @@ export class Movetext extends React.Component<MovetextProps> {
 			return interactionMode;
 		}
 		else {
-			throw new IllegalArgument('Movetext');
+			throw new IllegalArgument('Movetext', 'interactionMode');
 		}
 	}
 
@@ -250,7 +250,7 @@ function parseGame(game: Game | Database | string, gameIndex: number): { error: 
 	}
 	else if (game instanceof Database || typeof game === 'string') {
 		if (!Number.isInteger(gameIndex) || gameIndex < 0) {
-			throw new IllegalArgument('Movetext');
+			throw new IllegalArgument('Movetext', 'gameIndex');
 		}
 		try {
 			const result = game instanceof Database ? game.game(gameIndex) : pgnRead(game, gameIndex);
@@ -267,6 +267,6 @@ function parseGame(game: Game | Database | string, gameIndex: number): { error: 
 		}
 	}
 	else {
-		throw new IllegalArgument('Movetext');
+		throw new IllegalArgument('Movetext', 'game');
 	}
 }

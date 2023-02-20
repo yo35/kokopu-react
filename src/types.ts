@@ -200,7 +200,7 @@ export type ArrowMarkerSet = Partial<Record<SquareCouple, AnnotationColor>>;
  */
 export function flattenSquareMarkers(markers: SquareMarkerSet): string {
 	if (typeof markers !== 'object' || markers === null) {
-		throw new IllegalArgument('flattenSquareMarkers()');
+		throw new IllegalArgument('flattenSquareMarkers()', 'markers');
 	}
 	return Object.entries(markers)
 		.filter(([ sq, color ]) => isSquare(sq) && isAnnotationColor(color))
@@ -218,7 +218,7 @@ export function flattenSquareMarkers(markers: SquareMarkerSet): string {
  */
 export function flattenTextMarkers(markers: TextMarkerSet): string {
 	if (typeof markers !== 'object' || markers === null) {
-		throw new IllegalArgument('flattenTextMarkers()');
+		throw new IllegalArgument('flattenTextMarkers()', 'markers');
 	}
 	return Object.entries(markers)
 		.filter(([ sq, desc ]) => isSquare(sq) && desc && isAnnotationColor(desc.color) && isAnnotationSymbol(desc.symbol))
@@ -236,7 +236,7 @@ export function flattenTextMarkers(markers: TextMarkerSet): string {
  */
 export function flattenArrowMarkers(markers: ArrowMarkerSet): string {
 	if (typeof markers !== 'object' || markers === null) {
-		throw new IllegalArgument('flattenArrowMarkers()');
+		throw new IllegalArgument('flattenArrowMarkers()', 'markers');
 	}
 	return Object.entries(markers)
 		.filter(([ vect, color ]) => isSquareCouple(vect) && isAnnotationColor(color))
@@ -254,7 +254,7 @@ export function flattenArrowMarkers(markers: ArrowMarkerSet): string {
  */
 export function parseSquareMarkers(markers: string): SquareMarkerSet {
 	if (typeof markers !== 'string') {
-		throw new IllegalArgument('parseSquareMarkers()');
+		throw new IllegalArgument('parseSquareMarkers()', 'markers');
 	}
 	return parseMarkers<Square, AnnotationColor>(markers, token => {
 		return /^([BGRY])([a-h][1-8])$/.test(token) ?
@@ -272,7 +272,7 @@ export function parseSquareMarkers(markers: string): SquareMarkerSet {
  */
 export function parseTextMarkers(markers: string): TextMarkerSet {
 	if (typeof markers !== 'string') {
-		throw new IllegalArgument('parseTextMarkers()');
+		throw new IllegalArgument('parseTextMarkers()', 'markers');
 	}
 	return parseMarkers<Square, { symbol: AnnotationSymbol, color: AnnotationColor }>(markers, token => {
 		return /^([BGRY])(?:([A-Za-z0-9])|\((plus|times|dot|circle)\))([a-h][1-8])$/.test(token) ?
@@ -290,7 +290,7 @@ export function parseTextMarkers(markers: string): TextMarkerSet {
  */
 export function parseArrowMarkers(markers: string): ArrowMarkerSet {
 	if (typeof markers !== 'string') {
-		throw new IllegalArgument('parseArrowMarkers()');
+		throw new IllegalArgument('parseArrowMarkers()', 'markers');
 	}
 	return parseMarkers<SquareCouple, AnnotationColor>(markers, token => {
 		return /^([BGRY])([a-h][1-8][a-h][1-8])$/.test(token) ?

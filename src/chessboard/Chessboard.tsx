@@ -234,24 +234,30 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		const move = moveInfo.move;
 
 		// Validate the markers
-		const sqm = parseMarkers(this.props.squareMarkers, parseSquareMarkers, isSquare, isAnnotationColor);
-		const txtm = parseMarkers(this.props.textMarkers, parseTextMarkers, isSquare, isTextMarkerElement);
-		const arm = parseMarkers(this.props.arrowMarkers, parseArrowMarkers, isSquareCouple, isAnnotationColor);
+		const sqm = parseMarkers(this.props.squareMarkers, 'squareMarkers', parseSquareMarkers, isSquare, isAnnotationColor);
+		const txtm = parseMarkers(this.props.textMarkers, 'textMarkers', parseTextMarkers, isSquare, isTextMarkerElement);
+		const arm = parseMarkers(this.props.arrowMarkers, 'arrowMarkers', parseArrowMarkers, isSquareCouple, isAnnotationColor);
 
 		// Validate the appearance attributes.
 		const flipped = sanitizeBoolean(this.props.flipped);
-		const squareSize = sanitizeBoundedInteger(this.props.squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard'));
+		const squareSize = sanitizeBoundedInteger(this.props.squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard', 'squareSize'));
 		const coordinateVisible = sanitizeBoolean(this.props.coordinateVisible);
 		const moveArrowVisible = sanitizeBoolean(this.props.moveArrowVisible);
+		if (!isAnnotationColor(this.props.moveArrowColor)) {
+			throw new IllegalArgument('Chessboard', 'moveArrowColor');
+		}
 		const animated = sanitizeBoolean(this.props.animated);
 		const colorset = colorsets[this.props.colorset];
+		if (!colorset) {
+			throw new IllegalArgument('Chessboard', 'colorset');
+		}
 		const pieceset = piecesets[this.props.pieceset];
-		if (!isAnnotationColor(this.props.moveArrowColor) || !colorset || !pieceset) {
-			throw new IllegalArgument('Chessboard');
+		if (!pieceset) {
+			throw new IllegalArgument('Chessboard', 'pieceset');
 		}
 
 		// Validate and enforce the small-screen limits.
-		const smallScreenLimits = sanitizeSmallScreenLimits(this.props.smallScreenLimits, () => new IllegalArgument('Chessboard'));
+		const smallScreenLimits = sanitizeSmallScreenLimits(this.props.smallScreenLimits, () => new IllegalArgument('Chessboard', 'smallScreenLimits'));
 		const actualSquareSize = computeSquareSizeForSmallScreens(squareSize, smallScreenLimits, this.state.windowWidth);
 		const actualCoordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, this.state.windowWidth);
 
@@ -281,12 +287,12 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		}
 		else if (interactionMode === 'editArrows') {
 			if (!isAnnotationColor(this.props.editedArrowColor)) {
-				throw new IllegalArgument('Chessboard');
+				throw new IllegalArgument('Chessboard', 'editedArrowColor');
 			}
 			return interactionMode;
 		}
 		else {
-			throw new IllegalArgument('Chessboard');
+			throw new IllegalArgument('Chessboard', 'interactionMode');
 		}
 	}
 
@@ -296,9 +302,9 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	static size(squareSize: number, coordinateVisible: boolean, smallScreenLimits?: SmallScreenLimit[]): { width: number, height: number } {
 
 		// Sanitize the arguments.
-		squareSize = sanitizeBoundedInteger(squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard.size()'));
+		squareSize = sanitizeBoundedInteger(squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard.size()', 'squareSize'));
 		coordinateVisible = sanitizeBoolean(coordinateVisible);
-		const limits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.size()'));
+		const limits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.size()', 'smallScreenLimits'));
 
 		// Enforce small-screen limits, if any.
 		if (typeof window !== 'undefined') {
@@ -316,10 +322,10 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	static adaptSquareSize(width: number, height: number, coordinateVisible: boolean, smallScreenLimits?: SmallScreenLimit[]): number {
 
 		// Sanitize the arguments.
-		width = sanitizeInteger(width, () => new IllegalArgument('Chessboard.adaptSquareSize()'));
-		height = sanitizeInteger(height, () => new IllegalArgument('Chessboard.adaptSquareSize()'));
+		width = sanitizeInteger(width, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'width'));
+		height = sanitizeInteger(height, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'height'));
 		coordinateVisible = sanitizeBoolean(coordinateVisible);
-		const limits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.adaptSquareSize()'));
+		const limits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'smallScreenLimits'));
 
 		// Enforce small-screen limits, if any.
 		let maxSquareSize = MAX_SQUARE_SIZE;
@@ -464,7 +470,7 @@ function parsePosition(position: Position | string): { error: true, message: str
 		}
 	}
 	else {
-		throw new IllegalArgument('Chessboard');
+		throw new IllegalArgument('Chessboard', 'position');
 	}
 }
 
@@ -507,7 +513,7 @@ function parseMove(position: Position, move: MoveDescriptor | string | undefined
 		}
 	}
 	else {
-		throw new IllegalArgument('Chessboard');
+		throw new IllegalArgument('Chessboard', 'move');
 	}
 }
 
@@ -515,7 +521,7 @@ function parseMove(position: Position, move: MoveDescriptor | string | undefined
 /**
  * Try to interpret the given object as a list of markers.
  */
-function parseMarkers<K extends string, V>(markers: Partial<Record<K, V>> | string | undefined, parse: (m: string) => Partial<Record<K, V>>,
+function parseMarkers<K extends string, V>(markers: Partial<Record<K, V>> | string | undefined, argumentName: string, parse: (m: string) => Partial<Record<K, V>>,
 	isValidKey: (k: unknown) => k is K, isValidValue: (v: unknown) => v is V): Partial<Record<K, V>> | undefined {
 
 	if (markers === undefined || markers === null) {
@@ -534,7 +540,7 @@ function parseMarkers<K extends string, V>(markers: Partial<Record<K, V>> | stri
 		return result;
 	}
 	else {
-		throw new IllegalArgument('Chessboard');
+		throw new IllegalArgument('Chessboard', argumentName);
 	}
 }
 

@@ -62,7 +62,7 @@ export class ArrowMarkerIcon extends React.Component<ArrowMarkerIconProps> {
 	render() {
 
 		// Sanitize the inputs.
-		const size = sanitizeBoundedInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ArrowMarkerIcon'));
+		const size = sanitizeBoundedInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ArrowMarkerIcon', 'size'));
 		const color = sanitizeString(this.props.color);
 
 		// Render the component.

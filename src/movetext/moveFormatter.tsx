@@ -65,7 +65,7 @@ export function moveFormatter(pieceSymbols: 'native' | 'localized' | 'figurines'
 		return notation => pieceMappingNotation(pieceSymbols, notation);
 	}
 	else {
-		throw new IllegalArgument('moveFormatter');
+		throw new IllegalArgument('moveFormatter', 'pieceSymbols');
 	}
 }
 

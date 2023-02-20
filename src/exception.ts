@@ -34,14 +34,18 @@ export class IllegalArgument {
 	/** Name of the function or component that raises the exception. */
 	functionOrComponentName: string;
 
-	constructor(functionOrComponentName: string) {
+	/** Name of the argument that causes the error. */
+	argumentName: string;
+
+	constructor(functionOrComponentName: string, argumentName: string) {
 		this.functionOrComponentName = functionOrComponentName;
+		this.argumentName = argumentName;
 	}
 
 	/**
 	 * @ignore
 	 */
 	toString(): string {
-		return `Illegal argument in function or component ${this.functionOrComponentName}`;
+		return `Illegal argument '${this.argumentName}' in function or component ${this.functionOrComponentName}`;
 	}
 }

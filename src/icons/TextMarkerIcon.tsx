@@ -59,9 +59,9 @@ const defaultProps: Partial<TextMarkerIconProps> = {
 export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
 
 	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon'));
+	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon', 'size'));
 	if (!isAnnotationSymbol(symbol)) {
-		throw new IllegalArgument('TextMarkerIcon');
+		throw new IllegalArgument('TextMarkerIcon', 'symbol');
 	}
 	color = sanitizeString(color);
 
