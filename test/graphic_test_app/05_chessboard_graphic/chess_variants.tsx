@@ -20,69 +20,16 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
+import * as React from 'react';
+import { testApp } from '../common/test_app';
+import { Chessboard } from '../../../dist/lib/index';
 
-
-describeWithBrowser('Chessboard graphic', browserContext => {
-
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/base', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
-		'wrong type',
-	]);
-
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/flipped', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
-	]);
-
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/annotations', [
-		'with coordinates',
-		'with coordinates and flip',
-		'without coordinates',
-		'without coordinates and flip',
-		'overlap',
-		'overlap and flip',
-	]);
-
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/move', [
-		'default',
-		'no move arrow',
-		'parsing error',
-		'with forced move arrow and flip',
-		'capture',
-		'castling move',
-		'en-passant',
-		'promotion',
-		'wrong type',
-	]);
-
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/theme', [
-		'default',
-		'large',
-		'small',
-		'custom 1',
-		'custom 2',
-		'custom 3',
-		'custom 4',
-		'custom 5',
-		'custom 6',
-	]);
-
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/chess_variants', [
-		'chess960',
-		'chess960 with move',
-		'variant without std initial position',
-		'variant with std initial position',
-		'special code',
-		'invalid variant',
-		'invalid variant with FEN',
-	]);
-
-});
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard position="chess960:nqbrnkrb/pppppppp/8/8/8/8/PPPPPPPP/NQBRNKRB w KQkq - 0 1" />,
+	<Chessboard position="chess960:nqbrnkrb/pppppppp/8/8/8/8/PPPPPPPP/NQBRNKRB w KQkq - 0 1" move="O-O" />,
+	<Chessboard position="chess960" />,
+	<Chessboard position="horde" />,
+	<Chessboard position="start" />,
+	<Chessboard position="whatever" />,
+	<Chessboard position="whatever:rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" />,
+]); /* eslint-enable react/jsx-key */

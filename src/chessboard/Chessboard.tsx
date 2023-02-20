@@ -22,7 +22,7 @@
 
 import * as React from 'react';
 
-import { exception as kokopuException, MoveDescriptor, Position, Square, isSquare, isSquareCouple } from 'kokopu';
+import { exception as kokopuException, MoveDescriptor, Position, Square, GameVariant, isSquare, isSquareCouple, isGameVariant } from 'kokopu';
 
 import { IllegalArgument } from '../exception';
 import { i18n } from '../i18n';
@@ -443,10 +443,15 @@ function parsePosition(position: Position | string): { error: true, message: str
 	if (position instanceof Position) {
 		return { error: false, position: position };
 	}
+	else if (position === 'start' || position === 'empty') {
+		return { error: false, position: new Position(position) };
+	}
 	else if (typeof position === 'string') {
 		try {
-			// TODO avoid this constructor overload, use .fen(..) instead.
-			return { error: false, position: new Position(position) };
+			const { variant, fen } = splitGameVariantAndFEN(position);
+			const result = new Position(variant, 'empty');
+			result.fen(fen);
+			return { error: false, position: result };
 		}
 		catch (e) {
 			// istanbul ignore else
@@ -465,6 +470,19 @@ function parsePosition(position: Position | string): { error: true, message: str
 
 
 /**
+ * Look for an optional 'chess-variant:' prefix in the position attribute.
+ */
+function splitGameVariantAndFEN(position: string): { variant: GameVariant, fen: string } {
+	const separatorIndex = position.indexOf(':');
+	if (separatorIndex < 0) {
+		return { variant: 'regular', fen: position };
+	}
+	const variant = position.substring(0, separatorIndex);
+	return isGameVariant(variant) ? { variant: variant, fen: position.substring(separatorIndex + 1) } : { variant: 'regular', fen: position };
+}
+
+
+/**
  * Try to interpret the given object `move` as a move descriptor based on the given position.
  */
 function parseMove(position: Position, move: MoveDescriptor | string | undefined): { error: true, message: string } | { error: false, move: MoveDescriptor | undefined } {
@@ -472,7 +490,6 @@ function parseMove(position: Position, move: MoveDescriptor | string | undefined
 		return { error: false, move: undefined };
 	}
 	else if (move instanceof MoveDescriptor) {
-		// TODO ensure the move is actually playable.
 		return { error: false, move: move };
 	}
 	else if (typeof move === 'string') {
