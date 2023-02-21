@@ -33,6 +33,6 @@ import { Chessboard } from 'kokopu-react';
 createRoot(document.body).render(<Chessboard />);
 ```
 
-![Chessboard component](test/references/02_chessboard_simple/0.png)
+![Chessboard component](test/graphic_references/05_chessboard_graphic/base/default.png)
 
 More examples available in [documentation & live-demo](https://kokopu-react.yo35.org/).
