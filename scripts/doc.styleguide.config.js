@@ -173,6 +173,10 @@ module.exports = {
 			name: 'ChangeLog',
 			content: `${tmpDir}/changelog.md`,
 		},
+		{
+			name: 'Migrate to 2.x',
+			content: `${docSrcDir}/migrate_to_2.md`,
+		},
 	],
 	styleguideComponents: {
 		LogoRenderer: path.resolve(__dirname, `${docSrcDir}/theming/LogoRenderer`),
