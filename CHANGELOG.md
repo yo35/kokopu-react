@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+2.0.0 (February 21, 2023)
+-------------------------
+* Migration to TypeScript.
+* Breaking changes affecting `propTypes` properties and square size parameters:
+look at the [migration guide](https://kokopu-react.yo35.org/docs/current/#/Migrate%20to%202.x) for more details.
+
 1.11.1 (February 1, 2023)
 -------------------------
 * Fix drag-drop vs scroll conflict on mobile devices.
