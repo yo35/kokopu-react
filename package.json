@@ -18,6 +18,8 @@
 	"files": [
 		"dist/lib",
 		"doc_src",
+		"scripts/doc.styleguide.config.js",
+		"scripts/doc.tsconfig.json",
 		"scripts/docker-compose.yml",
 		"scripts/test-graphic.tsconfig.json",
 		"scripts/test-graphic.webpack.config.js",
@@ -26,6 +28,10 @@
 		"test",
 		".eslintrc.yml",
 		".nycrc.yml",
+		"CHANGELOG.md",
+		"CREDITS.md",
+		"LICENSE",
+		"README.md",
 		"tsconfig.json"
 	],
 	"peerDependencies": {
