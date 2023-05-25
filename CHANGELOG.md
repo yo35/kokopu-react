@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+2.0.1 (May 25, 2023)
+--------------------
+* Minor fixes.
+
 2.0.0 (February 21, 2023)
 -------------------------
 * Migration to TypeScript.
