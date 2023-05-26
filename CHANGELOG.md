@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+2.1.0 (May 26, 2023)
+--------------------
+* Listen to ESC key in Movetext to let the user unselect the currently selected move through keyboard.
+
 2.0.1 (May 25, 2023)
 --------------------
 * Minor fixes.
