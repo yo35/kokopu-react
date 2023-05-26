@@ -22,6 +22,7 @@
 
 const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot, itChecksScreenshots } = require('./common/graphic');
 const { By, Key } = require('selenium-webdriver');
+const test = require('unit.js');
 
 
 describeWithBrowser('Movetext interaction', browserContext => {
@@ -61,9 +62,22 @@ describeWithBrowser('Movetext interaction', browserContext => {
 		{ searchedText: 'Nc6', expectedText: tpl('1b-v0-2b', 'click') },
 	]);
 
-	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast) {
+	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast, expectedOnExit) {
 		itCustom(browserContext, '10_movetext_interaction/select_moves', itemIndex, label, async element => {
-			const focusFieldElement = await element.findElement(By.className('kokopu-focusField'));
+			const focusFieldElements = await element.findElements(By.className('kokopu-focusField'));
+
+			// Handle components for which no interaction is defined.
+			if (focusFieldElements.length === 0) {
+				test.value('').is(expectedOnGoFirst);
+				test.value('').is(expectedOnGoPrevious);
+				test.value('').is(expectedOnGoNext);
+				test.value('').is(expectedOnGoLast);
+				test.value('').is(expectedOnExit);
+				return;
+			}
+
+			test.value(focusFieldElements.length).is(1);
+			const focusFieldElement = focusFieldElements[0];
 
 			await setSandbox(browserContext, '');
 			await focusFieldElement.sendKeys(Key.HOME);
@@ -82,19 +96,29 @@ describeWithBrowser('Movetext interaction', browserContext => {
 			await compareSandbox(browserContext, expectedOnGoLast);
 
 			await setSandbox(browserContext, '');
+			await focusFieldElement.sendKeys(Key.ESCAPE);
+			await compareSandbox(browserContext, expectedOnExit);
+
+			await setSandbox(browserContext, '');
 			await focusFieldElement.sendKeys(Key.ARROW_UP);
 			await compareSandbox(browserContext, '');
 		});
 	}
 
-	itCheckKeyboardActions(1, 'key on unselected', '', '', '', '');
-	itCheckKeyboardActions(2, 'key on with variations 1', tpl('start', 'key-first'), tpl('1b-v0-2b', 'key-previous'), tpl('1b-v0-3w-v0-3b', 'key-next'), tpl('1b-v0-3w-v0-4w', 'key-last'));
-	itCheckKeyboardActions(3, 'key on with variations 2', tpl('start', 'key-first'), tpl('1b-v0-2w', 'key-previous'), tpl('1b-v0-3w', 'key-next'), tpl('1b-v0-3w', 'key-last'));
-	itCheckKeyboardActions(4, 'key on start selected', '', '', tpl('1w', 'key-next'), tpl('6b', 'key-last'));
-	itCheckKeyboardActions(5, 'key on first selected', tpl('start', 'key-first'), tpl('start', 'key-previous'), tpl('1b', 'key-next'), tpl('6b', 'key-last'));
-	itCheckKeyboardActions(6, 'key on last selected', tpl('start', 'key-first'), tpl('6w', 'key-previous'), '', '');
-	itCheckKeyboardActions(7, 'key on invalid selection', '', '', '', '');
-	itCheckKeyboardActions(8, 'key on sub-variation selected', tpl('start', 'key-first'), tpl('1w', 'key-previous'), tpl('1b-v0-1b', 'key-next'), tpl('1b-v0-3w', 'key-last'));
+	const TPL_EXIT = tpl(undefined, 'key-exit');
+
+	itCheckKeyboardActions(0, 'key on disabled', '', '', '', '', '');
+	itCheckKeyboardActions(1, 'key on unselected', '', '', '', '', '');
+	itCheckKeyboardActions(2, 'key on with variations 1', tpl('start', 'key-first'), tpl('1b-v0-2b', 'key-previous'), tpl('1b-v0-3w-v0-3b', 'key-next'),
+		tpl('1b-v0-3w-v0-4w', 'key-last'), TPL_EXIT);
+	itCheckKeyboardActions(3, 'key on with variations 2', tpl('start', 'key-first'), tpl('1b-v0-2w', 'key-previous'), tpl('1b-v0-3w', 'key-next'),
+		tpl('1b-v0-3w', 'key-last'), TPL_EXIT);
+	itCheckKeyboardActions(4, 'key on start selected', '', '', tpl('1w', 'key-next'), tpl('6b', 'key-last'), TPL_EXIT);
+	itCheckKeyboardActions(5, 'key on first selected', tpl('start', 'key-first'), tpl('start', 'key-previous'), tpl('1b', 'key-next'), tpl('6b', 'key-last'), TPL_EXIT);
+	itCheckKeyboardActions(6, 'key on last selected', tpl('start', 'key-first'), tpl('6w', 'key-previous'), '', '', TPL_EXIT);
+	itCheckKeyboardActions(7, 'key on invalid selection', '', '', '', '', '');
+	itCheckKeyboardActions(8, 'key on sub-variation selected', tpl('start', 'key-first'), tpl('1w', 'key-previous'), tpl('1b-v0-1b', 'key-next'),
+		tpl('1b-v0-3w', 'key-last'), TPL_EXIT);
 
 	itChecksScreenshots(browserContext, '10_movetext_interaction/error', [
 		'wrong interaction mode',

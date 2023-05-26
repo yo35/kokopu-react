@@ -52,7 +52,7 @@ interface MovetextImplProps {
 	selection?: string;
 	interactionMode?: 'selectMove';
 
-	onMoveSelected?: (nodeId: string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'click') => void;
+	onMoveSelected?: (nodeId: string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'key-exit' | 'click') => void;
 }
 
 
@@ -354,32 +354,34 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 	}
 
 	private handleKeyDownInFocusField(evt: React.KeyboardEvent<HTMLAnchorElement>) {
-		if (evt.key !== 'Home' && evt.key !== 'ArrowLeft' && evt.key !== 'ArrowRight' && evt.key !== 'End') {
+		if (evt.key !== 'Home' && evt.key !== 'ArrowLeft' && evt.key !== 'ArrowRight' && evt.key !== 'End' && evt.key !== 'Escape') {
 			return;
 		}
 		evt.preventDefault();
 		if (!this.props.selection) {
 			return;
 		}
-		let nodeId = undefined;
-		let evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last';
 		if (evt.key === 'Home') {
-			nodeId = firstNodeIdImpl(this.props.game, this.props.selection);
-			evtOrigin = 'key-first';
+			this.fireMoveSelected(firstNodeIdImpl(this.props.game, this.props.selection), 'key-first');
 		}
 		else if (evt.key === 'ArrowLeft') {
-			nodeId = previousNodeIdImpl(this.props.game, this.props.selection);
-			evtOrigin = 'key-previous';
+			this.fireMoveSelected(previousNodeIdImpl(this.props.game, this.props.selection), 'key-previous');
 		}
 		else if (evt.key === 'ArrowRight') {
-			nodeId = nextNodeIdImpl(this.props.game, this.props.selection);
-			evtOrigin = 'key-next';
+			this.fireMoveSelected(nextNodeIdImpl(this.props.game, this.props.selection), 'key-next');
 		}
-		else { // evt.key === 'End'
-			nodeId = lastNodeIdImpl(this.props.game, this.props.selection);
-			evtOrigin = 'key-last';
+		else if (evt.key === 'End') {
+			this.fireMoveSelected(lastNodeIdImpl(this.props.game, this.props.selection), 'key-last');
 		}
-		if (nodeId && this.props.onMoveSelected) {
+		else { // evt.key === 'Escape'
+			if (this.props.game.findById(this.props.selection)) {
+				this.fireMoveSelected(undefined, 'key-exit');
+			}
+		}
+	}
+
+	private fireMoveSelected(nodeId: string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'key-exit') {
+		if ((nodeId || evtOrigin === 'key-exit') && this.props.onMoveSelected) {
 			this.props.onMoveSelected(nodeId, evtOrigin);
 		}
 	}
