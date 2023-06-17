@@ -72,17 +72,6 @@ interface DraggableProps {
 }
 
 
-interface InnerListeners {
-	mouseDown: (evt: MouseEvent) => void;
-	mouseMove: (evt: MouseEvent) => void;
-	mouseUp: (evt: MouseEvent) => void;
-	touchStart: (evt: TouchEvent) => void;
-	touchMove: (evt: TouchEvent) => void;
-	touchEnd: (evt: TouchEvent) => void;
-	touchCancel: (evt: TouchEvent) => void;
-}
-
-
 interface DragData {
 	originX: number;
 	originY: number;
@@ -107,42 +96,34 @@ interface ClientCoordinates {
 export class Draggable extends React.Component<DraggableProps> {
 
 	private innerRef: React.RefObject<SVGRectElement> = React.createRef();
-	private innerListeners?: InnerListeners;
 	private dragData?: DragData;
 
+	private mouseDownListener = (evt: MouseEvent) => this.handleMouseDown(evt);
+	private mouseMoveListener = (evt: MouseEvent) => this.handleMouseMove(evt);
+	private mouseUpListener = (evt: MouseEvent) => this.handleMouseUp(evt);
+	private touchStartListener = (evt: TouchEvent) => this.handleTouchStart(evt);
+	private touchMoveListener = (evt: TouchEvent) => this.handleTouchMove(evt);
+	private touchEndListener = (evt: TouchEvent) => this.handleTouchEnd(evt);
+	private touchCancelListener = (evt: TouchEvent) => this.handleTouchCancel(evt);
+
 	componentDidMount() {
-		if (!this.innerListeners) {
-			this.innerListeners = {
-				mouseDown: evt => this.handleMouseDown(evt),
-				mouseMove: evt => this.handleMouseMove(evt),
-				mouseUp: evt => this.handleMouseUp(evt),
-				touchStart: evt => this.handleTouchStart(evt),
-				touchMove: evt => this.handleTouchMove(evt),
-				touchEnd: evt => this.handleTouchEnd(evt),
-				touchCancel: evt => this.handleTouchCancel(evt),
-			};
-			this.innerRef.current!.addEventListener('mousedown', this.innerListeners.mouseDown);
-			window.addEventListener('mousemove', this.innerListeners.mouseMove);
-			window.addEventListener('mouseup', this.innerListeners.mouseUp);
-			this.innerRef.current!.addEventListener('touchstart', this.innerListeners.touchStart, { passive: false });
-			window.addEventListener('touchmove', this.innerListeners.touchMove, { passive: false });
-			window.addEventListener('touchend', this.innerListeners.touchEnd);
-			window.addEventListener('touchcancel', this.innerListeners.touchCancel);
-		}
-		this.dragData = undefined;
+		this.innerRef.current!.addEventListener('mousedown', this.mouseDownListener);
+		window.addEventListener('mousemove', this.mouseMoveListener);
+		window.addEventListener('mouseup', this.mouseUpListener);
+		this.innerRef.current!.addEventListener('touchstart', this.touchStartListener, { passive: false });
+		window.addEventListener('touchmove', this.touchMoveListener, { passive: false });
+		window.addEventListener('touchend', this.touchEndListener);
+		window.addEventListener('touchcancel', this.touchCancelListener);
 	}
 
 	componentWillUnmount() {
-		if (this.innerListeners) {
-			this.innerRef.current!.removeEventListener('mousedown', this.innerListeners.mouseDown);
-			window.removeEventListener('mousemove', this.innerListeners.mouseMove);
-			window.removeEventListener('mouseup', this.innerListeners.mouseUp);
-			this.innerRef.current!.removeEventListener('touchstart', this.innerListeners.touchStart);
-			window.removeEventListener('touchmove', this.innerListeners.touchMove);
-			window.removeEventListener('touchend', this.innerListeners.touchEnd);
-			window.removeEventListener('touchcancel', this.innerListeners.touchCancel);
-			this.innerListeners = undefined;
-		}
+		this.innerRef.current!.removeEventListener('mousedown', this.mouseDownListener);
+		window.removeEventListener('mousemove', this.mouseMoveListener);
+		window.removeEventListener('mouseup', this.mouseUpListener);
+		this.innerRef.current!.removeEventListener('touchstart', this.touchStartListener);
+		window.removeEventListener('touchmove', this.touchMoveListener);
+		window.removeEventListener('touchend', this.touchEndListener);
+		window.removeEventListener('touchcancel', this.touchCancelListener);
 	}
 
 	render() {
