@@ -25,7 +25,7 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Marker icons graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '04_marker_icons_graphic/base', [
+	itChecksScreenshots(browserContext, '04_icons_graphic/marker', [
 
 		'default square',
 		'colorized square',
