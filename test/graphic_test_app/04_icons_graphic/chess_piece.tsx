@@ -20,21 +20,19 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+import * as React from 'react';
+import { testApp } from '../common/test_app';
+import { ChessPieceIcon } from '../../../dist/lib/index';
 
-export { ChessPieceIconType, Colorset, Pieceset, PieceSymbolMapping, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
-	isChessPieceIconType, isPieceSymbolMapping, isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers,
-	parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+testApp([ /* eslint-disable react/jsx-key */
 
-export { ErrorBox, ErrorBoxProps } from './errorbox/ErrorBox';
+	<ChessPieceIcon size={44} type="wq" />,
+	<ChessPieceIcon size={24} type={[ 'bb', 'wx', 'wx', 'wn', 'bx', 'bk', 'bk' ]} />,
+	<ChessPieceIcon size={36} type={[ 'wr', 'wb', 'bq' ]} pieceset="eyes" />,
 
-export { SquareMarkerIcon, SquareMarkerIconProps } from './icons/SquareMarkerIcon';
-export { TextMarkerIcon, TextMarkerIconProps } from './icons/TextMarkerIcon';
-export { ArrowMarkerIcon, ArrowMarkerIconProps } from './icons/ArrowMarkerIcon';
-export { ChessPieceIcon, ChessPieceIconProps } from './icons/ChessPieceIcon';
+	<ChessPieceIcon size={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'not-a-number' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } type="wq" />,
+	<ChessPieceIcon size={40} type={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'invalid' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+	<ChessPieceIcon size={40} type={[ 'bb', /* eslint-disable @typescript-eslint/no-explicit-any */ 'zp' as any /* eslint-enable @typescript-eslint/no-explicit-any */ ]} />,
+	<ChessPieceIcon size={40} type="wq" pieceset="not-a-pieceset" />,
 
-export { Chessboard, ChessboardProps, SmallScreenLimit } from './chessboard/Chessboard';
-
-export { formatMove, moveFormatter } from './movetext/moveFormatter';
-export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';
+]); /* eslint-enable react/jsx-key */

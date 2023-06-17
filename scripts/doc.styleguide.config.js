@@ -37,7 +37,8 @@ fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 // -------------------------------
 
 const componentSectionTitle = 'Components';
-const components = [ 'errorbox/ErrorBox', 'icons/SquareMarkerIcon', 'icons/TextMarkerIcon', 'icons/ArrowMarkerIcon', 'chessboard/Chessboard', 'movetext/Movetext' ];
+const components = [ 'errorbox/ErrorBox', 'icons/SquareMarkerIcon', 'icons/TextMarkerIcon', 'icons/ArrowMarkerIcon', 'icons/ChessPieceIcon',
+	'chessboard/Chessboard', 'movetext/Movetext' ];
 
 
 // Demo section configuration

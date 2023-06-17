@@ -46,4 +46,16 @@ describeWithBrowser('Marker icons graphic', browserContext => {
 		'invalid arrow size',
 	]);
 
+	itChecksScreenshots(browserContext, '04_icons_graphic/chess_piece', [
+
+		'single piece',
+		'multiple pieces',
+		'customized pieceset',
+
+		'invalid size',
+		'invalid single piece',
+		'invalid multiple pieces',
+		'invalid pieceset',
+	]);
+
 });

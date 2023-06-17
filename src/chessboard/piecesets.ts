@@ -122,6 +122,12 @@ import skulls_wx from './sprites/skulls-wx.png';
 
 
 /**
+ * Default pieceset.
+ */
+export const DEFAULT_PIECESET = 'cburnett';
+
+
+/**
  * Available piecesets.
  */
 export const piecesets: Record<string, Pieceset> = {};

@@ -20,7 +20,7 @@
  * -------------------------------------------------------------------------- */
 
 
-import { Square, SquareCouple, isSquare, isSquareCouple } from 'kokopu';
+import { ColoredPiece, Square, SquareCouple, isColoredPiece, isSquare, isSquareCouple } from 'kokopu';
 
 import { IllegalArgument } from './exception';
 
@@ -34,6 +34,22 @@ export const MIN_SQUARE_SIZE = 12;
  * Maximum square size in a {@link Chessboard} component.
  */
 export const MAX_SQUARE_SIZE = 96;
+
+
+/**
+ * Type of icon representing a (colored) chess piece.
+ *
+ * The two special values `'wx'` and `'bx'` correspond to the turn flags.
+ */
+export type ChessPieceIconType = ColoredPiece | 'wx' | 'bx';
+
+
+/**
+ * Whether the given object is a {@link ChessPieceIconType} or not.
+ */
+export function isChessPieceIconType(iconType: unknown): iconType is ChessPieceIconType {
+	return isColoredPiece(iconType) || iconType === 'wx' || iconType === 'bx';
+}
 
 
 /**

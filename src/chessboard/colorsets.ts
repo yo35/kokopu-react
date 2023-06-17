@@ -24,6 +24,12 @@ import { Colorset } from '../types';
 
 
 /**
+ * Default colorset.
+ */
+export const DEFAULT_COLORSET = 'original';
+
+
+/**
  * Available colorsets.
  */
 export const colorsets: Record<string, Colorset> = {};

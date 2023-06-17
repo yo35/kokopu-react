@@ -30,8 +30,8 @@ import { sanitizeString, sanitizeBoolean, sanitizeInteger, sanitizeBoundedIntege
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
 	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from '../types';
 
-import { colorsets } from './colorsets';
-import { piecesets } from './piecesets';
+import { colorsets, DEFAULT_COLORSET } from './colorsets';
+import { piecesets, DEFAULT_PIECESET } from './piecesets';
 import { ChessboardImpl, chessboardSize } from './ChessboardImpl';
 import { ErrorBox } from '../errorbox/ErrorBox';
 
@@ -201,8 +201,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		moveArrowVisible: true,
 		moveArrowColor: 'b',
 		animated: false,
-		colorset: 'original',
-		pieceset: 'cburnett',
+		colorset: DEFAULT_COLORSET,
+		pieceset: DEFAULT_PIECESET,
 	};
 
 	private windowResizeListener = () => this.handleWindowResize();
