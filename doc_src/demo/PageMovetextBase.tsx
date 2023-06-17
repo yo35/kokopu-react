@@ -55,6 +55,7 @@ interface PageState {
 		flipped: boolean;
 		squareSize: number;
 		coordinateVisible: boolean;
+		turnVisible: boolean;
 		colorset: string;
 		pieceset: string;
 	};
@@ -75,6 +76,7 @@ export default class Page extends React.Component<object, PageState> {
 				flipped: false,
 				squareSize: 32,
 				coordinateVisible: true,
+				turnVisible: true,
 				colorset: 'original',
 				pieceset: 'cburnett',
 			},
@@ -127,6 +129,11 @@ export default class Page extends React.Component<object, PageState> {
 				<FormControlLabel label="Show coordinates in diagram(s)"
 					control={<Switch checked={opts.coordinateVisible} onChange={() => this.setDiagramOption({ coordinateVisible: !opts.coordinateVisible })} color="primary" />}
 				/>
+				<FormControlLabel label="Show turn in diagram(s)"
+					control={<Switch checked={opts.turnVisible} onChange={() => this.setDiagramOption({ turnVisible: !opts.turnVisible })} color="primary" />}
+				/>
+			</Stack>
+			<Stack direction="row" spacing={2} alignItems="center">
 				<FormControl variant="standard">
 					<InputLabel id="colorset-label">Colorset</InputLabel>
 					<Select labelId="colorset-label" sx={{ width: '8em' }} value={opts.colorset} onChange={evt => this.setDiagramOption({ colorset: evt.target.value })}>
@@ -219,6 +226,7 @@ export default class Page extends React.Component<object, PageState> {
 		}
 		attributes.push(`squareSize:${this.state.diagramOptions.squareSize}`);
 		attributes.push(`coordinateVisible:${this.state.diagramOptions.coordinateVisible}`);
+		attributes.push(`turnVisible:${this.state.diagramOptions.turnVisible}`);
 		attributes.push(`colorset:'${this.state.diagramOptions.colorset}'`);
 		attributes.push(`pieceset:'${this.state.diagramOptions.pieceset}'`);
 		return attributes.join(', ');

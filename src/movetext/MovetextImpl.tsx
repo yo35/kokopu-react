@@ -41,6 +41,7 @@ interface MovetextImplProps {
 		flipped?: ChessboardProps['flipped'],
 		squareSize?: ChessboardProps['squareSize'],
 		coordinateVisible?: ChessboardProps['coordinateVisible'],
+		turnVisible?: ChessboardProps['turnVisible'],
 		colorset?: ChessboardProps['colorset'],
 		pieceset?: ChessboardProps['pieceset'],
 		smallScreenLimits?: ChessboardProps['smallScreenLimits'],
@@ -317,6 +318,7 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 						flipped={this.props.diagramOptions.flipped}
 						squareSize={this.props.diagramOptions.squareSize}
 						coordinateVisible={this.props.diagramOptions.coordinateVisible}
+						turnVisible={this.props.diagramOptions.turnVisible}
 						smallScreenLimits={this.props.diagramOptions.smallScreenLimits}
 						colorset={this.props.diagramOptions.colorset}
 						pieceset={this.props.diagramOptions.pieceset}

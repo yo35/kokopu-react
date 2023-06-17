@@ -34,6 +34,7 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
 	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
 		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
+	<Movetext game={pgn} gameIndex={3} diagramOptions={{ turnVisible: false, squareSize: 32 }} />,
 	<Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
 	<Movetext game={pgn} gameIndex={3} diagramOptions={ /* eslint-disable @typescript-eslint/no-explicit-any */ null as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
 	<Movetext game={pgn} gameIndex={3}

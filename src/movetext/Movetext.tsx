@@ -66,6 +66,7 @@ export interface MovetextProps {
 		flipped?: ChessboardProps['flipped'],
 		squareSize?: ChessboardProps['squareSize'],
 		coordinateVisible?: ChessboardProps['coordinateVisible'],
+		turnVisible?: ChessboardProps['turnVisible'],
 		colorset?: ChessboardProps['colorset'],
 		pieceset?: ChessboardProps['pieceset'],
 		smallScreenLimits?: ChessboardProps['smallScreenLimits'],

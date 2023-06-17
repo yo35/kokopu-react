@@ -51,6 +51,7 @@ describeWithBrowser('Movetext graphic', browserContext => {
 		'localized piece symbols',
 		'custom piece symbols',
 		'figurine piece symbols and diagram options',
+		'other diagram options',
 		'hidden diagrams',
 		'wrong diagram options 1',
 		'wrong diagram options 2',
