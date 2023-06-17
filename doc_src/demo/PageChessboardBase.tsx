@@ -50,6 +50,7 @@ interface PageState {
 	flipped: boolean;
 	squareSize: number;
 	coordinateVisible: boolean;
+	turnVisible: boolean;
 	annotationVisible: boolean;
 	colorset: string;
 	pieceset: string;
@@ -65,6 +66,7 @@ export default class Page extends React.Component<object, PageState> {
 			flipped: false,
 			squareSize: 40,
 			coordinateVisible: true,
+			turnVisible: true,
 			annotationVisible: false,
 			colorset: 'original',
 			pieceset: 'cburnett',
@@ -89,6 +91,9 @@ export default class Page extends React.Component<object, PageState> {
 				/>
 				<FormControlLabel label="Show coordinates"
 					control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
+				/>
+				<FormControlLabel label="Show turn"
+					control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
 				/>
 				<FormControlLabel label="Show annotations"
 					control={<Switch checked={this.state.annotationVisible} onChange={() => this.setState({ annotationVisible: !this.state.annotationVisible })} color="primary" />}
@@ -132,6 +137,7 @@ export default class Page extends React.Component<object, PageState> {
 					flipped={this.state.flipped}
 					squareSize={this.state.squareSize}
 					coordinateVisible={this.state.coordinateVisible}
+					turnVisible={this.state.turnVisible}
 					squareMarkers={this.state.annotationVisible ? SQUARE_MARKERS : ''}
 					arrowMarkers={this.state.annotationVisible ? ARROW_MARKERS : ''}
 					colorset={this.state.colorset}
@@ -155,6 +161,7 @@ export default class Page extends React.Component<object, PageState> {
 		}
 		attributes.push(`squareSize={${this.state.squareSize}}`);
 		attributes.push(`coordinateVisible={${this.state.coordinateVisible}}`);
+		attributes.push(`turnVisible={${this.state.turnVisible}}`);
 		attributes.push(`colorset="${this.state.colorset}"`);
 		attributes.push(`pieceset="${this.state.pieceset}"`);
 		return <pre className="kokopu-demoCode">{buildComponentDemoCode('Chessboard', attributes)}</pre>;

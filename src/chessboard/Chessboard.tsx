@@ -43,6 +43,7 @@ export interface SmallScreenLimit {
 	width: number;
 	squareSize?: number;
 	coordinateVisible?: boolean;
+	turnVisible?: boolean;
 }
 
 
@@ -97,6 +98,11 @@ export interface ChessboardProps {
 	 * Whether the row and column coordinates are visible or not.
 	 */
 	coordinateVisible: boolean;
+
+	/**
+	 * Whether the turn flag is visible or not.
+	 */
+	turnVisible: boolean;
 
 	/**
 	 * Whether moves are highlighted with an arrow or not.
@@ -191,6 +197,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		flipped: false,
 		squareSize: 40,
 		coordinateVisible: true,
+		turnVisible: true,
 		moveArrowVisible: true,
 		moveArrowColor: 'b',
 		animated: false,
@@ -242,6 +249,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		const flipped = sanitizeBoolean(this.props.flipped);
 		const squareSize = sanitizeBoundedInteger(this.props.squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard', 'squareSize'));
 		const coordinateVisible = sanitizeBoolean(this.props.coordinateVisible);
+		const turnVisible = sanitizeBoolean(this.props.turnVisible);
 		const moveArrowVisible = sanitizeBoolean(this.props.moveArrowVisible);
 		if (!isAnnotationColor(this.props.moveArrowColor)) {
 			throw new IllegalArgument('Chessboard', 'moveArrowColor');
@@ -260,6 +268,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		const smallScreenLimits = sanitizeSmallScreenLimits(this.props.smallScreenLimits, () => new IllegalArgument('Chessboard', 'smallScreenLimits'));
 		const actualSquareSize = computeSquareSizeForSmallScreens(squareSize, smallScreenLimits, this.state.windowWidth);
 		const actualCoordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, this.state.windowWidth);
+		const actualTurnVisible = computeTurnVisibleForSmallScreens(turnVisible, smallScreenLimits, this.state.windowWidth);
 
 		// Validate the interaction attributes and the callbacks.
 		const interactionMode = this.getInteractionModeAndValidateEditedArrowColor();
@@ -271,9 +280,10 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 
 		return (
 			<ChessboardImpl key={key}
-				position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm}
-				flipped={flipped} squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} moveArrowVisible={moveArrowVisible}
-				moveArrowColor={this.props.moveArrowColor} animated={animated} colorset={colorset} pieceset={pieceset}
+				position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm} flipped={flipped}
+				squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} turnVisible={actualTurnVisible}
+				moveArrowVisible={moveArrowVisible} moveArrowColor={this.props.moveArrowColor} animated={animated}
+				colorset={colorset} pieceset={pieceset}
 				interactionMode={interactionMode} editedArrowColor={this.props.editedArrowColor}
 				onPieceMoved={onPieceMoved} onSquareClicked={onSquareClicked} onArrowEdited={onArrowEdited} onMovePlayed={onMovePlayed}
 			/>
@@ -313,7 +323,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		}
 
 		// Compute the dimensions.
-		return chessboardSize(squareSize, coordinateVisible);
+		return chessboardSize(squareSize, coordinateVisible, true); // TODO take turnVisible into account
 	}
 
 	/**
@@ -335,7 +345,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		}
 
 		function isAdapted(squareSize: number) {
-			const { width: actualWidth, height: actualHeight } = chessboardSize(squareSize, coordinateVisible);
+			const { width: actualWidth, height: actualHeight } = chessboardSize(squareSize, coordinateVisible, true); // TODO take turnVisible into account
 			return actualWidth <= width && actualHeight <= height;
 		}
 
@@ -410,11 +420,20 @@ function computeSquareSizeForSmallScreens(squareSize: number, smallScreenLimits:
 
 
 /**
- * Compute the actual square size taking into account the given small-screen limits and window width.
+ * Compute the actual coordinate visibility attribute taking into account the given small-screen limits and window width.
  */
 function computeCoordinateVisibleForSmallScreens(coordinateVisible: boolean, smallScreenLimits: SmallScreenLimit[], windowWidth: number) {
 	const maximumCoordinateVisible = computeSmallScreenLimits(smallScreenLimits, windowWidth, limit => limit.coordinateVisible);
 	return maximumCoordinateVisible === undefined ? coordinateVisible : coordinateVisible && maximumCoordinateVisible;
+}
+
+
+/**
+ * Compute the actual turn flag visibility attribute taking into account the given small-screen limits and window width.
+ */
+function computeTurnVisibleForSmallScreens(turnVisible: boolean, smallScreenLimits: SmallScreenLimit[], windowWidth: number) {
+	const maximumTurnVisible = computeSmallScreenLimits(smallScreenLimits, windowWidth, limit => limit.turnVisible);
+	return maximumTurnVisible === undefined ? turnVisible : turnVisible && maximumTurnVisible;
 }
 
 

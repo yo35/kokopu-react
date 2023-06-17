@@ -60,6 +60,7 @@ interface ChessboardImplProps {
 	flipped: boolean;
 	squareSize: number;
 	coordinateVisible: boolean;
+	turnVisible: boolean;
 	moveArrowVisible: boolean;
 	moveArrowColor: AnnotationColor;
 	animated: boolean;
@@ -127,7 +128,7 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
 		// Render the whole canvas.
 		const xmin = Math.round(-RANK_COORDINATE_WIDTH_FACTOR * fontSize);
 		const ymin = 0;
-		const xmax = 9 * this.props.squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * this.props.squareSize);
+		const xmax = this.props.turnVisible ? 9 * this.props.squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * this.props.squareSize) : 8 * this.props.squareSize;
 		const ymax = 8 * this.props.squareSize + Math.round(FILE_COORDINATE_HEIGHT_FACTOR * fontSize);
 		const viewBox = `${xmin} ${ymin} ${xmax - xmin} ${ymax - ymin}`;
 		return (
@@ -433,6 +434,9 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
 	}
 
 	private renderTurnFlag(turn: Color) {
+		if (!this.props.turnVisible) {
+			return undefined;
+		}
 		const x = 8 * this.props.squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * this.props.squareSize);
 		const y = turn === (this.props.flipped ? 'b' : 'w') ? 7 * this.props.squareSize : 0;
 		return <image key={'turn-' + turn} x={x} y={y} width={this.props.squareSize} height={this.props.squareSize} href={this.getURLForTurnFlag(turn)} />;
@@ -612,9 +616,12 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
 /**
  * Return the size of the chessboard, assuming it is built with the given attributes.
  */
-export function chessboardSize(squareSize: number, coordinateVisible: boolean) {
-	let width = 9 * squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+export function chessboardSize(squareSize: number, coordinateVisible: boolean, turnVisible: boolean) {
+	let width = 8 * squareSize;
 	let height = 8 * squareSize;
+	if (turnVisible) {
+		width += squareSize + Math.round(TURN_FLAG_SPACING_FACTOR * squareSize);
+	}
 	if (coordinateVisible) {
 		const fontSize = computeCoordinateFontSize(squareSize);
 		width += Math.round(RANK_COORDINATE_WIDTH_FACTOR * fontSize);
