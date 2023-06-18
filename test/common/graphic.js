@@ -205,6 +205,15 @@ exports.setSandbox = async function(browserContext, value) {
 
 
 /**
+ * Set the width of the browser.
+ */
+exports.setWindowWidth = async function(browserContext, width) {
+	const { height } = await await browserContext.driver.manage().window().getRect();
+	await browserContext.driver.manage().window().setRect({ width: width, height: height });
+};
+
+
+/**
  * Open the page corresponding to the given test-case, and execute the given scenario.
  */
 const itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {
