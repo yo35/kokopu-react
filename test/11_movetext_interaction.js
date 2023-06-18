@@ -28,7 +28,7 @@ const test = require('unit.js');
 describeWithBrowser('Movetext interaction', browserContext => {
 
 	function itCheckClickMove(itemIndex, label, targets) {
-		itCustom(browserContext, '10_movetext_interaction/select_moves', itemIndex, label, async element => {
+		itCustom(browserContext, '11_movetext_interaction/select_moves', itemIndex, label, async element => {
 			const actions = browserContext.driver.actions({ async: true });
 			await setSandbox(browserContext, '');
 			for (let i = 0; i < targets.length; ++i) {
@@ -63,7 +63,7 @@ describeWithBrowser('Movetext interaction', browserContext => {
 	]);
 
 	function itCheckKeyboardActions(itemIndex, label, expectedOnGoFirst, expectedOnGoPrevious, expectedOnGoNext, expectedOnGoLast, expectedOnExit) {
-		itCustom(browserContext, '10_movetext_interaction/select_moves', itemIndex, label, async element => {
+		itCustom(browserContext, '11_movetext_interaction/select_moves', itemIndex, label, async element => {
 			const focusFieldElements = await element.findElements(By.className('kokopu-focusField'));
 
 			// Handle components for which no interaction is defined.
@@ -120,7 +120,7 @@ describeWithBrowser('Movetext interaction', browserContext => {
 	itCheckKeyboardActions(8, 'key on sub-variation selected', tpl('start', 'key-first'), tpl('1w', 'key-previous'), tpl('1b-v0-1b', 'key-next'),
 		tpl('1b-v0-3w', 'key-last'), TPL_EXIT);
 
-	itChecksScreenshots(browserContext, '10_movetext_interaction/error', [
+	itChecksScreenshots(browserContext, '11_movetext_interaction/error', [
 		'wrong interaction mode',
 	]);
 
