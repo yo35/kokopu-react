@@ -1,6 +1,14 @@
 ChangeLog
 =========
 
+3.0.0 (June 18, 2023)
+---------------------
+* Add attribute `turnVisible` on `Chessboard` to control whether the turn flag should be visible or not
+(see [#3](https://github.com/yo35/kokopu-react/issues/3)).
+* Add component `ChessPieceIcon`.
+* Breaking changes affecting methods `Chessboard.size()` and `Chessboard.adaptSquareSize()`:
+look at the [migration guide](https://kokopu-react.yo35.org/docs/current/#/Migrate%20to%203.x) for more details.
+
 2.1.0 (May 26, 2023)
 --------------------
 * Listen to ESC key in Movetext to let the user unselect the currently selected move through keyboard.
