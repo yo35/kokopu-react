@@ -23,7 +23,7 @@
 const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic');
 
 
-describeWithBrowser('Marker icons graphic', browserContext => {
+describeWithBrowser('Icons graphic', browserContext => {
 
 	itChecksScreenshots(browserContext, '04_icons_graphic/marker', [
 
