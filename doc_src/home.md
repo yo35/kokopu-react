@@ -32,3 +32,14 @@ Example
 ```js
 <Chessboard position="rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2" />
 ```
+
+
+
+Breaking changes
+----------------
+
+Versions 2.0.0 and 3.0.0 introduce some breaking changes with regard to the previous versions.
+To determine whether your codebase needs to be adapted or not when upgrading Kokopu-React,
+please look at:
+- [migration guide to 3.x](#/Migrate%20to%203.x) to upgrade from 2.x to 3.0.0 (or any subsequent version).
+- [migration guide to 2.x](#/Migrate%20to%202.x) and [migration guide to 3.x](#/Migrate%20to%203.x) to upgrade from 1.x to 3.0.0 (or any subsequent version).
