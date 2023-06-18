@@ -120,7 +120,7 @@ export default class Page extends React.Component<object, PageState> {
 		return (
 			<pre className="kokopu-demoCode">
 				{
-					'let limits = [\n' +
+					'const limits = [\n' +
 					limits.join('') +
 					'];\n' +
 					buildComponentDemoCode('Chessboard', attributes)

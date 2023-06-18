@@ -18,9 +18,9 @@ const coordinateVisible = true;
 const smallScreenLimits = [ /* whatever */ ];
 
 const { width, height } = Chessboard.size({
-  squareSize: squareSize,
-  coordinateVisible: coordinateVisible,
-  smallScreenLimits: smallScreenLimits,
+    squareSize: squareSize,
+    coordinateVisible: coordinateVisible,
+    smallScreenLimits: smallScreenLimits,
 });
 
 // Used to be, before 3.0.0:
@@ -42,8 +42,8 @@ const coordinateVisible = true;
 const smallScreenLimits = [ /* whatever */ ];
 
 const squareSize = Chessboard.adaptSquareSize(width, height, {
-  coordinateVisible: coordinateVisible,
-  smallScreenLimits: smallScreenLimits,
+    coordinateVisible: coordinateVisible,
+    smallScreenLimits: smallScreenLimits,
 });
 
 // Used to be, before 3.0.0:
