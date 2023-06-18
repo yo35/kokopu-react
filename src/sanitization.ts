@@ -33,6 +33,19 @@ export function sanitizeBoolean(input: boolean): boolean {
 }
 
 
+export function sanitizePartialObject<T>(input: Partial<T> | undefined, exceptionBuilder: () => IllegalArgument): Partial<T> {
+	if (input === undefined || input === null) {
+		return {};
+	}
+	else if (typeof input !== 'object') {
+		throw exceptionBuilder();
+	}
+	else {
+		return input;
+	}
+}
+
+
 export function sanitizeInteger(input: number, exceptionBuilder: () => IllegalArgument): number {
 	if (typeof input !== 'number' || !Number.isFinite(input)) {
 		throw exceptionBuilder();

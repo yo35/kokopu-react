@@ -26,7 +26,7 @@ import { exception as kokopuException, MoveDescriptor, Position, Square, GameVar
 
 import { IllegalArgument } from '../exception';
 import { i18n } from '../i18n';
-import { sanitizeString, sanitizeBoolean, sanitizeInteger, sanitizeBoundedInteger, sanitizeOptional } from '../sanitization';
+import { sanitizeString, sanitizeBoolean, sanitizePartialObject, sanitizeInteger, sanitizeBoundedInteger, sanitizeOptional } from '../sanitization';
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
 	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from '../types';
 
@@ -186,6 +186,9 @@ interface ChessboardState {
 }
 
 
+const DEFAULT_SQUARE_SIZE = 40;
+
+
 /**
  * SVG image representing a chessboard diagram. Optionally, the user may interact with the board (move pieces, click on squares...).
  * Annotations such as square markers or arrows can also be added to the board.
@@ -195,7 +198,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	static defaultProps: Partial<ChessboardProps> = {
 		position: 'start',
 		flipped: false,
-		squareSize: 40,
+		squareSize: DEFAULT_SQUARE_SIZE,
 		coordinateVisible: true,
 		turnVisible: true,
 		moveArrowVisible: true,
@@ -309,43 +312,50 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	/**
 	 * Return the size of the chessboard, assuming it is built with the given attributes.
 	 */
-	static size(squareSize: number, coordinateVisible: boolean, smallScreenLimits?: SmallScreenLimit[]): { width: number, height: number } {
+	static size(attr?: Partial<Pick<ChessboardProps, 'squareSize' | 'coordinateVisible' | 'turnVisible' | 'smallScreenLimits'>>): { width: number, height: number } {
+		let { squareSize, coordinateVisible, turnVisible, smallScreenLimits } = sanitizePartialObject(attr, () => new IllegalArgument('Chessboard.size()', 'attr'));
 
 		// Sanitize the arguments.
-		squareSize = sanitizeBoundedInteger(squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard.size()', 'squareSize'));
-		coordinateVisible = sanitizeBoolean(coordinateVisible);
-		const limits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.size()', 'smallScreenLimits'));
+		squareSize = squareSize === undefined ? DEFAULT_SQUARE_SIZE :
+			sanitizeBoundedInteger(squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard.size()', 'squareSize'));
+		coordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
+		turnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
+		smallScreenLimits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.size()', 'smallScreenLimits'));
 
 		// Enforce small-screen limits, if any.
 		if (typeof window !== 'undefined') {
-			squareSize = computeSquareSizeForSmallScreens(squareSize, limits, window.innerWidth);
-			coordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, limits, window.innerWidth);
+			squareSize = computeSquareSizeForSmallScreens(squareSize, smallScreenLimits, window.innerWidth);
+			coordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, window.innerWidth);
+			turnVisible = computeTurnVisibleForSmallScreens(turnVisible, smallScreenLimits, window.innerWidth);
 		}
 
 		// Compute the dimensions.
-		return chessboardSize(squareSize, coordinateVisible, true); // TODO take turnVisible into account
+		return chessboardSize(squareSize, coordinateVisible, turnVisible);
 	}
 
 	/**
 	 * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
 	 */
-	static adaptSquareSize(width: number, height: number, coordinateVisible: boolean, smallScreenLimits?: SmallScreenLimit[]): number {
+	static adaptSquareSize(width: number, height: number, attr?: Partial<Pick<ChessboardProps, 'coordinateVisible' | 'turnVisible' | 'smallScreenLimits'>>): number {
+		let { coordinateVisible, turnVisible, smallScreenLimits } = sanitizePartialObject(attr, () => new IllegalArgument('Chessboard.size()', 'attr'));
 
 		// Sanitize the arguments.
 		width = sanitizeInteger(width, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'width'));
 		height = sanitizeInteger(height, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'height'));
-		coordinateVisible = sanitizeBoolean(coordinateVisible);
-		const limits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'smallScreenLimits'));
+		coordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
+		turnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
+		smallScreenLimits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'smallScreenLimits'));
 
 		// Enforce small-screen limits, if any.
 		let maxSquareSize = MAX_SQUARE_SIZE;
 		if (typeof window !== 'undefined') {
-			maxSquareSize = computeSquareSizeForSmallScreens(maxSquareSize, limits, window.innerWidth);
-			coordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, limits, window.innerWidth);
+			maxSquareSize = computeSquareSizeForSmallScreens(maxSquareSize, smallScreenLimits, window.innerWidth);
+			coordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, window.innerWidth);
+			turnVisible = computeTurnVisibleForSmallScreens(turnVisible, smallScreenLimits, window.innerWidth);
 		}
 
 		function isAdapted(squareSize: number) {
-			const { width: actualWidth, height: actualHeight } = chessboardSize(squareSize, coordinateVisible, true); // TODO take turnVisible into account
+			const { width: actualWidth, height: actualHeight } = chessboardSize(squareSize, coordinateVisible!, turnVisible!);
 			return actualWidth <= width && actualHeight <= height;
 		}
 
@@ -584,10 +594,14 @@ function sanitizeSmallScreenLimits(smallScreenLimits: SmallScreenLimit[] | undef
 	}
 	else {
 		return smallScreenLimits.map(smallScreenLimit => {
+			if (typeof smallScreenLimit !== 'object' || smallScreenLimit === null) {
+				throw exceptionBuilder();
+			}
 			return {
 				width: sanitizeInteger(smallScreenLimit.width, exceptionBuilder),
 				squareSize: sanitizeOptional(smallScreenLimit.squareSize, val => sanitizeBoundedInteger(val, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, exceptionBuilder)),
 				coordinateVisible: sanitizeOptional(smallScreenLimit.coordinateVisible, sanitizeBoolean),
+				turnVisible: sanitizeOptional(smallScreenLimit.turnVisible, sanitizeBoolean)
 			};
 		});
 	}

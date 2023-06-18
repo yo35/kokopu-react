@@ -49,8 +49,9 @@ export default class Page extends React.Component<object, PageState> {
 			squareSize: 56,
 			windowWidth: window.innerWidth,
 			limits: [
-				{ width: 170, squareSize: 12, coordinateVisible: false },
-				{ width: 250, squareSize: 16, coordinateVisible: false },
+				{ width: 160, squareSize: 12 },
+				{ width: 224, squareSize: 16 },
+				{ width: 250, turnVisible: false },
 				{ width: 340, squareSize: 24, coordinateVisible: false },
 				{ width: 450, squareSize: 32 },
 				{ width: 560, squareSize: 44 },
@@ -100,9 +101,15 @@ export default class Page extends React.Component<object, PageState> {
 	private renderCode() {
 
 		const limits = this.state.limits.map(limit => {
-			const limitAttributes = [`width: ${limit.width}`, `squareSize: ${limit.squareSize}`];
+			const limitAttributes = [ `width: ${limit.width}` ];
+			if ('squareSize' in limit) {
+				limitAttributes.push(`squareSize: ${limit.squareSize}`);
+			}
 			if ('coordinateVisible' in limit) {
 				limitAttributes.push(`coordinateVisible: ${limit.coordinateVisible}`);
+			}
+			if ('turnVisible' in limit) {
+				limitAttributes.push(`turnVisible: ${limit.turnVisible}`);
 			}
 			return `    { ${limitAttributes.join(', ')} },\n`;
 		});
