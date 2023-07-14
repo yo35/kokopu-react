@@ -60,13 +60,11 @@ const demoPages = [
 
 // Generate the Markdown file corresponding to each demo page.
 demoPages.forEach(demoPage => {
-	const filename = `${tmpDir}/${demoPage.id}.md`;
-	fs.writeFileSync(path.resolve(__dirname, filename),
+	fs.writeFileSync(path.resolve(__dirname, `${tmpDir}/${demoPage.id}.md`),
 		'```js\n' +
 		`<Page${demoPage.id} />\n` +
 		'```\n'
 	);
-	demoPage.filename = filename;
 });
 
 // Generate the changelog page.
@@ -152,7 +150,7 @@ module.exports = {
 			name: componentSectionTitle,
 			content: componentsTocFilename,
 			components: components.map(componentName => `${srcDir}/${componentName}.tsx`),
-			sectionDepth: 1
+			sectionDepth: 1,
 		},
 		{
 			name: demoSectionTitle,
@@ -161,8 +159,8 @@ module.exports = {
 			sections: demoPages.map(demoPage => {
 				return {
 					name: demoPage.title,
-					content: demoPage.filename,
-					exampleMode: 'hide'
+					content: `${tmpDir}/${demoPage.id}.md`,
+					exampleMode: 'hide',
 				};
 			}),
 		},
