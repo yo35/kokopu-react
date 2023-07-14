@@ -167,6 +167,10 @@ module.exports = {
 			}),
 		},
 		{
+			name: 'Webpack configuration',
+			content: `${docSrcDir}/webpack_configuration.md`,
+		},
+		{
 			name: 'Kokopu core library documentation',
 			href: 'https://kokopu.yo35.org/',
 		},
