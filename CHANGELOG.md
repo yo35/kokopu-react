@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.0.1 (July 14, 2023)
+---------------------
+* Add documentation regarding Webpack configuration.
+
 3.0.0 (June 18, 2023)
 ---------------------
 * Add attribute `turnVisible` on `Chessboard` to control whether the turn flag should be visible or not
