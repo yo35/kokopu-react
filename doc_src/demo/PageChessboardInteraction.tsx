@@ -111,25 +111,33 @@ export default class Page extends React.Component<object, PageState> {
 				<Typography gutterBottom>Interaction mode</Typography>
 				<RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
 					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
-					<Stack direction="row" spacing={2} alignItems="center">
-						<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label="Add/remove pieces" />
-						{this.renderPieceSelector()}
-					</Stack>
+					<FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label={
+						<Stack direction="row" spacing={2} alignItems="center">
+							<span>Add/remove pieces</span>
+							{this.renderPieceSelector()}
+						</Stack>
+					} />
 					<FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
 					<FormControlLabel value="playMoves" control={<Radio color="primary" />} label="Move pieces (obeying chess rules)" />
-					<Stack direction="row" spacing={2} alignItems="center">
-						<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label="Edit square annotations" />
-						{this.renderMarkerColorSelector('editSquareMarkers', this.state.squareMarkerColor, newColor => this.handleSquareMarkerColorChanged(newColor))}
-					</Stack>
-					<Stack direction="row" spacing={2} alignItems="center">
-						<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label="Edit text annotations" />
-						{this.renderMarkerColorSelector('editTextMarkers', this.state.textMarkerColor, newColor => this.handleTextMarkerColorChanged(newColor))}
-						{this.renderTextMarkerSymbolSelector()}
-					</Stack>
-					<Stack direction="row" spacing={2} alignItems="center">
-						<FormControlLabel value="editArrowMarkers" control={<Radio color="primary" />} label="Edit arrow annotations" />
-						{this.renderMarkerColorSelector('editArrowMarkers', this.state.arrowMarkerColor, newColor => this.handleArrowMarkerColorChanged(newColor))}
-					</Stack>
+					<FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label={
+						<Stack direction="row" spacing={2} alignItems="center">
+							<span>Edit square annotations</span>
+							{this.renderMarkerColorSelector('editSquareMarkers', this.state.squareMarkerColor, newColor => this.handleSquareMarkerColorChanged(newColor))}
+						</Stack>
+					} />
+					<FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label={
+						<Stack direction="row" spacing={2} alignItems="center">
+							<span>Edit text annotations</span>
+							{this.renderMarkerColorSelector('editTextMarkers', this.state.textMarkerColor, newColor => this.handleTextMarkerColorChanged(newColor))}
+							{this.renderTextMarkerSymbolSelector()}
+						</Stack>
+					} />
+					<FormControlLabel value="editArrowMarkers" control={<Radio color="primary" />} label={
+						<Stack direction="row" spacing={2} alignItems="center">
+							<span>Edit arrow annotations</span>
+							{this.renderMarkerColorSelector('editArrowMarkers', this.state.arrowMarkerColor, newColor => this.handleArrowMarkerColorChanged(newColor))}
+						</Stack>
+					} />
 				</RadioGroup>
 			</Box>
 		</>);
