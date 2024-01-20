@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.0.2 (January 20, 2023)
+------------------------
+* Minor fixes in dependencies.
+
 3.0.1 (July 14, 2023)
 ---------------------
 * Add documentation regarding Webpack configuration.
