@@ -36,7 +36,8 @@ export { TextMarkerIcon, TextMarkerIconProps } from './icons/TextMarkerIcon';
 export { ArrowMarkerIcon, ArrowMarkerIconProps } from './icons/ArrowMarkerIcon';
 export { ChessPieceIcon, ChessPieceIconProps } from './icons/ChessPieceIcon';
 
-export { Chessboard, ChessboardProps, SmallScreenLimit } from './chessboard/Chessboard';
+export { SmallScreenLimit } from './chessboard/BoardProperties';
+export { Chessboard, ChessboardProps } from './chessboard/Chessboard';
 
 export { formatMove, moveFormatter } from './movetext/moveFormatter';
 export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';

@@ -29,7 +29,8 @@ import { Game, Color, GameResult, Node as GameNode, Variation, nagSymbol } from 
 import { i18n } from '../i18n';
 import { fillPlaceholder } from '../util';
 
-import { Chessboard, ChessboardProps } from '../chessboard/Chessboard';
+import { StaticBoardGraphicProps } from '../chessboard/BoardProperties';
+import { Chessboard } from '../chessboard/Chessboard';
 import { htmlFilter } from './htmlFilter';
 
 import './Movetext.css';
@@ -39,15 +40,7 @@ interface MovetextImplProps {
 
 	game: Game;
 
-	diagramOptions: {
-		flipped?: ChessboardProps['flipped'],
-		squareSize?: ChessboardProps['squareSize'],
-		coordinateVisible?: ChessboardProps['coordinateVisible'],
-		turnVisible?: ChessboardProps['turnVisible'],
-		colorset?: ChessboardProps['colorset'],
-		pieceset?: ChessboardProps['pieceset'],
-		smallScreenLimits?: ChessboardProps['smallScreenLimits'],
-	};
+	diagramOptions: Partial<StaticBoardGraphicProps>;
 	moveFormatter: (notation: string) => React.ReactNode;
 	diagramVisible: boolean;
 	headerVisible: boolean;
@@ -315,15 +308,10 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 			for (let textSegment of comment.split('[#]')) {
 				if (!isFirstTextSegment) {
 					const position = node instanceof Variation ? node.initialPosition() : node.position();
-					const diagram = <Chessboard position={position}
+					const diagram = <Chessboard
+						{ ...this.props.diagramOptions }
+						position={position}
 						squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}
-						flipped={this.props.diagramOptions.flipped}
-						squareSize={this.props.diagramOptions.squareSize}
-						coordinateVisible={this.props.diagramOptions.coordinateVisible}
-						turnVisible={this.props.diagramOptions.turnVisible}
-						smallScreenLimits={this.props.diagramOptions.smallScreenLimits}
-						colorset={this.props.diagramOptions.colorset}
-						pieceset={this.props.diagramOptions.pieceset}
 					/>;
 					segmentElements.push(<div className="kokopu-diagram" key={'diagram-' + (diagramIndex++)}>{diagram}</div>);
 				}

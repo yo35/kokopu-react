@@ -31,7 +31,7 @@ import { i18n } from '../i18n';
 import { sanitizeString, sanitizeBoolean, sanitizeOptional } from '../sanitization';
 import { PieceSymbolMapping } from '../types';
 
-import { ChessboardProps } from '../chessboard/Chessboard';
+import { StaticBoardGraphicProps } from '../chessboard/BoardProperties';
 import { ErrorBox } from '../errorbox/ErrorBox';
 import { moveFormatter } from './moveFormatter';
 import { MovetextImpl, firstNodeIdImpl, previousNodeIdImpl, nextNodeIdImpl, lastNodeIdImpl } from './MovetextImpl';
@@ -48,7 +48,7 @@ export type MoveSelectEventOrigin = 'key-first' | 'key-previous' | 'key-next' | 
 export interface MovetextProps {
 
 	/**
-	 * Displayed position. Can be a [kokopu.Game](https://kokopu.yo35.org/docs/current/classes/Game.html) object,
+	 * Displayed game. Can be a [kokopu.Game](https://kokopu.yo35.org/docs/current/classes/Game.html) object,
 	 * a [kokopu.Database](https://kokopu.yo35.org/docs/current/classes/Database.html) object,
 	 * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation).
 	 */
@@ -64,15 +64,7 @@ export interface MovetextProps {
 	/**
 	 * Options applicable to the diagrams in the comments. See [Chessboard](#/Components/Chessboard) for more details about each option.
 	 */
-	diagramOptions: {
-		flipped?: ChessboardProps['flipped'],
-		squareSize?: ChessboardProps['squareSize'],
-		coordinateVisible?: ChessboardProps['coordinateVisible'],
-		turnVisible?: ChessboardProps['turnVisible'],
-		colorset?: ChessboardProps['colorset'],
-		pieceset?: ChessboardProps['pieceset'],
-		smallScreenLimits?: ChessboardProps['smallScreenLimits'],
-	};
+	diagramOptions: Partial<StaticBoardGraphicProps>;
 
 	/**
 	 * Symbols to use for the chess pieces. See {@link moveFormatter}.

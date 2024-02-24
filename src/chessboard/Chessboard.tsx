@@ -32,24 +32,14 @@ import { sanitizeString, sanitizeBoolean, sanitizePartialObject, sanitizeInteger
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
 	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from '../types';
 
-import { colorsets, DEFAULT_COLORSET } from './colorsets';
-import { piecesets, DEFAULT_PIECESET } from './piecesets';
+import { DynamicBoardGraphicProps, SmallScreenLimit, DEFAULT_SQUARE_SIZE, defaultDynamicBoardProps } from './BoardProperties';
+import { colorsets } from './colorsets';
+import { piecesets } from './piecesets';
 import { ChessboardImpl, chessboardSize } from './ChessboardImpl';
 import { ErrorBox } from '../errorbox/ErrorBox';
 
 
-/**
- * Define a limit applicable to the parameters of a {@link Chessboard} on small-screen devices.
- */
-export interface SmallScreenLimit {
-	width: number;
-	squareSize?: number;
-	coordinateVisible?: boolean;
-	turnVisible?: boolean;
-}
-
-
-export interface ChessboardProps {
+export interface ChessboardProps extends DynamicBoardGraphicProps {
 
 	/**
 	 * Displayed position. Can be a [kokopu.Position](https://kokopu.yo35.org/docs/current/classes/Position.html) object,
@@ -85,66 +75,6 @@ export interface ChessboardProps {
 	 * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
 	 */
 	arrowMarkers?: ArrowMarkerSet | string;
-
-	/**
-	 * Whether the board is flipped (i.e. seen from Black's point of view) or not.
-	 */
-	flipped: boolean;
-
-	/**
-	 * Size of the squares (in pixels). Must be an integer between `Chessboard.minSquareSize()` and `Chessboard.maxSquareSize()`.
-	 */
-	squareSize: number;
-
-	/**
-	 * Whether the row and column coordinates are visible or not.
-	 */
-	coordinateVisible: boolean;
-
-	/**
-	 * Whether the turn flag is visible or not.
-	 */
-	turnVisible: boolean;
-
-	/**
-	 * Whether moves are highlighted with an arrow or not.
-	 */
-	moveArrowVisible: boolean;
-
-	/**
-	 * Color of the move arrow.
-	 */
-	moveArrowColor: AnnotationColor;
-
-	/**
-	 * Whether moves are animated or not.
-	 */
-	animated: boolean;
-
-	/**
-	 * Color theme ID. Must be a property of `Chessboard.colorsets()`.
-	 */
-	colorset: string;
-
-	/**
-	 * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
-	 */
-	pieceset: string;
-
-	/**
-	 * Limits applicable on small-screen devices. For instance, if set to
-	 * ```
-	 * [
-	 *   { width: 768, squareSize: 40 },
-	 *   { width: 375, squareSize: 24, coordinateVisible: false }
-	 * ]
-	 * ```
-	 * then on screens with resolution ≤768 pixels, the square size will be limited to 40 (whatever the value
-	 * of the `squareSize` attribute); in addition, on screens with resolution ≤375 pixels, the square size
-	 * will be limited to 24 and the row and column coordinates will always be hidden (whatever the value of the
-	 * `coordinateVisible` attribute).
-	 */
-	smallScreenLimits?: SmallScreenLimit[];
 
 	/**
 	 * Type of action allowed with the mouse on the chessboard. If undefined, then the user cannot interact with the component.
@@ -188,9 +118,6 @@ interface ChessboardState {
 }
 
 
-const DEFAULT_SQUARE_SIZE = 40;
-
-
 /**
  * SVG image representing a chessboard diagram. Optionally, the user may interact with the board (move pieces, click on squares...).
  * Annotations such as square markers or arrows can also be added to the board.
@@ -198,16 +125,8 @@ const DEFAULT_SQUARE_SIZE = 40;
 export class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 
 	static defaultProps: Partial<ChessboardProps> = {
+		...defaultDynamicBoardProps(),
 		position: 'start',
-		flipped: false,
-		squareSize: DEFAULT_SQUARE_SIZE,
-		coordinateVisible: true,
-		turnVisible: true,
-		moveArrowVisible: true,
-		moveArrowColor: 'b',
-		animated: false,
-		colorset: DEFAULT_COLORSET,
-		pieceset: DEFAULT_PIECESET,
 	};
 
 	private windowResizeListener = () => this.handleWindowResize();
