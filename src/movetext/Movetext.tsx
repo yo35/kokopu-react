@@ -24,15 +24,14 @@
 
 import * as React from 'react';
 
-import { exception as kokopuException, Database, Game, pgnRead } from 'kokopu';
+import { Database, Game } from 'kokopu';
 
 import { IllegalArgument } from '../exception';
-import { i18n } from '../i18n';
 import { sanitizeString, sanitizeBoolean, sanitizeOptional } from '../sanitization';
 import { PieceSymbolMapping } from '../types';
 
 import { StaticBoardGraphicProps } from '../chessboard/BoardProperties';
-import { ErrorBox } from '../errorbox/ErrorBox';
+import { parseGame } from '../errorbox/parsing';
 import { moveFormatter } from './moveFormatter';
 import { MovetextImpl, firstNodeIdImpl, previousNodeIdImpl, nextNodeIdImpl, lastNodeIdImpl } from './MovetextImpl';
 
@@ -130,14 +129,9 @@ export class Movetext extends React.Component<MovetextProps> {
 	render() {
 
 		// Validate the game and game-index attributes.
-		const info = parseGame(this.props.game, this.props.gameIndex);
+		const info = parseGame(this.props.game, this.props.gameIndex, 'Movetext');
 		if (info.error) {
-			return (
-				<ErrorBox
-					title={i18n.INVALID_PGN_ERROR_TITLE} message={info.pgnException.message} text={info.pgnException.pgn}
-					errorIndex={info.pgnException.index} lineNumber={info.pgnException.lineNumber}
-				/>
-			);
+			return info.errorBox;
 		}
 
 		// Validate the appearance attributes.
@@ -240,35 +234,4 @@ export class Movetext extends React.Component<MovetextProps> {
 		return lastNodeIdImpl(game, selection);
 	}
 
-}
-
-
-/**
- * Try to interpret the given object as a chess game.
- */
-function parseGame(game: Game | Database | string, gameIndex: number): { error: true, pgnException: kokopuException.InvalidPGN } | { error: false, game: Game } {
-	if (game instanceof Game) {
-		return { error: false, game: game };
-	}
-	else if (game instanceof Database || typeof game === 'string') {
-		if (!Number.isInteger(gameIndex) || gameIndex < 0) {
-			throw new IllegalArgument('Movetext', 'gameIndex');
-		}
-		try {
-			const result = game instanceof Database ? game.game(gameIndex) : pgnRead(game, gameIndex);
-			return { error: false, game: result };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopuException.InvalidPGN) {
-				return { error: true, pgnException: e };
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-	else {
-		throw new IllegalArgument('Movetext', 'game');
-	}
 }

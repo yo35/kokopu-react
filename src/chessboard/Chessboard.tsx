@@ -24,10 +24,9 @@
 
 import * as React from 'react';
 
-import { exception as kokopuException, MoveDescriptor, Position, Square, GameVariant, isSquare, isSquareCouple, isGameVariant } from 'kokopu';
+import { MoveDescriptor, Position, Square, isSquare, isSquareCouple } from 'kokopu';
 
 import { IllegalArgument } from '../exception';
-import { i18n } from '../i18n';
 import { sanitizeString, sanitizeBoolean, sanitizePartialObject, sanitizeInteger, sanitizeBoundedInteger, sanitizeOptional } from '../sanitization';
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
 	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from '../types';
@@ -36,7 +35,7 @@ import { DynamicBoardGraphicProps, SmallScreenLimit, DEFAULT_SQUARE_SIZE, defaul
 import { colorsets } from './colorsets';
 import { piecesets } from './piecesets';
 import { ChessboardImpl, chessboardSize } from './ChessboardImpl';
-import { ErrorBox } from '../errorbox/ErrorBox';
+import { parsePosition, parseMove } from '../errorbox/parsing';
 
 
 export interface ChessboardProps extends DynamicBoardGraphicProps {
@@ -153,14 +152,14 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	render() {
 
 		// Validate the position and move attributes.
-		const positionInfo = parsePosition(this.props.position);
+		const positionInfo = parsePosition(this.props.position, 'Chessboard');
 		if (positionInfo.error) {
-			return <ErrorBox title={i18n.INVALID_FEN_ERROR_TITLE} message={positionInfo.message} />;
+			return positionInfo.errorBox;
 		}
 		const position = positionInfo.position;
-		const moveInfo = parseMove(position, this.props.move);
+		const moveInfo = parseMove(position, this.props.move, 'Chessboard');
 		if (moveInfo.error) {
-			return <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={moveInfo.message} />;
+			return moveInfo.errorBox;
 		}
 		const move = moveInfo.move;
 
@@ -389,82 +388,6 @@ function computeSmallScreenLimits<T>(smallScreenLimits: SmallScreenLimit[], wind
 		}
 	}
 	return bestAttributeValue;
-}
-
-
-/**
- * Try to interpret the given object as a chess position.
- */
-function parsePosition(position: Position | string): { error: true, message: string } | { error: false, position: Position } {
-	if (position instanceof Position) {
-		return { error: false, position: position };
-	}
-	else if (position === 'start' || position === 'empty') {
-		return { error: false, position: new Position(position) };
-	}
-	else if (typeof position === 'string') {
-		try {
-			const { variant, fen } = splitGameVariantAndFEN(position);
-			const result = new Position(variant, 'empty');
-			result.fen(fen);
-			return { error: false, position: result };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopuException.InvalidFEN) {
-				return { error: true, message: e.message };
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-	else {
-		throw new IllegalArgument('Chessboard', 'position');
-	}
-}
-
-
-/**
- * Look for an optional 'chess-variant:' prefix in the position attribute.
- */
-function splitGameVariantAndFEN(position: string): { variant: GameVariant, fen: string } {
-	const separatorIndex = position.indexOf(':');
-	if (separatorIndex < 0) {
-		return { variant: 'regular', fen: position };
-	}
-	const variant = position.substring(0, separatorIndex);
-	return isGameVariant(variant) ? { variant: variant, fen: position.substring(separatorIndex + 1) } : { variant: 'regular', fen: position };
-}
-
-
-/**
- * Try to interpret the given object `move` as a move descriptor based on the given position.
- */
-function parseMove(position: Position, move: MoveDescriptor | string | undefined): { error: true, message: string } | { error: false, move: MoveDescriptor | undefined } {
-	if (move === undefined || move === null) {
-		return { error: false, move: undefined };
-	}
-	else if (move instanceof MoveDescriptor) {
-		return { error: false, move: move };
-	}
-	else if (typeof move === 'string') {
-		try {
-			return { error: false, move: position.notation(move) };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopuException.InvalidNotation) {
-				return { error: true, message: e.message };
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-	else {
-		throw new IllegalArgument('Chessboard', 'move');
-	}
 }
 
 
