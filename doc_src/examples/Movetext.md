@@ -1,5 +1,5 @@
 ```js
-let pgn = `
+const pgn = `
 [Event "Television Exhibition"]
 [Site "London ENG"]
 [Date "2014.01.23"]
