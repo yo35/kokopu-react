@@ -40,7 +40,7 @@ fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 
 const componentSectionTitle = 'Components';
 const components = [ 'errorbox/ErrorBox', 'icons/SquareMarkerIcon', 'icons/TextMarkerIcon', 'icons/ArrowMarkerIcon', 'icons/ChessPieceIcon',
-	'chessboard/Chessboard', 'movetext/Movetext' ];
+	'chessboard/Chessboard', 'movetext/Movetext', 'navigationboard/NavigationBoard' ];
 
 
 // Demo section configuration
@@ -54,6 +54,7 @@ const demoPages = [
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
 	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
 	{ id: 'MovetextInteraction', title: 'Movetext - Interactions' },
+	{ id: 'NavigationBoardBase', title: 'NavigationBoard - Basic features' },
 ];
 
 

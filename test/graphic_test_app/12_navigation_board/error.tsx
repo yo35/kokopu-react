@@ -22,31 +22,13 @@
  * -------------------------------------------------------------------------- */
 
 
-/**
- * This module defines the localizable strings used by the library.
- */
-export namespace i18n {
+import * as React from 'react';
+import { testApp } from '../common/test_app';
+import { NavigationBoard } from '../../../dist/lib/index';
 
-/* eslint-disable prefer-const */
-// WARNING: all those constants must be declared with "let" to allow them to be re-defined if necessary by consumer codes.
+import dummyPgn from '../common/dummy.pgn';
 
-// Error box
-export let LINE = 'line {0}';
-
-// Chessboard
-export let INVALID_FEN_ERROR_TITLE = 'Invalid FEN string.';
-export let INVALID_NOTATION_ERROR_TITLE = 'Invalid move notation.';
-
-// Navigation board
-export let TOOLTIP_GO_FIRST = 'Go to the beginning of the game';
-export let TOOLTIP_GO_PREVIOUS = 'Go to the previous move';
-export let TOOLTIP_GO_NEXT = 'Go to the next move';
-export let TOOLTIP_GO_LAST = 'Go to the end of the game';
-export let TOOLTIP_FLIP = 'Flip the board';
-
-// Movetext
-export let PIECE_SYMBOLS = { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' };
-export let ANNOTATED_BY = 'Annotated by {0}';
-export let INVALID_PGN_ERROR_TITLE = 'Invalid PGN string.';
-
-}
+testApp([ /* eslint-disable react/jsx-key */
+	<NavigationBoard game={dummyPgn} />,
+	<NavigationBoard game={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+], 'width-600'); /* eslint-enable react/jsx-key */

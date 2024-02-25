@@ -63,7 +63,9 @@ export interface MovetextProps {
 	/**
 	 * Options applicable to the diagrams in the comments. See [Chessboard](#/Components/Chessboard) for more details about each option.
 	 */
-	diagramOptions: Partial<StaticBoardGraphicProps>;
+	diagramOptions: Partial<StaticBoardGraphicProps> & {
+		flipped?: boolean,
+	};
 
 	/**
 	 * Symbols to use for the chess pieces. See {@link moveFormatter}.

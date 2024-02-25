@@ -76,6 +76,11 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
 	arrowMarkers?: ArrowMarkerSet | string;
 
 	/**
+	 * Whether the board is flipped (i.e. seen from Black's point of view) or not.
+	 */
+	flipped: boolean;
+
+	/**
 	 * Type of action allowed with the mouse on the chessboard. If undefined, then the user cannot interact with the component.
 	 *
 	 * - `'movePieces'` allows the user to drag & drop the chess pieces from one square to another (regardless of the chess rules),
@@ -126,6 +131,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	static defaultProps: Partial<ChessboardProps> = {
 		...defaultDynamicBoardProps(),
 		position: 'start',
+		flipped: false,
 	};
 
 	private windowResizeListener = () => this.handleWindowResize();

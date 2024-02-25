@@ -44,11 +44,6 @@ export interface SmallScreenLimit {
 export interface StaticBoardGraphicProps {
 
 	/**
-	 * Whether the board is flipped (i.e. seen from Black's point of view) or not.
-	 */
-	flipped: boolean;
-
-	/**
 	 * Size of the squares (in pixels). Must be an integer between `Chessboard.minSquareSize()` and `Chessboard.maxSquareSize()`.
 	 */
 	squareSize: number;
@@ -117,7 +112,6 @@ export const DEFAULT_SQUARE_SIZE = 40;
 
 export function defaultStaticBoardProps(): StaticBoardGraphicProps {
 	return {
-		flipped: false,
 		squareSize: DEFAULT_SQUARE_SIZE,
 		coordinateVisible: true,
 		turnVisible: true,

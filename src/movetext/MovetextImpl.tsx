@@ -40,7 +40,9 @@ interface MovetextImplProps {
 
 	game: Game;
 
-	diagramOptions: Partial<StaticBoardGraphicProps>;
+	diagramOptions: Partial<StaticBoardGraphicProps> & {
+		flipped?: boolean,
+	};
 	moveFormatter: (notation: string) => React.ReactNode;
 	diagramVisible: boolean;
 	headerVisible: boolean;
@@ -309,9 +311,15 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 				if (!isFirstTextSegment) {
 					const position = node instanceof Variation ? node.initialPosition() : node.position();
 					const diagram = <Chessboard
-						{ ...this.props.diagramOptions }
 						position={position}
 						squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}
+						flipped={this.props.diagramOptions.flipped}
+						squareSize={this.props.diagramOptions.squareSize}
+						coordinateVisible={this.props.diagramOptions.coordinateVisible}
+						turnVisible={this.props.diagramOptions.turnVisible}
+						colorset={this.props.diagramOptions.colorset}
+						pieceset={this.props.diagramOptions.pieceset}
+						smallScreenLimits={this.props.diagramOptions.smallScreenLimits}
 					/>;
 					segmentElements.push(<div className="kokopu-diagram" key={'diagram-' + (diagramIndex++)}>{diagram}</div>);
 				}

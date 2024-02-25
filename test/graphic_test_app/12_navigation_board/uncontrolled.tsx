@@ -22,31 +22,31 @@
  * -------------------------------------------------------------------------- */
 
 
-/**
- * This module defines the localizable strings used by the library.
- */
-export namespace i18n {
+import * as React from 'react';
+import { Game, Position, pgnRead } from 'kokopu';
+import { setSandbox, testApp } from '../common/test_app';
+import { NavigationBoard } from '../../../dist/lib/index';
 
-/* eslint-disable prefer-const */
-// WARNING: all those constants must be declared with "let" to allow them to be re-defined if necessary by consumer codes.
+import pgn from '../common/games.pgn';
 
-// Error box
-export let LINE = 'line {0}';
+const game = new Game();
+game.initialPosition(new Position('regular', 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4'), 4);
+game.mainVariation().play('Qxf7#');
+game.result('1-0');
 
-// Chessboard
-export let INVALID_FEN_ERROR_TITLE = 'Invalid FEN string.';
-export let INVALID_NOTATION_ERROR_TITLE = 'Invalid move notation.';
+const database = pgnRead(pgn);
 
-// Navigation board
-export let TOOLTIP_GO_FIRST = 'Go to the beginning of the game';
-export let TOOLTIP_GO_PREVIOUS = 'Go to the previous move';
-export let TOOLTIP_GO_NEXT = 'Go to the next move';
-export let TOOLTIP_GO_LAST = 'Go to the end of the game';
-export let TOOLTIP_FLIP = 'Flip the board';
-
-// Movetext
-export let PIECE_SYMBOLS = { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' };
-export let ANNOTATED_BY = 'Annotated by {0}';
-export let INVALID_PGN_ERROR_TITLE = 'Invalid PGN string.';
-
+function onNodeIdChanged(nodeId: string) { // Must NOT be invoked as the components are uncontrolled.
+	setSandbox(`Node ID changed: ${nodeId}`);
 }
+
+function onFlippedChanged(flipped: boolean) {
+	setSandbox(`Flip state changed: ${flipped}`);
+}
+
+testApp([ /* eslint-disable react/jsx-key */
+	<NavigationBoard game={game} initialFlipped />,
+	<NavigationBoard game={pgn} initialNodeId="end" initialFlipped flipped={false} />,
+	<NavigationBoard game={pgn} gameIndex={1} initialNodeId="17w" onNodeIdChanged={onNodeIdChanged} />,
+	<NavigationBoard game={database} gameIndex={3} onNodeIdChanged={onNodeIdChanged} flipped onFlippedChanged={onFlippedChanged} />,
+]); /* eslint-enable react/jsx-key */

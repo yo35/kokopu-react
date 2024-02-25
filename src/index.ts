@@ -41,3 +41,5 @@ export { Chessboard, ChessboardProps } from './chessboard/Chessboard';
 
 export { formatMove, moveFormatter } from './movetext/moveFormatter';
 export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';
+
+export { NavigationBoard, NavigationBoardProps } from './navigationboard/NavigationBoard';
