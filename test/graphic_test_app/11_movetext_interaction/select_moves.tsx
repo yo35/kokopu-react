@@ -35,6 +35,7 @@ function onMoveSelected(nodeId: string | undefined, evtOrigin: string) {
 testApp([ /* eslint-disable react/jsx-key */
 	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} selection="4w" />,
 	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" />,
+	<Movetext game={pgn} gameIndex={7} headerVisible={false} interactionMode="selectMove" />,
 	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-3w-v0-3w" />,
 	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-2b" />,
 	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="start" />,
