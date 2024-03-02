@@ -55,6 +55,7 @@ const demoPages = [
 	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
 	{ id: 'MovetextInteraction', title: 'Movetext - Interactions' },
 	{ id: 'NavigationBoardBase', title: 'NavigationBoard - Basic features' },
+	{ id: 'NavigationBoardUncontrolledVsControlled', title: 'NavigationBoard - Uncontrolled vs. controlled' },
 ];
 
 
