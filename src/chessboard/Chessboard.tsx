@@ -53,8 +53,8 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
 
 	/**
 	 * Displayed move (optional), defined either as a [kokopu.MoveDescriptor](https://kokopu.yo35.org/docs/current/classes/MoveDescriptor.html) object
-	 * or as a [SAN string](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) (e.g. `'Nf3'`). In both cases, it must represent
-	 * a legal move in position defined in attribute `position`.
+	 * or as a [SAN string](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) (e.g. `'Nf3'`). Use `'--'` for a null-move.
+	 * In all cases, the move must be a legal move in position defined in attribute `position`.
 	 */
 	move?: MoveDescriptor | string;
 
@@ -162,12 +162,16 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		if (positionInfo.error) {
 			return positionInfo.errorBox;
 		}
-		const position = positionInfo.position;
+		let position = positionInfo.position;
 		const moveInfo = parseMove(position, this.props.move, 'Chessboard');
 		if (moveInfo.error) {
 			return moveInfo.errorBox;
 		}
-		const move = moveInfo.move;
+		const move = moveInfo.type === 'regular' ? moveInfo.move : undefined;
+		if (moveInfo.type === 'null-move') {
+			position = new Position(position);
+			position.playNullMove();
+		}
 
 		// Validate the markers
 		const sqm = parseMarkers(this.props.squareMarkers, 'squareMarkers', parseSquareMarkers, isSquare, isAnnotationColor);

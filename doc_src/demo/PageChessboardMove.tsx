@@ -180,6 +180,23 @@ export default class Page extends React.Component<object, PageState> {
 				positionAfter: null,
 			});
 		}
+		else if (move === '--') {
+			const positionAfter = new Position(currentPosition);
+			if (positionAfter.playNullMove()) {
+				this.setState({
+					position: currentPosition,
+					playedMove: '--',
+					positionAfter: positionAfter,
+				});
+			}
+			else {
+				this.setState({
+					position: currentPosition,
+					playedMove: '',
+					positionAfter: null,
+				});
+			}
+		}
 		else {
 			try {
 				const moveDescriptor = currentPosition.notation(move);

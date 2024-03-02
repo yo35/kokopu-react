@@ -33,6 +33,7 @@ describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext =
 		'initial state at end',
 		'initial state at specific ID',
 		'initial state default with game index',
+		'initial state on null-move',
 	]);
 
 	function itCheckClickButton(itemIndex, label, buttons) {

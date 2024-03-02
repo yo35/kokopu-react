@@ -152,7 +152,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 
 	private renderBoard(node: GameNode | Variation, flipped: boolean) {
 		const position = node instanceof GameNode ? node.positionBefore() : node.initialPosition();
-		const move = node instanceof GameNode ? node.notation() : undefined; // TODO handle null-moves
+		const move = node instanceof GameNode ? node.notation() : undefined;
 		return <Chessboard
 			position={position} move={move} flipped={flipped}
 			squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}

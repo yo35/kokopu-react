@@ -64,6 +64,8 @@ describeWithBrowser('Chessboard graphic', browserContext => {
 		'promotion',
 		'wrong move type',
 		'wrong move arrow color type',
+		'null-move',
+		'illegal null-move',
 	]);
 
 	itChecksScreenshots(browserContext, '05_chessboard_graphic/theme', [

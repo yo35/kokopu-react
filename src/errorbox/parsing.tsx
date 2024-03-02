@@ -24,7 +24,7 @@
 
 import * as React from 'react';
 
-import { exception as kokopuException, Database, Game, GameVariant, MoveDescriptor, Position, isGameVariant, pgnRead } from 'kokopu';
+import { exception as kokopuException, i18n as kokopuI18n, Database, Game, GameVariant, MoveDescriptor, Position, isGameVariant, pgnRead } from 'kokopu';
 
 import { IllegalArgument } from '../exception';
 import { i18n } from '../i18n';
@@ -35,7 +35,9 @@ import { ErrorBox } from './ErrorBox';
 /**
  * Try to interpret the given object as a chess position.
  */
-export function parsePosition(position: Position | string, componentName: string): { error: true, errorBox: JSX.Element } | { error: false, position: Position } {
+export function parsePosition(position: Position | string, componentName: string):
+	{ error: true, errorBox: JSX.Element } | { error: false, position: Position }
+{
 	if (position instanceof Position) {
 		return { error: false, position: position };
 	}
@@ -82,25 +84,35 @@ function splitGameVariantAndFEN(position: string): { variant: GameVariant, fen: 
  * Try to interpret the given object `move` as a move descriptor based on the given position.
  */
 export function parseMove(position: Position, move: MoveDescriptor | string | undefined, componentName: string):
-	{ error: true, errorBox: JSX.Element } | { error: false, move: MoveDescriptor | undefined }
+	{ error: true, errorBox: JSX.Element } | { error: false, type: 'none' | 'null-move' } | { error: false, type: 'regular', move: MoveDescriptor }
 {
 	if (move === undefined || move === null) {
-		return { error: false, move: undefined };
+		return { error: false, type: 'none' };
 	}
 	else if (move instanceof MoveDescriptor) {
-		return { error: false, move: move };
+		return { error: false, type: 'regular', move: move };
 	}
 	else if (typeof move === 'string') {
-		try {
-			return { error: false, move: position.notation(move) };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopuException.InvalidNotation) {
-				return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={e.message} /> };
+		if (move === '--') {
+			if (position.isNullMoveLegal()) {
+				return { error: false, type: 'null-move' };
 			}
 			else {
-				throw e;
+				return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={kokopuI18n.ILLEGAL_NULL_MOVE} /> };
+			}
+		}
+		else {
+			try {
+				return { error: false, type: 'regular', move: position.notation(move) };
+			}
+			catch (e) {
+				// istanbul ignore else
+				if (e instanceof kokopuException.InvalidNotation) {
+					return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={e.message} /> };
+				}
+				else {
+					throw e;
+				}
 			}
 		}
 	}

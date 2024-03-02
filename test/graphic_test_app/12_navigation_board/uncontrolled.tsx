@@ -34,6 +34,9 @@ game.initialPosition(new Position('regular', 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3
 game.mainVariation().play('Qxf7#');
 game.result('1-0');
 
+const gameWithNullMove = new Game();
+gameWithNullMove.mainVariation().play('e4').play('e5').play('Nf3').play('--').play('Bc4');
+
 const database = pgnRead(pgn);
 
 function onNodeIdChanged(nodeId: string) { // Must NOT be invoked as the components are uncontrolled.
@@ -49,4 +52,5 @@ testApp([ /* eslint-disable react/jsx-key */
 	<NavigationBoard game={pgn} initialNodeId="end" initialFlipped flipped={false} />,
 	<NavigationBoard game={pgn} gameIndex={1} initialNodeId="17w" onNodeIdChanged={onNodeIdChanged} />,
 	<NavigationBoard game={database} gameIndex={3} onNodeIdChanged={onNodeIdChanged} flipped onFlippedChanged={onFlippedChanged} />,
+	<NavigationBoard game={gameWithNullMove} initialNodeId="2b" />,
 ]); /* eslint-enable react/jsx-key */

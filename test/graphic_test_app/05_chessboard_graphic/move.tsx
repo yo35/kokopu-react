@@ -41,4 +41,6 @@ testApp([ /* eslint-disable react/jsx-key */
 	<Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={false} moveArrowColor="b" />,
 	<Chessboard move={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } animated={false} />,
 	<Chessboard move="e4" animated={false} moveArrowColor={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'z' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+	<Chessboard move="--" animated={false} />,
+	<Chessboard position="rnbqkbnr/ppp1pppp/8/1B1p4/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2" move="--" animated={false} />,
 ]); /* eslint-enable react/jsx-key */
