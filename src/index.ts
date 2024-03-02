@@ -42,4 +42,5 @@ export { Chessboard, ChessboardProps } from './chessboard/Chessboard';
 export { formatMove, moveFormatter } from './movetext/moveFormatter';
 export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';
 
+export { firstNodeId, previousNodeId, nextNodeId, lastNodeId } from './navigationboard/NavigationField';
 export { NavigationBoard, NavigationBoardProps } from './navigationboard/NavigationBoard';

@@ -31,7 +31,7 @@ import { sanitizeBoolean, sanitizeOptional, sanitizeString } from '../sanitizati
 import { DynamicBoardGraphicProps, defaultDynamicBoardProps } from '../chessboard/BoardProperties';
 import { Chessboard } from '../chessboard/Chessboard';
 import { parseGame } from '../errorbox/parsing';
-import { Movetext } from '../movetext/Movetext';
+import { NavigationField, firstNodeId, previousNodeId, nextNodeId, lastNodeId } from '../navigationboard/NavigationField';
 import { NavigationToolbar } from './NavigationToolbar';
 
 
@@ -119,6 +119,8 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 		flipButtonVisible: true,
 	};
 
+	private navigationFieldRef: React.RefObject<NavigationField> = React.createRef();
+
 	constructor(props: NavigationBoardProps) {
 		super(props);
 		this.state = {
@@ -146,6 +148,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 			<div className="kokopu-navigationBoard">
 				{this.renderBoard(currentNode, flipped)}
 				{this.renderToolbar(info.game, currentNode.id())}
+				{this.renderNavigationField(info.game, currentNode.id())}
 			</div>
 		);
 	}
@@ -168,37 +171,59 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 		/>;
 	}
 
+	private renderNavigationField(game: Game, currentNodeId: string) {
+		return <NavigationField ref={this.navigationFieldRef}
+			onFirstPressed={() => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId))}
+			onPreviousPressed={() => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId))}
+			onNextPressed={() => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId))}
+			onLastPressed={() => this.handleNavigationButtonClicked(lastNodeId(game, currentNodeId))}
+		/>;
+	}
+
 	private renderToolbar(game: Game, currentNodeId: string) {
 		// TODO sanitize square size + handle small screens
 		const flipButtonVisible = sanitizeBoolean(this.props.flipButtonVisible);
 		return <NavigationToolbar flipButtonVisible={flipButtonVisible} squareSize={this.props.squareSize}
-			onFirstClicked={() => this.handleNavigationButtonClicked(Movetext.firstNodeId(game, currentNodeId))}
-			onPreviousClicked={() => this.handleNavigationButtonClicked(Movetext.previousNodeId(game, currentNodeId))}
-			onNextClicked={() => this.handleNavigationButtonClicked(Movetext.nextNodeId(game, currentNodeId))}
-			onLastClicked={() => this.handleNavigationButtonClicked(Movetext.lastNodeId(game, currentNodeId))}
+			onFirstClicked={() => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId))}
+			onPreviousClicked={() => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId))}
+			onNextClicked={() => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId))}
+			onLastClicked={() => this.handleNavigationButtonClicked(lastNodeId(game, currentNodeId))}
 			onFlipClicked={() => this.handleFlipButtonClicked()}
 		/>;
 	}
 
-	private handleNavigationButtonClicked(nextNodeId: string | undefined) {
-		if (nextNodeId === undefined) {
+	private handleNavigationButtonClicked(targetNodeId: string | undefined) {
+		this.focus();
+		if (targetNodeId === undefined) {
 			return;
 		}
 
 		if (this.props.nodeId === undefined) { // uncontrolled-component behavior
-			this.setState({ nodeIdAsUncontrolled: nextNodeId });
+			this.setState({ nodeIdAsUncontrolled: targetNodeId });
 		}
 		else if (this.props.onNodeIdChanged) { // controlled-component behavior
-			this.props.onNodeIdChanged(nextNodeId);
+			this.props.onNodeIdChanged(targetNodeId);
 		}
 	}
 
 	private handleFlipButtonClicked() {
+		this.focus();
 		if (this.props.flipped === undefined) { // uncontrolled flip state
 			this.setState({ flippedAsUncontrolled: !this.state.flippedAsUncontrolled });
 		}
 		else if (this.props.onFlippedChanged) { // controlled flip state
 			this.props.onFlippedChanged(!this.props.flipped);
+		}
+	}
+
+	/**
+	 * Set the focus to the current component.
+	 */
+	focus(): void {
+		const target = this.navigationFieldRef.current;
+		// istanbul ignore else
+		if (target) {
+			target.focus();
 		}
 	}
 

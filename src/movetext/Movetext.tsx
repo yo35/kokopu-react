@@ -32,8 +32,9 @@ import { PieceSymbolMapping } from '../types';
 
 import { StaticBoardGraphicProps } from '../chessboard/BoardProperties';
 import { parseGame } from '../errorbox/parsing';
+import { firstNodeId as firstNodeIdImpl, previousNodeId as previousNodeIdImpl, nextNodeId as nextNodeIdImpl, lastNodeId as lastNodeIdImpl } from '../navigationboard/NavigationField';
 import { moveFormatter } from './moveFormatter';
-import { MovetextImpl, firstNodeIdImpl, previousNodeIdImpl, nextNodeIdImpl, lastNodeIdImpl } from './MovetextImpl';
+import { MovetextImpl } from './MovetextImpl';
 
 import './Movetext.css';
 
@@ -175,63 +176,40 @@ export class Movetext extends React.Component<MovetextProps> {
 	 */
 	focus() {
 		const movetextImpl = this.implRef.current;
+		// istanbul ignore else
 		if (movetextImpl) {
 			movetextImpl.focus();
 		}
 	}
 
 	/**
-	 * Return the ID of the main variation in the given chess game.
-	 * If the given selection corresponds already at the main variation, `undefined` is returned.
-	 *
-	 * This corresponds to the operation performed when the user presses key "home" on a `Movetext` component.
-	 *
-	 * @param game - Considered chess game.
-	 * @param selection - ID of the selected move (or `'start'` for the beginning of the main variation).
-	 * @public
+	 * @deprecated
 	 */
+	// istanbul ignore next
 	static firstNodeId(game: Game, selection: string): string | undefined {
 		return firstNodeIdImpl(game, selection);
 	}
 
 	/**
-	 * Return the ID of the node immediately preceding the given selection in the given chess game.
-	 * If no such node exists, `undefined` is returned.
-	 *
-	 * This corresponds to the operation performed when the user presses key "arrow left" on a `Movetext` component.
-	 *
-	 * @param game - Considered chess game.
-	 * @param selection - ID of the selected move (or `'start'` for the beginning of the main variation).
-	 * @public
+	 * @deprecated
 	 */
+	// istanbul ignore next
 	static previousNodeId(game: Game, selection: string): string | undefined {
 		return previousNodeIdImpl(game, selection);
 	}
 
 	/**
-	 * Return the ID of the node immediately following the given selection in the given chess game.
-	 * If no such node exists, `undefined` is returned.
-	 *
-	 * This corresponds to the operation performed when the user presses key "arrow right" on a `Movetext` component.
-	 *
-	 * @param game - Considered chess game.
-	 * @param selection - ID of the selected move (or `'start'` for the beginning of the main variation).
-	 * @public
+	 * @deprecated
 	 */
+	// istanbul ignore next
 	static nextNodeId(game: Game, selection: string): string | undefined {
 		return nextNodeIdImpl(game, selection);
 	}
 
 	/**
-	 * Return the ID of the node at then end of the variation in which lies the given selection in the given chess game.
-	 * If the selection is already at the end its variation, `undefined` is returned.
-	 *
-	 * This corresponds to the operation performed when the user presses key "end" on a `Movetext` component.
-	 *
-	 * @param game - Considered chess game.
-	 * @param selection - ID of the selected move (or `'start'` for the beginning of the main variation).
-	 * @public
+	 * @deprecated
 	 */
+	// istanbul ignore next
 	static lastNodeId(game: Game, selection: string): string | undefined {
 		return lastNodeIdImpl(game, selection);
 	}

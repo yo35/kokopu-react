@@ -23,7 +23,8 @@
 
 
 const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot, itChecksScreenshots } = require('./common/graphic');
-const { By } = require('selenium-webdriver');
+const { By, Key } = require('selenium-webdriver');
+const test = require('unit.js');
 
 
 describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext => {
@@ -75,6 +76,33 @@ describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext =
 		{ title: 'Go to the next move' },
 		{ title: 'Go to the end of the game' },
 		{ title: 'Flip the board' },
+	]);
+
+	function itCheckPressKey(itemIndex, label, keys) {
+		itCustom(browserContext, '12_navigation_board/uncontrolled', itemIndex, label, async element => {
+			await setSandbox(browserContext, '');
+			const focusFieldElements = await element.findElements(By.className('kokopu-focusField'));
+
+			test.value(focusFieldElements.length).is(1);
+			const focusFieldElement = focusFieldElements[0];
+
+			for (let i = 0; i < keys.length; ++i) {
+				await focusFieldElement.sendKeys(keys[i].code);
+				await compareSandbox(browserContext, keys[i].expectedSandbox ?? '');
+				await takeScreenshot(browserContext, `${label} ${i}`, element);
+			}
+			for (let i = 0; i < keys.length; ++i) {
+				await compareScreenshot(browserContext, `${label} ${i}`);
+			}
+		});
+	}
+
+	itCheckPressKey(4, 'navigation with keys', [
+		{ code: Key.ARROW_LEFT },
+		{ code: Key.HOME },
+		{ code: Key.ARROW_RIGHT },
+		{ code: Key.ESCAPE },
+		{ code: Key.END },
 	]);
 
 });

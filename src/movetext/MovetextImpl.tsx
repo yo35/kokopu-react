@@ -31,6 +31,7 @@ import { fillPlaceholder } from '../util';
 
 import { StaticBoardGraphicProps } from '../chessboard/BoardProperties';
 import { Chessboard } from '../chessboard/Chessboard';
+import { NavigationField, firstNodeId, previousNodeId, nextNodeId, lastNodeId } from '../navigationboard/NavigationField';
 import { htmlFilter } from './htmlFilter';
 
 import './Movetext.css';
@@ -61,14 +62,14 @@ interface MovetextImplProps {
  */
 export class MovetextImpl extends React.Component<MovetextImplProps> {
 
-	private focusFieldRef: React.RefObject<HTMLAnchorElement> = React.createRef();
+	private navigationFieldRef: React.RefObject<NavigationField> = React.createRef();
 
 	render() {
 		return (
 			<div className="kokopu-movetext">
 				{this.renderHeaders()}
 				{this.renderBody()}
-				{this.renderFocusField()}
+				{this.renderNavigationField()}
 			</div>
 		);
 	}
@@ -150,15 +151,17 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 		return <div className="kokopu-header-annotator" key="annotator">{filter(fillPlaceholder(i18n.ANNOTATED_BY, annotator))}</div>;
 	}
 
-	private renderFocusField() {
+	private renderNavigationField() {
 		if (this.props.interactionMode !== 'selectMove') {
 			return undefined;
 		}
-		return (
-			<div className="kokopu-focusFieldContainer">
-				<a className="kokopu-focusField" href="#" ref={this.focusFieldRef} onKeyDown={evt => this.handleKeyDownInFocusField(evt)}></a>
-			</div>
-		);
+		return <NavigationField ref={this.navigationFieldRef}
+			onFirstPressed={() => this.handleNavigationPressed(firstNodeId, 'key-first')}
+			onPreviousPressed={() => this.handleNavigationPressed(previousNodeId, 'key-previous')}
+			onNextPressed={() => this.handleNavigationPressed(nextNodeId, 'key-next')}
+			onLastPressed={() => this.handleNavigationPressed(lastNodeId, 'key-last')}
+			onExitPressed={() => this.handleExitPressed()}
+		/>;
 	}
 
 	private renderBody() {
@@ -353,30 +356,15 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 		return comment ? comment : undefined;
 	}
 
-	private handleKeyDownInFocusField(evt: React.KeyboardEvent<HTMLAnchorElement>) {
-		if (evt.key !== 'Home' && evt.key !== 'ArrowLeft' && evt.key !== 'ArrowRight' && evt.key !== 'End' && evt.key !== 'Escape') {
-			return;
+	private handleNavigationPressed(transition: (game: Game, nodeId: string) => string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last') {
+		if (this.props.selection) {
+			this.fireMoveSelected(transition(this.props.game, this.props.selection), evtOrigin);
 		}
-		evt.preventDefault();
-		if (!this.props.selection) {
-			return;
-		}
-		if (evt.key === 'Home') {
-			this.fireMoveSelected(firstNodeIdImpl(this.props.game, this.props.selection), 'key-first');
-		}
-		else if (evt.key === 'ArrowLeft') {
-			this.fireMoveSelected(previousNodeIdImpl(this.props.game, this.props.selection), 'key-previous');
-		}
-		else if (evt.key === 'ArrowRight') {
-			this.fireMoveSelected(nextNodeIdImpl(this.props.game, this.props.selection), 'key-next');
-		}
-		else if (evt.key === 'End') {
-			this.fireMoveSelected(lastNodeIdImpl(this.props.game, this.props.selection), 'key-last');
-		}
-		else { // evt.key === 'Escape'
-			if (this.props.game.findById(this.props.selection)) {
-				this.fireMoveSelected(undefined, 'key-exit');
-			}
+	}
+
+	private handleExitPressed() {
+		if (this.props.selection && this.props.game.findById(this.props.selection)) {
+			this.fireMoveSelected(undefined, 'key-exit');
 		}
 	}
 
@@ -397,84 +385,13 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
 	 * Set the focus to the current component.
 	 */
 	focus(): void {
-		const target = this.focusFieldRef.current;
+		const target = this.navigationFieldRef.current;
+		// istanbul ignore else
 		if (target) {
 			target.focus();
 		}
 	}
 
-}
-
-
-/**
- * See {@link Movetext.firstNodeId}.
- */
-export function firstNodeIdImpl(game: Game, selection: string): string | undefined {
-	if (!game.findById(selection)) {
-		return undefined;
-	}
-	return selection === 'start' ? undefined : 'start';
-}
-
-
-/**
- * See {@link Movetext.previousNodeId}.
- */
-export function previousNodeIdImpl(game: Game, selection: string): string | undefined {
-	let currentNode = game.findById(selection);
-	if (!currentNode) {
-		return undefined;
-	}
-	if (currentNode instanceof Variation) {
-		currentNode = currentNode.parentNode();
-		if (!currentNode) {
-			return undefined; // This case corresponds to the first variation being selected initially.
-		}
-	}
-	while (currentNode) {
-		const previousNode = currentNode.previous();
-		if (previousNode) {
-			return previousNode.id();
-		}
-		currentNode = currentNode.parentVariation().parentNode();
-	}
-	return 'start';
-}
-
-
-/**
- * See {@link Movetext.nextNodeId}.
- */
-export function nextNodeIdImpl(game: Game, selection: string): string | undefined {
-	const currentNode = game.findById(selection);
-	if (!currentNode) {
-		return undefined;
-	}
-	const nextNode = currentNode instanceof Variation ? currentNode.first() : currentNode.next();
-	return nextNode ? nextNode.id() : undefined;
-}
-
-
-/**
- * See {@link Movetext.lastNodeId}.
- */
-export function lastNodeIdImpl(game: Game, selection: string): string | undefined {
-	let currentNode = game.findById(selection);
-	if (!currentNode) {
-		return undefined;
-	}
-	currentNode = currentNode instanceof Variation ? currentNode.first() : currentNode.next();
-	if (!currentNode) { // Ensure that the input node is not already the last one.
-		return undefined;
-	}
-	let currentNodeNotNull = currentNode;
-	while (true) {
-		const nextNode = currentNodeNotNull.next();
-		if (!nextNode) {
-			return currentNodeNotNull.id();
-		}
-		currentNodeNotNull = nextNode;
-	}
 }
 
 
