@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-3.0.2 (January 20, 2023)
+3.0.2 (January 20, 2024)
 ------------------------
 * Minor fixes in dependencies.
 
