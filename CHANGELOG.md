@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+3.1.0 (March 3, 2024)
+---------------------
+* Add support for null-moves in `Chessboard`.
+* Add top/bottom auxilliary components in `Chessboard`.
+* Add `NavigationBoard` (see [#6](https://github.com/yo35/kokopu-react/issues/6)).
+
 3.0.2 (January 20, 2024)
 ------------------------
 * Minor fixes in dependencies.
