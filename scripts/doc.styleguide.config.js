@@ -39,8 +39,16 @@ fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 // -------------------------------
 
 const componentSectionTitle = 'Components';
-const components = [ 'errorbox/ErrorBox', 'icons/SquareMarkerIcon', 'icons/TextMarkerIcon', 'icons/ArrowMarkerIcon', 'icons/ChessPieceIcon',
-	'chessboard/Chessboard', 'movetext/Movetext', 'navigationboard/NavigationBoard' ];
+const components = [
+	'errorbox/ErrorBox',
+	'icons/SquareMarkerIcon',
+	'icons/TextMarkerIcon',
+	'icons/ArrowMarkerIcon',
+	'icons/ChessPieceIcon',
+	'chessboard/Chessboard',
+	'navigationboard/NavigationBoard',
+	'movetext/Movetext',
+];
 
 
 // Demo section configuration
@@ -52,10 +60,10 @@ const demoPages = [
 	{ id: 'ChessboardInteraction', title: 'Chessboard - Interactions' },
 	{ id: 'ChessboardMove', title: 'Chessboard - Display moves' },
 	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
-	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
-	{ id: 'MovetextInteraction', title: 'Movetext - Interactions' },
 	{ id: 'NavigationBoardBase', title: 'NavigationBoard - Basic features' },
 	{ id: 'NavigationBoardUncontrolledVsControlled', title: 'NavigationBoard - Uncontrolled vs. controlled' },
+	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
+	{ id: 'MovetextInteraction', title: 'Movetext - Interactions' },
 ];
 
 

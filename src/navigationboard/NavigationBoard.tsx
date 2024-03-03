@@ -217,6 +217,8 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 
 	/**
 	 * Set the focus to the current component.
+	 *
+	 * @public
 	 */
 	focus(): void {
 		const target = this.navigationFieldRef.current;

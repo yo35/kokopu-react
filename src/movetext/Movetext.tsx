@@ -84,7 +84,7 @@ export interface MovetextProps {
 	headerVisible: boolean;
 
 	/**
-	 * ID of the selected move (or `'start'` for the beginning of the main variation).
+	 * ID of the selected move (or `'start'`/`'end'` for the beginning/end of the main variation).
 	 * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/current/classes/Node.html#id) to get the ID of a game move.
 	 */
 	selection?: string;
