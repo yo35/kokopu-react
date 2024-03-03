@@ -31,7 +31,7 @@ import { sanitizeString, sanitizeBoolean, sanitizePartialObject, sanitizeInteger
 import { MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, Colorset, Pieceset, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
 	isAnnotationColor, isAnnotationSymbol, parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from '../types';
 
-import { DynamicBoardGraphicProps, SmallScreenLimit, DEFAULT_SQUARE_SIZE, defaultDynamicBoardProps } from './BoardProperties';
+import { StaticBoardGraphicProps, DynamicBoardGraphicProps, SmallScreenLimit, DEFAULT_SQUARE_SIZE, defaultDynamicBoardProps } from './BoardProperties';
 import { colorsets } from './colorsets';
 import { piecesets } from './piecesets';
 import { ChessboardImpl, chessboardSize } from './ChessboardImpl';
@@ -114,6 +114,18 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
 	 * Callback invoked when a move is played (only if `interactionMode` is set to `'playMoves'`).
 	 */
 	onMovePlayed?: (move: string) => void;
+
+	/**
+	 * Optional component, to be rendered above the chessboard, and customized with the same square-size / coordinate-visible / turn-visible
+	 * parameter values as actually used for the chessboard (which may be different from what is defined in props because of small-screen limits).
+	 */
+	topComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element;
+
+	/**
+	 * Optional component, to be rendered below the chessboard, and customized with the same square-size / coordinate-visible / turn-visible
+	 * parameter values as actually used for the chessboard (which may be different from what is defined in props because of small-screen limits).
+	 */
+	bottomComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element;
 }
 
 
@@ -202,6 +214,11 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		const actualSquareSize = computeSquareSizeForSmallScreens(squareSize, smallScreenLimits, this.state.windowWidth);
 		const actualCoordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, this.state.windowWidth);
 		const actualTurnVisible = computeTurnVisibleForSmallScreens(turnVisible, smallScreenLimits, this.state.windowWidth);
+		const auxilliaryComponentAttr = {
+			squareSize: actualSquareSize,
+			coordinateVisible: actualCoordinateVisible,
+			turnVisible: actualTurnVisible,
+		};
 
 		// Validate the interaction attributes and the callbacks.
 		const interactionMode = this.getInteractionModeAndValidateEditedArrowColor();
@@ -211,7 +228,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 		// (mandatory to ensure that the move animation works properly and that the internal state of the component remains consistent).
 		const key = `${position.variant()}|${position.fen()}|${move ? position.notation(move) : ''}`;
 
-		return (
+		return (<>
+			{this.props.topComponent ? this.props.topComponent(auxilliaryComponentAttr) : undefined}
 			<ChessboardImpl key={key}
 				position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm} flipped={flipped}
 				squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} turnVisible={actualTurnVisible}
@@ -220,7 +238,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 				interactionMode={interactionMode} editedArrowColor={this.props.editedArrowColor}
 				onPieceMoved={onPieceMoved} onSquareClicked={onSquareClicked} onArrowEdited={onArrowEdited} onMovePlayed={onMovePlayed}
 			/>
-		);
+			{this.props.bottomComponent ? this.props.bottomComponent(auxilliaryComponentAttr) : undefined}
+		</>);
 	}
 
 	private getInteractionModeAndValidateEditedArrowColor() {
@@ -267,7 +286,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
 	 * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
 	 */
 	static adaptSquareSize(width: number, height: number, attr?: Partial<Pick<ChessboardProps, 'coordinateVisible' | 'turnVisible' | 'smallScreenLimits'>>): number {
-		let { coordinateVisible, turnVisible, smallScreenLimits } = sanitizePartialObject(attr, () => new IllegalArgument('Chessboard.size()', 'attr'));
+		let { coordinateVisible, turnVisible, smallScreenLimits } = sanitizePartialObject(attr, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'attr'));
 
 		// Sanitize the arguments.
 		width = sanitizeInteger(width, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'width'));

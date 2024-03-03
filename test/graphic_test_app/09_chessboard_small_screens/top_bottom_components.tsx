@@ -22,52 +22,27 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itCustom, itChecksScreenshots, takeScreenshot, compareScreenshot, setWindowWidth } = require('./common/graphic');
+import * as React from 'react';
+import { testApp } from '../common/test_app';
+import { Chessboard, ChessboardProps } from '../../../dist/lib/index';
 
+const limits1 = [
+	{ width: 750, squareSize: 24, coordinateVisible: false },
+];
 
-describeWithBrowser('Chessboard on small-screens', browserContext => {
+const limits2 = [
+	{ width: 750, squareSize: 27, turnVisible: false },
+];
 
-	itChecksScreenshots(browserContext, '09_chessboard_small_screens/base', [
-		'default',
-		'invalid limits',
-	]);
+function AuxilliaryComponent({ squareSize, coordinateVisible, turnVisible}: Pick<ChessboardProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) {
+	return (<>
+		<div>{`Square size: ${squareSize}`}</div>
+		<div>{`Coordinates: ${coordinateVisible}`}</div>
+		<div>{`Turn: ${turnVisible}`}</div>
+	</>);
+}
 
-	function itCheckScreenshotWithWidth(width) {
-		const label = `width ${width}`;
-		itCustom(browserContext, '09_chessboard_small_screens/base', 0, label, async element => {
-			await setWindowWidth(browserContext, width);
-			await takeScreenshot(browserContext, label, element);
-			await compareScreenshot(browserContext, label);
-		});
-	}
-
-	itCheckScreenshotWithWidth(750);
-	itCheckScreenshotWithWidth(740);
-	itCheckScreenshotWithWidth(730);
-	itCheckScreenshotWithWidth(720);
-	itCheckScreenshotWithWidth(710);
-	itCheckScreenshotWithWidth(700);
-	itCheckScreenshotWithWidth(690);
-
-});
-
-
-describeWithBrowser('Chessboard on small-screens with top/bottom components', browserContext => {
-
-	itChecksScreenshots(browserContext, '09_chessboard_small_screens/top_bottom_components', [
-		'default top component',
-		'default bottom component',
-	]);
-
-	function itCheckScreenshotWithReducedWidth(itemIndex, label) {
-		itCustom(browserContext, '09_chessboard_small_screens/top_bottom_components', itemIndex, label, async element => {
-			await setWindowWidth(browserContext, 700);
-			await takeScreenshot(browserContext, label, element);
-			await compareScreenshot(browserContext, label);
-		});
-	}
-
-	itCheckScreenshotWithReducedWidth(0, 'reduced top component');
-	itCheckScreenshotWithReducedWidth(1, 'reduced bottom component');
-
-});
+testApp([ /* eslint-disable react/jsx-key */
+	<Chessboard squareSize={30} smallScreenLimits={limits1} topComponent={AuxilliaryComponent} />,
+	<Chessboard squareSize={30} smallScreenLimits={limits2} bottomComponent={AuxilliaryComponent} />,
+]); /* eslint-enable react/jsx-key */

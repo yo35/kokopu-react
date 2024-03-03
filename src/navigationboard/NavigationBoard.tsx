@@ -146,14 +146,13 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 
 		return (
 			<div className="kokopu-navigationBoard">
-				{this.renderBoard(currentNode, flipped)}
-				{this.renderToolbar(info.game, currentNode.id())}
+				{this.renderBoard(info.game, currentNode, flipped)}
 				{this.renderNavigationField(info.game, currentNode.id())}
 			</div>
 		);
 	}
 
-	private renderBoard(node: GameNode | Variation, flipped: boolean) {
+	private renderBoard(game: Game, node: GameNode | Variation, flipped: boolean) {
 		const position = node instanceof GameNode ? node.positionBefore() : node.initialPosition();
 		const move = node instanceof GameNode ? node.notation() : undefined;
 		return <Chessboard
@@ -168,6 +167,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 			moveArrowVisible={this.props.moveArrowVisible}
 			moveArrowColor={this.props.moveArrowColor}
 			animated={this.props.animated}
+			bottomComponent={({ squareSize }) => this.renderToolbar(game, node.id(), squareSize)}
 		/>;
 	}
 
@@ -180,10 +180,9 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
 		/>;
 	}
 
-	private renderToolbar(game: Game, currentNodeId: string) {
-		// TODO sanitize square size + handle small screens
+	private renderToolbar(game: Game, currentNodeId: string, squareSize: number) {
 		const flipButtonVisible = sanitizeBoolean(this.props.flipButtonVisible);
-		return <NavigationToolbar flipButtonVisible={flipButtonVisible} squareSize={this.props.squareSize}
+		return <NavigationToolbar flipButtonVisible={flipButtonVisible} squareSize={squareSize}
 			onFirstClicked={() => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId))}
 			onPreviousClicked={() => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId))}
 			onNextClicked={() => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId))}
