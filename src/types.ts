@@ -50,7 +50,7 @@ export type ChessPieceIconType = ColoredPiece | 'wx' | 'bx';
  * Whether the given object is a {@link ChessPieceIconType} or not.
  */
 export function isChessPieceIconType(iconType: unknown): iconType is ChessPieceIconType {
-	return isColoredPiece(iconType) || iconType === 'wx' || iconType === 'bx';
+    return isColoredPiece(iconType) || iconType === 'wx' || iconType === 'bx';
 }
 
 
@@ -61,23 +61,23 @@ export function isChessPieceIconType(iconType: unknown): iconType is ChessPieceI
  */
 export type Colorset = {
 
-	/** Color of the black squares. */
-	b: string;
+    /** Color of the black squares. */
+    b: string;
 
-	/** Color of the white squares. */
-	w: string;
+    /** Color of the white squares. */
+    w: string;
 
-	/** Color of the blue markers. */
-	cb: string;
+    /** Color of the blue markers. */
+    cb: string;
 
-	/** Color of the green markers. */
-	cg: string;
+    /** Color of the green markers. */
+    cg: string;
 
-	/** Color of the red markers. */
-	cr: string;
+    /** Color of the red markers. */
+    cr: string;
 
-	/** Color of the yellow markers. */
-	cy: string;
+    /** Color of the yellow markers. */
+    cy: string;
 };
 
 
@@ -88,47 +88,47 @@ export type Colorset = {
  */
 export type Pieceset = {
 
-	/** Image for the black bishops. */
-	bb: string;
+    /** Image for the black bishops. */
+    bb: string;
 
-	/** Image for the black kings. */
-	bk: string;
+    /** Image for the black kings. */
+    bk: string;
 
-	/** Image for the black knights. */
-	bn: string;
+    /** Image for the black knights. */
+    bn: string;
 
-	/** Image for the black pawns. */
-	bp: string;
+    /** Image for the black pawns. */
+    bp: string;
 
-	/** Image for the black queens. */
-	bq: string;
+    /** Image for the black queens. */
+    bq: string;
 
-	/** Image for the black rooks. */
-	br: string;
+    /** Image for the black rooks. */
+    br: string;
 
-	/** Image for the black turn flags. */
-	bx: string;
+    /** Image for the black turn flags. */
+    bx: string;
 
-	/** Image for the white bishops. */
-	wb: string;
+    /** Image for the white bishops. */
+    wb: string;
 
-	/** Image for the white kings. */
-	wk: string;
+    /** Image for the white kings. */
+    wk: string;
 
-	/** Image for the white knights. */
-	wn: string;
+    /** Image for the white knights. */
+    wn: string;
 
-	/** Image for the white pawns. */
-	wp: string;
+    /** Image for the white pawns. */
+    wp: string;
 
-	/** Image for the white queens. */
-	wq: string;
+    /** Image for the white queens. */
+    wq: string;
 
-	/** Image for the white rooks. */
-	wr: string;
+    /** Image for the white rooks. */
+    wr: string;
 
-	/** Image for the white turn flags. */
-	wx: string;
+    /** Image for the white turn flags. */
+    wx: string;
 };
 
 
@@ -136,12 +136,12 @@ export type Pieceset = {
  * Set of aliases for chess pieces symbols.
  */
 export type PieceSymbolMapping = {
-	K: string;
-	Q: string;
-	R: string;
-	B: string;
-	N: string;
-	P: string;
+    K: string;
+    Q: string;
+    R: string;
+    B: string;
+    N: string;
+    P: string;
 };
 
 
@@ -149,15 +149,15 @@ export type PieceSymbolMapping = {
  * Whether the given object is a {@link PieceSymbolMapping} or not.
  */
 export function isPieceSymbolMapping(mapping: unknown): mapping is PieceSymbolMapping {
-	if (typeof mapping !== 'object' || mapping === null) {
-		return false;
-	}
-	return typeof (mapping as PieceSymbolMapping).K === 'string' &&
-		typeof (mapping as PieceSymbolMapping).Q === 'string' &&
-		typeof (mapping as PieceSymbolMapping).R === 'string' &&
-		typeof (mapping as PieceSymbolMapping).B === 'string' &&
-		typeof (mapping as PieceSymbolMapping).N === 'string' &&
-		typeof (mapping as PieceSymbolMapping).P === 'string';
+    if (typeof mapping !== 'object' || mapping === null) {
+        return false;
+    }
+    return typeof (mapping as PieceSymbolMapping).K === 'string' &&
+        typeof (mapping as PieceSymbolMapping).Q === 'string' &&
+        typeof (mapping as PieceSymbolMapping).R === 'string' &&
+        typeof (mapping as PieceSymbolMapping).B === 'string' &&
+        typeof (mapping as PieceSymbolMapping).N === 'string' &&
+        typeof (mapping as PieceSymbolMapping).P === 'string';
 }
 
 
@@ -165,16 +165,16 @@ export function isPieceSymbolMapping(mapping: unknown): mapping is PieceSymbolMa
  * Symbol that can be chosen to decorate a square in a {@link Chessboard}.
  */
 export type AnnotationSymbol = 'plus' | 'times' | 'dot' | 'circle' |
-	'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' |
-	'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' |
-	'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' |
+    'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' |
+    '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 
 
 /**
  * Whether the given object is a {@link AnnotationSymbol} or not.
  */
 export function isAnnotationSymbol(symbol: unknown): symbol is AnnotationSymbol {
-	return typeof symbol === 'string' && /^(?:[A-Za-z0-9]|plus|times|dot|circle)$/.test(symbol);
+    return typeof symbol === 'string' && /^(?:[A-Za-z0-9]|plus|times|dot|circle)$/.test(symbol);
 }
 
 
@@ -188,7 +188,7 @@ export type AnnotationColor = 'b' | 'g' | 'r' | 'y';
  * Whether the given object is a {@link AnnotationSymbol} or not.
  */
 export function isAnnotationColor(color: unknown): color is AnnotationColor {
-	return color === 'b' || color === 'g' || color === 'r' || color === 'y';
+    return color === 'b' || color === 'g' || color === 'r' || color === 'y';
 }
 
 
@@ -217,14 +217,14 @@ export type ArrowMarkerSet = Partial<Record<SquareCouple, AnnotationColor>>;
  * @returns For example: `'Gd5,Ge4'`
  */
 export function flattenSquareMarkers(markers: SquareMarkerSet): string {
-	if (typeof markers !== 'object' || markers === null) {
-		throw new IllegalArgument('flattenSquareMarkers()', 'markers');
-	}
-	return Object.entries(markers)
-		.filter(([ sq, color ]) => isSquare(sq) && isAnnotationColor(color))
-		.sort((a, b) => a[0].localeCompare(b[0]))
-		.map(([ sq, color ]) => color.toUpperCase() + sq)
-		.join(',');
+    if (typeof markers !== 'object' || markers === null) {
+        throw new IllegalArgument('flattenSquareMarkers()', 'markers');
+    }
+    return Object.entries(markers)
+        .filter(([ sq, color ]) => isSquare(sq) && isAnnotationColor(color))
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([ sq, color ]) => color.toUpperCase() + sq)
+        .join(',');
 }
 
 
@@ -235,14 +235,14 @@ export function flattenSquareMarkers(markers: SquareMarkerSet): string {
  * @returns For example: `'Rzd5,GAe4,Y(plus)h3'`
  */
 export function flattenTextMarkers(markers: TextMarkerSet): string {
-	if (typeof markers !== 'object' || markers === null) {
-		throw new IllegalArgument('flattenTextMarkers()', 'markers');
-	}
-	return Object.entries(markers)
-		.filter(([ sq, desc ]) => isSquare(sq) && desc && isAnnotationColor(desc.color) && isAnnotationSymbol(desc.symbol))
-		.sort((a, b) => a[0].localeCompare(b[0]))
-		.map(([ sq, desc ]) => desc.color.toUpperCase() + (desc.symbol.length === 1 ? desc.symbol : `(${desc.symbol})`) + sq)
-		.join(',');
+    if (typeof markers !== 'object' || markers === null) {
+        throw new IllegalArgument('flattenTextMarkers()', 'markers');
+    }
+    return Object.entries(markers)
+        .filter(([ sq, desc ]) => isSquare(sq) && desc && isAnnotationColor(desc.color) && isAnnotationSymbol(desc.symbol))
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([ sq, desc ]) => desc.color.toUpperCase() + (desc.symbol.length === 1 ? desc.symbol : `(${desc.symbol})`) + sq)
+        .join(',');
 }
 
 
@@ -253,14 +253,14 @@ export function flattenTextMarkers(markers: TextMarkerSet): string {
  * @returns For example: `'Ge2e4,Rg8f6,Bg8h6'`
  */
 export function flattenArrowMarkers(markers: ArrowMarkerSet): string {
-	if (typeof markers !== 'object' || markers === null) {
-		throw new IllegalArgument('flattenArrowMarkers()', 'markers');
-	}
-	return Object.entries(markers)
-		.filter(([ vect, color ]) => isSquareCouple(vect) && isAnnotationColor(color))
-		.sort((a, b) => a[0].localeCompare(b[0]))
-		.map(([ vect, color ]) => color.toUpperCase() + vect)
-		.join(',');
+    if (typeof markers !== 'object' || markers === null) {
+        throw new IllegalArgument('flattenArrowMarkers()', 'markers');
+    }
+    return Object.entries(markers)
+        .filter(([ vect, color ]) => isSquareCouple(vect) && isAnnotationColor(color))
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([ vect, color ]) => color.toUpperCase() + vect)
+        .join(',');
 }
 
 
@@ -271,14 +271,14 @@ export function flattenArrowMarkers(markers: ArrowMarkerSet): string {
  * @returns For example: `{ e4: 'g', d5: 'r' }`
  */
 export function parseSquareMarkers(markers: string): SquareMarkerSet {
-	if (typeof markers !== 'string') {
-		throw new IllegalArgument('parseSquareMarkers()', 'markers');
-	}
-	return parseMarkers<Square, AnnotationColor>(markers, token => {
-		return /^([BGRY])([a-h][1-8])$/.test(token) ?
-			{ key: RegExp.$2 as Square, value: RegExp.$1.toLowerCase() as AnnotationColor } :
-			undefined;
-	});
+    if (typeof markers !== 'string') {
+        throw new IllegalArgument('parseSquareMarkers()', 'markers');
+    }
+    return parseMarkers<Square, AnnotationColor>(markers, token => {
+        return /^([BGRY])([a-h][1-8])$/.test(token) ?
+            { key: RegExp.$2 as Square, value: RegExp.$1.toLowerCase() as AnnotationColor } :
+            undefined;
+    });
 }
 
 
@@ -289,14 +289,14 @@ export function parseSquareMarkers(markers: string): SquareMarkerSet {
  * @returns For example: `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }, h3: { symbol: 'plus', color: 'y' } }`
  */
 export function parseTextMarkers(markers: string): TextMarkerSet {
-	if (typeof markers !== 'string') {
-		throw new IllegalArgument('parseTextMarkers()', 'markers');
-	}
-	return parseMarkers<Square, { symbol: AnnotationSymbol, color: AnnotationColor }>(markers, token => {
-		return /^([BGRY])(?:([A-Za-z0-9])|\((plus|times|dot|circle)\))([a-h][1-8])$/.test(token) ?
-			{ key: RegExp.$4 as Square, value: { symbol: (RegExp.$2 || RegExp.$3) as AnnotationSymbol, color: RegExp.$1.toLowerCase() as AnnotationColor } } :
-			undefined;
-	});
+    if (typeof markers !== 'string') {
+        throw new IllegalArgument('parseTextMarkers()', 'markers');
+    }
+    return parseMarkers<Square, { symbol: AnnotationSymbol, color: AnnotationColor }>(markers, token => {
+        return /^([BGRY])(?:([A-Za-z0-9])|\((plus|times|dot|circle)\))([a-h][1-8])$/.test(token) ?
+            { key: RegExp.$4 as Square, value: { symbol: (RegExp.$2 || RegExp.$3) as AnnotationSymbol, color: RegExp.$1.toLowerCase() as AnnotationColor } } :
+            undefined;
+    });
 }
 
 
@@ -307,23 +307,23 @@ export function parseTextMarkers(markers: string): TextMarkerSet {
  * @returns For example: `{ e2e4: 'g', g8f6: 'r', g8h6: 'b' }`
  */
 export function parseArrowMarkers(markers: string): ArrowMarkerSet {
-	if (typeof markers !== 'string') {
-		throw new IllegalArgument('parseArrowMarkers()', 'markers');
-	}
-	return parseMarkers<SquareCouple, AnnotationColor>(markers, token => {
-		return /^([BGRY])([a-h][1-8][a-h][1-8])$/.test(token) ?
-			{ key: RegExp.$2 as SquareCouple, value: RegExp.$1.toLowerCase() as AnnotationColor } :
-			undefined;
-	});
+    if (typeof markers !== 'string') {
+        throw new IllegalArgument('parseArrowMarkers()', 'markers');
+    }
+    return parseMarkers<SquareCouple, AnnotationColor>(markers, token => {
+        return /^([BGRY])([a-h][1-8][a-h][1-8])$/.test(token) ?
+            { key: RegExp.$2 as SquareCouple, value: RegExp.$1.toLowerCase() as AnnotationColor } :
+            undefined;
+    });
 }
 
 
 function parseMarkers<K extends string, V>(markers: string, tokenParser: (token: string) => { key: K, value: V } | undefined): Partial<Record<K, V>> {
-	const result: Partial<Record<K, V>> = {};
-	markers.split(',').map(token => tokenParser(token.trim())).forEach(marker => {
-		if (marker) {
-			result[marker.key] = marker.value;
-		}
-	});
-	return result;
+    const result: Partial<Record<K, V>> = {};
+    markers.split(',').map(token => tokenParser(token.trim())).forEach(marker => {
+        if (marker) {
+            result[marker.key] = marker.value;
+        }
+    });
+    return result;
 }

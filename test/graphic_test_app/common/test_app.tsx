@@ -30,54 +30,54 @@ import './test_app.css';
 
 // This global variable allows to freeze animations in an intermediate stage.
 declare global {
-	interface Window {
-		'__kokopu_debug_freeze_motion': number;
-	}
+    interface Window {
+        '__kokopu_debug_freeze_motion': number;
+    }
 }
 
 
 interface TestItemContainerProps {
-	index: number;
-	children: React.ReactNode;
+    index: number;
+    children: React.ReactNode;
 }
 
 
 interface TestItemContainerState {
-	hasError: boolean;
+    hasError: boolean;
 }
 
 
 class TestItemContainer extends React.Component<TestItemContainerProps, TestItemContainerState> {
 
-	constructor(props: TestItemContainerProps) {
-		super(props);
-		this.state = { hasError: false };
-	}
+    constructor(props: TestItemContainerProps) {
+        super(props);
+        this.state = { hasError: false };
+    }
 
-	static getDerivedStateFromError() {
-		return { hasError: true };
-	}
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
 
-	render() {
-		return (
-			<div className="test-item-container">
-				<div className="test-item" id={'test-item-' + this.props.index}>{this.renderContent()}</div>
-			</div>
-		);
-	}
+    render() {
+        return (
+            <div className="test-item-container">
+                <div className="test-item" id={'test-item-' + this.props.index}>{this.renderContent()}</div>
+            </div>
+        );
+    }
 
-	private renderContent() {
-		return this.state.hasError ? <span className="test-item-error">Exception thrown</span> : this.props.children;
-	}
+    private renderContent() {
+        return this.state.hasError ? <span className="test-item-error">Exception thrown</span> : this.props.children;
+    }
 }
 
 
 function flattenMultiElements(elements: React.ReactNode[], containerClassName: string[]) {
-	const items = [];
-	for (let i = 0; i < elements.length; ++i) {
-		items.push(<TestItemContainer key={i} index={i}>{elements[i]}</TestItemContainer>);
-	}
-	return <div className={containerClassName.join(' ')}>{items}</div>;
+    const items = [];
+    for (let i = 0; i < elements.length; ++i) {
+        items.push(<TestItemContainer key={i} index={i}>{elements[i]}</TestItemContainer>);
+    }
+    return <div className={containerClassName.join(' ')}>{items}</div>;
 }
 
 
@@ -86,20 +86,20 @@ function flattenMultiElements(elements: React.ReactNode[], containerClassName: s
  */
 export function testApp(elements: React.ReactNode[], ...containerClassName: string[]) {
 
-	// Create the main anchor.
-	const anchor = document.createElement('div');
-	anchor.id = 'test-app';
-	document.body.appendChild(anchor);
+    // Create the main anchor.
+    const anchor = document.createElement('div');
+    anchor.id = 'test-app';
+    document.body.appendChild(anchor);
 
-	// Render the content.
-	const root = createRoot(anchor);
-	const content = flattenMultiElements(elements, containerClassName);
-	root.render(content);
+    // Render the content.
+    const root = createRoot(anchor);
+    const content = flattenMultiElements(elements, containerClassName);
+    root.render(content);
 
-	// Append a text area
-	const sandbox = document.createElement('pre');
-	sandbox.id = 'sandbox';
-	document.body.appendChild(sandbox);
+    // Append a text area
+    const sandbox = document.createElement('pre');
+    sandbox.id = 'sandbox';
+    document.body.appendChild(sandbox);
 }
 
 
@@ -107,9 +107,9 @@ export function testApp(elements: React.ReactNode[], ...containerClassName: stri
  * Set the content of the sandbox.
  */
 export function setSandbox(text: string) {
-	const sandbox = document.getElementById('sandbox');
-	if (sandbox === null) {
-		throw new Error('Cannot locate the sandbox...');
-	}
-	sandbox.innerText = text;
+    const sandbox = document.getElementById('sandbox');
+    if (sandbox === null) {
+        throw new Error('Cannot locate the sandbox...');
+    }
+    sandbox.innerText = text;
 }

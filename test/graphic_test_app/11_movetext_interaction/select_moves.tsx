@@ -29,18 +29,18 @@ import { Movetext } from '../../../dist/lib/index';
 import pgn from '../common/games.pgn';
 
 function onMoveSelected(nodeId: string | undefined, evtOrigin: string) {
-	setSandbox(`move selected: ${nodeId}\norigin: ${evtOrigin}`);
+    setSandbox(`move selected: ${nodeId}\norigin: ${evtOrigin}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} selection="4w" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} interactionMode="selectMove" />,
-	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-3w-v0-3w" />,
-	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-2b" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="start" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1w" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="6b" />,
-	<Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="invalid-id" />,
-	<Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-start" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} selection="4w" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} interactionMode="selectMove" />,
+    <Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-3w-v0-3w" />,
+    <Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-2b" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="start" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1w" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="6b" />,
+    <Movetext game={pgn} gameIndex={7} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="invalid-id" />,
+    <Movetext game={pgn} gameIndex={8} headerVisible={false} onMoveSelected={onMoveSelected} interactionMode="selectMove" selection="1b-v0-start" />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

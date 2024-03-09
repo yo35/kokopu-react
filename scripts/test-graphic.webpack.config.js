@@ -29,72 +29,72 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // List all the files corresponding to /test/graphic_test_app/{number}_*/*.tsx, each of them corresponding to a entry.
 const items = fs.readdirSync('./test/graphic_test_app', { withFileTypes: true })
-	.filter(file => file.isDirectory() && /^\d+_/.test(file.name))
-	.flatMap(file => fs.readdirSync(`./test/graphic_test_app/${file.name}`)
-		.filter(subFile => path.extname(subFile) === '.tsx')
-		.map(subFile => `${file.name}/${path.basename(subFile, '.tsx')}`)
-	);
+    .filter(file => file.isDirectory() && /^\d+_/.test(file.name))
+    .flatMap(file => fs.readdirSync(`./test/graphic_test_app/${file.name}`)
+        .filter(subFile => path.extname(subFile) === '.tsx')
+        .map(subFile => `${file.name}/${path.basename(subFile, '.tsx')}`)
+    );
 const entries = {};
 items.forEach(item => {
-	entries[item] = `./test/graphic_test_app/${item}`;
+    entries[item] = `./test/graphic_test_app/${item}`;
 });
 
 // Define the outputs.
 const plugins = items.map(item => new HtmlWebpackPlugin({
-	title: 'Test ' + item,
-	chunks: [ item ],
-	filename: item + '/index.html',
+    title: 'Test ' + item,
+    chunks: [ item ],
+    filename: item + '/index.html',
 }));
 plugins.push(new CopyWebpackPlugin({
-	patterns: [
-		{ from: './test/graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' },
-		{ from: './test/graphic_test_app/common/smiley.png', to: 'smiley.png' },
-	],
+    patterns: [
+        { from: './test/graphic_test_app/common/heartbeat.txt', to: 'heartbeat.txt' },
+        { from: './test/graphic_test_app/common/smiley.png', to: 'smiley.png' },
+    ],
 }));
 
 module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	entry: entries,
-	output: {
-		path: path.resolve(__dirname, '../build/test_graphic'),
-		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
-		clean: true,
-	},
-	plugins: plugins,
-	module: {
-		rules: [
-			{
-				test: /\.js$/i,
-				use: 'coverage-istanbul-loader',
-			},
-			{
-				test: /\.tsx?$/i,
-				use: [
-					'coverage-istanbul-loader',
-					{
-						loader: 'ts-loader',
-						options: {
-							configFile: path.resolve(__dirname, 'test-graphic.tsconfig.json'),
-						},
-					},
-				],
-			},
-			{
-				test: /\.css$/i,
-				use: [ 'style-loader', 'css-loader' ],
-			},
-			{
-				test: /\.(png|woff|woff2)$/i,
-				type: 'asset/resource',
-			},
-			{
-				test: /\.pgn$/i,
-				type: 'asset/source',
-			},
-		],
-	},
-	resolve: {
-		extensions: [ '.js', '.ts', '.tsx' ],
-	},
+    mode: 'development',
+    devtool: 'inline-source-map',
+    entry: entries,
+    output: {
+        path: path.resolve(__dirname, '../build/test_graphic'),
+        hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
+        clean: true,
+    },
+    plugins: plugins,
+    module: {
+        rules: [
+            {
+                test: /\.js$/i,
+                use: 'coverage-istanbul-loader',
+            },
+            {
+                test: /\.tsx?$/i,
+                use: [
+                    'coverage-istanbul-loader',
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            configFile: path.resolve(__dirname, 'test-graphic.tsconfig.json'),
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.css$/i,
+                use: [ 'style-loader', 'css-loader' ],
+            },
+            {
+                test: /\.(png|woff|woff2)$/i,
+                type: 'asset/resource',
+            },
+            {
+                test: /\.pgn$/i,
+                type: 'asset/source',
+            },
+        ],
+    },
+    resolve: {
+        extensions: [ '.js', '.ts', '.tsx' ],
+    },
 };

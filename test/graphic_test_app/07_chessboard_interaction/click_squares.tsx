@@ -28,12 +28,12 @@ import { testApp, setSandbox } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 function onSquareClicked(sq: Square) {
-	setSandbox(`square clicked: ${sq}`);
+    setSandbox(`square clicked: ${sq}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} />,
-	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} flipped coordinateVisible={false} />,
-	<Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} position="empty"
-		squareMarkers="Ga8" arrowMarkers="Ra6d6" textMarkers="YAb4" />,
+    <Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} />,
+    <Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} flipped coordinateVisible={false} />,
+    <Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} position="empty"
+        squareMarkers="Ga8" arrowMarkers="Ra6d6" textMarkers="YAb4" />,
 ]); /* eslint-enable react/jsx-key */

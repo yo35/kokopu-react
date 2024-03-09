@@ -36,16 +36,16 @@ const sm = 'Ba8,Ba7,Gb8,Gb7,Rc8,Rc7,Yd8,Yd7';
 const am = 'Ba1a3,Gb1b3,Rc1c3,Yd1d3';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} animated={false} />,
-	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={60} animated={false} />,
-	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={29} coordinateVisible={false} flipped={true} animated={false} />,
-	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={47} coordinateVisible={true} flipped={true} colorset="scid" animated={false} />,
-	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} coordinateVisible={false} colorset="marine" pieceset="eyes" animated={false} />,
-	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} coordinateVisible={false} pieceset="fantasy" animated={false} />,
-	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} colorset="emerald" pieceset="skulls" animated={false} />,
-	<Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={91} flipped={true} colorset="gray" pieceset="spatial" animated={false} />,
-	<Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={17} colorset="dusk" animated={false} />,
-	<Chessboard squareSize={ /* eslint-disable @typescript-eslint/no-explicit-any */ '24' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
-	<Chessboard colorset="not-a-colorset" />,
-	<Chessboard pieceset="not-a-pieceset" />,
+    <Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} animated={false} />,
+    <Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={60} animated={false} />,
+    <Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={29} coordinateVisible={false} flipped={true} animated={false} />,
+    <Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={47} coordinateVisible={true} flipped={true} colorset="scid" animated={false} />,
+    <Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} coordinateVisible={false} colorset="marine" pieceset="eyes" animated={false} />,
+    <Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} coordinateVisible={false} pieceset="fantasy" animated={false} />,
+    <Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} colorset="emerald" pieceset="skulls" animated={false} />,
+    <Chessboard position={pos2} move={mv2} squareMarkers={sm} arrowMarkers={am} squareSize={91} flipped={true} colorset="gray" pieceset="spatial" animated={false} />,
+    <Chessboard position={pos1} move={mv1} squareMarkers={sm} arrowMarkers={am} squareSize={17} colorset="dusk" animated={false} />,
+    <Chessboard squareSize={ /* eslint-disable @typescript-eslint/no-explicit-any */ '24' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Chessboard colorset="not-a-colorset" />,
+    <Chessboard pieceset="not-a-pieceset" />,
 ]); /* eslint-enable react/jsx-key */

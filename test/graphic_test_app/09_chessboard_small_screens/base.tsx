@@ -28,16 +28,16 @@ import { Chessboard } from '../../../dist/lib/index';
 
 // WARNING: avoid window width < 600 (the selenium-controlled window has some issues in this case).
 const limits = [
-	{ width: 690, squareSize: 16 },
-	{ width: 700, turnVisible: false },
-	{ width: 710, squareSize: 24, coordinateVisible: false },
-	{ width: 720, squareSize: 44 },
-	{ width: 730, squareSize: 48, coordinateVisible: true },
-	{ width: 740, squareSize: 24, coordinateVisible: false },
-	{ width: 750, squareSize: 32 },
+    { width: 690, squareSize: 16 },
+    { width: 700, turnVisible: false },
+    { width: 710, squareSize: 24, coordinateVisible: false },
+    { width: 720, squareSize: 44 },
+    { width: 730, squareSize: 48, coordinateVisible: true },
+    { width: 740, squareSize: 24, coordinateVisible: false },
+    { width: 750, squareSize: 32 },
 ];
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} smallScreenLimits={limits} />,
-	<Chessboard smallScreenLimits={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Chessboard squareSize={50} smallScreenLimits={limits} />,
+    <Chessboard smallScreenLimits={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
 ]); /* eslint-enable react/jsx-key */

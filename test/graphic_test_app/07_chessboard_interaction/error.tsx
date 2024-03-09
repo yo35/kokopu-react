@@ -27,6 +27,6 @@ import { testApp } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard interactionMode={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'whatever' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
-	<Chessboard interactionMode="editArrows" />,
+    <Chessboard interactionMode={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'whatever' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Chessboard interactionMode="editArrows" />,
 ]); /* eslint-enable react/jsx-key */

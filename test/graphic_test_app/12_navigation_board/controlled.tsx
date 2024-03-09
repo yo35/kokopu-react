@@ -29,15 +29,15 @@ import { NavigationBoard } from '../../../dist/lib/index';
 import pgn from '../common/games.pgn';
 
 function onNodeIdChanged(nodeId: string) {
-	setSandbox(`Node ID changed: ${nodeId}`);
+    setSandbox(`Node ID changed: ${nodeId}`);
 }
 
 function onFlippedChanged(flipped: boolean) {
-	setSandbox(`Flip state changed: ${flipped}`);
+    setSandbox(`Flip state changed: ${flipped}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<NavigationBoard game={pgn} gameIndex={1} nodeId="17w" onNodeIdChanged={onNodeIdChanged} />,
-	<NavigationBoard game={pgn} initialNodeId="3w" nodeId="end" onFlippedChanged={onFlippedChanged} />,
-	<NavigationBoard game={pgn} gameIndex={3} nodeId="whatever..." onNodeIdChanged={onNodeIdChanged} flipped={false} onFlippedChanged={onFlippedChanged} />,
+    <NavigationBoard game={pgn} gameIndex={1} nodeId="17w" onNodeIdChanged={onNodeIdChanged} />,
+    <NavigationBoard game={pgn} initialNodeId="3w" nodeId="end" onFlippedChanged={onFlippedChanged} />,
+    <NavigationBoard game={pgn} gameIndex={3} nodeId="whatever..." onNodeIdChanged={onNodeIdChanged} flipped={false} onFlippedChanged={onFlippedChanged} />,
 ]); /* eslint-enable react/jsx-key */

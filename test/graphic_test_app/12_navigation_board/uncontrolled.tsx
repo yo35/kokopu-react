@@ -40,17 +40,17 @@ gameWithNullMove.mainVariation().play('e4').play('e5').play('Nf3').play('--').pl
 const database = pgnRead(pgn);
 
 function onNodeIdChanged(nodeId: string) { // Must NOT be invoked as the components are uncontrolled.
-	setSandbox(`Node ID changed: ${nodeId}`);
+    setSandbox(`Node ID changed: ${nodeId}`);
 }
 
 function onFlippedChanged(flipped: boolean) {
-	setSandbox(`Flip state changed: ${flipped}`);
+    setSandbox(`Flip state changed: ${flipped}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<NavigationBoard game={game} initialFlipped />,
-	<NavigationBoard game={pgn} initialNodeId="end" initialFlipped flipped={false} />,
-	<NavigationBoard game={pgn} gameIndex={1} initialNodeId="17w" onNodeIdChanged={onNodeIdChanged} />,
-	<NavigationBoard game={database} gameIndex={3} onNodeIdChanged={onNodeIdChanged} flipped onFlippedChanged={onFlippedChanged} />,
-	<NavigationBoard game={gameWithNullMove} initialNodeId="2b" />,
+    <NavigationBoard game={game} initialFlipped />,
+    <NavigationBoard game={pgn} initialNodeId="end" initialFlipped flipped={false} />,
+    <NavigationBoard game={pgn} gameIndex={1} initialNodeId="17w" onNodeIdChanged={onNodeIdChanged} />,
+    <NavigationBoard game={database} gameIndex={3} onNodeIdChanged={onNodeIdChanged} flipped onFlippedChanged={onFlippedChanged} />,
+    <NavigationBoard game={gameWithNullMove} initialNodeId="2b" />,
 ]); /* eslint-enable react/jsx-key */

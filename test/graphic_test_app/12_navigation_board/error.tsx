@@ -29,6 +29,6 @@ import { NavigationBoard } from '../../../dist/lib/index';
 import dummyPgn from '../common/dummy.pgn';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<NavigationBoard game={dummyPgn} />,
-	<NavigationBoard game={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <NavigationBoard game={dummyPgn} />,
+    <NavigationBoard game={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

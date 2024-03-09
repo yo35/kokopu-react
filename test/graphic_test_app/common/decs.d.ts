@@ -23,6 +23,6 @@
 
 
 declare module '*.pgn' {
-	const pgnText: string;
-	export default pgnText;
+    const pgnText: string;
+    export default pgnText;
 }

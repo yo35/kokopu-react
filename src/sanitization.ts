@@ -26,41 +26,41 @@ import { IllegalArgument } from './exception';
 
 
 export function sanitizeString(input: string): string {
-	return String(input);
+    return String(input);
 }
 
 
 export function sanitizeBoolean(input: boolean): boolean {
-	return Boolean(input);
+    return Boolean(input);
 }
 
 
 export function sanitizePartialObject<T>(input: Partial<T> | undefined, exceptionBuilder: () => IllegalArgument): Partial<T> {
-	if (input === undefined || input === null) {
-		return {};
-	}
-	else if (typeof input !== 'object') {
-		throw exceptionBuilder();
-	}
-	else {
-		return input;
-	}
+    if (input === undefined || input === null) {
+        return {};
+    }
+    else if (typeof input !== 'object') {
+        throw exceptionBuilder();
+    }
+    else {
+        return input;
+    }
 }
 
 
 export function sanitizeInteger(input: number, exceptionBuilder: () => IllegalArgument): number {
-	if (typeof input !== 'number' || !Number.isFinite(input)) {
-		throw exceptionBuilder();
-	}
-	return Math.round(input);
+    if (typeof input !== 'number' || !Number.isFinite(input)) {
+        throw exceptionBuilder();
+    }
+    return Math.round(input);
 }
 
 
 export function sanitizeBoundedInteger(input: number, min: number, max: number, exceptionBuilder: () => IllegalArgument) {
-	return Math.min(Math.max(sanitizeInteger(input, exceptionBuilder), min), max);
+    return Math.min(Math.max(sanitizeInteger(input, exceptionBuilder), min), max);
 }
 
 
 export function sanitizeOptional<T>(input: T | undefined, sanitizationFunction: (val: T) => T): T | undefined {
-	return input === undefined || input === null ? undefined : sanitizationFunction(input);
+    return input === undefined || input === null ? undefined : sanitizationFunction(input);
 }

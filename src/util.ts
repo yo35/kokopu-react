@@ -23,19 +23,19 @@
 
 
 export function generateRandomId() {
-	const buffer = new Uint32Array(8);
-	crypto.getRandomValues(buffer);
-	let result = '';
-	for (let i = 0; i < buffer.length; ++i) {
-		result += buffer[i].toString(16);
-	}
-	return result;
+    const buffer = new Uint32Array(8);
+    crypto.getRandomValues(buffer);
+    let result = '';
+    for (let i = 0; i < buffer.length; ++i) {
+        result += buffer[i].toString(16);
+    }
+    return result;
 }
 
 
 export function fillPlaceholder(message: string, ...placeholderValues: unknown[]) {
-	return message.replace(/{(\d+)}/g, (match, placeholder) => {
-		const placeholderIndex = Number(placeholder);
-		return placeholderIndex < placeholderValues.length ? String(placeholderValues[placeholderIndex]) : match;
-	});
+    return message.replace(/{(\d+)}/g, (match, placeholder) => {
+        const placeholderIndex = Number(placeholder);
+        return placeholderIndex < placeholderValues.length ? String(placeholderValues[placeholderIndex]) : match;
+    });
 }

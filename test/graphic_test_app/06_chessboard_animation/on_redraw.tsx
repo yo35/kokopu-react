@@ -28,24 +28,24 @@ import { Chessboard } from '../../../dist/lib/index';
 
 function TestComponent() {
 
-	const [ clicked, setClicked ] = React.useState(false);
-	const position = clicked ? 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-	const move = clicked ? 'Nf6' : 'e4';
+    const [ clicked, setClicked ] = React.useState(false);
+    const position = clicked ? 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const move = clicked ? 'Nf6' : 'e4';
 
-	function onClick() {
-		window['__kokopu_debug_freeze_motion'] = 0.6;
-		setClicked(true);
-	}
+    function onClick() {
+        window['__kokopu_debug_freeze_motion'] = 0.6;
+        setClicked(true);
+    }
 
-	return (<>
-		<div>
-			<Chessboard position={position} move={move} animated={true} />
-		</div>
-		{clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
-	</>);
+    return (<>
+        <div>
+            <Chessboard position={position} move={move} animated={true} />
+        </div>
+        {clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
+    </>);
 }
 
 
 testApp([ /* eslint-disable react/jsx-key */
-	<TestComponent />,
+    <TestComponent />,
 ]); /* eslint-enable react/jsx-key */

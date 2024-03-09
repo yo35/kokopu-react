@@ -26,8 +26,8 @@ export { i18n } from './i18n';
 export * as exception from './exception';
 
 export { ChessPieceIconType, Colorset, Pieceset, PieceSymbolMapping, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
-	isChessPieceIconType, isPieceSymbolMapping, isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers,
-	parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+    isChessPieceIconType, isPieceSymbolMapping, isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers,
+    parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
 
 export { ErrorBox, ErrorBoxProps } from './errorbox/ErrorBox';
 

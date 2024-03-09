@@ -27,11 +27,11 @@ import { testApp, setSandbox } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 function onMovePlayed(move: string) {
-	setSandbox(`promotion move played: ${move}`);
+    setSandbox(`promotion move played: ${move}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/1P6/8/8/7k/8/5K2/8 w - - 0 1" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/8/8/8/7k/8/1p3K2/R7 b - - 0 1" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} flipped position="antichess:8/1P6/8/8/7r/8/5K2/8 w - - 0 1" />,
+    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/1P6/8/8/7k/8/5K2/8 w - - 0 1" />,
+    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} position="8/8/8/8/7k/8/1p3K2/R7 b - - 0 1" />,
+    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} flipped position="antichess:8/1P6/8/8/7r/8/5K2/8 w - - 0 1" />,
 ]); /* eslint-enable react/jsx-key */

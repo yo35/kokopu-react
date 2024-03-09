@@ -35,104 +35,104 @@ import './demo.css';
 
 
 interface PageState {
-	squareSize: number;
-	windowWidth: number;
-	limits: SmallScreenLimit[];
+    squareSize: number;
+    windowWidth: number;
+    limits: SmallScreenLimit[];
 }
 
 
 export default class Page extends React.Component<object, PageState> {
 
-	private windowResizeListener = () => this.handleWindowResize();
+    private windowResizeListener = () => this.handleWindowResize();
 
-	constructor(props: object) {
-		super(props);
-		this.state = {
-			squareSize: 56,
-			windowWidth: window.innerWidth,
-			limits: [
-				{ width: 160, squareSize: 12 },
-				{ width: 224, squareSize: 16 },
-				{ width: 250, turnVisible: false },
-				{ width: 340, squareSize: 24, coordinateVisible: false },
-				{ width: 450, squareSize: 32 },
-				{ width: 560, squareSize: 44 },
-				{ width: 600, squareSize: 52, coordinateVisible: true },
-				{ width: 640, squareSize: 24, coordinateVisible: false },
-				{ width: 750, squareSize: 32 },
-				{ width: 860, squareSize: 44 },
-			],
-		};
-	}
+    constructor(props: object) {
+        super(props);
+        this.state = {
+            squareSize: 56,
+            windowWidth: window.innerWidth,
+            limits: [
+                { width: 160, squareSize: 12 },
+                { width: 224, squareSize: 16 },
+                { width: 250, turnVisible: false },
+                { width: 340, squareSize: 24, coordinateVisible: false },
+                { width: 450, squareSize: 32 },
+                { width: 560, squareSize: 44 },
+                { width: 600, squareSize: 52, coordinateVisible: true },
+                { width: 640, squareSize: 24, coordinateVisible: false },
+                { width: 750, squareSize: 32 },
+                { width: 860, squareSize: 44 },
+            ],
+        };
+    }
 
-	componentDidMount() {
-		window.addEventListener('resize', this.windowResizeListener);
-	}
+    componentDidMount() {
+        window.addEventListener('resize', this.windowResizeListener);
+    }
 
-	componentWillUnmount() {
-		window.removeEventListener('resize', this.windowResizeListener);
-	}
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.windowResizeListener);
+    }
 
-	render() {
-		return (
-			<Stack spacing={2} mt={2}>
-				{this.renderControls()}
-				{this.renderChessboard()}
-				{this.renderCode()}
-			</Stack>
-		);
-	}
+    render() {
+        return (
+            <Stack spacing={2} mt={2}>
+                {this.renderControls()}
+                {this.renderChessboard()}
+                {this.renderCode()}
+            </Stack>
+        );
+    }
 
-	private renderControls() {
-		return (
-			<Box>
-				<Typography>Resize the browser to see the chessboard adapt its size...</Typography>
-				<Typography>{`Current browser width: ${this.state.windowWidth} px`}</Typography>
-			</Box>
-		);
-	}
+    private renderControls() {
+        return (
+            <Box>
+                <Typography>Resize the browser to see the chessboard adapt its size...</Typography>
+                <Typography>{`Current browser width: ${this.state.windowWidth} px`}</Typography>
+            </Box>
+        );
+    }
 
-	private renderChessboard() {
-		return (
-			<Box>
-				<Chessboard squareSize={this.state.squareSize} smallScreenLimits={this.state.limits} />
-			</Box>
-		);
-	}
+    private renderChessboard() {
+        return (
+            <Box>
+                <Chessboard squareSize={this.state.squareSize} smallScreenLimits={this.state.limits} />
+            </Box>
+        );
+    }
 
-	private renderCode() {
+    private renderCode() {
 
-		const limits = this.state.limits.map(limit => {
-			const limitAttributes = [ `width: ${limit.width}` ];
-			if ('squareSize' in limit) {
-				limitAttributes.push(`squareSize: ${limit.squareSize}`);
-			}
-			if ('coordinateVisible' in limit) {
-				limitAttributes.push(`coordinateVisible: ${limit.coordinateVisible}`);
-			}
-			if ('turnVisible' in limit) {
-				limitAttributes.push(`turnVisible: ${limit.turnVisible}`);
-			}
-			return `    { ${limitAttributes.join(', ')} },\n`;
-		});
+        const limits = this.state.limits.map(limit => {
+            const limitAttributes = [ `width: ${limit.width}` ];
+            if ('squareSize' in limit) {
+                limitAttributes.push(`squareSize: ${limit.squareSize}`);
+            }
+            if ('coordinateVisible' in limit) {
+                limitAttributes.push(`coordinateVisible: ${limit.coordinateVisible}`);
+            }
+            if ('turnVisible' in limit) {
+                limitAttributes.push(`turnVisible: ${limit.turnVisible}`);
+            }
+            return `    { ${limitAttributes.join(', ')} },\n`;
+        });
 
-		const attributes: string[] = [];
-		attributes.push(`squareSize={${this.state.squareSize}}`);
-		attributes.push('smallScreenLimits={limits}');
-		return (
-			<pre className="kokopu-demoCode">
-				{
-					'const limits = [\n' +
-					limits.join('') +
-					'];\n' +
-					buildComponentDemoCode('Chessboard', attributes)
-				}
-			</pre>
-		);
-	}
+        const attributes: string[] = [];
+        attributes.push(`squareSize={${this.state.squareSize}}`);
+        attributes.push('smallScreenLimits={limits}');
+        return (
+            <pre className="kokopu-demoCode">
+                {
+                    'const limits = [\n' +
+                    limits.join('') +
+                    '];\n' +
+                    buildComponentDemoCode('Chessboard', attributes)
+                }
+            </pre>
+        );
+    }
 
-	private handleWindowResize() {
-		this.setState({ windowWidth: window.innerWidth });
-	}
+    private handleWindowResize() {
+        this.setState({ windowWidth: window.innerWidth });
+    }
 
 }

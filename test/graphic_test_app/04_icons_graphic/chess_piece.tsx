@@ -28,13 +28,13 @@ import { ChessPieceIcon } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
 
-	<ChessPieceIcon size={44} type="wq" />,
-	<ChessPieceIcon size={24} type={[ 'bb', 'wx', 'wx', 'wn', 'bx', 'bk', 'bk' ]} />,
-	<ChessPieceIcon size={36} type={[ 'wr', 'wb', 'bq' ]} pieceset="eyes" />,
+    <ChessPieceIcon size={44} type="wq" />,
+    <ChessPieceIcon size={24} type={[ 'bb', 'wx', 'wx', 'wn', 'bx', 'bk', 'bk' ]} />,
+    <ChessPieceIcon size={36} type={[ 'wr', 'wb', 'bq' ]} pieceset="eyes" />,
 
-	<ChessPieceIcon size={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'not-a-number' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } type="wq" />,
-	<ChessPieceIcon size={40} type={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'invalid' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
-	<ChessPieceIcon size={40} type={[ 'bb', /* eslint-disable @typescript-eslint/no-explicit-any */ 'zp' as any /* eslint-enable @typescript-eslint/no-explicit-any */ ]} />,
-	<ChessPieceIcon size={40} type="wq" pieceset="not-a-pieceset" />,
+    <ChessPieceIcon size={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'not-a-number' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } type="wq" />,
+    <ChessPieceIcon size={40} type={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'invalid' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <ChessPieceIcon size={40} type={[ 'bb', /* eslint-disable @typescript-eslint/no-explicit-any */ 'zp' as any /* eslint-enable @typescript-eslint/no-explicit-any */ ]} />,
+    <ChessPieceIcon size={40} type="wq" pieceset="not-a-pieceset" />,
 
 ]); /* eslint-enable react/jsx-key */

@@ -23,88 +23,88 @@
 
 
 .kokopu-colorTag {
-	width : 1.2em;
-	height: 1.2em;
-	vertical-align: middle;
-	display: inline-block;
-	border: 1px solid black;
-	margin-right: 0.25em;
+    width : 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    display: inline-block;
+    border: 1px solid black;
+    margin-right: 0.25em;
 }
 
 .kokopu-headerGroup-whitePlayer .kokopu-colorTag {
-	background-color: white;
+    background-color: white;
 } 
 
 .kokopu-headerGroup-blackPlayer .kokopu-colorTag {
-	background-color: black;
+    background-color: black;
 }
 
 .kokopu-headerGroup-titleRating:before,
 .kokopu-header-round:before {
-	content: "\a0("; /* \a0 == &nbsp; */
+    content: "\a0("; /* \a0 == &nbsp; */
 }
 
 .kokopu-headerGroup-titleRating:after,
 .kokopu-header-round:after {
-	content: ")";
+    content: ")";
 }
 
 .kokopu-header-round,
 .kokopu-header-annotator {
-	font-style: italic;
+    font-style: italic;
 }
 
 * + .kokopu-move:before,
 * + .kokopu-gameResult:before,
 * + span.kokopu-comment:before {
-	content: " ";
+    content: " ";
 }
 
 span.kokopu-variation:before {
-	content: " (";
+    content: " (";
 }
 
 span.kokopu-variation:after {
-	content: ")";
+    content: ")";
 }
 
 * + .kokopu-nag:before {
-	content: "\a0"; /* \a0 == &nbsp; */
+    content: "\a0"; /* \a0 == &nbsp; */
 }
 
 div.kokopu-subVariation {
-	margin-left: 1.5em;
+    margin-left: 1.5em;
 }
 
 .kokopu-move,
 .kokopu-gameResult {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .kokopu-subVariation .kokopu-move {
-	font-weight: inherit;
+    font-weight: inherit;
 }
 
 .kokopu-diagram {
-	text-align: center;
-	line-height: 0px;
+    text-align: center;
+    line-height: 0px;
 }
 
 .kokopu-moveContent {
-	display: inline-block;
-	padding-left: 1px;
-	padding-right: 1px;
+    display: inline-block;
+    padding-left: 1px;
+    padding-right: 1px;
 }
 
 .kokopu-selectedMove .kokopu-moveContent {
-	background-color: currentcolor;
+    background-color: currentcolor;
 }
 
 .kokopu-selectedMove .kokopu-moveContent > * {
-	filter: invert(1);
+    filter: invert(1);
 }
 
 .kokopu-clickableMove .kokopu-moveContent:hover {
-	text-decoration: underline;
-	cursor: pointer;
+    text-decoration: underline;
+    cursor: pointer;
 }

@@ -32,14 +32,14 @@ import pgn from '../common/games.pgn';
 i18n.PIECE_SYMBOLS = { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' };
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} pieceSymbols="localized" />,
-	<Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
-	<Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
-		diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
-	<Movetext game={pgn} gameIndex={3} diagramOptions={{ turnVisible: false, squareSize: 32 }} />,
-	<Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
-	<Movetext game={pgn} gameIndex={3} diagramOptions={ /* eslint-disable @typescript-eslint/no-explicit-any */ null as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
-	<Movetext game={pgn} gameIndex={3}
-		diagramOptions={ /* eslint-disable @typescript-eslint/no-explicit-any */ { squareSize: '32' }  as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
-	<Movetext game={pgn} pieceSymbols={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'invalid' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />
+    <Movetext game={pgn} pieceSymbols="localized" />,
+    <Movetext game={pgn} gameIndex={2} pieceSymbols={{ K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }} />,
+    <Movetext game={pgn} gameIndex={3} pieceSymbols="figurines" headerVisible={false}
+        diagramOptions={{ flipped: true, coordinateVisible: false, squareSize: 32, colorset: 'scid', pieceset: 'eyes' }} />,
+    <Movetext game={pgn} gameIndex={3} diagramOptions={{ turnVisible: false, squareSize: 32 }} />,
+    <Movetext game={pgn} gameIndex={9} diagramVisible={false} />,
+    <Movetext game={pgn} gameIndex={3} diagramOptions={ /* eslint-disable @typescript-eslint/no-explicit-any */ null as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Movetext game={pgn} gameIndex={3}
+        diagramOptions={ /* eslint-disable @typescript-eslint/no-explicit-any */ { squareSize: '32' }  as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Movetext game={pgn} pieceSymbols={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'invalid' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />
 ], 'width-600'); /* eslint-enable react/jsx-key */

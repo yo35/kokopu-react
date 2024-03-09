@@ -48,147 +48,147 @@ const COLOR_ICON_SIZE = 16;
 
 
 interface PageState {
-	squareSize: number;
-	coordinateVisible: boolean;
-	turnVisible: boolean;
-	colorset: string;
-	pieceset: string;
-	moveArrowVisible: boolean;
-	moveArrowColor: AnnotationColor;
-	animated: boolean;
-	flipButtonVisible: boolean;
+    squareSize: number;
+    coordinateVisible: boolean;
+    turnVisible: boolean;
+    colorset: string;
+    pieceset: string;
+    moveArrowVisible: boolean;
+    moveArrowColor: AnnotationColor;
+    animated: boolean;
+    flipButtonVisible: boolean;
 }
 
 
 export default class Page extends React.Component<object, PageState> {
 
-	constructor(props: object) {
-		super(props);
-		this.state = {
-			squareSize: 40,
-			coordinateVisible: true,
-			turnVisible: true,
-			colorset: 'original',
-			pieceset: 'cburnett',
-			moveArrowVisible: true,
-			moveArrowColor: 'b',
-			animated: true,
-			flipButtonVisible: true,
-		};
-	}
+    constructor(props: object) {
+        super(props);
+        this.state = {
+            squareSize: 40,
+            coordinateVisible: true,
+            turnVisible: true,
+            colorset: 'original',
+            pieceset: 'cburnett',
+            moveArrowVisible: true,
+            moveArrowColor: 'b',
+            animated: true,
+            flipButtonVisible: true,
+        };
+    }
 
-	render() {
-		return (
-			<Stack spacing={2} mt={2}>
-				{this.renderControls()}
-				{this.renderNavigationBoard()}
-				{this.renderCode()}
-			</Stack>
-		);
-	}
+    render() {
+        return (
+            <Stack spacing={2} mt={2}>
+                {this.renderControls()}
+                {this.renderNavigationBoard()}
+                {this.renderCode()}
+            </Stack>
+        );
+    }
 
-	private renderControls() {
-		return (<>
-			<Stack direction="row" spacing={2} alignItems="center">
-				<FormControlLabel label="Show flip button"
-					control={<Switch checked={this.state.flipButtonVisible} onChange={() => this.setState({ flipButtonVisible: !this.state.flipButtonVisible })} color="primary" />}
-				/>
-				<FormControlLabel label="Show coordinates"
-					control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
-				/>
-				<FormControlLabel label="Show turn"
-					control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
-				/>
-				<FormControlLabel label="Animated"
-					control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
-				/>
-			</Stack>
-			<Box>
-				<Typography gutterBottom>Square size</Typography>
-				<Slider
-					value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
-					min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
-				/>
-			</Box>
-			<Stack direction="row" spacing={2} alignItems="center">
-				<FormControl variant="standard">
-					<InputLabel id="colorset-label">Colorset</InputLabel>
-					<Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
-						{Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
-					</Select>
-				</FormControl>
-				<FormControl variant="standard">
-					<InputLabel id="pieceset-label">Pieceset</InputLabel>
-					<Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
-						{Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
-					</Select>
-				</FormControl>
-				<FormControlLabel label="Show move arrow"
-					control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.setState({ moveArrowVisible: !this.state.moveArrowVisible })} color="primary" />}
-				/>
-				{this.renderMoveArrowColorSelector()}
-			</Stack>
-		</>);
-	}
+    private renderControls() {
+        return (<>
+            <Stack direction="row" spacing={2} alignItems="center">
+                <FormControlLabel label="Show flip button"
+                    control={<Switch checked={this.state.flipButtonVisible} onChange={() => this.setState({ flipButtonVisible: !this.state.flipButtonVisible })} color="primary" />}
+                />
+                <FormControlLabel label="Show coordinates"
+                    control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
+                />
+                <FormControlLabel label="Show turn"
+                    control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
+                />
+                <FormControlLabel label="Animated"
+                    control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
+                />
+            </Stack>
+            <Box>
+                <Typography gutterBottom>Square size</Typography>
+                <Slider
+                    value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
+                    min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
+                />
+            </Box>
+            <Stack direction="row" spacing={2} alignItems="center">
+                <FormControl variant="standard">
+                    <InputLabel id="colorset-label">Colorset</InputLabel>
+                    <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
+                        {Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
+                    </Select>
+                </FormControl>
+                <FormControl variant="standard">
+                    <InputLabel id="pieceset-label">Pieceset</InputLabel>
+                    <Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
+                        {Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
+                    </Select>
+                </FormControl>
+                <FormControlLabel label="Show move arrow"
+                    control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.setState({ moveArrowVisible: !this.state.moveArrowVisible })} color="primary" />}
+                />
+                {this.renderMoveArrowColorSelector()}
+            </Stack>
+        </>);
+    }
 
-	private renderMoveArrowColorSelector() {
-		if (!this.state.moveArrowVisible) {
-			return undefined;
-		}
-		const colorset = Chessboard.colorsets()['original'];
-		return (
-			<ToggleButtonGroup value={this.state.moveArrowColor} exclusive size="small" onChange={(_, newColor) => this.handleMoveArrowColorChanged(newColor)}>
-				<ToggleButton value="b"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cb} /></ToggleButton>
-				<ToggleButton value="g"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cg} /></ToggleButton>
-				<ToggleButton value="r"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cr} /></ToggleButton>
-				<ToggleButton value="y"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cy} /></ToggleButton>
-			</ToggleButtonGroup>
-		);
-	}
+    private renderMoveArrowColorSelector() {
+        if (!this.state.moveArrowVisible) {
+            return undefined;
+        }
+        const colorset = Chessboard.colorsets()['original'];
+        return (
+            <ToggleButtonGroup value={this.state.moveArrowColor} exclusive size="small" onChange={(_, newColor) => this.handleMoveArrowColorChanged(newColor)}>
+                <ToggleButton value="b"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cb} /></ToggleButton>
+                <ToggleButton value="g"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cg} /></ToggleButton>
+                <ToggleButton value="r"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cr} /></ToggleButton>
+                <ToggleButton value="y"><ArrowMarkerIcon size={COLOR_ICON_SIZE} color={colorset.cy} /></ToggleButton>
+            </ToggleButtonGroup>
+        );
+    }
 
-	private renderNavigationBoard() {
-		return (
-			<Box>
-				<NavigationBoard
-					game={pgn}
-					initialNodeId="end"
-					squareSize={this.state.squareSize}
-					coordinateVisible={this.state.coordinateVisible}
-					turnVisible={this.state.turnVisible}
-					colorset={this.state.colorset}
-					pieceset={this.state.pieceset}
-					moveArrowVisible={this.state.moveArrowVisible}
-					moveArrowColor={this.state.moveArrowColor}
-					animated={this.state.animated}
-					flipButtonVisible={this.state.flipButtonVisible}
-				/>
-			</Box>
-		);
-	}
+    private renderNavigationBoard() {
+        return (
+            <Box>
+                <NavigationBoard
+                    game={pgn}
+                    initialNodeId="end"
+                    squareSize={this.state.squareSize}
+                    coordinateVisible={this.state.coordinateVisible}
+                    turnVisible={this.state.turnVisible}
+                    colorset={this.state.colorset}
+                    pieceset={this.state.pieceset}
+                    moveArrowVisible={this.state.moveArrowVisible}
+                    moveArrowColor={this.state.moveArrowColor}
+                    animated={this.state.animated}
+                    flipButtonVisible={this.state.flipButtonVisible}
+                />
+            </Box>
+        );
+    }
 
-	private renderCode() {
-		const attributes: string[] = [];
-		attributes.push('game={pgn}');
-		attributes.push('initialNodeId="end"');
-		attributes.push(`squareSize={${this.state.squareSize}}`);
-		attributes.push(`coordinateVisible={${this.state.coordinateVisible}}`);
-		attributes.push(`turnVisible={${this.state.turnVisible}}`);
-		attributes.push(`colorset="${this.state.colorset}"`);
-		attributes.push(`pieceset="${this.state.pieceset}"`);
-		attributes.push(`moveArrowVisible={${this.state.moveArrowVisible}}`);
-		if (this.state.moveArrowVisible) {
-			attributes.push(`moveArrowColor="${this.state.moveArrowColor}"`);
-		}
-		attributes.push(`animated={${this.state.animated}}`);
-		attributes.push(`flipButtonVisible={${this.state.flipButtonVisible}}`);
-		const pgnDeclaration = 'const pgn = `\n' + pgn.trim() + '`;\n\n';
-		return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('NavigationBoard', attributes)}</pre>;
-	}
+    private renderCode() {
+        const attributes: string[] = [];
+        attributes.push('game={pgn}');
+        attributes.push('initialNodeId="end"');
+        attributes.push(`squareSize={${this.state.squareSize}}`);
+        attributes.push(`coordinateVisible={${this.state.coordinateVisible}}`);
+        attributes.push(`turnVisible={${this.state.turnVisible}}`);
+        attributes.push(`colorset="${this.state.colorset}"`);
+        attributes.push(`pieceset="${this.state.pieceset}"`);
+        attributes.push(`moveArrowVisible={${this.state.moveArrowVisible}}`);
+        if (this.state.moveArrowVisible) {
+            attributes.push(`moveArrowColor="${this.state.moveArrowColor}"`);
+        }
+        attributes.push(`animated={${this.state.animated}}`);
+        attributes.push(`flipButtonVisible={${this.state.flipButtonVisible}}`);
+        const pgnDeclaration = 'const pgn = `\n' + pgn.trim() + '`;\n\n';
+        return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('NavigationBoard', attributes)}</pre>;
+    }
 
-	private handleMoveArrowColorChanged(newColor: AnnotationColor | null) {
-		if (newColor !== null) {
-			this.setState({ moveArrowColor: newColor });
-		}
-	}
+    private handleMoveArrowColorChanged(newColor: AnnotationColor | null) {
+        if (newColor !== null) {
+            this.setState({ moveArrowColor: newColor });
+        }
+    }
 
 }

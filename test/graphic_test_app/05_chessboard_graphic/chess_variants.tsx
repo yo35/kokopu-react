@@ -27,11 +27,11 @@ import { testApp } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard position="chess960:nqbrnkrb/pppppppp/8/8/8/8/PPPPPPPP/NQBRNKRB w KQkq - 0 1" />,
-	<Chessboard position="chess960:nqbrnkrb/pppppppp/8/8/8/8/PPPPPPPP/NQBRNKRB w KQkq - 0 1" move="O-O" />,
-	<Chessboard position="chess960" />,
-	<Chessboard position="horde" />,
-	<Chessboard position="start" />,
-	<Chessboard position="whatever" />,
-	<Chessboard position="whatever:rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" />,
+    <Chessboard position="chess960:nqbrnkrb/pppppppp/8/8/8/8/PPPPPPPP/NQBRNKRB w KQkq - 0 1" />,
+    <Chessboard position="chess960:nqbrnkrb/pppppppp/8/8/8/8/PPPPPPPP/NQBRNKRB w KQkq - 0 1" move="O-O" />,
+    <Chessboard position="chess960" />,
+    <Chessboard position="horde" />,
+    <Chessboard position="start" />,
+    <Chessboard position="whatever" />,
+    <Chessboard position="whatever:rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" />,
 ]); /* eslint-enable react/jsx-key */

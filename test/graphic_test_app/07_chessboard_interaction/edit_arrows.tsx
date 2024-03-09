@@ -28,11 +28,11 @@ import { testApp, setSandbox } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 function onArrowEdited(from: Square, to: Square) {
-	setSandbox(`arrow edited: ${from} -> ${to}`);
+    setSandbox(`arrow edited: ${from} -> ${to}`);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="g" />,
-	<Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
-		squareMarkers="Gc5" arrowMarkers="Yh3f6" />,
+    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="g" />,
+    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
+        squareMarkers="Gc5" arrowMarkers="Yh3f6" />,
 ]); /* eslint-enable react/jsx-key */

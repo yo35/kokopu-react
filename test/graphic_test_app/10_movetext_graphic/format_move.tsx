@@ -27,5 +27,5 @@ import { testApp } from '../common/test_app';
 import { formatMove } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<div>{formatMove('figurines', 'Figurines: KQRBNP')}</div>,
+    <div>{formatMove('figurines', 'Figurines: KQRBNP')}</div>,
 ], 'width-600'); /* eslint-enable react/jsx-key */

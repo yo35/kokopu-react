@@ -38,15 +38,15 @@ const ARROW_THICKNESS_FACTOR = 0.2;
 
 export interface ArrowMarkerIconProps {
 
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: number;
+    /**
+     * Width and height (in pixels) of the icon.
+     */
+    size: number;
 
-	/**
-	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: string;
+    /**
+     * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+     */
+    color: string;
 }
 
 
@@ -55,29 +55,29 @@ export interface ArrowMarkerIconProps {
  */
 export class ArrowMarkerIcon extends React.Component<ArrowMarkerIconProps> {
 
-	static defaultProps: Partial<ArrowMarkerIconProps> = {
-		color: 'currentcolor',
-	};
+    static defaultProps: Partial<ArrowMarkerIconProps> = {
+        color: 'currentcolor',
+    };
 
-	private arrowTipId = generateRandomId();
+    private arrowTipId = generateRandomId();
 
-	render() {
+    render() {
 
-		// Sanitize the inputs.
-		const size = sanitizeBoundedInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ArrowMarkerIcon', 'size'));
-		const color = sanitizeString(this.props.color);
+        // Sanitize the inputs.
+        const size = sanitizeBoundedInteger(this.props.size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ArrowMarkerIcon', 'size'));
+        const color = sanitizeString(this.props.color);
 
-		// Render the component.
-		const halfThickness = size * ARROW_THICKNESS_FACTOR / 2;
-		const viewBox = `0 0 ${size} ${size}`;
-		return (
-			<svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
-				<defs>
-					<ArrowTip id={this.arrowTipId} color={this.props.color} />
-				</defs>
-				<line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={color}
-					strokeWidth={halfThickness * 2} markerEnd={`url(#${this.arrowTipId})`} />
-			</svg>
-		);
-	}
+        // Render the component.
+        const halfThickness = size * ARROW_THICKNESS_FACTOR / 2;
+        const viewBox = `0 0 ${size} ${size}`;
+        return (
+            <svg className="kokopu-arrowMarkerIcon" viewBox={viewBox} width={size} height={size}>
+                <defs>
+                    <ArrowTip id={this.arrowTipId} color={this.props.color} />
+                </defs>
+                <line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={color}
+                    strokeWidth={halfThickness * 2} markerEnd={`url(#${this.arrowTipId})`} />
+            </svg>
+        );
+    }
 }

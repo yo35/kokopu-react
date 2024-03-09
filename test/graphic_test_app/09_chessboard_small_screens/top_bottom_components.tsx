@@ -27,22 +27,22 @@ import { testApp } from '../common/test_app';
 import { Chessboard, ChessboardProps } from '../../../dist/lib/index';
 
 const limits1 = [
-	{ width: 750, squareSize: 24, coordinateVisible: false },
+    { width: 750, squareSize: 24, coordinateVisible: false },
 ];
 
 const limits2 = [
-	{ width: 750, squareSize: 27, turnVisible: false },
+    { width: 750, squareSize: 27, turnVisible: false },
 ];
 
 function AuxilliaryComponent({ squareSize, coordinateVisible, turnVisible}: Pick<ChessboardProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) {
-	return (<>
-		<div>{`Square size: ${squareSize}`}</div>
-		<div>{`Coordinates: ${coordinateVisible}`}</div>
-		<div>{`Turn: ${turnVisible}`}</div>
-	</>);
+    return (<>
+        <div>{`Square size: ${squareSize}`}</div>
+        <div>{`Coordinates: ${coordinateVisible}`}</div>
+        <div>{`Turn: ${turnVisible}`}</div>
+    </>);
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Chessboard squareSize={30} smallScreenLimits={limits1} topComponent={AuxilliaryComponent} />,
-	<Chessboard squareSize={30} smallScreenLimits={limits2} bottomComponent={AuxilliaryComponent} />,
+    <Chessboard squareSize={30} smallScreenLimits={limits1} topComponent={AuxilliaryComponent} />,
+    <Chessboard squareSize={30} smallScreenLimits={limits2} bottomComponent={AuxilliaryComponent} />,
 ]); /* eslint-enable react/jsx-key */

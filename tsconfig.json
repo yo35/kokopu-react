@@ -1,15 +1,15 @@
 {
-	"include": [ "./src/**/*" ],
-	"compilerOptions": {
-		"sourceMap": true,
-		"declaration": true,
-		"module": "es2020",
-		"target": "es2020",
-		"jsx": "react",
-		"types": [],
-		"allowJs": false,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"moduleResolution": "node"
-	}
+    "include": [ "./src/**/*" ],
+    "compilerOptions": {
+        "sourceMap": true,
+        "declaration": true,
+        "module": "es2020",
+        "target": "es2020",
+        "jsx": "react",
+        "types": [],
+        "allowJs": false,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node"
+    }
 }

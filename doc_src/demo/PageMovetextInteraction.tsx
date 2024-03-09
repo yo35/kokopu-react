@@ -44,133 +44,133 @@ import game2 from './game-2.pgn';
 
 
 interface PageState {
-	pgn: string;
-	selection: string;
-	interactionMode: 'none' | 'selectMove';
-	withPopup: boolean;
-	withMove: boolean;
+    pgn: string;
+    selection: string;
+    interactionMode: 'none' | 'selectMove';
+    withPopup: boolean;
+    withMove: boolean;
 }
 
 
 export default class Page extends React.Component<object, PageState> {
 
-	constructor(props: object) {
-		super(props);
-		this.state = {
-			pgn: game1,
-			selection: '28b',
-			interactionMode: 'selectMove',
-			withPopup: true,
-			withMove: false,
-		};
-	}
+    constructor(props: object) {
+        super(props);
+        this.state = {
+            pgn: game1,
+            selection: '28b',
+            interactionMode: 'selectMove',
+            withPopup: true,
+            withMove: false,
+        };
+    }
 
-	render() {
-		return (
-			<Stack spacing={2} mt={2}>
-				{this.renderControls()}
-				{this.renderMovetext()}
-				{this.renderCode()}
-				{this.renderNavigationBoard()}
-			</Stack>
-		);
-	}
+    render() {
+        return (
+            <Stack spacing={2} mt={2}>
+                {this.renderControls()}
+                {this.renderMovetext()}
+                {this.renderCode()}
+                {this.renderNavigationBoard()}
+            </Stack>
+        );
+    }
 
-	private renderControls() {
-		return (<>
-			<Stack direction="row" spacing={2} alignItems="center">
-				<ButtonGroup color="primary" size="small">
-					<Button onClick={() => this.setState({ pgn: game1, selection: '28b' })}>Game 1</Button>
-					<Button onClick={() => this.setState({ pgn: game2, selection: '15b' })}>Game 2</Button>
-				</ButtonGroup>
-			</Stack>
-			<Box>
-				<Typography gutterBottom>Interaction mode</Typography>
-				<RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
-					<FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
-					<FormControlLabel value="selectMove" control={<Radio color="primary" />} label="Select moves" />
-				</RadioGroup>
-			</Box>
-		</>);
-	}
+    private renderControls() {
+        return (<>
+            <Stack direction="row" spacing={2} alignItems="center">
+                <ButtonGroup color="primary" size="small">
+                    <Button onClick={() => this.setState({ pgn: game1, selection: '28b' })}>Game 1</Button>
+                    <Button onClick={() => this.setState({ pgn: game2, selection: '15b' })}>Game 2</Button>
+                </ButtonGroup>
+            </Stack>
+            <Box>
+                <Typography gutterBottom>Interaction mode</Typography>
+                <RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
+                    <FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
+                    <FormControlLabel value="selectMove" control={<Radio color="primary" />} label="Select moves" />
+                </RadioGroup>
+            </Box>
+        </>);
+    }
 
-	private renderMovetext() {
-		return (
-			<Box>
-				<Movetext
-					game={this.state.pgn}
-					selection={this.state.selection}
-					pieceSymbols="figurines"
-					diagramVisible={false}
-					interactionMode={this.getMovetextInterationMode()}
-					onMoveSelected={(nodeId, evtOrigin) => this.handleMoveSelected(nodeId, evtOrigin)}
-				/>
-			</Box>
-		);
-	}
+    private renderMovetext() {
+        return (
+            <Box>
+                <Movetext
+                    game={this.state.pgn}
+                    selection={this.state.selection}
+                    pieceSymbols="figurines"
+                    diagramVisible={false}
+                    interactionMode={this.getMovetextInterationMode()}
+                    onMoveSelected={(nodeId, evtOrigin) => this.handleMoveSelected(nodeId, evtOrigin)}
+                />
+            </Box>
+        );
+    }
 
-	private renderCode() {
-		const attributes: string[] = [];
-		attributes.push('game={pgn}');
-		attributes.push('pieceSymbols="figurines"');
-		attributes.push('diagramVisible={false}');
-		attributes.push(`selection="${this.state.selection}"`);
-		switch (this.state.interactionMode) {
-			case 'selectMove':
-				attributes.push('interactionMode="selectMove"');
-				attributes.push('onMoveSelected={nodeId => handleMoveSelected(nodeId)}');
-				break;
-			default:
-				break;
-		}
-		const pgnDeclaration = 'const pgn = `\n' + this.state.pgn.trim() + '`;\n\n';
-		return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('Movetext', attributes)}</pre>;
-	}
+    private renderCode() {
+        const attributes: string[] = [];
+        attributes.push('game={pgn}');
+        attributes.push('pieceSymbols="figurines"');
+        attributes.push('diagramVisible={false}');
+        attributes.push(`selection="${this.state.selection}"`);
+        switch (this.state.interactionMode) {
+            case 'selectMove':
+                attributes.push('interactionMode="selectMove"');
+                attributes.push('onMoveSelected={nodeId => handleMoveSelected(nodeId)}');
+                break;
+            default:
+                break;
+        }
+        const pgnDeclaration = 'const pgn = `\n' + this.state.pgn.trim() + '`;\n\n';
+        return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('Movetext', attributes)}</pre>;
+    }
 
-	private renderNavigationBoard() {
-		const button = <Button size="small" onClick={() => this.setState({ withPopup: !this.state.withPopup })}>{this.state.withPopup ? 'Reduce' : 'Open'}</Button>;
-		const { position, move, csl, cal } = this.getCurrentPositionAndAnnotations();
-		const content = this.state.withPopup ?
-			<Stack><Chessboard position={position} move={move} squareMarkers={csl} arrowMarkers={cal} animated={true} />{button}</Stack> :
-			button;
-		return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
-	}
+    private renderNavigationBoard() {
+        const button = <Button size="small" onClick={() => this.setState({ withPopup: !this.state.withPopup })}>{this.state.withPopup ? 'Reduce' : 'Open'}</Button>;
+        const { position, move, csl, cal } = this.getCurrentPositionAndAnnotations();
+        const content = this.state.withPopup ?
+            <Stack><Chessboard position={position} move={move} squareMarkers={csl} arrowMarkers={cal} animated={true} />{button}</Stack> :
+            button;
+        return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
+    }
 
-	private handleMoveSelected(nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) {
-		if (nodeId) {
-			this.setState({ selection: nodeId, withMove: evtOrigin === 'key-next' });
-		}
-	}
+    private handleMoveSelected(nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) {
+        if (nodeId) {
+            this.setState({ selection: nodeId, withMove: evtOrigin === 'key-next' });
+        }
+    }
 
-	private getMovetextInterationMode(): MovetextProps['interactionMode'] {
-		switch (this.state.interactionMode) {
-			case 'selectMove':
-				return this.state.interactionMode;
-			default:
-				return undefined;
-		}
-	}
+    private getMovetextInterationMode(): MovetextProps['interactionMode'] {
+        switch (this.state.interactionMode) {
+            case 'selectMove':
+                return this.state.interactionMode;
+            default:
+                return undefined;
+        }
+    }
 
-	private getCurrentPositionAndAnnotations() {
-		const game = pgnRead(this.state.pgn, 0);
-		if (this.state.selection === 'start') {
-			const mainVariation = game.mainVariation();
-			return {
-				position: mainVariation.initialPosition(),
-				move: undefined,
-				csl: mainVariation.tag('csl'),
-				cal: mainVariation.tag('cal'),
-			};
-		}
-		else {
-			const node = game.findById(this.state.selection) as GameNode;
-			return {
-				position: this.state.withMove ? node.positionBefore() : node.position(),
-				move:  this.state.withMove ? node.notation() : undefined,
-				csl: node.tag('csl'),
-				cal: node.tag('cal'),
-			};
-		}
-	}
+    private getCurrentPositionAndAnnotations() {
+        const game = pgnRead(this.state.pgn, 0);
+        if (this.state.selection === 'start') {
+            const mainVariation = game.mainVariation();
+            return {
+                position: mainVariation.initialPosition(),
+                move: undefined,
+                csl: mainVariation.tag('csl'),
+                cal: mainVariation.tag('cal'),
+            };
+        }
+        else {
+            const node = game.findById(this.state.selection) as GameNode;
+            return {
+                position: this.state.withMove ? node.positionBefore() : node.position(),
+                move:  this.state.withMove ? node.notation() : undefined,
+                csl: node.tag('csl'),
+                cal: node.tag('cal'),
+            };
+        }
+    }
 
 }

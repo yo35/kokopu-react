@@ -40,14 +40,14 @@ fs.mkdirSync(path.resolve(__dirname, tmpDir), { recursive: true });
 
 const componentSectionTitle = 'Components';
 const components = [
-	'errorbox/ErrorBox',
-	'icons/SquareMarkerIcon',
-	'icons/TextMarkerIcon',
-	'icons/ArrowMarkerIcon',
-	'icons/ChessPieceIcon',
-	'chessboard/Chessboard',
-	'navigationboard/NavigationBoard',
-	'movetext/Movetext',
+    'errorbox/ErrorBox',
+    'icons/SquareMarkerIcon',
+    'icons/TextMarkerIcon',
+    'icons/ArrowMarkerIcon',
+    'icons/ChessPieceIcon',
+    'chessboard/Chessboard',
+    'navigationboard/NavigationBoard',
+    'movetext/Movetext',
 ];
 
 
@@ -56,14 +56,14 @@ const components = [
 
 const demoSectionTitle = 'Live demo';
 const demoPages = [
-	{ id: 'ChessboardBase', title: 'Chessboard - Basic features' },
-	{ id: 'ChessboardInteraction', title: 'Chessboard - Interactions' },
-	{ id: 'ChessboardMove', title: 'Chessboard - Display moves' },
-	{ id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
-	{ id: 'NavigationBoardBase', title: 'NavigationBoard - Basic features' },
-	{ id: 'NavigationBoardUncontrolledVsControlled', title: 'NavigationBoard - Uncontrolled vs. controlled' },
-	{ id: 'MovetextBase', title: 'Movetext - Basic features' },
-	{ id: 'MovetextInteraction', title: 'Movetext - Interactions' },
+    { id: 'ChessboardBase', title: 'Chessboard - Basic features' },
+    { id: 'ChessboardInteraction', title: 'Chessboard - Interactions' },
+    { id: 'ChessboardMove', title: 'Chessboard - Display moves' },
+    { id: 'ChessboardSmallScreens', title: 'Chessboard - Small screens' },
+    { id: 'NavigationBoardBase', title: 'NavigationBoard - Basic features' },
+    { id: 'NavigationBoardUncontrolledVsControlled', title: 'NavigationBoard - Uncontrolled vs. controlled' },
+    { id: 'MovetextBase', title: 'Movetext - Basic features' },
+    { id: 'MovetextInteraction', title: 'Movetext - Interactions' },
 ];
 
 
@@ -72,11 +72,11 @@ const demoPages = [
 
 // Generate the Markdown file corresponding to each demo page.
 demoPages.forEach(demoPage => {
-	fs.writeFileSync(path.resolve(__dirname, `${tmpDir}/${demoPage.id}.md`),
-		'```js\n' +
-		`<Page${demoPage.id} />\n` +
-		'```\n'
-	);
+    fs.writeFileSync(path.resolve(__dirname, `${tmpDir}/${demoPage.id}.md`),
+        '```js\n' +
+        `<Page${demoPage.id} />\n` +
+        '```\n'
+    );
 });
 
 // Generate the changelog page.
@@ -87,14 +87,14 @@ fs.writeFileSync(path.resolve(__dirname, `${tmpDir}/changelog.md`), changelog.jo
 
 // Generate the table of contents for each sections with sub-sections.
 function generateTableOfContents(parentName, itemNames) {
-	const text = itemNames.map(itemName => {
-		itemName = path.basename(itemName);
-		const link = `#/${parentName}/${itemName}`.replace(/ /g, '%20');
-		return `- [${itemName}](${link})\n`;
-	}).join('');
-	const filename = `${tmpDir}/Header_${parentName.replace(/ /g, '_')}.md`;
-	fs.writeFileSync(path.resolve(__dirname, filename), text);
-	return filename;
+    const text = itemNames.map(itemName => {
+        itemName = path.basename(itemName);
+        const link = `#/${parentName}/${itemName}`.replace(/ /g, '%20');
+        return `- [${itemName}](${link})\n`;
+    }).join('');
+    const filename = `${tmpDir}/Header_${parentName.replace(/ /g, '_')}.md`;
+    fs.writeFileSync(path.resolve(__dirname, filename), text);
+    return filename;
 }
 const componentsTocFilename = generateTableOfContents(componentSectionTitle, components);
 const demoTocFilename = generateTableOfContents(demoSectionTitle, demoPages.map(demoPage => demoPage.title));
@@ -106,106 +106,106 @@ const demoContext = Object.fromEntries(demoPages.map(demoPage => [ 'Page' + demo
 
 // Styleguidist config.
 module.exports = {
-	styleguideDir: '../dist/docs',
-	webpackConfig: {
-		module: {
-			rules: [
-				{
-					test: /\.js$/i,
-					use: {
-						loader: 'babel-loader',
-						options: {
-							presets: [ '@babel/preset-env', '@babel/preset-react' ],
-						},
-					}
-				},
-				{
-					test: /\.tsx?$/i,
-					use: {
-						loader: 'ts-loader',
-						options: {
-							configFile: path.resolve(__dirname, 'doc.tsconfig.json'),
-						},
-					},
-				},
-				{
-					test: /\.css$/i,
-					use: [ 'style-loader', 'css-loader' ],
-				},
-				{
-					test: /\.(png|woff|woff2)$/i,
-					type: 'asset/resource',
-				},
-				{
-					test: /\.pgn$/i,
-					type: 'asset/source',
-				},
-			],
-		},
-		resolve: {
-			extensions: [ '*.js', '*.ts', '*.tsx' ],
-		},
-	},
-	propsParser: (filePath, source, resolver, handlers) => reactDocgenTypescript.parse(filePath, source, resolver, handlers),
-	usageMode: 'expand',
-	exampleMode: 'expand',
-	context: Object.assign({}, componentContext, demoContext),
-	getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.tsx')} } from 'kokopu-react';`,
-	getExampleFilename: componentPath => path.resolve(__dirname, `${docSrcDir}/examples/${path.basename(componentPath, '.tsx')}.md`),
-	pagePerSection: true,
-	sections: [
-		{
-			name: 'Home',
-			content: `${docSrcDir}/home.md`,
-		},
-		{
-			name: componentSectionTitle,
-			content: componentsTocFilename,
-			components: components.map(componentName => `${srcDir}/${componentName}.tsx`),
-			sectionDepth: 1,
-		},
-		{
-			name: demoSectionTitle,
-			content: demoTocFilename,
-			sectionDepth: 1,
-			sections: demoPages.map(demoPage => {
-				return {
-					name: demoPage.title,
-					content: `${tmpDir}/${demoPage.id}.md`,
-					exampleMode: 'hide',
-				};
-			}),
-		},
-		{
-			name: 'Webpack configuration',
-			content: `${docSrcDir}/webpack_configuration.md`,
-		},
-		{
-			name: 'Kokopu core library documentation',
-			href: 'https://kokopu.yo35.org/',
-		},
-		{
-			name: 'ChangeLog',
-			content: `${tmpDir}/changelog.md`,
-		},
-		{
-			name: 'Migrate to 2.x',
-			content: `${docSrcDir}/migrate_to_2.md`,
-		},
-		{
-			name: 'Migrate to 3.x',
-			content: `${docSrcDir}/migrate_to_3.md`,
-		},
-	],
-	styleguideComponents: {
-		LogoRenderer: path.resolve(__dirname, `${docSrcDir}/theming/LogoRenderer`),
-	},
-	template: {
-		favicon: 'kokopu-react-favicon.png',
-	},
-	theme: {
-		sidebarWidth: 300,
-	},
-	title: 'Kokopu-React documentation',
-	version: version,
+    styleguideDir: '../dist/docs',
+    webpackConfig: {
+        module: {
+            rules: [
+                {
+                    test: /\.js$/i,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [ '@babel/preset-env', '@babel/preset-react' ],
+                        },
+                    }
+                },
+                {
+                    test: /\.tsx?$/i,
+                    use: {
+                        loader: 'ts-loader',
+                        options: {
+                            configFile: path.resolve(__dirname, 'doc.tsconfig.json'),
+                        },
+                    },
+                },
+                {
+                    test: /\.css$/i,
+                    use: [ 'style-loader', 'css-loader' ],
+                },
+                {
+                    test: /\.(png|woff|woff2)$/i,
+                    type: 'asset/resource',
+                },
+                {
+                    test: /\.pgn$/i,
+                    type: 'asset/source',
+                },
+            ],
+        },
+        resolve: {
+            extensions: [ '*.js', '*.ts', '*.tsx' ],
+        },
+    },
+    propsParser: (filePath, source, resolver, handlers) => reactDocgenTypescript.parse(filePath, source, resolver, handlers),
+    usageMode: 'expand',
+    exampleMode: 'expand',
+    context: Object.assign({}, componentContext, demoContext),
+    getComponentPathLine: componentPath => `import { ${path.basename(componentPath, '.tsx')} } from 'kokopu-react';`,
+    getExampleFilename: componentPath => path.resolve(__dirname, `${docSrcDir}/examples/${path.basename(componentPath, '.tsx')}.md`),
+    pagePerSection: true,
+    sections: [
+        {
+            name: 'Home',
+            content: `${docSrcDir}/home.md`,
+        },
+        {
+            name: componentSectionTitle,
+            content: componentsTocFilename,
+            components: components.map(componentName => `${srcDir}/${componentName}.tsx`),
+            sectionDepth: 1,
+        },
+        {
+            name: demoSectionTitle,
+            content: demoTocFilename,
+            sectionDepth: 1,
+            sections: demoPages.map(demoPage => {
+                return {
+                    name: demoPage.title,
+                    content: `${tmpDir}/${demoPage.id}.md`,
+                    exampleMode: 'hide',
+                };
+            }),
+        },
+        {
+            name: 'Webpack configuration',
+            content: `${docSrcDir}/webpack_configuration.md`,
+        },
+        {
+            name: 'Kokopu core library documentation',
+            href: 'https://kokopu.yo35.org/',
+        },
+        {
+            name: 'ChangeLog',
+            content: `${tmpDir}/changelog.md`,
+        },
+        {
+            name: 'Migrate to 2.x',
+            content: `${docSrcDir}/migrate_to_2.md`,
+        },
+        {
+            name: 'Migrate to 3.x',
+            content: `${docSrcDir}/migrate_to_3.md`,
+        },
+    ],
+    styleguideComponents: {
+        LogoRenderer: path.resolve(__dirname, `${docSrcDir}/theming/LogoRenderer`),
+    },
+    template: {
+        favicon: 'kokopu-react-favicon.png',
+    },
+    theme: {
+        sidebarWidth: 300,
+    },
+    title: 'Kokopu-React documentation',
+    version: version,
 };

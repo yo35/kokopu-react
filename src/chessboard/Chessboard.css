@@ -23,39 +23,39 @@
 
 
 .kokopu-coordinate {
-	fill: currentcolor;
-	font-style: normal;
-	font-family: sans-serif;
-	text-anchor: middle;
-	dominant-baseline: central;
-	letter-spacing: 0px;
+    fill: currentcolor;
+    font-style: normal;
+    font-family: sans-serif;
+    text-anchor: middle;
+    dominant-baseline: central;
+    letter-spacing: 0px;
 }
 
 .kokopu-annotation {
-	opacity: 0.8;
+    opacity: 0.8;
 }
 
 .kokopu-hoveredSquare,
 .kokopu-handle {
-	fill: transparent;
+    fill: transparent;
 }
 
 .kokopu-clickable {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .kokopu-pieceDraggable {
-	cursor: grab;
+    cursor: grab;
 }
 
 .kokopu-pieceDraggable.kokopu-dragging {
-	cursor: grabbing;
+    cursor: grabbing;
 }
 
 .kokopu-arrowDraggable {
-	cursor: crosshair;
+    cursor: crosshair;
 }
 
 .kokopu-drawerMask {
-	opacity: 0.5;
+    opacity: 0.5;
 }

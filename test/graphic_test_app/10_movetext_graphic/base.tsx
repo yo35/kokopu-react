@@ -36,8 +36,8 @@ game.result('1-0');
 const database = pgnRead(pgn);
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={game} />,
-	<Movetext game={database} />,
-	<Movetext game={pgn} gameIndex={1} />,
-	<Movetext game={database} gameIndex={3} />,
+    <Movetext game={game} />,
+    <Movetext game={database} />,
+    <Movetext game={pgn} gameIndex={1} />,
+    <Movetext game={database} gameIndex={3} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

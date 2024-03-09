@@ -25,33 +25,33 @@
 const path = require('path');
 
 module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	entry: {
-		index: './dist/lib/index',
-	},
-	output: {
-		path: path.resolve(__dirname, '../build/test_headless'),
-		library: {
-			type: 'commonjs2',
-		},
-		hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
-		clean: true,
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/i,
-				use: 'coverage-istanbul-loader',
-			},
-			{
-				test: /\.css$/i,
-				use: 'null-loader',
-			},
-			{
-				test: /\.(png|woff|woff2)$/i,
-				use: 'null-loader',
-			},
-		],
-	},
+    mode: 'development',
+    devtool: 'inline-source-map',
+    entry: {
+        index: './dist/lib/index',
+    },
+    output: {
+        path: path.resolve(__dirname, '../build/test_headless'),
+        library: {
+            type: 'commonjs2',
+        },
+        hashFunction: "xxhash64", // FIXME The default hash function used by Webpack has been removed from OpenSSL.
+        clean: true,
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/i,
+                use: 'coverage-istanbul-loader',
+            },
+            {
+                test: /\.css$/i,
+                use: 'null-loader',
+            },
+            {
+                test: /\.(png|woff|woff2)$/i,
+                use: 'null-loader',
+            },
+        ],
+    },
 };

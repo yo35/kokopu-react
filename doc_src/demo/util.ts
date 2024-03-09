@@ -23,5 +23,5 @@
 
 
 export function buildComponentDemoCode(componentName: string, attributes: string[]) {
-	return attributes.length === 0 ? `<${componentName} />` : `<${componentName} ${attributes.join(' ')} />`;
+    return attributes.length === 0 ? `<${componentName} />` : `<${componentName} ${attributes.join(' ')} />`;
 }

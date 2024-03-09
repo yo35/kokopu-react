@@ -36,16 +36,16 @@ mkdir -p $output_dir
 
 
 function echo_pieceset {
-	echo ""
-	echo "#################################################"
-	echo "# Pieceset $1"
-	echo "#################################################"
-	echo ""
+    echo ""
+    echo "#################################################"
+    echo "# Pieceset $1"
+    echo "#################################################"
+    echo ""
 }
 
 
 function echo_sprite {
-	echo "Processing sprite $1..."
+    echo "Processing sprite $1..."
 }
 
 
@@ -56,21 +56,21 @@ function echo_sprite {
 
 function export_cburnett {
 
-	echo_pieceset "cburnett"
+    echo_pieceset "cburnett"
 
-	codes=$1
-	for code in $codes; do
+    codes=$1
+    for code in $codes; do
 
-		echo_sprite $code
+        echo_sprite $code
 
-		# Input/output files
-		input=cburnett/$code.svg
-		output=$output_dir/cburnett-$code.png
+        # Input/output files
+        input=cburnett/$code.svg
+        output=$output_dir/cburnett-$code.png
 
-		# Create the sprite
-		inkscape -e $output -w $size -h $size $input > /dev/null
+        # Create the sprite
+        inkscape -e $output -w $size -h $size $input > /dev/null
 
-	done
+    done
 }
 
 
@@ -81,48 +81,48 @@ function export_cburnett {
 
 function export_mmonge {
 
-	codes=$1
-	piecesets=$2
+    codes=$1
+    piecesets=$2
 
-	for pieceset in $piecesets; do
+    for pieceset in $piecesets; do
 
-		echo_pieceset $pieceset
+        echo_pieceset $pieceset
 
-		for code in $codes; do
+        for code in $codes; do
 
-			echo_sprite $code
+            echo_sprite $code
 
-			colorcode=${code:0:1}
-			piececode=${code:1:1}
+            colorcode=${code:0:1}
+            piececode=${code:1:1}
 
-			if [ "$piececode" == "x" ]; then
+            if [ "$piececode" == "x" ]; then
 
-				# Input/output files
-				input=mmonge/$pieceset-$code.svg
-				output=$output_dir/$pieceset-$code.png
+                # Input/output files
+                input=mmonge/$pieceset-$code.svg
+                output=$output_dir/$pieceset-$code.png
 
-				# Create the sprite
-				inkscape -e $output -w $size -h $size $input > /dev/null
+                # Create the sprite
+                inkscape -e $output -w $size -h $size $input > /dev/null
 
-			else
+            else
 
-				# Input/output files
-				input=mmonge/$pieceset.svg
-				output=$output_dir/$pieceset-$code.png
+                # Input/output files
+                input=mmonge/$pieceset.svg
+                output=$output_dir/$pieceset-$code.png
 
-				# Area to extract from the source file
-				x1=`expr "(" index "kqrbnp" $piececode ")" "*" 200`
-				y1=`expr "(" index "wb" $colorcode ")" "*" 200`
-				x0=`expr $x1 - 200`
-				y0=`expr $y1 - 200`
-				area="$x0:$y0:$x1:$y1"
+                # Area to extract from the source file
+                x1=`expr "(" index "kqrbnp" $piececode ")" "*" 200`
+                y1=`expr "(" index "wb" $colorcode ")" "*" 200`
+                x0=`expr $x1 - 200`
+                y0=`expr $y1 - 200`
+                area="$x0:$y0:$x1:$y1"
 
-				# Create the sprite
-				inkscape -e $output -a $area -w $size -h $size $input > /dev/null
-			fi
+                # Create the sprite
+                inkscape -e $output -a $area -w $size -h $size $input > /dev/null
+            fi
 
-		done
-	done
+        done
+    done
 }
 
 

@@ -31,8 +31,8 @@ const game = new Game();
 game.mainVariation().play('e4');
 
 testApp([ /* eslint-disable react/jsx-key */
-	<NavigationBoard game={game} initialNodeId="end" squareSize={20} coordinateVisible={false} />,
-	<NavigationBoard game={game} initialNodeId="end" squareSize={53} colorset="scid" pieceset="celtic" flipButtonVisible={false} />,
-	<NavigationBoard game={game} initialNodeId="end" turnVisible={false} moveArrowColor="g" />,
-	<div style={{ color: 'red' }}><NavigationBoard game={game} initialNodeId="end" squareSize={48} moveArrowVisible={false} /></div>,
+    <NavigationBoard game={game} initialNodeId="end" squareSize={20} coordinateVisible={false} />,
+    <NavigationBoard game={game} initialNodeId="end" squareSize={53} colorset="scid" pieceset="celtic" flipButtonVisible={false} />,
+    <NavigationBoard game={game} initialNodeId="end" turnVisible={false} moveArrowColor="g" />,
+    <div style={{ color: 'red' }}><NavigationBoard game={game} initialNodeId="end" squareSize={48} moveArrowVisible={false} /></div>,
 ]); /* eslint-enable react/jsx-key */

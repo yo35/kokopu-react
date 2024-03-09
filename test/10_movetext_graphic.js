@@ -27,41 +27,41 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Movetext graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '10_movetext_graphic/base', [
-		'game 1',
-		'game 2',
-		'game 3',
-		'game 4',
-	]);
+    itChecksScreenshots(browserContext, '10_movetext_graphic/base', [
+        'game 1',
+        'game 2',
+        'game 3',
+        'game 4',
+    ]);
 
-	itChecksScreenshots(browserContext, '10_movetext_graphic/error', [
-		'wrong game index 1',
-		'wrong game index 2',
-		'pgn parsing error 1',
-		'pgn parsing error 2',
-		'wrong game type',
-		'wrong game index type',
-	]);
+    itChecksScreenshots(browserContext, '10_movetext_graphic/error', [
+        'wrong game index 1',
+        'wrong game index 2',
+        'pgn parsing error 1',
+        'pgn parsing error 2',
+        'wrong game type',
+        'wrong game index type',
+    ]);
 
-	itChecksScreenshots(browserContext, '10_movetext_graphic/html', [
-		'html in headers',
-		'html in comments',
-		'filtered tags and attributes',
-	]);
+    itChecksScreenshots(browserContext, '10_movetext_graphic/html', [
+        'html in headers',
+        'html in comments',
+        'filtered tags and attributes',
+    ]);
 
-	itChecksScreenshots(browserContext, '10_movetext_graphic/options', [
-		'localized piece symbols',
-		'custom piece symbols',
-		'figurine piece symbols and diagram options',
-		'other diagram options',
-		'hidden diagrams',
-		'wrong diagram options 1',
-		'wrong diagram options 2',
-		'wrong piece symbol value',
-	]);
+    itChecksScreenshots(browserContext, '10_movetext_graphic/options', [
+        'localized piece symbols',
+        'custom piece symbols',
+        'figurine piece symbols and diagram options',
+        'other diagram options',
+        'hidden diagrams',
+        'wrong diagram options 1',
+        'wrong diagram options 2',
+        'wrong piece symbol value',
+    ]);
 
-	itChecksScreenshots(browserContext, '10_movetext_graphic/format_move', [
-		'format text',
-	]);
+    itChecksScreenshots(browserContext, '10_movetext_graphic/format_move', [
+        'format text',
+    ]);
 
 });

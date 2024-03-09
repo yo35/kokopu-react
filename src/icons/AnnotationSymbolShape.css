@@ -23,13 +23,13 @@
 
 
 .kokopu-symbolCircle {
-	fill: transparent;
+    fill: transparent;
 }
 
 .kokopu-symbolText {
-	font-style: normal;
-	font-family: sans-serif;
-	text-anchor: middle;
-	dominant-baseline: central;
-	letter-spacing: 0px;
+    font-style: normal;
+    font-family: sans-serif;
+    text-anchor: middle;
+    dominant-baseline: central;
+    letter-spacing: 0px;
 }

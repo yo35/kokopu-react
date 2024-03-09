@@ -33,20 +33,20 @@ const SQUARE_MARGIN_FACTOR = 0.1;
 
 export interface SquareMarkerIconProps {
 
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: number;
+    /**
+     * Width and height (in pixels) of the icon.
+     */
+    size: number;
 
-	/**
-	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: string;
+    /**
+     * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+     */
+    color: string;
 }
 
 
 const defaultProps: Partial<SquareMarkerIconProps> = {
-	color: 'currentcolor',
+    color: 'currentcolor',
 };
 
 
@@ -55,18 +55,18 @@ const defaultProps: Partial<SquareMarkerIconProps> = {
  */
 export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
 
-	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon', 'size'));
-	color = sanitizeString(color);
+    // Sanitize the inputs.
+    size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon', 'size'));
+    color = sanitizeString(color);
 
-	// Render the component.
-	const margin = Math.round(size * SQUARE_MARGIN_FACTOR);
-	const viewBox = `0 0 ${size} ${size}`;
-	return (
-		<svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<rect x={margin} y={margin} width={size - margin * 2} height={size - margin * 2} fill={color} />
-		</svg>
-	);
+    // Render the component.
+    const margin = Math.round(size * SQUARE_MARGIN_FACTOR);
+    const viewBox = `0 0 ${size} ${size}`;
+    return (
+        <svg className="kokopu-squareMarkerIcon" viewBox={viewBox} width={size} height={size}>
+            <rect x={margin} y={margin} width={size - margin * 2} height={size - margin * 2} fill={color} />
+        </svg>
+    );
 }
 
 SquareMarkerIcon.defaultProps = defaultProps;

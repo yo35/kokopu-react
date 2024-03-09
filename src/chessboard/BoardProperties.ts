@@ -31,10 +31,10 @@ import { DEFAULT_PIECESET } from './piecesets';
  * Define a limit applicable to the parameters of a {@link Chessboard} on small-screen devices.
  */
 export interface SmallScreenLimit {
-	width: number;
-	squareSize?: number;
-	coordinateVisible?: boolean;
-	turnVisible?: boolean;
+    width: number;
+    squareSize?: number;
+    coordinateVisible?: boolean;
+    turnVisible?: boolean;
 }
 
 
@@ -43,45 +43,45 @@ export interface SmallScreenLimit {
  */
 export interface StaticBoardGraphicProps {
 
-	/**
-	 * Size of the squares (in pixels). Must be an integer between `Chessboard.minSquareSize()` and `Chessboard.maxSquareSize()`.
-	 */
-	squareSize: number;
+    /**
+     * Size of the squares (in pixels). Must be an integer between `Chessboard.minSquareSize()` and `Chessboard.maxSquareSize()`.
+     */
+    squareSize: number;
 
-	/**
-	 * Whether the row and column coordinates are visible or not.
-	 */
-	coordinateVisible: boolean;
+    /**
+     * Whether the row and column coordinates are visible or not.
+     */
+    coordinateVisible: boolean;
 
-	/**
-	 * Whether the turn flag is visible or not.
-	 */
-	turnVisible: boolean;
+    /**
+     * Whether the turn flag is visible or not.
+     */
+    turnVisible: boolean;
 
-	/**
-	 * Color theme ID. Must be a property of `Chessboard.colorsets()`.
-	 */
-	colorset: string;
+    /**
+     * Color theme ID. Must be a property of `Chessboard.colorsets()`.
+     */
+    colorset: string;
 
-	/**
-	 * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
-	 */
-	pieceset: string;
+    /**
+     * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
+     */
+    pieceset: string;
 
-	/**
-	 * Limits applicable on small-screen devices. For instance, if set to
-	 * ```
-	 * [
-	 *   { width: 768, squareSize: 40 },
-	 *   { width: 375, squareSize: 24, coordinateVisible: false }
-	 * ]
-	 * ```
-	 * then on screens with resolution ≤768 pixels, the square size will be limited to 40 (whatever the value
-	 * of the `squareSize` attribute); in addition, on screens with resolution ≤375 pixels, the square size
-	 * will be limited to 24 and the row and column coordinates will always be hidden (whatever the value of the
-	 * `coordinateVisible` attribute).
-	 */
-	smallScreenLimits?: SmallScreenLimit[];
+    /**
+     * Limits applicable on small-screen devices. For instance, if set to
+     * ```
+     * [
+     *   { width: 768, squareSize: 40 },
+     *   { width: 375, squareSize: 24, coordinateVisible: false }
+     * ]
+     * ```
+     * then on screens with resolution ≤768 pixels, the square size will be limited to 40 (whatever the value
+     * of the `squareSize` attribute); in addition, on screens with resolution ≤375 pixels, the square size
+     * will be limited to 24 and the row and column coordinates will always be hidden (whatever the value of the
+     * `coordinateVisible` attribute).
+     */
+    smallScreenLimits?: SmallScreenLimit[];
 }
 
 
@@ -90,20 +90,20 @@ export interface StaticBoardGraphicProps {
  */
 export interface DynamicBoardGraphicProps extends StaticBoardGraphicProps {
 
-	/**
-	 * Whether moves are highlighted with an arrow or not.
-	 */
-	moveArrowVisible: boolean;
+    /**
+     * Whether moves are highlighted with an arrow or not.
+     */
+    moveArrowVisible: boolean;
 
-	/**
-	 * Color of the move arrow.
-	 */
-	moveArrowColor: AnnotationColor;
+    /**
+     * Color of the move arrow.
+     */
+    moveArrowColor: AnnotationColor;
 
-	/**
-	 * Whether moves are animated or not.
-	 */
-	animated: boolean;
+    /**
+     * Whether moves are animated or not.
+     */
+    animated: boolean;
 }
 
 
@@ -111,21 +111,21 @@ export const DEFAULT_SQUARE_SIZE = 40;
 
 
 export function defaultStaticBoardProps(): StaticBoardGraphicProps {
-	return {
-		squareSize: DEFAULT_SQUARE_SIZE,
-		coordinateVisible: true,
-		turnVisible: true,
-		colorset: DEFAULT_COLORSET,
-		pieceset: DEFAULT_PIECESET,
-	};
+    return {
+        squareSize: DEFAULT_SQUARE_SIZE,
+        coordinateVisible: true,
+        turnVisible: true,
+        colorset: DEFAULT_COLORSET,
+        pieceset: DEFAULT_PIECESET,
+    };
 }
 
 
 export function defaultDynamicBoardProps(): DynamicBoardGraphicProps {
-	return {
-		...defaultStaticBoardProps(),
-		moveArrowVisible: true,
-		moveArrowColor: 'b',
-		animated: false,
-	};
+    return {
+        ...defaultStaticBoardProps(),
+        moveArrowVisible: true,
+        moveArrowColor: 'b',
+        animated: false,
+    };
 }

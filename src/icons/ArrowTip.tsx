@@ -27,15 +27,15 @@ import * as React from 'react';
 
 interface ArrowTipProps {
 
-	/**
-	 * ID of the element.
-	 */
-	id: string;
+    /**
+     * ID of the element.
+     */
+    id: string;
 
-	/**
-	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: string;
+    /**
+     * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
+     */
+    color: string;
 }
 
 
@@ -43,9 +43,9 @@ interface ArrowTipProps {
  * Tip of the arrow markers.
  */
 export function ArrowTip({ id, color }: ArrowTipProps) {
-	return (
-		<marker id={id} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto">
-			<path fill={color} d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
-		</marker>
-	);
+    return (
+        <marker id={id} markerWidth={4} markerHeight={4} refX={2.5} refY={2} orient="auto">
+            <path fill={color} d="M 4,2 L 0,4 L 1,2 L 0,0 Z" />
+        </marker>
+    );
 }

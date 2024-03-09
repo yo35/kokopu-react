@@ -27,37 +27,37 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Icons graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '04_icons_graphic/marker', [
+    itChecksScreenshots(browserContext, '04_icons_graphic/marker', [
 
-		'default square',
-		'colorized square',
-		'wrapped square',
-		'invalid square size',
+        'default square',
+        'colorized square',
+        'wrapped square',
+        'invalid square size',
 
-		'default text',
-		'colorized text',
-		'wrapped text',
-		'colorized symbol',
-		'wrapped symbol',
-		'invalid text size',
-		'invalid symbol',
+        'default text',
+        'colorized text',
+        'wrapped text',
+        'colorized symbol',
+        'wrapped symbol',
+        'invalid text size',
+        'invalid symbol',
 
-		'default arrow',
-		'colorized arrow',
-		'wrapped arrow',
-		'invalid arrow size',
-	]);
+        'default arrow',
+        'colorized arrow',
+        'wrapped arrow',
+        'invalid arrow size',
+    ]);
 
-	itChecksScreenshots(browserContext, '04_icons_graphic/chess_piece', [
+    itChecksScreenshots(browserContext, '04_icons_graphic/chess_piece', [
 
-		'single piece',
-		'multiple pieces',
-		'customized pieceset',
+        'single piece',
+        'multiple pieces',
+        'customized pieceset',
 
-		'invalid size',
-		'invalid single piece',
-		'invalid multiple pieces',
-		'invalid pieceset',
-	]);
+        'invalid size',
+        'invalid single piece',
+        'invalid multiple pieces',
+        'invalid pieceset',
+    ]);
 
 });

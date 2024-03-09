@@ -33,25 +33,25 @@ import { AnnotationSymbolShape } from './AnnotationSymbolShape';
 
 export interface TextMarkerIconProps {
 
-	/**
-	 * Width and height (in pixels) of the icon.
-	 */
-	size: number;
+    /**
+     * Width and height (in pixels) of the icon.
+     */
+    size: number;
 
-	/**
-	 * Symbol to represent on the icon.
-	 */
-	symbol: AnnotationSymbol;
+    /**
+     * Symbol to represent on the icon.
+     */
+    symbol: AnnotationSymbol;
 
-	/**
-	 * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
-	 */
-	color: string;
+    /**
+     * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
+     */
+    color: string;
 }
 
 
 const defaultProps: Partial<TextMarkerIconProps> = {
-	color: 'currentcolor',
+    color: 'currentcolor',
 };
 
 
@@ -60,20 +60,20 @@ const defaultProps: Partial<TextMarkerIconProps> = {
  */
 export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
 
-	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon', 'size'));
-	if (!isAnnotationSymbol(symbol)) {
-		throw new IllegalArgument('TextMarkerIcon', 'symbol');
-	}
-	color = sanitizeString(color);
+    // Sanitize the inputs.
+    size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon', 'size'));
+    if (!isAnnotationSymbol(symbol)) {
+        throw new IllegalArgument('TextMarkerIcon', 'symbol');
+    }
+    color = sanitizeString(color);
 
-	// Render the component.
-	const viewBox = `0 0 ${size} ${size}`;
-	return (
-		<svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
-			<AnnotationSymbolShape x={size / 2} y={size / 2} size={size} symbol={symbol} color={color} />
-		</svg>
-	);
+    // Render the component.
+    const viewBox = `0 0 ${size} ${size}`;
+    return (
+        <svg className="kokopu-textMarkerIcon" viewBox={viewBox} width={size} height={size}>
+            <AnnotationSymbolShape x={size / 2} y={size / 2} size={size} symbol={symbol} color={color} />
+        </svg>
+    );
 }
 
 TextMarkerIcon.defaultProps = defaultProps;

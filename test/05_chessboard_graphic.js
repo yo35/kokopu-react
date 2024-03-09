@@ -27,70 +27,70 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Chessboard graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/base', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
-		'wrong position type',
-	]);
+    itChecksScreenshots(browserContext, '05_chessboard_graphic/base', [
+        'default',
+        'empty',
+        'parsing error',
+        'from FEN',
+        'from Kokopu object',
+        'wrong position type',
+    ]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/flipped', [
-		'default',
-		'empty',
-		'parsing error',
-		'from FEN',
-		'from Kokopu object',
-	]);
+    itChecksScreenshots(browserContext, '05_chessboard_graphic/flipped', [
+        'default',
+        'empty',
+        'parsing error',
+        'from FEN',
+        'from Kokopu object',
+    ]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/annotations', [
-		'with coordinates',
-		'with coordinates and flip',
-		'without coordinates',
-		'without coordinates and flip',
-		'overlap',
-		'overlap and flip',
-	]);
+    itChecksScreenshots(browserContext, '05_chessboard_graphic/annotations', [
+        'with coordinates',
+        'with coordinates and flip',
+        'without coordinates',
+        'without coordinates and flip',
+        'overlap',
+        'overlap and flip',
+    ]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/move', [
-		'default',
-		'no move arrow',
-		'parsing error',
-		'with forced move arrow and flip',
-		'capture',
-		'castling move',
-		'en-passant',
-		'promotion',
-		'wrong move type',
-		'wrong move arrow color type',
-		'null-move',
-		'illegal null-move',
-	]);
+    itChecksScreenshots(browserContext, '05_chessboard_graphic/move', [
+        'default',
+        'no move arrow',
+        'parsing error',
+        'with forced move arrow and flip',
+        'capture',
+        'castling move',
+        'en-passant',
+        'promotion',
+        'wrong move type',
+        'wrong move arrow color type',
+        'null-move',
+        'illegal null-move',
+    ]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/theme', [
-		'default',
-		'large',
-		'small',
-		'custom 1',
-		'custom 2',
-		'custom 3',
-		'custom 4',
-		'custom 5',
-		'custom 6',
-		'wrong square size type',
-		'wrong colorset',
-		'wrong pieceset',
-	]);
+    itChecksScreenshots(browserContext, '05_chessboard_graphic/theme', [
+        'default',
+        'large',
+        'small',
+        'custom 1',
+        'custom 2',
+        'custom 3',
+        'custom 4',
+        'custom 5',
+        'custom 6',
+        'wrong square size type',
+        'wrong colorset',
+        'wrong pieceset',
+    ]);
 
-	itChecksScreenshots(browserContext, '05_chessboard_graphic/chess_variants', [
-		'chess960',
-		'chess960 with move',
-		'variant without std initial position',
-		'variant with std initial position',
-		'special code',
-		'invalid variant',
-		'invalid variant with FEN',
-	]);
+    itChecksScreenshots(browserContext, '05_chessboard_graphic/chess_variants', [
+        'chess960',
+        'chess960 with move',
+        'variant without std initial position',
+        'variant with std initial position',
+        'special code',
+        'invalid variant',
+        'invalid variant with FEN',
+    ]);
 
 });

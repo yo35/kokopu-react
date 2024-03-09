@@ -38,8 +38,8 @@ import './fonts.css';
  * @param notation - SAN notation.
  */
 export function formatMove(pieceSymbols: 'native' | 'localized' | 'figurines' | PieceSymbolMapping, notation: string): React.ReactNode {
-	const formatter = moveFormatter(pieceSymbols);
-	return formatter(notation);
+    const formatter = moveFormatter(pieceSymbols);
+    return formatter(notation);
 }
 
 
@@ -53,22 +53,22 @@ export function formatMove(pieceSymbols: 'native' | 'localized' | 'figurines' | 
  *                       - {@link PieceSymbolMapping}: use the given custom set of chess piece symbols.
  */
 export function moveFormatter(pieceSymbols: 'native' | 'localized' | 'figurines' | PieceSymbolMapping): (notation: string) => React.ReactNode {
-	if (pieceSymbols === 'native') {
-		return notation => notation;
-	}
-	else if (pieceSymbols === 'localized') {
-		const mapping = i18n.PIECE_SYMBOLS;
-		return notation => pieceMappingNotation(mapping, notation);
-	}
-	else if (pieceSymbols === 'figurines') {
-		return notation => figurineNotation('alpha', notation);
-	}
-	else if (isPieceSymbolMapping(pieceSymbols)) {
-		return notation => pieceMappingNotation(pieceSymbols, notation);
-	}
-	else {
-		throw new IllegalArgument('moveFormatter', 'pieceSymbols');
-	}
+    if (pieceSymbols === 'native') {
+        return notation => notation;
+    }
+    else if (pieceSymbols === 'localized') {
+        const mapping = i18n.PIECE_SYMBOLS;
+        return notation => pieceMappingNotation(mapping, notation);
+    }
+    else if (pieceSymbols === 'figurines') {
+        return notation => figurineNotation('alpha', notation);
+    }
+    else if (isPieceSymbolMapping(pieceSymbols)) {
+        return notation => pieceMappingNotation(pieceSymbols, notation);
+    }
+    else {
+        throw new IllegalArgument('moveFormatter', 'pieceSymbols');
+    }
 }
 
 
@@ -76,7 +76,7 @@ export function moveFormatter(pieceSymbols: 'native' | 'localized' | 'figurines'
  * Replace the native piece symbols by those defined by the given {@link PieceSymbolMapping}.
  */
 function pieceMappingNotation(mapping: PieceSymbolMapping, text: string) {
-	return text.replace(/[KQRBNP]/g, match => mapping[match as keyof PieceSymbolMapping]);
+    return text.replace(/[KQRBNP]/g, match => mapping[match as keyof PieceSymbolMapping]);
 }
 
 
@@ -85,22 +85,22 @@ function pieceMappingNotation(mapping: PieceSymbolMapping, text: string) {
  * React objects represented with the given chess font.
  */
 function figurineNotation(fontName: string, text: string): React.ReactNode {
-	const result: React.ReactNode[] = [];
-	let beginOfText = 0;
-	let pieceSymbolIndex = 0;
-	for (let pos = 0; pos < text.length; ++pos) {
-		const currentChar = text.charAt(pos);
-		if (currentChar === 'K' || currentChar === 'Q' || currentChar === 'R' || currentChar === 'B' || currentChar === 'N' || currentChar === 'P') {
-			if (pos > beginOfText) {
-				result.push(text.substring(beginOfText, pos));
-			}
-			beginOfText = pos + 1;
-			const key = 'symbol-' + (pieceSymbolIndex++);
-			result.push(<span className={'kokopu-font-' + fontName} key={key}>{currentChar}</span>);
-		}
-	}
-	if (beginOfText < text.length) {
-		result.push(text.substring(beginOfText));
-	}
-	return <>{result}</>;
+    const result: React.ReactNode[] = [];
+    let beginOfText = 0;
+    let pieceSymbolIndex = 0;
+    for (let pos = 0; pos < text.length; ++pos) {
+        const currentChar = text.charAt(pos);
+        if (currentChar === 'K' || currentChar === 'Q' || currentChar === 'R' || currentChar === 'B' || currentChar === 'N' || currentChar === 'P') {
+            if (pos > beginOfText) {
+                result.push(text.substring(beginOfText, pos));
+            }
+            beginOfText = pos + 1;
+            const key = 'symbol-' + (pieceSymbolIndex++);
+            result.push(<span className={'kokopu-font-' + fontName} key={key}>{currentChar}</span>);
+        }
+    }
+    if (beginOfText < text.length) {
+        result.push(text.substring(beginOfText));
+    }
+    return <>{result}</>;
 }

@@ -23,11 +23,11 @@
 
 
 declare module '*.pgn' {
-	const pgnText: string;
-	export default pgnText;
+    const pgnText: string;
+    export default pgnText;
 }
 
 declare module '*.png' {
-	const path: string;
-	export default path;
+    const path: string;
+    export default path;
 }

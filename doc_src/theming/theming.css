@@ -23,15 +23,15 @@
  
  
 .kokopu-logo {
-	text-align: center;
+    text-align: center;
 }
 
 footer {
-	display: none !important;
+    display: none !important;
 }
 
 #changelog h2 {
-	font-size: inherit;
-	font-weight: bold;
-	margin-top: 24px;
+    font-size: inherit;
+    font-weight: bold;
+    margin-top: 24px;
 }

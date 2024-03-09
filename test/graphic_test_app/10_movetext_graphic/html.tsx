@@ -29,14 +29,14 @@ import { Movetext } from '../../../dist/lib/index';
 import pgn from '../common/games.pgn';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} gameIndex={4} />,
-	<Movetext game={pgn} gameIndex={5} />,
-	<Movetext game={pgn} gameIndex={6} />,
+    <Movetext game={pgn} gameIndex={4} />,
+    <Movetext game={pgn} gameIndex={5} />,
+    <Movetext game={pgn} gameIndex={6} />,
 ], 'width-600'); /* eslint-enable react/jsx-key */
 
 const customCSS = document.createElement('style');
 customCSS.innerText = `
-	.myClass { font-weight: bold; color: green; }
-	#myId { font-weight: bold; color: red; }
+    .myClass { font-weight: bold; color: green; }
+    #myId { font-weight: bold; color: red; }
 `;
 document.head.appendChild(customCSS);

@@ -27,22 +27,22 @@ const { describeWithBrowser, itChecksScreenshots } = require('./common/graphic')
 
 describeWithBrowser('Error box graphic', browserContext => {
 
-	itChecksScreenshots(browserContext, '03_error_box_graphic/base', [
-		'minimal',
-		'full',
-		'missing error index',
-		'missing error text',
-		'negative error index',
-		'too large error index',
-		'error index not integer',
-		'cut end of text',
-		'cut beginning of text',
-		'cut on line breaks',
-		'single character text',
-	]);
+    itChecksScreenshots(browserContext, '03_error_box_graphic/base', [
+        'minimal',
+        'full',
+        'missing error index',
+        'missing error text',
+        'negative error index',
+        'too large error index',
+        'error index not integer',
+        'cut end of text',
+        'cut beginning of text',
+        'cut on line breaks',
+        'single character text',
+    ]);
 
-	itChecksScreenshots(browserContext, '03_error_box_graphic/localization', [
-		'default'
-	]);
+    itChecksScreenshots(browserContext, '03_error_box_graphic/localization', [
+        'default'
+    ]);
 
 });

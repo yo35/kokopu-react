@@ -45,48 +45,48 @@ type ChildNode = ReturnType<typeof htmlparser2.parseDocument>['children'][0];
  */
 export function htmlFilter(type: 'header' | 'comment'): (text: string) => React.ReactNode {
 
-	let allowedTags = [
-		'span', // general purpose
-		'a', // links
-		'b', 'strong', 'i', 'em', // bold, italic
-		'del', 'ins', 's', 'u', // underline, strikethrough
-		'sub', 'sup', // subscript, superscript
-		'abbr', // acronym (typically associated to a title=".." tooltip)
-		'q', 'cite', // quotation and title of a work
-		'mark', // highlighted text
-		'small', // smaller text
-	];
-	const allowedAttributes: Record<string, string[]> = {
-		'*': [ 'class', 'id', 'title' ],
-		'a': [ 'href', 'target' ],
-	};
+    let allowedTags = [
+        'span', // general purpose
+        'a', // links
+        'b', 'strong', 'i', 'em', // bold, italic
+        'del', 'ins', 's', 'u', // underline, strikethrough
+        'sub', 'sup', // subscript, superscript
+        'abbr', // acronym (typically associated to a title=".." tooltip)
+        'q', 'cite', // quotation and title of a work
+        'mark', // highlighted text
+        'small', // smaller text
+    ];
+    const allowedAttributes: Record<string, string[]> = {
+        '*': [ 'class', 'id', 'title' ],
+        'a': [ 'href', 'target' ],
+    };
 
-	if (type === 'comment') {
-		allowedTags = allowedTags.concat([
-			'div', // general purpose
-			'h1', 'h2', 'h3', 'h4', 'h5', 'h6', // headings
-			'p', 'br', // paragraph and line break
-			'blockquote', // long quotation
-			'img', // image
-			'pre', // preformatted text
-			'ul', 'ol', 'li', // lists
-		]);
-		Object.assign(allowedAttributes, {
-			'img': [ 'alt', 'src', 'height', 'width' ],
-		});
-	}
+    if (type === 'comment') {
+        allowedTags = allowedTags.concat([
+            'div', // general purpose
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', // headings
+            'p', 'br', // paragraph and line break
+            'blockquote', // long quotation
+            'img', // image
+            'pre', // preformatted text
+            'ul', 'ol', 'li', // lists
+        ]);
+        Object.assign(allowedAttributes, {
+            'img': [ 'alt', 'src', 'height', 'width' ],
+        });
+    }
 
-	const sanitizer = new HtmlSanitizer({
-		allowedTags: allowedTags,
-		allowedAttributes: allowedAttributes,
-	});
-	return text => sanitizer.parse(text);
+    const sanitizer = new HtmlSanitizer({
+        allowedTags: allowedTags,
+        allowedAttributes: allowedAttributes,
+    });
+    return text => sanitizer.parse(text);
 }
 
 
 interface HtmlSanitizerProps {
-	allowedTags?: string[];
-	allowedAttributes?: Record<string, string[]>;
+    allowedTags?: string[];
+    allowedAttributes?: Record<string, string[]>;
 }
 
 
@@ -95,96 +95,96 @@ interface HtmlSanitizerProps {
  */
 class HtmlSanitizer {
 
-	#allowedTags: Set<string>;
-	#allowedAttributes: Map<string, Set<string>>;
-	#keyCounter = 0;
+    #allowedTags: Set<string>;
+    #allowedAttributes: Map<string, Set<string>>;
+    #keyCounter = 0;
 
-	constructor({ allowedTags, allowedAttributes }: HtmlSanitizerProps) {
-		this.#allowedTags = allowedTags ? new Set(allowedTags) : new Set();
-		this.#allowedAttributes = allowedAttributes ? new Map(Object.entries(allowedAttributes).map(([k, v]) => [k, new Set(v)])) : new Map();
-	}
+    constructor({ allowedTags, allowedAttributes }: HtmlSanitizerProps) {
+        this.#allowedTags = allowedTags ? new Set(allowedTags) : new Set();
+        this.#allowedAttributes = allowedAttributes ? new Map(Object.entries(allowedAttributes).map(([k, v]) => [k, new Set(v)])) : new Map();
+    }
 
-	/**
-	 * @param text - HTML string to be parsed.
-	 * @returns React object corresponding to the given HTML string. Can also be a fragment, or just a simple string if the given HTML string
-	 *          does not contain any HTML tag.
-	 */
-	parse(text: string): React.ReactNode {
-		const dom = htmlparser2.parseDocument(text);
+    /**
+     * @param text - HTML string to be parsed.
+     * @returns React object corresponding to the given HTML string. Can also be a fragment, or just a simple string if the given HTML string
+     *          does not contain any HTML tag.
+     */
+    parse(text: string): React.ReactNode {
+        const dom = htmlparser2.parseDocument(text);
 
-		// Ensure that the returned object is a non-empty node type.
-		if (dom.type !== 'root') {
-			return undefined;
-		}
+        // Ensure that the returned object is a non-empty node type.
+        if (dom.type !== 'root') {
+            return undefined;
+        }
 
-		// Process the children of the root node.
-		const result: React.ReactNode[] = [];
-		dom.children.forEach(child => {
-			const childElement = this.processNode(child);
-			if (childElement) {
-				result.push(childElement);
-			}
-		});
+        // Process the children of the root node.
+        const result: React.ReactNode[] = [];
+        dom.children.forEach(child => {
+            const childElement = this.processNode(child);
+            if (childElement) {
+                result.push(childElement);
+            }
+        });
 
-		// Return the result.
-		if (result.length === 0) {
-			return undefined;
-		}
-		else if (result.length === 1) {
-			return result[0];
-		}
-		else {
-			return <React.Fragment key={this.allocateKey()}>{result}</React.Fragment>;
-		}
-	}
+        // Return the result.
+        if (result.length === 0) {
+            return undefined;
+        }
+        else if (result.length === 1) {
+            return result[0];
+        }
+        else {
+            return <React.Fragment key={this.allocateKey()}>{result}</React.Fragment>;
+        }
+    }
 
-	private processNode(node: ChildNode): React.ReactNode {
-		if (node.type === 'text') {
-			return node.data;
-		}
-		else if (node.type === 'tag') {
-			const children = NO_CHILDREN_TAGS.has(node.name) ? undefined : node.children.map(child => this.processNode(child));
-			if (this.#allowedTags.has(node.name)) {
-				const attributes = this.filterAttributes(node.name, node.attribs);
-				attributes['key'] = this.allocateKey();
-				return React.createElement(node.name, attributes, children);
-			}
-			else {
-				return children ? <React.Fragment key={this.allocateKey()}>{children}</React.Fragment> : undefined;
-			}
-		}
-		else {
-			return undefined;
-		}
-	}
+    private processNode(node: ChildNode): React.ReactNode {
+        if (node.type === 'text') {
+            return node.data;
+        }
+        else if (node.type === 'tag') {
+            const children = NO_CHILDREN_TAGS.has(node.name) ? undefined : node.children.map(child => this.processNode(child));
+            if (this.#allowedTags.has(node.name)) {
+                const attributes = this.filterAttributes(node.name, node.attribs);
+                attributes['key'] = this.allocateKey();
+                return React.createElement(node.name, attributes, children);
+            }
+            else {
+                return children ? <React.Fragment key={this.allocateKey()}>{children}</React.Fragment> : undefined;
+            }
+        }
+        else {
+            return undefined;
+        }
+    }
 
-	private filterAttributes(nodeName: string, attributes: Record<string, string>) {
-		const result: Record<string, string> = {};
-		for (const [ attribute, value ] of Object.entries(attributes)) {
-			if (this.isAttributeAllowed(nodeName, attribute)) {
-				result[attribute === 'class' ? 'className' : attribute] = value;
-			}
-		}
-		return result;
-	}
+    private filterAttributes(nodeName: string, attributes: Record<string, string>) {
+        const result: Record<string, string> = {};
+        for (const [ attribute, value ] of Object.entries(attributes)) {
+            if (this.isAttributeAllowed(nodeName, attribute)) {
+                result[attribute === 'class' ? 'className' : attribute] = value;
+            }
+        }
+        return result;
+    }
 
-	private isAttributeAllowed(nodeName: string, attribute: string) {
-		if (attribute === 'key' || attribute === 'ref' || attribute === 'className') { // Those attributes are always forbidden.
-			return false;
-		}
-		const allowedAttributesForCurrent = this.#allowedAttributes.get(nodeName);
-		if (allowedAttributesForCurrent && allowedAttributesForCurrent.has(attribute)) {
-			return true;
-		}
-		const allowedAttributesForAll = this.#allowedAttributes.get('*');
-		if (allowedAttributesForAll && allowedAttributesForAll.has(attribute)) {
-			return true;
-		}
-		return false;
-	}
+    private isAttributeAllowed(nodeName: string, attribute: string) {
+        if (attribute === 'key' || attribute === 'ref' || attribute === 'className') { // Those attributes are always forbidden.
+            return false;
+        }
+        const allowedAttributesForCurrent = this.#allowedAttributes.get(nodeName);
+        if (allowedAttributesForCurrent && allowedAttributesForCurrent.has(attribute)) {
+            return true;
+        }
+        const allowedAttributesForAll = this.#allowedAttributes.get('*');
+        if (allowedAttributesForAll && allowedAttributesForAll.has(attribute)) {
+            return true;
+        }
+        return false;
+    }
 
-	private allocateKey() {
-		return 'auto-' + (this.#keyCounter++);
-	}
+    private allocateKey() {
+        return 'auto-' + (this.#keyCounter++);
+    }
 
 }

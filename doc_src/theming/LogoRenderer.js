@@ -31,22 +31,22 @@ import './theming.css';
 /* eslint-disable react/prop-types */
 
 const styles = ({ color, fontFamily, fontSize }) => ({
-	logo: {
-		color: color.base,
-		margin: 0,
-		fontFamily: fontFamily.base,
-		fontSize: fontSize.h4,
-		fontWeight: 'normal',
-	},
+    logo: {
+        color: color.base,
+        margin: 0,
+        fontFamily: fontFamily.base,
+        fontSize: fontSize.h4,
+        fontWeight: 'normal',
+    },
 });
 
 function LogoRenderer({ classes, children }) {
-	return (<>
-		<div className="kokopu-logo">
-			<img src="kokopu-react-logo.png" />
-		</div>
-		<h1 className={classes.logo}>{children}</h1>
-	</>);
+    return (<>
+        <div className="kokopu-logo">
+            <img src="kokopu-react-logo.png" />
+        </div>
+        <h1 className={classes.logo}>{children}</h1>
+    </>);
 }
 
 export default Styled(styles)(LogoRenderer);

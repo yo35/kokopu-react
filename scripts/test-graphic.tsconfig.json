@@ -1,7 +1,7 @@
 {
-	"extends": "../tsconfig.json",
-	"include": [ "../test/graphic_test_app/**/*" ],
-	"compilerOptions": {
-		"declaration": false
-	}
+    "extends": "../tsconfig.json",
+    "include": [ "../test/graphic_test_app/**/*" ],
+    "compilerOptions": {
+        "declaration": false
+    }
 }

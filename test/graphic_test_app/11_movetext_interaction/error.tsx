@@ -29,5 +29,5 @@ import { Movetext } from '../../../dist/lib/index';
 import pgn from '../common/games.pgn';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<Movetext game={pgn} gameIndex={7} interactionMode={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'whatever' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Movetext game={pgn} gameIndex={7} interactionMode={ /* eslint-disable @typescript-eslint/no-explicit-any */ 'whatever' as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
 ], 'width-600'); /* eslint-enable react/jsx-key */

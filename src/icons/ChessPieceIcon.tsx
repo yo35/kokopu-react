@@ -32,25 +32,25 @@ import { piecesets, DEFAULT_PIECESET } from '../chessboard/piecesets';
 
 export interface ChessPieceIconProps {
 
-	/**
-	 * Width and height (in pixels) of each chess piece icon.
-	 */
-	size: number;
+    /**
+     * Width and height (in pixels) of each chess piece icon.
+     */
+    size: number;
 
-	/**
-	 * Chess piece(s) to display.
-	 */
-	type: ChessPieceIconType | ChessPieceIconType[];
+    /**
+     * Chess piece(s) to display.
+     */
+    type: ChessPieceIconType | ChessPieceIconType[];
 
-	/**
-	 * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
-	 */
-	pieceset: string;
+    /**
+     * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
+     */
+    pieceset: string;
 }
 
 
 const defaultProps: Partial<ChessPieceIconProps> = {
-	pieceset: DEFAULT_PIECESET,
+    pieceset: DEFAULT_PIECESET,
 };
 
 
@@ -59,22 +59,22 @@ const defaultProps: Partial<ChessPieceIconProps> = {
  */
 export function ChessPieceIcon({ size, type, pieceset }: ChessPieceIconProps) {
 
-	// Sanitize the inputs.
-	size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ChessPieceIcon', 'size'));
-	const types = sanitizeChessPieceIconType(type, () => new IllegalArgument('ChessPieceIcon', 'type'));
-	const piecesetData = piecesets[pieceset];
-	if (!piecesetData) {
-		throw new IllegalArgument('ChessPieceIcon', 'pieceset');
-	}
+    // Sanitize the inputs.
+    size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ChessPieceIcon', 'size'));
+    const types = sanitizeChessPieceIconType(type, () => new IllegalArgument('ChessPieceIcon', 'type'));
+    const piecesetData = piecesets[pieceset];
+    if (!piecesetData) {
+        throw new IllegalArgument('ChessPieceIcon', 'pieceset');
+    }
 
-	// Render the component.
-	const width = size * types.length;
-	const viewBox = `0 0 ${width} ${size}`;
-	return (
-		<svg className="kokopu-chessPieceIcon" viewBox={viewBox} width={width} height={size}>
-			{types.map((t, i) => <image key={i} x={i * size} y={0} width={size} height={size} href={piecesetData[t]} />)}
-		</svg>
-	);
+    // Render the component.
+    const width = size * types.length;
+    const viewBox = `0 0 ${width} ${size}`;
+    return (
+        <svg className="kokopu-chessPieceIcon" viewBox={viewBox} width={width} height={size}>
+            {types.map((t, i) => <image key={i} x={i * size} y={0} width={size} height={size} href={piecesetData[t]} />)}
+        </svg>
+    );
 }
 
 ChessPieceIcon.defaultProps = defaultProps;
@@ -84,18 +84,18 @@ ChessPieceIcon.defaultProps = defaultProps;
  * Sanitization method for the small-screen limits parameter.
  */
 function sanitizeChessPieceIconType(type: ChessPieceIconType | ChessPieceIconType[], exceptionBuilder: () => IllegalArgument): ChessPieceIconType[] {
-	if (Array.isArray(type)) {
-		return type.map(t => {
-			if (!isChessPieceIconType(t)) {
-				throw exceptionBuilder();
-			}
-			return t;
-		});
-	}
-	else if (isChessPieceIconType(type)) {
-		return [ type ];
-	}
-	else {
-		throw exceptionBuilder();
-	}
+    if (Array.isArray(type)) {
+        return type.map(t => {
+            if (!isChessPieceIconType(t)) {
+                throw exceptionBuilder();
+            }
+            return t;
+        });
+    }
+    else if (isChessPieceIconType(type)) {
+        return [ type ];
+    }
+    else {
+        throw exceptionBuilder();
+    }
 }

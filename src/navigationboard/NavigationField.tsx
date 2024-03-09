@@ -30,11 +30,11 @@ import './NavigationField.css';
 
 
 interface NavigationFieldProps {
-	onFirstPressed?: () => void;
-	onPreviousPressed?: () => void;
-	onNextPressed?: () => void;
-	onLastPressed?: () => void;
-	onExitPressed?: () => void;
+    onFirstPressed?: () => void;
+    onPreviousPressed?: () => void;
+    onNextPressed?: () => void;
+    onLastPressed?: () => void;
+    onExitPressed?: () => void;
 }
 
 
@@ -43,53 +43,53 @@ interface NavigationFieldProps {
  */
 export class NavigationField extends React.Component<NavigationFieldProps> {
 
-	private focusFieldRef: React.RefObject<HTMLAnchorElement> = React.createRef();
+    private focusFieldRef: React.RefObject<HTMLAnchorElement> = React.createRef();
 
-	render() {
-		return (
-			<div className="kokopu-focusFieldContainer">
-				<a className="kokopu-focusField" href="#" ref={this.focusFieldRef} onKeyDown={evt => this.handleKeyDown(evt)}></a>
-			</div>
-		);
-	}
+    render() {
+        return (
+            <div className="kokopu-focusFieldContainer">
+                <a className="kokopu-focusField" href="#" ref={this.focusFieldRef} onKeyDown={evt => this.handleKeyDown(evt)}></a>
+            </div>
+        );
+    }
 
-	private handleKeyDown(evt: React.KeyboardEvent<HTMLAnchorElement>) {
-		/* eslint-disable no-unused-expressions */
-		doHandleKeyDown(evt, 'Home', this.props.onFirstPressed) ||
-		doHandleKeyDown(evt, 'ArrowLeft', this.props.onPreviousPressed) ||
-		doHandleKeyDown(evt, 'ArrowRight', this.props.onNextPressed) ||
-		doHandleKeyDown(evt, 'End', this.props.onLastPressed) ||
-		doHandleKeyDown(evt, 'Escape', this.props.onExitPressed);
-		/* eslint-enable */
-	}
+    private handleKeyDown(evt: React.KeyboardEvent<HTMLAnchorElement>) {
+        /* eslint-disable no-unused-expressions */
+        doHandleKeyDown(evt, 'Home', this.props.onFirstPressed) ||
+        doHandleKeyDown(evt, 'ArrowLeft', this.props.onPreviousPressed) ||
+        doHandleKeyDown(evt, 'ArrowRight', this.props.onNextPressed) ||
+        doHandleKeyDown(evt, 'End', this.props.onLastPressed) ||
+        doHandleKeyDown(evt, 'Escape', this.props.onExitPressed);
+        /* eslint-enable */
+    }
 
-	/**
-	 * Set the focus to the component.
-	 */
-	focus(): void {
-		const target = this.focusFieldRef.current;
-		// istanbul ignore else
-		if (target) {
-			target.focus();
-		}
-	}
+    /**
+     * Set the focus to the component.
+     */
+    focus(): void {
+        const target = this.focusFieldRef.current;
+        // istanbul ignore else
+        if (target) {
+            target.focus();
+        }
+    }
 
 }
 
 
 function doHandleKeyDown(evt: React.KeyboardEvent<HTMLAnchorElement>, targetKey: string, targetCallback: (() => void) | undefined) {
 
-	// Skip if the pressed key does not match the target key.
-	if (evt.key !== targetKey) {
-		return false;
-	}
+    // Skip if the pressed key does not match the target key.
+    if (evt.key !== targetKey) {
+        return false;
+    }
 
-	// Otherwise, invoke the callback.
-	if (targetCallback) {
-		evt.preventDefault();
-		targetCallback();
-	}
-	return true;
+    // Otherwise, invoke the callback.
+    if (targetCallback) {
+        evt.preventDefault();
+        targetCallback();
+    }
+    return true;
 }
 
 
@@ -102,10 +102,10 @@ function doHandleKeyDown(evt: React.KeyboardEvent<HTMLAnchorElement>, targetKey:
  * @public
  */
 export function firstNodeId(game: Game, selection: string): string | undefined {
-	if (!game.findById(selection)) {
-		return undefined;
-	}
-	return selection === 'start' ? undefined : 'start';
+    if (!game.findById(selection)) {
+        return undefined;
+    }
+    return selection === 'start' ? undefined : 'start';
 }
 
 
@@ -118,24 +118,24 @@ export function firstNodeId(game: Game, selection: string): string | undefined {
  * @public
  */
 export function previousNodeId(game: Game, selection: string): string | undefined {
-	let currentNode = game.findById(selection);
-	if (!currentNode) {
-		return undefined;
-	}
-	if (currentNode instanceof Variation) {
-		currentNode = currentNode.parentNode();
-		if (!currentNode) {
-			return undefined; // This case corresponds to the first variation being selected initially.
-		}
-	}
-	while (currentNode) {
-		const previousNode = currentNode.previous();
-		if (previousNode) {
-			return previousNode.id();
-		}
-		currentNode = currentNode.parentVariation().parentNode();
-	}
-	return 'start';
+    let currentNode = game.findById(selection);
+    if (!currentNode) {
+        return undefined;
+    }
+    if (currentNode instanceof Variation) {
+        currentNode = currentNode.parentNode();
+        if (!currentNode) {
+            return undefined; // This case corresponds to the first variation being selected initially.
+        }
+    }
+    while (currentNode) {
+        const previousNode = currentNode.previous();
+        if (previousNode) {
+            return previousNode.id();
+        }
+        currentNode = currentNode.parentVariation().parentNode();
+    }
+    return 'start';
 }
 
 
@@ -148,12 +148,12 @@ export function previousNodeId(game: Game, selection: string): string | undefine
  * @public
  */
 export function nextNodeId(game: Game, selection: string): string | undefined {
-	const currentNode = game.findById(selection);
-	if (!currentNode) {
-		return undefined;
-	}
-	const nextNode = currentNode instanceof Variation ? currentNode.first() : currentNode.next();
-	return nextNode ? nextNode.id() : undefined;
+    const currentNode = game.findById(selection);
+    if (!currentNode) {
+        return undefined;
+    }
+    const nextNode = currentNode instanceof Variation ? currentNode.first() : currentNode.next();
+    return nextNode ? nextNode.id() : undefined;
 }
 
 
@@ -166,20 +166,20 @@ export function nextNodeId(game: Game, selection: string): string | undefined {
  * @public
  */
 export function lastNodeId(game: Game, selection: string): string | undefined {
-	let currentNode = game.findById(selection);
-	if (!currentNode) {
-		return undefined;
-	}
-	currentNode = currentNode instanceof Variation ? currentNode.first() : currentNode.next();
-	if (!currentNode) { // Ensure that the input node is not already the last one.
-		return undefined;
-	}
-	let currentNodeNotNull = currentNode;
-	while (true) {
-		const nextNode = currentNodeNotNull.next();
-		if (!nextNode) {
-			return currentNodeNotNull.id();
-		}
-		currentNodeNotNull = nextNode;
-	}
+    let currentNode = game.findById(selection);
+    if (!currentNode) {
+        return undefined;
+    }
+    currentNode = currentNode instanceof Variation ? currentNode.first() : currentNode.next();
+    if (!currentNode) { // Ensure that the input node is not already the last one.
+        return undefined;
+    }
+    let currentNodeNotNull = currentNode;
+    while (true) {
+        const nextNode = currentNodeNotNull.next();
+        if (!nextNode) {
+            return currentNodeNotNull.id();
+        }
+        currentNodeNotNull = nextNode;
+    }
 }

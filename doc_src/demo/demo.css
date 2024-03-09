@@ -23,25 +23,25 @@
 
 
 .kokopu-demoCode {
-	border: 1px solid rgb(232, 232, 232);
-	border-radius: 3px;
-	background-color: rgb(245, 245, 245);
-	font-size: 13px;
-	padding: 16px;
-	white-space: pre-wrap;
+    border: 1px solid rgb(232, 232, 232);
+    border-radius: 3px;
+    background-color: rgb(245, 245, 245);
+    font-size: 13px;
+    padding: 16px;
+    white-space: pre-wrap;
 }
 
 .MuiToggleButton-root.kokopu-fixTextTransform {
-	text-transform: none;
+    text-transform: none;
 }
 
 .MuiToggleButton-root.Mui-disabled.kokopu-fixOpacity .kokopu-arrowMarkerIcon {
-	opacity: 0.3;
+    opacity: 0.3;
 }
 
 .kokopu-fixedPopup {
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	padding: 10px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px;
 }

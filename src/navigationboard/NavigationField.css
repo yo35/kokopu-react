@@ -23,14 +23,14 @@
 
 
 .kokopu-focusFieldContainer {
-	position: fixed;
-	bottom: 0px;
-	right: 0px;
-	width: 0px;
-	height: 0px;
-	overflow: hidden;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
 }
 
 .kokopu-focusField {
-	position: absolute; /* see #1 */
+    position: absolute; /* see #1 */
 }

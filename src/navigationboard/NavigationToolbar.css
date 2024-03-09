@@ -23,29 +23,29 @@
 
 
 .kokopu-navigationBoard {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .kokopu-navigationToolbar {
-	line-height: 0px;
+    line-height: 0px;
 }
 
 .kokopu-navigationButton {
-	display: inline-block;
-	cursor: pointer;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .kokopu-navigationButton:hover {
-	opacity: 0.6;
+    opacity: 0.6;
 }
 
 * + .kokopu-navigationButton {
-	margin-left: 2px;
+    margin-left: 2px;
 }
 
 .kokopu-navigationSpacer {
-	display: inline-block;
-	width: 10px;
+    display: inline-block;
+    width: 10px;
 }

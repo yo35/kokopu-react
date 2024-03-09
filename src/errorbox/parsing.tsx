@@ -36,34 +36,34 @@ import { ErrorBox } from './ErrorBox';
  * Try to interpret the given object as a chess position.
  */
 export function parsePosition(position: Position | string, componentName: string):
-	{ error: true, errorBox: JSX.Element } | { error: false, position: Position }
+    { error: true, errorBox: JSX.Element } | { error: false, position: Position }
 {
-	if (position instanceof Position) {
-		return { error: false, position: position };
-	}
-	else if (position === 'start' || position === 'empty') {
-		return { error: false, position: new Position(position) };
-	}
-	else if (typeof position === 'string') {
-		try {
-			const { variant, fen } = splitGameVariantAndFEN(position);
-			const result = new Position(variant, 'empty');
-			result.fen(fen);
-			return { error: false, position: result };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopuException.InvalidFEN) {
-				return { error: true, errorBox: <ErrorBox title={i18n.INVALID_FEN_ERROR_TITLE} message={e.message} /> };
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-	else {
-		throw new IllegalArgument(componentName, 'position');
-	}
+    if (position instanceof Position) {
+        return { error: false, position: position };
+    }
+    else if (position === 'start' || position === 'empty') {
+        return { error: false, position: new Position(position) };
+    }
+    else if (typeof position === 'string') {
+        try {
+            const { variant, fen } = splitGameVariantAndFEN(position);
+            const result = new Position(variant, 'empty');
+            result.fen(fen);
+            return { error: false, position: result };
+        }
+        catch (e) {
+            // istanbul ignore else
+            if (e instanceof kokopuException.InvalidFEN) {
+                return { error: true, errorBox: <ErrorBox title={i18n.INVALID_FEN_ERROR_TITLE} message={e.message} /> };
+            }
+            else {
+                throw e;
+            }
+        }
+    }
+    else {
+        throw new IllegalArgument(componentName, 'position');
+    }
 }
 
 
@@ -71,12 +71,12 @@ export function parsePosition(position: Position | string, componentName: string
  * Look for an optional 'chess-variant:' prefix in the position attribute.
  */
 function splitGameVariantAndFEN(position: string): { variant: GameVariant, fen: string } {
-	const separatorIndex = position.indexOf(':');
-	if (separatorIndex < 0) {
-		return { variant: 'regular', fen: position };
-	}
-	const variant = position.substring(0, separatorIndex);
-	return isGameVariant(variant) ? { variant: variant, fen: position.substring(separatorIndex + 1) } : { variant: 'regular', fen: position };
+    const separatorIndex = position.indexOf(':');
+    if (separatorIndex < 0) {
+        return { variant: 'regular', fen: position };
+    }
+    const variant = position.substring(0, separatorIndex);
+    return isGameVariant(variant) ? { variant: variant, fen: position.substring(separatorIndex + 1) } : { variant: 'regular', fen: position };
 }
 
 
@@ -84,41 +84,41 @@ function splitGameVariantAndFEN(position: string): { variant: GameVariant, fen: 
  * Try to interpret the given object `move` as a move descriptor based on the given position.
  */
 export function parseMove(position: Position, move: MoveDescriptor | string | undefined, componentName: string):
-	{ error: true, errorBox: JSX.Element } | { error: false, type: 'none' | 'null-move' } | { error: false, type: 'regular', move: MoveDescriptor }
+    { error: true, errorBox: JSX.Element } | { error: false, type: 'none' | 'null-move' } | { error: false, type: 'regular', move: MoveDescriptor }
 {
-	if (move === undefined || move === null) {
-		return { error: false, type: 'none' };
-	}
-	else if (move instanceof MoveDescriptor) {
-		return { error: false, type: 'regular', move: move };
-	}
-	else if (typeof move === 'string') {
-		if (move === '--') {
-			if (position.isNullMoveLegal()) {
-				return { error: false, type: 'null-move' };
-			}
-			else {
-				return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={kokopuI18n.ILLEGAL_NULL_MOVE} /> };
-			}
-		}
-		else {
-			try {
-				return { error: false, type: 'regular', move: position.notation(move) };
-			}
-			catch (e) {
-				// istanbul ignore else
-				if (e instanceof kokopuException.InvalidNotation) {
-					return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={e.message} /> };
-				}
-				else {
-					throw e;
-				}
-			}
-		}
-	}
-	else {
-		throw new IllegalArgument(componentName, 'move');
-	}
+    if (move === undefined || move === null) {
+        return { error: false, type: 'none' };
+    }
+    else if (move instanceof MoveDescriptor) {
+        return { error: false, type: 'regular', move: move };
+    }
+    else if (typeof move === 'string') {
+        if (move === '--') {
+            if (position.isNullMoveLegal()) {
+                return { error: false, type: 'null-move' };
+            }
+            else {
+                return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={kokopuI18n.ILLEGAL_NULL_MOVE} /> };
+            }
+        }
+        else {
+            try {
+                return { error: false, type: 'regular', move: position.notation(move) };
+            }
+            catch (e) {
+                // istanbul ignore else
+                if (e instanceof kokopuException.InvalidNotation) {
+                    return { error: true, errorBox: <ErrorBox title={i18n.INVALID_NOTATION_ERROR_TITLE} message={e.message} /> };
+                }
+                else {
+                    throw e;
+                }
+            }
+        }
+    }
+    else {
+        throw new IllegalArgument(componentName, 'move');
+    }
 }
 
 
@@ -126,33 +126,33 @@ export function parseMove(position: Position, move: MoveDescriptor | string | un
  * Try to interpret the given object as a chess game.
  */
 export function parseGame(game: Game | Database | string, gameIndex: number, componentName: string):
-	{ error: true, errorBox: JSX.Element } | { error: false, game: Game }
+    { error: true, errorBox: JSX.Element } | { error: false, game: Game }
 {
-	if (game instanceof Game) {
-		return { error: false, game: game };
-	}
-	else if (game instanceof Database || typeof game === 'string') {
-		if (!Number.isInteger(gameIndex) || gameIndex < 0) {
-			throw new IllegalArgument(componentName, 'gameIndex');
-		}
-		try {
-			const result = game instanceof Database ? game.game(gameIndex) : pgnRead(game, gameIndex);
-			return { error: false, game: result };
-		}
-		catch (e) {
-			// istanbul ignore else
-			if (e instanceof kokopuException.InvalidPGN) {
-				return {
-					error: true,
-					errorBox: <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={e.message} text={e.pgn} errorIndex={e.index} lineNumber={e.lineNumber} />,
-				};
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-	else {
-		throw new IllegalArgument(componentName, 'game');
-	}
+    if (game instanceof Game) {
+        return { error: false, game: game };
+    }
+    else if (game instanceof Database || typeof game === 'string') {
+        if (!Number.isInteger(gameIndex) || gameIndex < 0) {
+            throw new IllegalArgument(componentName, 'gameIndex');
+        }
+        try {
+            const result = game instanceof Database ? game.game(gameIndex) : pgnRead(game, gameIndex);
+            return { error: false, game: result };
+        }
+        catch (e) {
+            // istanbul ignore else
+            if (e instanceof kokopuException.InvalidPGN) {
+                return {
+                    error: true,
+                    errorBox: <ErrorBox title={i18n.INVALID_PGN_ERROR_TITLE} message={e.message} text={e.pgn} errorIndex={e.index} lineNumber={e.lineNumber} />,
+                };
+            }
+            else {
+                throw e;
+            }
+        }
+    }
+    else {
+        throw new IllegalArgument(componentName, 'game');
+    }
 }

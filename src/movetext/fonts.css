@@ -23,14 +23,14 @@
 
 
 @font-face {
-	font-family: 'Chess Alpha';
-	src:
-		url('./fonts/chessalpha.woff2') format('woff2'),
-		url('./fonts/chessalpha.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
+    font-family: 'Chess Alpha';
+    src:
+        url('./fonts/chessalpha.woff2') format('woff2'),
+        url('./fonts/chessalpha.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 .kokopu-font-alpha {
-	font-family: 'Chess Alpha', sans-serif;
+    font-family: 'Chess Alpha', sans-serif;
 }

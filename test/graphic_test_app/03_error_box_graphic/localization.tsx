@@ -30,5 +30,5 @@ import { ErrorBox, i18n } from '../../../dist/lib/index';
 i18n.LINE = 'ligne {0} (+ invalid placeholder {1})';
 
 testApp([ /* eslint-disable react/jsx-key */
-	<ErrorBox title="The title" message="The message" text="| x <- error is here" errorIndex={2} lineNumber={42} />,
+    <ErrorBox title="The title" message="The message" text="| x <- error is here" errorIndex={2} lineNumber={42} />,
 ]); /* eslint-enable react/jsx-key */
