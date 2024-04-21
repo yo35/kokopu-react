@@ -61,6 +61,7 @@ describeWithBrowser('Navigation board graphic', browserContext => {
         { title: 'Button A', expectedSandbox: 'Button A clicked' },
         { title: 'Button 0', expectedSandbox: 'Button A clicked' }, // No callback binded to button 0
         { title: 'Button B', expectedSandbox: 'Button B clicked' },
+        { title: 'Button C', expectedSandbox: 'Button B clicked' }, // Callback is not supposed to be invoked since button C is disabled.
     ]);
 
 });

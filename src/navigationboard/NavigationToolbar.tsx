@@ -88,8 +88,11 @@ interface NavigationButtonImplProps extends NavigationButton {
 function NavigationButtonImpl({ size, spaceOnLeft, spaceOnRight, iconPath, tooltip, enabled, onClick }: NavigationButtonImplProps) {
     const leftBoundary = spaceOnLeft ? 'A 16 16 0 0 0 16 32' : 'L 1 0 L 1 32 L 16 32';
     const rightBoundary = spaceOnRight ? 'A 16 16 0 0 0 16 0' : 'L 31 32 L 31 0 L 16 0';
+    const actuallyEnabled = enabled ?? true;
     return (
-        <div className={(enabled ?? true) ? 'kokopu-enabledNavigationButton' : 'kokopu-disabledNavigationButton'} title={tooltip} onClick={onClick}>
+        <div className={actuallyEnabled ? 'kokopu-enabledNavigationButton' : 'kokopu-disabledNavigationButton'} title={tooltip}
+            onClick={actuallyEnabled ? onClick : undefined}
+        >
             <svg viewBox="0 0 32 32" width={size} height={size}>
                 <path d={`M 16 0 ${leftBoundary} ${rightBoundary} Z ${iconPath}`} fill="currentcolor" />
             </svg>
