@@ -41,11 +41,6 @@
     opacity: 0.6;
 }
 
-* + .kokopu-navigationButton {
-    margin-left: 2px;
-}
-
 .kokopu-navigationSpacer {
     display: inline-block;
-    width: 10px;
 }

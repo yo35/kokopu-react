@@ -41,6 +41,7 @@ interface NavigationToolbarProps {
 export function NavigationToolbar({ squareSize, buttons }: NavigationToolbarProps) {
 
     const buttonSize = computeButtonSize(squareSize);
+    const spacerSize = computeSpacerSize(squareSize);
     const buttonNodes: React.ReactNode[] = [];
 
     let atLeastOneButtonEncountered = false;
@@ -56,14 +57,18 @@ export function NavigationToolbar({ squareSize, buttons }: NavigationToolbarProp
         // Enqueue a spacer if necessary.
         // Remark: consecutive spacers are collapsed into a single one for rendering, and spacers at the begin and end of the button list are not rendered.
         if (atLeastOneButtonEncountered && buttons[i - 1] === 'spacer') {
-            buttonNodes.push(<div key={buttonNodes.length} className="kokopu-navigationSpacer" />);
+            buttonNodes.push(<div key={buttonNodes.length} className="kokopu-navigationSpacer" style={{ width: spacerSize }} />);
         }
         atLeastOneButtonEncountered = true;
 
         // Enqueue the button node.
-        buttonNodes.push(
-            <NavigationButtonImpl key={buttonNodes.length} size={buttonSize} tooltip={button.tooltip} iconPath={button.iconPath} onClick={button.onClick} />
-        );
+        buttonNodes.push(<NavigationButtonImpl
+            key={buttonNodes.length}
+            tooltip={button.tooltip} iconPath={button.iconPath} onClick={button.onClick}
+            size={buttonSize}
+            spaceOnLeft={i === 0 || buttons[i - 1] === 'spacer'}
+            spaceOnRight={i === buttons.length - 1 || buttons[i + 1] === 'spacer'}
+        />);
     }
 
     return <div className="kokopu-navigationToolbar" style={{ marginTop: Math.round(buttonSize / 4) }}>{buttonNodes}</div>;
@@ -72,17 +77,21 @@ export function NavigationToolbar({ squareSize, buttons }: NavigationToolbarProp
 
 interface NavigationButtonImplProps extends NavigationButton {
     size: number;
+    spaceOnLeft: boolean;
+    spaceOnRight: boolean;
 }
 
 
 /**
  * Button for the navigation toolbar.
  */
-function NavigationButtonImpl({ size, tooltip, iconPath, onClick }: NavigationButtonImplProps) {
+function NavigationButtonImpl({ size, spaceOnLeft, spaceOnRight, tooltip, iconPath, onClick }: NavigationButtonImplProps) {
+    const leftBoundary = spaceOnLeft ? 'A 16 16 0 0 0 16 32' : 'L 1 0 L 1 32 L 16 32';
+    const rightBoundary = spaceOnRight ? 'A 16 16 0 0 0 16 0' : 'L 31 32 L 31 0 L 16 0';
     return (
         <div className="kokopu-navigationButton" title={tooltip} onClick={onClick}>
             <svg viewBox="0 0 32 32" width={size} height={size}>
-                <path d={`M 16 0 A 16 16 0 0 0 16 32 A 16 16 0 0 0 16 0 Z ${iconPath}`} fill="currentcolor" />
+                <path d={`M 16 0 ${leftBoundary} ${rightBoundary} Z ${iconPath}`} fill="currentcolor" />
             </svg>
         </div>
     );
@@ -94,4 +103,12 @@ function NavigationButtonImpl({ size, tooltip, iconPath, onClick }: NavigationBu
  */
 function computeButtonSize(squareSize: number) {
     return Math.round((squareSize * 2 + 116) / 7);
+}
+
+
+/**
+ * Return the width of the spacer between button groups, assuming the given square size.
+ */
+function computeSpacerSize(squareSize: number) {
+    return Math.round((squareSize * 2 + 116) / 14);
 }
