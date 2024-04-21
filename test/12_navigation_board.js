@@ -165,4 +165,27 @@ describeWithBrowser('Navigation board graphic', browserContext => {
         'custom 2',
     ]);
 
+    itChecksScreenshots(browserContext, '12_navigation_board/additional_buttons', [
+        'single button',
+        'multiple buttons',
+        'error',
+    ]);
+
+    function itCheckClickButton(itemIndex, label, buttons) {
+        itCustom(browserContext, '12_navigation_board/additional_buttons', itemIndex, label, async element => {
+            await setSandbox(browserContext, '');
+            for (let i = 0; i < buttons.length; ++i) {
+                const buttonElement = await element.findElement(By.xpath(`.//div[@title='${buttons[i].title}']`));
+                await buttonElement.click();
+                await compareSandbox(browserContext, buttons[i].expectedSandbox ?? '');
+            }
+        });
+    }
+
+    itCheckClickButton(1, 'click on additional buttons', [
+        { title: 'Button A', expectedSandbox: 'Button A clicked' },
+        { title: 'Button 0', expectedSandbox: 'Button A clicked' }, // No callback binded to button 0
+        { title: 'Button B', expectedSandbox: 'Button B clicked' },
+    ]);
+
 });

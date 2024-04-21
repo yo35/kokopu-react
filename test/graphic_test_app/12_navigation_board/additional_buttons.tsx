@@ -22,26 +22,21 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+import * as React from 'react';
+import { setSandbox, testApp } from '../common/test_app';
+import { NavigationBoard } from '../../../dist/lib/index';
 
-export { ChessPieceIconType, Colorset, Pieceset, PieceSymbolMapping, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
-    isChessPieceIconType, isPieceSymbolMapping, isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers,
-    parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+import pgn from '../common/games.pgn';
 
-export { ErrorBox, ErrorBoxProps } from './errorbox/ErrorBox';
-
-export { SquareMarkerIcon, SquareMarkerIconProps } from './icons/SquareMarkerIcon';
-export { TextMarkerIcon, TextMarkerIconProps } from './icons/TextMarkerIcon';
-export { ArrowMarkerIcon, ArrowMarkerIconProps } from './icons/ArrowMarkerIcon';
-export { ChessPieceIcon, ChessPieceIconProps } from './icons/ChessPieceIcon';
-
-export { SmallScreenLimit } from './chessboard/BoardProperties';
-export { Chessboard, ChessboardProps } from './chessboard/Chessboard';
-
-export { formatMove, moveFormatter } from './movetext/moveFormatter';
-export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';
-
-export { NavigationButton, NavigationButtonList, isNavigationButton } from './navigationboard/NavigationButton';
-export { firstNodeId, previousNodeId, nextNodeId, lastNodeId } from './navigationboard/NavigationField';
-export { NavigationBoard, NavigationBoardProps } from './navigationboard/NavigationBoard';
+testApp([ /* eslint-disable react/jsx-key */
+    <NavigationBoard game={pgn} additionalButtons={{ iconPath: 'M 11 11 H 21 V 21 H 11 Z' }} />,
+    <NavigationBoard game={pgn} additionalButtons={[
+        { iconPath: 'M 11 11 H 21 V 21 H 11 Z', tooltip: 'Button 0' },
+        { iconPath: 'M 9 16 L 16 9 L 23 16 L 16 23 Z', tooltip: 'Button A', onClick: () => setSandbox('Button A clicked') },
+        'spacer',
+        { iconPath: 'M 16 22 L 10 11 H 22 Z', tooltip: 'Button B', onClick: () => setSandbox('Button B clicked') },
+    ]} />,
+    <NavigationBoard game={pgn} additionalButtons={
+        /* eslint-disable @typescript-eslint/no-explicit-any */ 'not a button' as any /* eslint-enable @typescript-eslint/no-explicit-any */
+    } />,
+]); /* eslint-enable react/jsx-key */

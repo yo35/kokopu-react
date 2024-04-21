@@ -22,26 +22,45 @@
  * -------------------------------------------------------------------------- */
 
 
-export { i18n } from './i18n';
-export * as exception from './exception';
+/**
+ * Descriptor for additional buttons to be added to the toolbar of {@link NavigationBoard}.
+ */
+export type NavigationButton = {
 
-export { ChessPieceIconType, Colorset, Pieceset, PieceSymbolMapping, AnnotationColor, AnnotationSymbol, SquareMarkerSet, TextMarkerSet, ArrowMarkerSet,
-    isChessPieceIconType, isPieceSymbolMapping, isAnnotationColor, isAnnotationSymbol, flattenSquareMarkers, flattenTextMarkers, flattenArrowMarkers,
-    parseSquareMarkers, parseTextMarkers, parseArrowMarkers } from './types';
+    /**
+     * Button icon, defined as a SVG path (see https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands for more details
+     * on how to define a SVG path).
+     *
+     * The path is rendered within 32 x 32 viewbox (defined as `viewbox="0 0 32 32"`). It must be be a closed path, and must fit within the viewbox incircle.
+     */
+    iconPath: string;
 
-export { ErrorBox, ErrorBoxProps } from './errorbox/ErrorBox';
+    /**
+     * Human-readable tooltip.
+     */
+    tooltip?: string;
 
-export { SquareMarkerIcon, SquareMarkerIconProps } from './icons/SquareMarkerIcon';
-export { TextMarkerIcon, TextMarkerIconProps } from './icons/TextMarkerIcon';
-export { ArrowMarkerIcon, ArrowMarkerIconProps } from './icons/ArrowMarkerIcon';
-export { ChessPieceIcon, ChessPieceIconProps } from './icons/ChessPieceIcon';
+    /**
+     * Callback invoked when the user clicks on the button.
+     */
+    onClick?: () => void;
+};
 
-export { SmallScreenLimit } from './chessboard/BoardProperties';
-export { Chessboard, ChessboardProps } from './chessboard/Chessboard';
 
-export { formatMove, moveFormatter } from './movetext/moveFormatter';
-export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';
+/**
+ * List of additional buttons to be added to the toolbar of {@link NavigationBoard}, together with optional spacers in-between.
+ */
+export type NavigationButtonList = (NavigationButton | 'spacer')[];
 
-export { NavigationButton, NavigationButtonList, isNavigationButton } from './navigationboard/NavigationButton';
-export { firstNodeId, previousNodeId, nextNodeId, lastNodeId } from './navigationboard/NavigationField';
-export { NavigationBoard, NavigationBoardProps } from './navigationboard/NavigationBoard';
+
+/**
+ * Whether the given object is a {@link NavigationButton} or not.
+ */
+export function isNavigationButton(button: unknown): button is NavigationButton {
+    if (typeof button !== 'object' || button === null) {
+        return false;
+    }
+    return typeof (button as NavigationButton).iconPath === 'string' &&
+        ((button as NavigationButton).tooltip === undefined || typeof (button as NavigationButton).tooltip === 'string') &&
+        ((button as NavigationButton).onClick === undefined || typeof (button as NavigationButton).onClick === 'function');
+}

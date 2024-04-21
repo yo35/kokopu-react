@@ -26,12 +26,16 @@ import * as React from 'react';
 
 import { Database, Game, Node as GameNode, Variation } from 'kokopu';
 
+import { IllegalArgument } from '../exception';
+import { i18n } from '../i18n';
 import { sanitizeBoolean, sanitizeOptional, sanitizeString } from '../sanitization';
 
 import { DynamicBoardGraphicProps, defaultDynamicBoardProps } from '../chessboard/BoardProperties';
 import { Chessboard } from '../chessboard/Chessboard';
 import { parseGame } from '../errorbox/parsing';
 import { NavigationField, firstNodeId, previousNodeId, nextNodeId, lastNodeId } from '../navigationboard/NavigationField';
+import { GO_FIRST_ICON_PATH, GO_PREVIOUS_ICON_PATH, GO_NEXT_ICON_PATH, GO_LAST_ICON_PATH, FLIP_ICON_PATH } from './iconPaths';
+import { NavigationButton, NavigationButtonList, isNavigationButton } from './NavigationButton';
 import { NavigationToolbar } from './NavigationToolbar';
 
 
@@ -96,6 +100,11 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
      * Whether the flip button is visible or not in the toolbar.
      */
     flipButtonVisible: boolean;
+
+    /**
+     * Additional buttons to be added to the toolbar.
+     */
+    additionalButtons: NavigationButton | NavigationButtonList;
 }
 
 
@@ -117,6 +126,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         initialNodeId: 'start',
         initialFlipped: false,
         flipButtonVisible: true,
+        additionalButtons: [],
     };
 
     private navigationFieldRef: React.RefObject<NavigationField> = React.createRef();
@@ -181,14 +191,26 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
     }
 
     private renderToolbar(game: Game, currentNodeId: string, squareSize: number) {
-        const flipButtonVisible = sanitizeBoolean(this.props.flipButtonVisible);
-        return <NavigationToolbar flipButtonVisible={flipButtonVisible} squareSize={squareSize}
-            onFirstClicked={() => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId))}
-            onPreviousClicked={() => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId))}
-            onNextClicked={() => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId))}
-            onLastClicked={() => this.handleNavigationButtonClicked(lastNodeId(game, currentNodeId))}
-            onFlipClicked={() => this.handleFlipButtonClicked()}
-        />;
+        const buttons: NavigationButtonList = [];
+
+        // Core navigation buttons
+        buttons.push({ iconPath: GO_FIRST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_FIRST, onClick: () => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId)) });
+        buttons.push({ iconPath: GO_PREVIOUS_ICON_PATH, tooltip: i18n.TOOLTIP_GO_PREVIOUS, onClick: () => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId)) });
+        buttons.push({ iconPath: GO_NEXT_ICON_PATH, tooltip: i18n.TOOLTIP_GO_NEXT, onClick: () => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId)) });
+        buttons.push({ iconPath: GO_LAST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_LAST, onClick: () => this.handleNavigationButtonClicked(lastNodeId(game, currentNodeId)) });
+        buttons.push('spacer');
+        if (this.props.flipButtonVisible) {
+            buttons.push({ iconPath: FLIP_ICON_PATH, tooltip: i18n.TOOLTIP_FLIP, onClick: () => this.handleFlipButtonClicked() });
+        }
+        buttons.push('spacer');
+
+        // Additional buttons.
+        const additionalButtons = sanitizeNavigationButtonList(this.props.additionalButtons, () => new IllegalArgument('NavigationBoard', 'additionalButtons'));
+        for (const button of additionalButtons) {
+            buttons.push(button);
+        }
+
+        return <NavigationToolbar squareSize={squareSize} buttons={buttons} />;
     }
 
     private handleNavigationButtonClicked(targetNodeId: string | undefined) {
@@ -228,4 +250,25 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         }
     }
 
+}
+
+
+/**
+ * Sanitization method for the additional button parameter.
+ */
+function sanitizeNavigationButtonList(type: NavigationButton | NavigationButtonList, exceptionBuilder: () => IllegalArgument): NavigationButtonList {
+    if (Array.isArray(type)) {
+        return type.map(t => {
+            if (t !== 'spacer' && !isNavigationButton(t)) {
+                throw exceptionBuilder();
+            }
+            return t;
+        });
+    }
+    else if (isNavigationButton(type)) {
+        return [ type ];
+    }
+    else {
+        throw exceptionBuilder();
+    }
 }
