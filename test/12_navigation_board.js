@@ -29,7 +29,7 @@ const test = require('unit.js');
 
 describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext => {
 
-    itChecksScreenshots(browserContext, '12_navigation_board/uncontrolled', [
+    itChecksScreenshots(browserContext, '12_navigation_board_base/uncontrolled', [
         'initial state default',
         'initial state at end',
         'initial state at specific ID',
@@ -38,7 +38,7 @@ describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext =
     ]);
 
     function itCheckClickButton(itemIndex, label, buttons) {
-        itCustom(browserContext, '12_navigation_board/uncontrolled', itemIndex, label, async element => {
+        itCustom(browserContext, '12_navigation_board_base/uncontrolled', itemIndex, label, async element => {
             await setSandbox(browserContext, '');
             for (let i = 0; i < buttons.length; ++i) {
                 const buttonElement = await element.findElement(By.xpath(`.//div[@title='${buttons[i].title}']`));
@@ -79,7 +79,7 @@ describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext =
     ]);
 
     function itCheckPressKey(itemIndex, label, keys) {
-        itCustom(browserContext, '12_navigation_board/uncontrolled', itemIndex, label, async element => {
+        itCustom(browserContext, '12_navigation_board_base/uncontrolled', itemIndex, label, async element => {
             await setSandbox(browserContext, '');
             const focusFieldElements = await element.findElements(By.className('kokopu-focusField'));
 
@@ -110,14 +110,14 @@ describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext =
 
 describeWithBrowser('Navigation board - Controlled behavior', browserContext => {
 
-    itChecksScreenshots(browserContext, '12_navigation_board/controlled', [
+    itChecksScreenshots(browserContext, '12_navigation_board_base/controlled', [
         'default',
         'overriding initial node ID',
         'invalid node ID',
     ]);
 
     function itCheckClickButton(itemIndex, label, buttons) {
-        itCustom(browserContext, '12_navigation_board/controlled', itemIndex, label, async element => {
+        itCustom(browserContext, '12_navigation_board_base/controlled', itemIndex, label, async element => {
             await setSandbox(browserContext, '');
             for (let i = 0; i < buttons.length; ++i) {
                 const buttonElement = await element.findElement(By.xpath(`.//div[@title='${buttons[i].title}']`));
@@ -146,46 +146,6 @@ describeWithBrowser('Navigation board - Controlled behavior', browserContext => 
     itCheckClickButton(2, 'forbidden navigation', [
         { title: 'Go to the previous move' },
         { title: 'Flip the board', expectedSandbox: 'Flip state changed: true' },
-    ]);
-
-});
-
-
-describeWithBrowser('Navigation board graphic', browserContext => {
-
-    itChecksScreenshots(browserContext, '12_navigation_board/error', [
-        'pgn parsing error',
-        'wrong game type',
-    ]);
-
-    itChecksScreenshots(browserContext, '12_navigation_board/theme', [
-        'small',
-        'large',
-        'custom 1',
-        'custom 2',
-    ]);
-
-    itChecksScreenshots(browserContext, '12_navigation_board/additional_buttons', [
-        'single button',
-        'multiple buttons',
-        'error',
-    ]);
-
-    function itCheckClickButton(itemIndex, label, buttons) {
-        itCustom(browserContext, '12_navigation_board/additional_buttons', itemIndex, label, async element => {
-            await setSandbox(browserContext, '');
-            for (let i = 0; i < buttons.length; ++i) {
-                const buttonElement = await element.findElement(By.xpath(`.//div[@title='${buttons[i].title}']`));
-                await buttonElement.click();
-                await compareSandbox(browserContext, buttons[i].expectedSandbox ?? '');
-            }
-        });
-    }
-
-    itCheckClickButton(1, 'click on additional buttons', [
-        { title: 'Button A', expectedSandbox: 'Button A clicked' },
-        { title: 'Button 0', expectedSandbox: 'Button A clicked' }, // No callback binded to button 0
-        { title: 'Button B', expectedSandbox: 'Button B clicked' },
     ]);
 
 });
