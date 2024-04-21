@@ -177,27 +177,30 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
             moveArrowVisible={this.props.moveArrowVisible}
             moveArrowColor={this.props.moveArrowColor}
             animated={this.props.animated}
-            bottomComponent={({ squareSize }) => this.renderToolbar(game, node.id(), squareSize)}
+            bottomComponent={({ squareSize }) => this.renderToolbar(game, node, squareSize)}
         />;
     }
 
     private renderNavigationField(game: Game, currentNodeId: string) {
         return <NavigationField ref={this.navigationFieldRef}
-            onFirstPressed={() => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId))}
-            onPreviousPressed={() => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId))}
-            onNextPressed={() => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId))}
-            onLastPressed={() => this.handleNavigationButtonClicked(lastNodeId(game, currentNodeId))}
+            onFirstPressed={() => this.handleNavClicked(firstNodeId(game, currentNodeId))}
+            onPreviousPressed={() => this.handleNavClicked(previousNodeId(game, currentNodeId))}
+            onNextPressed={() => this.handleNavClicked(nextNodeId(game, currentNodeId))}
+            onLastPressed={() => this.handleNavClicked(lastNodeId(game, currentNodeId))}
         />;
     }
 
-    private renderToolbar(game: Game, currentNodeId: string, squareSize: number) {
+    private renderToolbar(game: Game, node: GameNode | Variation, squareSize: number) {
         const buttons: NavigationButtonList = [];
 
         // Core navigation buttons
-        buttons.push({ iconPath: GO_FIRST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_FIRST, onClick: () => this.handleNavigationButtonClicked(firstNodeId(game, currentNodeId)) });
-        buttons.push({ iconPath: GO_PREVIOUS_ICON_PATH, tooltip: i18n.TOOLTIP_GO_PREVIOUS, onClick: () => this.handleNavigationButtonClicked(previousNodeId(game, currentNodeId)) });
-        buttons.push({ iconPath: GO_NEXT_ICON_PATH, tooltip: i18n.TOOLTIP_GO_NEXT, onClick: () => this.handleNavigationButtonClicked(nextNodeId(game, currentNodeId)) });
-        buttons.push({ iconPath: GO_LAST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_LAST, onClick: () => this.handleNavigationButtonClicked(lastNodeId(game, currentNodeId)) });
+        const currentNodeId = node.id();
+        const hasPrevious = currentNodeId !== 'start';
+        const hasNext = (node instanceof Variation ? node.first() : node.next()) !== undefined;
+        buttons.push({ iconPath: GO_FIRST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_FIRST, enabled: hasPrevious, onClick: () => this.handleNavClicked(firstNodeId(game, currentNodeId)) });
+        buttons.push({ iconPath: GO_PREVIOUS_ICON_PATH, tooltip: i18n.TOOLTIP_GO_PREVIOUS, enabled: hasPrevious, onClick: () => this.handleNavClicked(previousNodeId(game, currentNodeId)) });
+        buttons.push({ iconPath: GO_NEXT_ICON_PATH, tooltip: i18n.TOOLTIP_GO_NEXT, enabled: hasNext, onClick: () => this.handleNavClicked(nextNodeId(game, currentNodeId)) });
+        buttons.push({ iconPath: GO_LAST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_LAST, enabled: hasNext, onClick: () => this.handleNavClicked(lastNodeId(game, currentNodeId)) });
         buttons.push('spacer');
         if (this.props.flipButtonVisible) {
             buttons.push({ iconPath: FLIP_ICON_PATH, tooltip: i18n.TOOLTIP_FLIP, onClick: () => this.handleFlipButtonClicked() });
@@ -213,7 +216,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         return <NavigationToolbar squareSize={squareSize} buttons={buttons} />;
     }
 
-    private handleNavigationButtonClicked(targetNodeId: string | undefined) {
+    private handleNavClicked(targetNodeId: string | undefined) {
         this.focus();
         if (targetNodeId === undefined) {
             return;

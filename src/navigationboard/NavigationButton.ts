@@ -41,6 +41,11 @@ export type NavigationButton = {
     tooltip?: string;
 
     /**
+     * Whether or not the button is enabled (true by default).
+     */
+    enabled?: boolean;
+
+    /**
      * Callback invoked when the user clicks on the button.
      */
     onClick?: () => void;
@@ -62,5 +67,6 @@ export function isNavigationButton(button: unknown): button is NavigationButton 
     }
     return typeof (button as NavigationButton).iconPath === 'string' &&
         ((button as NavigationButton).tooltip === undefined || typeof (button as NavigationButton).tooltip === 'string') &&
+        ((button as NavigationButton).enabled === undefined || typeof (button as NavigationButton).enabled === 'boolean') &&
         ((button as NavigationButton).onClick === undefined || typeof (button as NavigationButton).onClick === 'function');
 }

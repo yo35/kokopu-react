@@ -32,13 +32,21 @@
     line-height: 0px;
 }
 
-.kokopu-navigationButton {
+.kokopu-enabledNavigationButton,
+.kokopu-disabledNavigationButton {
     display: inline-block;
+}
+
+.kokopu-enabledNavigationButton {
     cursor: pointer;
 }
 
-.kokopu-navigationButton:hover {
+.kokopu-enabledNavigationButton:hover {
     opacity: 0.6;
+}
+
+.kokopu-disabledNavigationButton {
+    opacity: 0.2;
 }
 
 .kokopu-navigationSpacer {
