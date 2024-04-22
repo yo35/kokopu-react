@@ -40,6 +40,10 @@ testApp([ /* eslint-disable react/jsx-key */
         { iconPath: 'M 16 10 L 22 21 H 10 Z', tooltip: 'Button C', enabled: false, onClick: () => setSandbox('Button C clicked') },
     ]} />,
     <NavigationBoard game={pgn} additionalButtons={
-        /* eslint-disable @typescript-eslint/no-explicit-any */ 'not a button' as any /* eslint-enable @typescript-eslint/no-explicit-any */
+        /* eslint-disable @typescript-eslint/no-explicit-any */ 'not a button nor a spacer' as any /* eslint-enable @typescript-eslint/no-explicit-any */
     } />,
+    <NavigationBoard game={pgn} additionalButtons={[
+        { iconPath: 'M 11 11 H 21 V 21 H 11 Z' },
+        /* eslint-disable @typescript-eslint/no-explicit-any */ 'not a button nor a spacer' as any /* eslint-enable @typescript-eslint/no-explicit-any */,
+    ]} />,
 ]); /* eslint-enable react/jsx-key */

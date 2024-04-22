@@ -43,7 +43,8 @@ describeWithBrowser('Navigation board graphic', browserContext => {
     itChecksScreenshots(browserContext, '13_navigation_board_graphic/additional_buttons', [
         'single button',
         'multiple buttons',
-        'error',
+        'error 1',
+        'error 2',
     ]);
 
     function itCheckClickButton(itemIndex, label, buttons) {
