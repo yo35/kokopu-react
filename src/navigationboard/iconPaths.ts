@@ -93,4 +93,6 @@ export const GO_FIRST_ICON_PATH = chevronPath(14, 16, -1) + ' ' + chevronPath(10
 export const GO_PREVIOUS_ICON_PATH = chevronPath(12, 16, -1);
 export const GO_NEXT_ICON_PATH = chevronPath(20, 16, 1);
 export const GO_LAST_ICON_PATH = chevronPath(18, 16, 1) + ' ' + chevronPath(22, 16, 1);
+export const PLAY_ICON_PATH = 'M 23 16 L 12 23 V 9 Z';
+export const STOP_ICON_PATH = 'M 11 11 H 21 V 21 H 11 Z';
 export const FLIP_ICON_PATH = arrowPath(11, 25, 1) + ' ' + arrowPath(21, 7, -1);

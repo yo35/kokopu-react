@@ -56,6 +56,7 @@ interface PageState {
     moveArrowVisible: boolean;
     moveArrowColor: AnnotationColor;
     animated: boolean;
+    playButtonVisible: boolean;
     flipButtonVisible: boolean;
 }
 
@@ -73,6 +74,7 @@ export default class Page extends React.Component<object, PageState> {
             moveArrowVisible: true,
             moveArrowColor: 'b',
             animated: true,
+            playButtonVisible: true,
             flipButtonVisible: true,
         };
     }
@@ -90,6 +92,9 @@ export default class Page extends React.Component<object, PageState> {
     private renderControls() {
         return (<>
             <Stack direction="row" spacing={2} alignItems="center">
+                <FormControlLabel label="Show play/stop button"
+                    control={<Switch checked={this.state.playButtonVisible} onChange={() => this.setState({ playButtonVisible: !this.state.playButtonVisible })} color="primary" />}
+                />
                 <FormControlLabel label="Show flip button"
                     control={<Switch checked={this.state.flipButtonVisible} onChange={() => this.setState({ flipButtonVisible: !this.state.flipButtonVisible })} color="primary" />}
                 />
@@ -160,6 +165,7 @@ export default class Page extends React.Component<object, PageState> {
                     moveArrowVisible={this.state.moveArrowVisible}
                     moveArrowColor={this.state.moveArrowColor}
                     animated={this.state.animated}
+                    playButtonVisible={this.state.playButtonVisible}
                     flipButtonVisible={this.state.flipButtonVisible}
                 />
             </Box>
@@ -180,6 +186,7 @@ export default class Page extends React.Component<object, PageState> {
             attributes.push(`moveArrowColor="${this.state.moveArrowColor}"`);
         }
         attributes.push(`animated={${this.state.animated}}`);
+        attributes.push(`playButtonVisible={${this.state.playButtonVisible}}`);
         attributes.push(`flipButtonVisible={${this.state.flipButtonVisible}}`);
         const pgnDeclaration = 'const pgn = `\n' + pgn.trim() + '`;\n\n';
         return <pre className="kokopu-demoCode">{pgnDeclaration + buildComponentDemoCode('NavigationBoard', attributes)}</pre>;

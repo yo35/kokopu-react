@@ -41,6 +41,7 @@ const UNREACHABLE_TEST_CLIENT_MESSAGE =
 
 
 const ANIMATION_DELAY = 200;
+const AUTOPLAY_DELAY = 1000;
 
 
 /**
@@ -148,6 +149,14 @@ async function fetchTestCase(browserContext, testCaseName) {
  */
 const waitForAnimation = exports.waitForAnimation = async function() {
     await new Promise(resolve => setTimeout(resolve, ANIMATION_DELAY));
+};
+
+
+/**
+ * Wait until the given number of moves have been auto-played.
+ */
+exports.waitForAutoplay = async function(nbMoves) {
+    await new Promise(resolve => setTimeout(resolve, (nbMoves + 0.5) * AUTOPLAY_DELAY));
 };
 
 

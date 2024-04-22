@@ -34,9 +34,12 @@ import { DynamicBoardGraphicProps, defaultDynamicBoardProps } from '../chessboar
 import { Chessboard } from '../chessboard/Chessboard';
 import { parseGame } from '../errorbox/parsing';
 import { NavigationField, firstNodeId, previousNodeId, nextNodeId, lastNodeId } from '../navigationboard/NavigationField';
-import { GO_FIRST_ICON_PATH, GO_PREVIOUS_ICON_PATH, GO_NEXT_ICON_PATH, GO_LAST_ICON_PATH, FLIP_ICON_PATH } from './iconPaths';
+import { GO_FIRST_ICON_PATH, GO_PREVIOUS_ICON_PATH, GO_NEXT_ICON_PATH, GO_LAST_ICON_PATH, PLAY_ICON_PATH, STOP_ICON_PATH, FLIP_ICON_PATH } from './iconPaths';
 import { NavigationButton, NavigationButtonList, isNavigationButton } from './NavigationButton';
 import { NavigationToolbar } from './NavigationToolbar';
+
+
+const INTER_MOVE_DURATION = 1000;
 
 
 export interface NavigationBoardProps extends DynamicBoardGraphicProps {
@@ -78,6 +81,25 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
     onNodeIdChanged?: (nodeId: string) => void;
 
     /**
+     * Whether auto-play is initially enabled or not.
+     * Ignored if the `isPlaying` attribute is provided.
+     */
+    initialIsPlaying: boolean;
+
+    /**
+     * Whether auto-play is enabled or not.
+     * If provided (i.e. if the is-playing state is controlled), the attribute `onIsPlayingChanged` must be provided as well.
+     */
+    isPlaying?: boolean;
+
+    /**
+     * Callback invoked in controlled-is-playing-state mode, when the user clicks on the play/stop button.
+     *
+     * @param isPlaying - New is-playing state.
+     */
+    onIsPlayingChanged?: (isPlaying: boolean) => void;
+
+    /**
      * Whether the board is initially flipped (i.e. seen from Black's point of view) or not, when the flip state is uncontrolled.
      * Ignored if the `flipped` attribute is provided.
      */
@@ -97,6 +119,11 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
     onFlippedChanged?: (flipped: boolean) => void;
 
     /**
+     * Whether the play/stop button is visible or not in the toolbar.
+     */
+    playButtonVisible: boolean;
+
+    /**
      * Whether the flip button is visible or not in the toolbar.
      */
     flipButtonVisible: boolean;
@@ -110,6 +137,7 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
 
 interface NavigationBoardState {
     nodeIdAsUncontrolled: string;
+    isPlayingAsUncontrolled: boolean;
     flippedAsUncontrolled: boolean;
 }
 
@@ -124,22 +152,31 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         game: new Game(),
         gameIndex: 0,
         initialNodeId: 'start',
+        initialIsPlaying: false,
         initialFlipped: false,
+        playButtonVisible: false,
         flipButtonVisible: true,
         additionalButtons: [],
     };
 
     private navigationFieldRef: React.RefObject<NavigationField> = React.createRef();
+    private timeoutId?: number;
 
     constructor(props: NavigationBoardProps) {
         super(props);
         this.state = {
             nodeIdAsUncontrolled: sanitizeString(props.initialNodeId),
+            isPlayingAsUncontrolled: sanitizeBoolean(props.initialIsPlaying),
             flippedAsUncontrolled: sanitizeBoolean(props.initialFlipped),
         };
     }
 
+    componentWillUnmount() {
+        this.cancelCurrentTimeout();
+    }
+
     render() {
+        this.cancelCurrentTimeout();
 
         // Validate the game and game-index attributes.
         const info = parseGame(this.props.game, this.props.gameIndex, 'NavigationBoard');
@@ -151,18 +188,19 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         const currentNodeId = sanitizeOptional(this.props.nodeId, sanitizeString) ?? this.state.nodeIdAsUncontrolled;
         const currentNode = info.game.findById(currentNodeId) ?? info.game.mainVariation();
 
-        // Flip state.
+        // State flags.
+        const isPlaying = sanitizeOptional(this.props.isPlaying, sanitizeBoolean) ?? this.state.isPlayingAsUncontrolled;
         const flipped = sanitizeOptional(this.props.flipped, sanitizeBoolean) ?? this.state.flippedAsUncontrolled;
 
         return (
             <div className="kokopu-navigationBoard">
-                {this.renderBoard(info.game, currentNode, flipped)}
+                {this.renderBoard(info.game, currentNode, isPlaying, flipped)}
                 {this.renderNavigationField(info.game, currentNode.id())}
             </div>
         );
     }
 
-    private renderBoard(game: Game, node: GameNode | Variation, flipped: boolean) {
+    private renderBoard(game: Game, node: GameNode | Variation, isPlaying: boolean, flipped: boolean) {
         const position = node instanceof GameNode ? node.positionBefore() : node.initialPosition();
         const move = node instanceof GameNode ? node.notation() : undefined;
         return <Chessboard
@@ -177,7 +215,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
             moveArrowVisible={this.props.moveArrowVisible}
             moveArrowColor={this.props.moveArrowColor}
             animated={this.props.animated}
-            bottomComponent={({ squareSize }) => this.renderToolbar(game, node, squareSize)}
+            bottomComponent={({ squareSize }) => this.renderToolbar(game, node, squareSize, isPlaying)}
         />;
     }
 
@@ -190,7 +228,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         />;
     }
 
-    private renderToolbar(game: Game, node: GameNode | Variation, squareSize: number) {
+    private renderToolbar(game: Game, node: GameNode | Variation, squareSize: number, isPlaying: boolean) {
         const buttons: NavigationButtonList = [];
 
         // Core navigation buttons
@@ -199,13 +237,27 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         const hasNext = (node instanceof Variation ? node.first() : node.next()) !== undefined;
         buttons.push({ iconPath: GO_FIRST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_FIRST, enabled: hasPrevious, onClick: () => this.handleNavClicked(firstNodeId(game, currentNodeId)) });
         buttons.push({ iconPath: GO_PREVIOUS_ICON_PATH, tooltip: i18n.TOOLTIP_GO_PREVIOUS, enabled: hasPrevious, onClick: () => this.handleNavClicked(previousNodeId(game, currentNodeId)) });
+        if (sanitizeBoolean(this.props.playButtonVisible)) {
+            buttons.push({ iconPath: isPlaying ? STOP_ICON_PATH : PLAY_ICON_PATH, tooltip: i18n.TOOLTIP_PLAY_STOP, enabled: hasNext, onClick: () => this.handlePlayStopClicked(!isPlaying) });
+        }
         buttons.push({ iconPath: GO_NEXT_ICON_PATH, tooltip: i18n.TOOLTIP_GO_NEXT, enabled: hasNext, onClick: () => this.handleNavClicked(nextNodeId(game, currentNodeId)) });
         buttons.push({ iconPath: GO_LAST_ICON_PATH, tooltip: i18n.TOOLTIP_GO_LAST, enabled: hasNext, onClick: () => this.handleNavClicked(lastNodeId(game, currentNodeId)) });
         buttons.push('spacer');
-        if (this.props.flipButtonVisible) {
+        if (sanitizeBoolean(this.props.flipButtonVisible)) {
             buttons.push({ iconPath: FLIP_ICON_PATH, tooltip: i18n.TOOLTIP_FLIP, onClick: () => this.handleFlipButtonClicked() });
         }
         buttons.push('spacer');
+
+        // Schedule the next transition if auto-play is enabled.
+        if (isPlaying) {
+            if (hasNext) {
+                this.timeoutId = window.setTimeout(() => this.handleNavClicked(nextNodeId(game, currentNodeId), false), INTER_MOVE_DURATION);
+            }
+            else {
+                // ... or stop the auto-play if at the end of the game.
+                this.timeoutId = window.setTimeout(() => this.handlePlayStopClicked(false, false), 0);
+            }
+        }
 
         // Additional buttons.
         const additionalButtons = sanitizeNavigationButtonList(this.props.additionalButtons, () => new IllegalArgument('NavigationBoard', 'additionalButtons'));
@@ -216,8 +268,10 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         return <NavigationToolbar squareSize={squareSize} buttons={buttons} />;
     }
 
-    private handleNavClicked(targetNodeId: string | undefined) {
-        this.focus();
+    private handleNavClicked(targetNodeId: string | undefined, forceFocus = true) {
+        if (forceFocus) {
+            this.focus();
+        }
         if (targetNodeId === undefined) {
             return;
         }
@@ -230,6 +284,18 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         }
     }
 
+    private handlePlayStopClicked(targetIsPlaying: boolean, forceFocus = true) {
+        if (forceFocus) {
+            this.focus();
+        }
+        if (this.props.isPlaying === undefined) { // uncontrolled is-playing state
+            this.setState({ isPlayingAsUncontrolled: targetIsPlaying });
+        }
+        else if (this.props.onIsPlayingChanged) { // controlled is-playing state
+            this.props.onIsPlayingChanged(targetIsPlaying);
+        }
+    }
+
     private handleFlipButtonClicked() {
         this.focus();
         if (this.props.flipped === undefined) { // uncontrolled flip state
@@ -237,6 +303,13 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         }
         else if (this.props.onFlippedChanged) { // controlled flip state
             this.props.onFlippedChanged(!this.props.flipped);
+        }
+    }
+
+    private cancelCurrentTimeout() {
+        if (this.timeoutId !== undefined) {
+            window.clearTimeout(this.timeoutId);
+            this.timeoutId = undefined;
         }
     }
 
