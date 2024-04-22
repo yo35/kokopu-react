@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+3.2.0 (April 22, 2024)
+----------------------
+* Add support for additional buttons in the toolbar of `NavigationBoard`.
+* Rework the toolbar look'n feel of `NavigationBoard`.
+* Add auto-play feature in `NavigationBoard` (see [#7](https://github.com/yo35/kokopu-react/issues/7)).
+
 3.1.0 (March 3, 2024)
 ---------------------
 * Add support for null-moves in `Chessboard`.
