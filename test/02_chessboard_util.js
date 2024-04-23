@@ -45,6 +45,22 @@ describe('Chessboard.size()', () => {
     itChessboardSize('Default without turn', 330, 333, { turnVisible: false });
     itChessboardSize('Default board only', 320, 320, { coordinateVisible: false, turnVisible: false });
 
+    function topComponent({ squareSize, coordinateVisible, turnVisible }) {
+        const width = squareSize * 20;
+        const height = (coordinateVisible ? 11 : 0) + (turnVisible ? 107 : 0);
+        return { width: width, height: height };
+    }
+
+    function bottomComponent({ squareSize, coordinateVisible, turnVisible }) {
+        const width = squareSize * 19;
+        const height = (coordinateVisible ? 3 : 0) + (turnVisible ? 157 : 0);
+        return { width: width, height: height };
+    }
+
+    itChessboardSize('With top component', 800, 451, { topComponent: topComponent });
+    itChessboardSize('With bottom component', 760, 493, { bottomComponent: bottomComponent });
+    itChessboardSize('With top & bottom components', 800, 611, { topComponent: topComponent, bottomComponent: bottomComponent });
+
     itInvalidArgument('Attribute not an object', () => Chessboard.size('not-an-object'));
     itInvalidArgument('Square size not an integer', () => Chessboard.size({ squareSize: 'not-an-integer' }));
     itInvalidArgument('Small-screen limits not an array', () => Chessboard.size({ smallScreenLimits: 'not-an-array' }));

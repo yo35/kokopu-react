@@ -129,6 +129,34 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
 }
 
 
+type AuxilliaryComponentSizeFunction = (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => { width: number, height: number };
+
+
+/**
+ * Attributes for method `Chessboard.size()`.
+ */
+export interface ChessboardSizeAttr {
+    squareSize?: ChessboardProps['squareSize'];
+    coordinateVisible?: ChessboardProps['coordinateVisible'];
+    turnVisible?: ChessboardProps['turnVisible'];
+    smallScreenLimits?: ChessboardProps['smallScreenLimits'];
+    topComponent?: AuxilliaryComponentSizeFunction;
+    bottomComponent?: AuxilliaryComponentSizeFunction;
+}
+
+
+/**
+ * Attributes for method `Chessboard.adaptSquareSize()`.
+ */
+export interface ChessboardAdaptSquareSizeAttr {
+    coordinateVisible?: ChessboardProps['coordinateVisible'];
+    turnVisible?: ChessboardProps['turnVisible'];
+    smallScreenLimits?: ChessboardProps['smallScreenLimits'];
+    topComponent?: AuxilliaryComponentSizeFunction;
+    bottomComponent?: AuxilliaryComponentSizeFunction;
+}
+
+
 interface ChessboardState {
     windowWidth: number;
 }
@@ -261,50 +289,53 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
     /**
      * Return the size of the chessboard, assuming it is built with the given attributes.
      */
-    static size(attr?: Partial<Pick<ChessboardProps, 'squareSize' | 'coordinateVisible' | 'turnVisible' | 'smallScreenLimits'>>): { width: number, height: number } {
-        let { squareSize, coordinateVisible, turnVisible, smallScreenLimits } = sanitizePartialObject(attr, () => new IllegalArgument('Chessboard.size()', 'attr'));
+    static size(attr?: ChessboardSizeAttr): { width: number, height: number } {
+        const { squareSize, coordinateVisible, turnVisible, smallScreenLimits, topComponent, bottomComponent } = sanitizePartialObject(attr,
+            () => new IllegalArgument('Chessboard.size()', 'attr'));
 
         // Sanitize the arguments.
-        squareSize = squareSize === undefined ? DEFAULT_SQUARE_SIZE :
+        let actualSquareSize = squareSize === undefined ? DEFAULT_SQUARE_SIZE :
             sanitizeBoundedInteger(squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard.size()', 'squareSize'));
-        coordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
-        turnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
-        smallScreenLimits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.size()', 'smallScreenLimits'));
+        let actualCoordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
+        let actualTurnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
+        const actualLimits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.size()', 'smallScreenLimits'));
 
         // Enforce small-screen limits, if any.
         if (typeof window !== 'undefined') {
-            squareSize = computeSquareSizeForSmallScreens(squareSize, smallScreenLimits, window.innerWidth);
-            coordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, window.innerWidth);
-            turnVisible = computeTurnVisibleForSmallScreens(turnVisible, smallScreenLimits, window.innerWidth);
+            actualSquareSize = computeSquareSizeForSmallScreens(actualSquareSize, actualLimits, window.innerWidth);
+            actualCoordinateVisible = computeCoordinateVisibleForSmallScreens(actualCoordinateVisible, actualLimits, window.innerWidth);
+            actualTurnVisible = computeTurnVisibleForSmallScreens(actualTurnVisible, actualLimits, window.innerWidth);
         }
 
         // Compute the dimensions.
-        return chessboardSize(squareSize, coordinateVisible, turnVisible);
+        return chessBoardWithAuxilliaryComponentSize(actualSquareSize, actualCoordinateVisible, actualTurnVisible, topComponent, bottomComponent);
     }
 
     /**
      * Return the maximum square size that would allow the chessboard to fit in a rectangle of size `width x height`.
      */
-    static adaptSquareSize(width: number, height: number, attr?: Partial<Pick<ChessboardProps, 'coordinateVisible' | 'turnVisible' | 'smallScreenLimits'>>): number {
-        let { coordinateVisible, turnVisible, smallScreenLimits } = sanitizePartialObject(attr, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'attr'));
+    static adaptSquareSize(width: number, height: number, attr?: ChessboardAdaptSquareSizeAttr): number {
+        const { coordinateVisible, turnVisible, smallScreenLimits, topComponent, bottomComponent } = sanitizePartialObject(attr,
+            () => new IllegalArgument('Chessboard.adaptSquareSize()', 'attr'));
 
         // Sanitize the arguments.
         width = sanitizeInteger(width, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'width'));
         height = sanitizeInteger(height, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'height'));
-        coordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
-        turnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
-        smallScreenLimits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'smallScreenLimits'));
+        let actualCoordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
+        let actualTurnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
+        const actualLimits = sanitizeSmallScreenLimits(smallScreenLimits, () => new IllegalArgument('Chessboard.adaptSquareSize()', 'smallScreenLimits'));
 
         // Enforce small-screen limits, if any.
         let maxSquareSize = MAX_SQUARE_SIZE;
         if (typeof window !== 'undefined') {
-            maxSquareSize = computeSquareSizeForSmallScreens(maxSquareSize, smallScreenLimits, window.innerWidth);
-            coordinateVisible = computeCoordinateVisibleForSmallScreens(coordinateVisible, smallScreenLimits, window.innerWidth);
-            turnVisible = computeTurnVisibleForSmallScreens(turnVisible, smallScreenLimits, window.innerWidth);
+            maxSquareSize = computeSquareSizeForSmallScreens(maxSquareSize, actualLimits, window.innerWidth);
+            actualCoordinateVisible = computeCoordinateVisibleForSmallScreens(actualCoordinateVisible, actualLimits, window.innerWidth);
+            actualTurnVisible = computeTurnVisibleForSmallScreens(actualTurnVisible, actualLimits, window.innerWidth);
         }
 
         function isAdapted(squareSize: number) {
-            const { width: actualWidth, height: actualHeight } = chessboardSize(squareSize, coordinateVisible!, turnVisible!);
+            const { width: actualWidth, height: actualHeight } = chessBoardWithAuxilliaryComponentSize(squareSize, actualCoordinateVisible, actualTurnVisible,
+                topComponent, bottomComponent);
             return actualWidth <= width && actualHeight <= height;
         }
 
@@ -366,6 +397,31 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
     static piecesets(): Record<string, Pieceset> {
         return piecesets;
     }
+}
+
+
+function chessBoardWithAuxilliaryComponentSize(squareSize: number, coordinateVisible: boolean, turnVisible: boolean,
+    topComponent: AuxilliaryComponentSizeFunction | undefined, bottomComponent: AuxilliaryComponentSizeFunction | undefined): { width: number, height: number } {
+
+    let { width, height } = chessboardSize(squareSize, coordinateVisible, turnVisible);
+    const auxilliaryComponentAttr = {
+        squareSize: squareSize,
+        coordinateVisible: coordinateVisible,
+        turnVisible: turnVisible,
+    };
+
+    if (topComponent) {
+        const { width: auxilliaryWidth, height: auxilliaryHeight } = topComponent(auxilliaryComponentAttr);
+        width = Math.max(width, auxilliaryWidth);
+        height += auxilliaryHeight;
+    }
+    if (bottomComponent) {
+        const { width: auxilliaryWidth, height: auxilliaryHeight } = bottomComponent(auxilliaryComponentAttr);
+        width = Math.max(width, auxilliaryWidth);
+        height += auxilliaryHeight;
+    }
+
+    return { width: width, height: height };
 }
 
 
