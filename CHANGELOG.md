@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.3.0 (April 23, 2024)
+----------------------
+* Add methods `NavigationBoard.size()` and `NavigationBoard.adaptSquareSize()`.
+
 3.2.0 (April 22, 2024)
 ----------------------
 * Add support for additional buttons in the toolbar of `NavigationBoard`.
