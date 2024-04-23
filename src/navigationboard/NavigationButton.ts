@@ -55,7 +55,13 @@ export type NavigationButton = {
 /**
  * List of additional buttons to be added to the toolbar of {@link NavigationBoard}, together with optional spacers in-between.
  */
-export type NavigationButtonList = (NavigationButton | 'spacer')[];
+export type NavigationBar = (NavigationButton | 'spacer')[];
+
+
+/**
+ * Scheme of additional button list to be added to the toolbar of {@link NavigationBoard}, together with optional spacers in-between.
+ */
+export type NavigationBarScheme = ('button' | 'spacer')[];
 
 
 /**
@@ -69,4 +75,40 @@ export function isNavigationButton(button: unknown): button is NavigationButton 
         ((button as NavigationButton).tooltip === undefined || typeof (button as NavigationButton).tooltip === 'string') &&
         ((button as NavigationButton).enabled === undefined || typeof (button as NavigationButton).enabled === 'boolean') &&
         ((button as NavigationButton).onClick === undefined || typeof (button as NavigationButton).onClick === 'function');
+}
+
+
+/**
+ * Whether the given object is a {@link NavigationBar} or not.
+ */
+export function isNavigationBar(buttons: unknown): buttons is NavigationBar {
+    if (Array.isArray(buttons)) {
+        for (const button of buttons) {
+            if (!(isNavigationButton(button) || button === 'spacer')) {
+                return false;
+            }
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+/**
+ * Whether the given object is a {@link NavigationBarScheme} or not.
+ */
+export function isNavigationBarScheme(buttons: unknown): buttons is NavigationBarScheme {
+    if (Array.isArray(buttons)) {
+        for (const button of buttons) {
+            if (!(button === 'button' || button === 'spacer')) {
+                return false;
+            }
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
 }

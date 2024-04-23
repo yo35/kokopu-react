@@ -28,15 +28,15 @@ import { Database, Game, Node as GameNode, Variation } from 'kokopu';
 
 import { IllegalArgument } from '../exception';
 import { i18n } from '../i18n';
-import { sanitizeBoolean, sanitizeOptional, sanitizeString } from '../sanitization';
+import { sanitizeBoolean, sanitizeOptional, sanitizeString, sanitizePartialObject } from '../sanitization';
 
 import { DynamicBoardGraphicProps, defaultDynamicBoardProps } from '../chessboard/BoardProperties';
 import { Chessboard } from '../chessboard/Chessboard';
 import { parseGame } from '../errorbox/parsing';
 import { NavigationField, firstNodeId, previousNodeId, nextNodeId, lastNodeId } from '../navigationboard/NavigationField';
 import { GO_FIRST_ICON_PATH, GO_PREVIOUS_ICON_PATH, GO_NEXT_ICON_PATH, GO_LAST_ICON_PATH, PLAY_ICON_PATH, STOP_ICON_PATH, FLIP_ICON_PATH } from './iconPaths';
-import { NavigationButton, NavigationButtonList, isNavigationButton } from './NavigationButton';
-import { NavigationToolbar } from './NavigationToolbar';
+import { NavigationBar, NavigationBarScheme, isNavigationBar, isNavigationBarScheme } from './NavigationButton';
+import { NavigationToolbar, navigationToolbarSize } from './NavigationToolbar';
 
 
 const INTER_MOVE_DURATION = 1000;
@@ -131,7 +131,34 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
     /**
      * Additional buttons to be added to the toolbar.
      */
-    additionalButtons: NavigationButton | NavigationButtonList;
+    additionalButtons: NavigationBar;
+}
+
+
+/**
+ * Attributes for method `NavigationBoard.size()`.
+ */
+interface NavigationBoardSizeAttr {
+    squareSize?: NavigationBoardProps['squareSize'];
+    coordinateVisible?: NavigationBoardProps['coordinateVisible'];
+    turnVisible?: NavigationBoardProps['turnVisible'];
+    smallScreenLimits?: NavigationBoardProps['smallScreenLimits'];
+    playButtonVisible?: NavigationBoardProps['playButtonVisible'];
+    flipButtonVisible?: NavigationBoardProps['flipButtonVisible'];
+    additionalButtons?: NavigationBarScheme;
+}
+
+
+/**
+ * Attributes for method `NavigationBoard.adaptSquareSize()`.
+ */
+interface NavigationBoardAdaptSquareSizeAttr {
+    coordinateVisible?: NavigationBoardProps['coordinateVisible'];
+    turnVisible?: NavigationBoardProps['turnVisible'];
+    smallScreenLimits?: NavigationBoardProps['smallScreenLimits'];
+    playButtonVisible?: NavigationBoardProps['playButtonVisible'];
+    flipButtonVisible?: NavigationBoardProps['flipButtonVisible'];
+    additionalButtons?: NavigationBarScheme;
 }
 
 
@@ -229,7 +256,9 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
     }
 
     private renderToolbar(game: Game, node: GameNode | Variation, squareSize: number, isPlaying: boolean) {
-        const buttons: NavigationButtonList = [];
+
+        // WARNING: the logic here must be the same as the one in `computeBarScheme()`.
+        const buttons: NavigationBar = [];
 
         // Core navigation buttons
         const currentNodeId = node.id();
@@ -260,8 +289,10 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         }
 
         // Additional buttons.
-        const additionalButtons = sanitizeNavigationButtonList(this.props.additionalButtons, () => new IllegalArgument('NavigationBoard', 'additionalButtons'));
-        for (const button of additionalButtons) {
+        if (!isNavigationBar(this.props.additionalButtons)) {
+            throw new IllegalArgument('NavigationBoard', 'additionalButtons');
+        }
+        for (const button of this.props.additionalButtons) {
             buttons.push(button);
         }
 
@@ -326,25 +357,81 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         }
     }
 
+    /**
+     * Return the size of the {@link NavigationBoard}, assuming it is built with the given attributes.
+     */
+    static size(attr?: NavigationBoardSizeAttr): { width: number, height: number } {
+        const { squareSize, coordinateVisible, turnVisible, smallScreenLimits, playButtonVisible, flipButtonVisible, additionalButtons } =
+            sanitizePartialObject(attr, () => new IllegalArgument('NavigationBoard.size()', 'attr'));
+
+        // Sanitization
+        const actualPlayButtonVisible = sanitizeOptional(playButtonVisible, sanitizeBoolean);
+        const actualFlipButtonVisible = sanitizeOptional(flipButtonVisible, sanitizeBoolean);
+        if (additionalButtons !== undefined && !isNavigationBarScheme(additionalButtons)) {
+            throw new IllegalArgument('NavigationBoard.size()', 'additionalButtons');
+        }
+
+        const buttons = computeBarScheme(actualPlayButtonVisible, actualFlipButtonVisible, additionalButtons);
+        return Chessboard.size({
+            squareSize: squareSize,
+            coordinateVisible: coordinateVisible,
+            turnVisible: turnVisible,
+            smallScreenLimits: smallScreenLimits,
+            bottomComponent: ({ squareSize: sz }) => navigationToolbarSize(sz, buttons),
+        });
+    }
+
+    /**
+     * Return the maximum square size that would allow the {@link NavigationBoard} to fit in a rectangle of size `width x height`.
+     */
+    static adaptSquareSize(width: number, height: number, attr?: NavigationBoardAdaptSquareSizeAttr): number {
+
+        const { coordinateVisible, turnVisible, smallScreenLimits, playButtonVisible, flipButtonVisible, additionalButtons } =
+            sanitizePartialObject(attr, () => new IllegalArgument('NavigationBoard.adaptSquareSize()', 'attr'));
+
+        // Sanitization
+        const actualPlayButtonVisible = sanitizeOptional(playButtonVisible, sanitizeBoolean);
+        const actualFlipButtonVisible = sanitizeOptional(flipButtonVisible, sanitizeBoolean);
+        if (additionalButtons !== undefined && !isNavigationBarScheme(additionalButtons)) {
+            throw new IllegalArgument('NavigationBoard.adaptSquareSize()', 'additionalButtons');
+        }
+
+        const buttons = computeBarScheme(actualPlayButtonVisible, actualFlipButtonVisible, additionalButtons);
+        return Chessboard.adaptSquareSize(width, height, {
+            coordinateVisible: coordinateVisible,
+            turnVisible: turnVisible,
+            smallScreenLimits: smallScreenLimits,
+            bottomComponent: ({ squareSize: sz }) => navigationToolbarSize(sz, buttons),
+        });
+    }
+
 }
 
 
-/**
- * Sanitization method for the additional button parameter.
- */
-function sanitizeNavigationButtonList(type: NavigationButton | NavigationButtonList, exceptionBuilder: () => IllegalArgument): NavigationButtonList {
-    if (Array.isArray(type)) {
-        return type.map(t => {
-            if (t !== 'spacer' && !isNavigationButton(t)) {
-                throw exceptionBuilder();
-            }
-            return t;
-        });
+function computeBarScheme(playButtonVisible: boolean | undefined, flipButtonVisible: boolean | undefined,
+    additionalButtons: NavigationBarScheme | undefined): NavigationBarScheme {
+
+    // WARNING: the logic here must be the same as the one in `renderToolbar()`.
+    const buttons: NavigationBarScheme = [];
+
+    buttons.push('button'); // go-first
+    buttons.push('button'); // go-previous
+    if (playButtonVisible ?? NavigationBoard.defaultProps.playButtonVisible) {
+        buttons.push('button');
     }
-    else if (isNavigationButton(type)) {
-        return [ type ];
+    buttons.push('button'); // go-next
+    buttons.push('button'); // go-last
+    buttons.push('spacer');
+    if (flipButtonVisible ?? NavigationBoard.defaultProps.flipButtonVisible) {
+        buttons.push('button');
     }
-    else {
-        throw exceptionBuilder();
+    buttons.push('spacer');
+
+    if (additionalButtons !== undefined) {
+        for (const button of additionalButtons) {
+            buttons.push(button);
+        }
     }
+
+    return buttons;
 }

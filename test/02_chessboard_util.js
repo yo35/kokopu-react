@@ -22,7 +22,7 @@
  * -------------------------------------------------------------------------- */
 
 
-const { exception, Chessboard } = require('../build/test_headless/index');
+const { exception, Chessboard, NavigationBoard } = require('../build/test_headless/index');
 const test = require('unit.js');
 
 
@@ -67,6 +67,38 @@ describe('Chessboard.size()', () => {
     itInvalidArgument('Small-screen limit undefined', () => Chessboard.size({ smallScreenLimits: [ undefined ] }));
     itInvalidArgument('Small-screen limit null', () => Chessboard.size({ smallScreenLimits: [ null ] }));
     itInvalidArgument('Small-screen limit not-an-object', () => Chessboard.size({ smallScreenLimits: [ 'not-an-object' ] }));
+});
+
+
+describe('NavigationBoard.size()', () => {
+
+    function itNavigationBoardSize(label, expectedWidth, expectedHeight, attr) {
+        it(label, () => {
+            test.value(NavigationBoard.size(attr)).is({ width: expectedWidth, height: expectedHeight });
+        });
+    }
+
+    itNavigationBoardSize('Default', 374, 368);
+    itNavigationBoardSize('Minimal square size with all default buttons', 130, 121, {
+        squareSize: 12,
+        coordinateVisible: false,
+        turnVisible: false,
+        playButtonVisible: true,
+        flipButtonVisible: true,
+    });
+    itNavigationBoardSize('With additional buttons', 198, 188, {
+        squareSize: 20,
+        coordinateVisible: false,
+        turnVisible: false,
+        playButtonVisible: true,
+        flipButtonVisible: false,
+        additionalButtons: [ 'button', 'button', 'spacer', 'spacer', 'button' ],
+    });
+
+    itInvalidArgument('Attribute not an object', () => NavigationBoard.size('not-an-object'));
+    itInvalidArgument('Square size not an integer', () => NavigationBoard.size({ squareSize: 'not-an-integer' }));
+    itInvalidArgument('Additional buttons not an array', () => NavigationBoard.size({ additionalButtons: 'not-an-array' }));
+    itInvalidArgument('Additional buttons with invalid items', () => NavigationBoard.size({ additionalButtons: [ 'not-a-button-nor-a-spacer' ] }));
 });
 
 
@@ -132,6 +164,34 @@ describe('Adapt square-size', () => {
     itInvalidArgument('Height object', () => Chessboard.adaptSquareSize(500, {}));
     itInvalidArgument('Attribute not-an-object', () => Chessboard.adaptSquareSize(500, 400, 'not-an-object'));
     itInvalidArgument('Small-screen limits not-an-array', () => Chessboard.adaptSquareSize(500, 400, { smallScreenLimits: 'not-an-array' }));
+});
+
+
+describe('Adapt square-size (NavigationBoard)', () => {
+
+    function itAdaptSquareSize(label, width, height, attributes, expectedSquareSize) {
+        it(label, () => {
+            test.value(NavigationBoard.adaptSquareSize(width, height, attributes)).is(expectedSquareSize);
+
+            const actualSizeIncremented = NavigationBoard.size({
+                ...attributes,
+                squareSize: expectedSquareSize + 1,
+            });
+            test.value(actualSizeIncremented.width > width || actualSizeIncremented.height > height).isTrue();
+        });
+    }
+
+    itAdaptSquareSize('Size 300x300 (default)', 300, 300, {}, 32);
+    itAdaptSquareSize('Size 136x200 (with play button)', 136, 200, { coordinateVisible: false, turnVisible: false, playButtonVisible: true }, 15);
+    itAdaptSquareSize('Size 136x200 (with minimal buttons)', 136, 200, { coordinateVisible: false, turnVisible: false, flipButtonVisible: false }, 17);
+
+    itInvalidArgument('Width <null>', () => NavigationBoard.adaptSquareSize(null, 400));
+    itInvalidArgument('Width not-a-number', () => NavigationBoard.adaptSquareSize('500', 400));
+    itInvalidArgument('Height <undefined>', () => NavigationBoard.adaptSquareSize(500, undefined));
+    itInvalidArgument('Height object', () => NavigationBoard.adaptSquareSize(500, {}));
+    itInvalidArgument('Attribute not-an-object', () => NavigationBoard.adaptSquareSize(500, 400, 'not-an-object'));
+    itInvalidArgument('Additional buttons not an array', () => NavigationBoard.adaptSquareSize(500, 400, { additionalButtons: 'not-an-array' }));
+    itInvalidArgument('Small-screen limits not-an-array', () => NavigationBoard.adaptSquareSize(500, 400, { smallScreenLimits: 'not-an-array' }));
 });
 
 

@@ -24,14 +24,14 @@
 
 import * as React from 'react';
 
-import { NavigationButton, NavigationButtonList } from './NavigationButton';
+import { NavigationButton, NavigationBar, NavigationBarScheme } from './NavigationButton';
 
 import './NavigationToolbar.css';
 
 
 interface NavigationToolbarProps {
     squareSize: number;
-    buttons: NavigationButtonList;
+    buttons: NavigationBar;
 }
 
 
@@ -71,7 +71,7 @@ export function NavigationToolbar({ squareSize, buttons }: NavigationToolbarProp
         />);
     }
 
-    return <div className="kokopu-navigationToolbar" style={{ marginTop: Math.round(buttonSize / 4) }}>{buttonNodes}</div>;
+    return <div className="kokopu-navigationToolbar" style={{ marginTop: computeMarginTop(squareSize) }}>{buttonNodes}</div>;
 }
 
 
@@ -102,6 +102,41 @@ function NavigationButtonImpl({ size, spaceOnLeft, spaceOnRight, iconPath, toolt
 
 
 /**
+ * Size of the navigation toolbar (taking into account the margin between the toolbar and the chessboard), assuming the given square size.
+ */
+export function navigationToolbarSize(squareSize: number, buttons: NavigationBarScheme): { width: number, height: number } {
+
+    const buttonSize = computeButtonSize(squareSize);
+    const spacerSize = computeSpacerSize(squareSize);
+    let width = 0;
+
+    let atLeastOneButtonEncountered = false;
+    for (let i = 0; i < buttons.length; ++i) {
+
+        // Skip the spacers.
+        if (buttons[i] === 'spacer') {
+            continue;
+        }
+
+        // Enqueue a spacer if necessary.
+        // Remark: consecutive spacers are collapsed into a single one for rendering, and spacers at the begin and end of the button list are not rendered.
+        if (atLeastOneButtonEncountered && buttons[i - 1] === 'spacer') {
+            width += spacerSize;
+        }
+        atLeastOneButtonEncountered = true;
+
+        // Enqueue the button node.
+        width += buttonSize;
+    }
+
+    return {
+        width: width,
+        height: buttonSize + computeMarginTop(squareSize),
+    };
+}
+
+
+/**
  * Return the height/width of the buttons assuming the given square size.
  */
 function computeButtonSize(squareSize: number) {
@@ -114,4 +149,12 @@ function computeButtonSize(squareSize: number) {
  */
 function computeSpacerSize(squareSize: number) {
     return Math.round((squareSize * 2 + 116) / 14);
+}
+
+
+/**
+ * Return the height of the margin between the toolbar and the chessboard.
+ */
+function computeMarginTop(squareSize: number) {
+    return Math.round((squareSize * 2 + 116) / 28);
 }

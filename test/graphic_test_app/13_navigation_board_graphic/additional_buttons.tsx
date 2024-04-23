@@ -29,7 +29,7 @@ import { NavigationBoard } from '../../../dist/lib/index';
 import pgn from '../common/games.pgn';
 
 testApp([ /* eslint-disable react/jsx-key */
-    <NavigationBoard game={pgn} additionalButtons={{ iconPath: 'M 11 11 H 21 V 21 H 11 Z' }} />,
+    <NavigationBoard game={pgn} additionalButtons={[ { iconPath: 'M 11 11 H 21 V 21 H 11 Z' } ]} />,
     <NavigationBoard game={pgn} additionalButtons={[
         { iconPath: 'M 11 11 H 21 V 21 H 11 Z', tooltip: 'Button 0', enabled: true },
         { iconPath: 'M 9 16 L 16 9 L 23 16 L 16 23 Z', tooltip: 'Button A', onClick: () => setSandbox('Button A clicked') },

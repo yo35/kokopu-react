@@ -42,6 +42,6 @@ export { Chessboard, ChessboardProps } from './chessboard/Chessboard';
 export { formatMove, moveFormatter } from './movetext/moveFormatter';
 export { Movetext, MovetextProps, MoveSelectEventOrigin } from './movetext/Movetext';
 
-export { NavigationButton, NavigationButtonList, isNavigationButton } from './navigationboard/NavigationButton';
+export { NavigationButton, NavigationBar, NavigationBarScheme, isNavigationButton, isNavigationBar, isNavigationBarScheme } from './navigationboard/NavigationButton';
 export { firstNodeId, previousNodeId, nextNodeId, lastNodeId } from './navigationboard/NavigationField';
 export { NavigationBoard, NavigationBoardProps } from './navigationboard/NavigationBoard';
