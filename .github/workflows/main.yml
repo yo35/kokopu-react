@@ -15,9 +15,9 @@ jobs:
         with:
           node-version: latest
       - run: npm ci
-      - run: docker-compose -f scripts/docker-compose.yml up -d
+      - run: docker compose -f scripts/docker-compose.yml up -d
       - run: npm test
-      - run: docker-compose -f scripts/docker-compose.yml down
+      - run: docker compose -f scripts/docker-compose.yml down
         if: ${{ always() }}
       - uses: coverallsapp/github-action@v2
         with:
