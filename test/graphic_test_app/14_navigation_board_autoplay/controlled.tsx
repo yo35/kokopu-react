@@ -33,41 +33,57 @@ const HISTORY_1: string[] = [];
 const HISTORY_2: string[] = [];
 
 interface NavigationBoardWithNodeIdControllerProps {
-    initialNodeId: string;
-    sandboxHistory: string[];
+    initialNodeId: string,
+    sandboxHistory: string[],
 }
 
 function NavigationBoardWithNodeIdController({ initialNodeId, sandboxHistory }: NavigationBoardWithNodeIdControllerProps) {
 
     const [ nodeId, setNodeId ] = React.useState(initialNodeId);
 
-    return <NavigationBoard game={pgn} playButtonVisible nodeId={nodeId} onNodeIdChanged={newNodeId => {
-        sandboxHistory.push(`Node ID changed: ${newNodeId}`);
-        setSandbox(sandboxHistory.join('\n'));
-        setNodeId(newNodeId);
-    }} />;
+    return (
+        <NavigationBoard
+            game={pgn} playButtonVisible nodeId={nodeId}
+            onNodeIdChanged={newNodeId => {
+                sandboxHistory.push(`Node ID changed: ${newNodeId}`);
+                setSandbox(sandboxHistory.join('\n'));
+                setNodeId(newNodeId);
+            }}
+        />
+    );
 }
 
 function NavigationBoardWithIsPlayingController() {
 
     const [ isPlaying, setIsPlaying ] = React.useState(false);
 
-    return <NavigationBoard game={pgn} playButtonVisible initialNodeId="5b" isPlaying={isPlaying} onIsPlayingChanged={newIsPlaying => {
-        setSandbox(`is-playing flag changed: ${newIsPlaying}`);
-        setIsPlaying(newIsPlaying);
-    }} />;
+    return (
+        <NavigationBoard
+            game={pgn} playButtonVisible initialNodeId="5b" isPlaying={isPlaying}
+            onIsPlayingChanged={newIsPlaying => {
+                setSandbox(`is-playing flag changed: ${newIsPlaying}`);
+                setIsPlaying(newIsPlaying);
+            }}
+        />
+    );
 }
 
 testApp([ /* eslint-disable react/jsx-key */
-    <NavigationBoard game={pgn} playButtonVisible nodeId="3w" onNodeIdChanged={nodeId => {
-        HISTORY_0.push(`Node ID changed: ${nodeId}`);
-        setSandbox(HISTORY_0.join('\n'));
-    }} />,
+    <NavigationBoard
+        game={pgn} playButtonVisible nodeId="3w"
+        onNodeIdChanged={nodeId => {
+            HISTORY_0.push(`Node ID changed: ${nodeId}`);
+            setSandbox(HISTORY_0.join('\n'));
+        }}
+    />,
     <NavigationBoardWithNodeIdController initialNodeId="3w" sandboxHistory={HISTORY_1} />,
     <NavigationBoardWithNodeIdController initialNodeId="20w" sandboxHistory={HISTORY_2} />,
-    <NavigationBoard game={pgn} playButtonVisible initialNodeId="5b" isPlaying={false} onIsPlayingChanged={isPlaying => {
-        setSandbox(`is-playing flag changed: ${isPlaying}`);
-    }} />,
+    <NavigationBoard
+        game={pgn} playButtonVisible initialNodeId="5b" isPlaying={false}
+        onIsPlayingChanged={isPlaying => {
+            setSandbox(`is-playing flag changed: ${isPlaying}`);
+        }}
+    />,
     <NavigationBoardWithIsPlayingController />,
     <NavigationBoard game={pgn} playButtonVisible initialNodeId="20b" isPlaying={true} />,
 ]); /* eslint-enable react/jsx-key */

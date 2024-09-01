@@ -40,27 +40,27 @@ export interface ErrorBoxProps {
     /**
      * Title of the error box.
      */
-    title: string;
+    title: string,
 
     /**
      * Additional message providing details about the error.
      */
-    message: string;
+    message: string,
 
     /**
      * Raw text whose processing results in the error.
      */
-    text?: string;
+    text?: string,
 
     /**
      * Index of the character within `text` that results in the error.
      */
-    errorIndex?: number;
+    errorIndex?: number,
 
     /**
      * Index (1-based) of the line in which is the character that results in the error.
      */
-    lineNumber?: number;
+    lineNumber?: number,
 }
 
 

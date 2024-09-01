@@ -39,5 +39,7 @@ const limits = [
 
 testApp([ /* eslint-disable react/jsx-key */
     <Chessboard squareSize={50} smallScreenLimits={limits} />,
-    <Chessboard smallScreenLimits={ /* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */ } />,
+    <Chessboard
+        smallScreenLimits={/* eslint-disable @typescript-eslint/no-explicit-any */ 42 as any /* eslint-enable @typescript-eslint/no-explicit-any */}
+    />,
 ]); /* eslint-enable react/jsx-key */

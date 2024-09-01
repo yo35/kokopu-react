@@ -34,12 +34,14 @@ const limits2 = [
     { width: 750, squareSize: 27, turnVisible: false },
 ];
 
-function AuxilliaryComponent({ squareSize, coordinateVisible, turnVisible}: Pick<ChessboardProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) {
-    return (<>
-        <div>{`Square size: ${squareSize}`}</div>
-        <div>{`Coordinates: ${coordinateVisible}`}</div>
-        <div>{`Turn: ${turnVisible}`}</div>
-    </>);
+function AuxilliaryComponent({ squareSize, coordinateVisible, turnVisible }: Pick<ChessboardProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) {
+    return (
+        <>
+            <div>{`Square size: ${squareSize}`}</div>
+            <div>{`Coordinates: ${coordinateVisible}`}</div>
+            <div>{`Turn: ${turnVisible}`}</div>
+        </>
+    );
 }
 
 testApp([ /* eslint-disable react/jsx-key */

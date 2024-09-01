@@ -211,6 +211,8 @@ describe('Adapt square-size with small-screen limits', () => {
         delete global.window;
     });
 
+    /* global window */
+
     it('Window-limited', () => {
         window.innerWidth = 640;
         testAdaptSquareSize(32, 9999, 9999, true, true, limits);

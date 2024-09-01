@@ -30,65 +30,65 @@ interface DraggableProps {
     /**
      * Initial X coordinate of the handle.
      */
-    x: number;
+    x: number,
 
     /**
      * Initial Y coordinate of the handle.
      */
-    y: number;
+    y: number,
 
     /**
      * Width of the handle.
      */
-    width: number;
+    width: number,
 
     /**
      * Height of the handle.
      */
-    height: number;
+    height: number,
 
     /**
      * `true` if the handle corresponds to a draggable arrow, `false` if it corresponds to a draggable piece.
      */
-    isArrowHandle: boolean;
+    isArrowHandle: boolean,
 
     /**
      * Callback invoked when the drag starts. `x0` and `y0` correspond to the coordinates (relative to the hande) at which the drag has been initiated.
      */
-    onDragStart?: (x0: number, y0: number) => void;
+    onDragStart?: (x0: number, y0: number) => void,
 
     /**
      * Callback invoked during the drag. `dx` and `dy` correspond to the coordinates of the drag translation vector.
      */
-    onDrag?: (dx: number, dy: number) => void;
+    onDrag?: (dx: number, dy: number) => void,
 
     /**
      * Callback invoked when the drag stops. `dx` and `dy` correspond to the coordinates of the drag translation vector.
      */
-    onDragStop?: (dx: number, dy: number) => void;
+    onDragStop?: (dx: number, dy: number) => void,
 
     /**
      * Callback invoked when the drag is canceled.
      */
-    onDragCanceled?: () => void;
+    onDragCanceled?: () => void,
 }
 
 
 interface DragData {
-    originX: number;
-    originY: number;
+    originX: number,
+    originY: number,
 }
 
 
 interface PageCoordinates {
-    pageX: number;
-    pageY: number;
+    pageX: number,
+    pageY: number,
 }
 
 
 interface ClientCoordinates {
-    clientX: number;
-    clientY: number;
+    clientX: number,
+    clientY: number,
 }
 
 

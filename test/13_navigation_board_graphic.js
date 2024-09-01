@@ -50,10 +50,10 @@ describeWithBrowser('Navigation board graphic', browserContext => {
     function itCheckClickButton(itemIndex, label, buttons) {
         itCustom(browserContext, '13_navigation_board_graphic/additional_buttons', itemIndex, label, async element => {
             await setSandbox(browserContext, '');
-            for (let i = 0; i < buttons.length; ++i) {
-                const buttonElement = await element.findElement(By.xpath(`.//div[@title='${buttons[i].title}']`));
+            for (const button of buttons) {
+                const buttonElement = await element.findElement(By.xpath(`.//div[@title='${button.title}']`));
                 await buttonElement.click();
-                await compareSandbox(browserContext, buttons[i].expectedSandbox ?? '');
+                await compareSandbox(browserContext, button.expectedSandbox ?? '');
             }
         });
     }

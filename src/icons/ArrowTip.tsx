@@ -30,12 +30,12 @@ interface ArrowTipProps {
     /**
      * ID of the element.
      */
-    id: string;
+    id: string,
 
     /**
      * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
      */
-    color: string;
+    color: string,
 }
 
 

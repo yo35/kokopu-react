@@ -27,7 +27,7 @@
  */
 export namespace i18n {
 
-/* eslint-disable prefer-const */
+/* eslint-disable prefer-const, @stylistic/indent */
 // WARNING: all those constants must be declared with "let" to allow them to be re-defined if necessary by consumer codes.
 
 // Error box
@@ -46,7 +46,7 @@ export let TOOLTIP_PLAY_STOP = 'Play/stop the game';
 export let TOOLTIP_FLIP = 'Flip the board';
 
 // Movetext
-export let PIECE_SYMBOLS = { 'K':'K', 'Q':'Q', 'R':'R', 'B':'B', 'N':'N', 'P':'P' };
+export let PIECE_SYMBOLS = { K: 'K', Q: 'Q', R: 'R', B: 'B', N: 'N', P: 'P' };
 export let ANNOTATED_BY = 'Annotated by {0}';
 export let INVALID_PGN_ERROR_TITLE = 'Invalid PGN string.';
 

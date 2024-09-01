@@ -31,8 +31,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
         itCustom(browserContext, '07_chessboard_interaction/click_squares', itemIndex, label, async element => {
             const actions = browserContext.driver.actions({ async: true });
             const area = await element.getRect();
-            for (let i = 0; i < targets.length; ++i) {
-                const target = targets[i];
+            for (const target of targets) {
                 await actions.move({ x: area.x + target.x, y: area.y + target.y }).click().perform();
                 await compareSandbox(browserContext, target.expectedText);
             }

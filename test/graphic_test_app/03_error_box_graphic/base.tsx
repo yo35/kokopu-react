@@ -37,12 +37,24 @@ testApp([ /* eslint-disable react/jsx-key */
     <ErrorBox title="Too large error index" message="Nothing below" text="You will not see this..." errorIndex={100} />,
     <ErrorBox title="Error index not an integer" message="Nothing below" text="You will not see this..." errorIndex={2.3} />,
 
-    <ErrorBox title="Cut the end of the text" message="and keep all the beginning" text="| x <- the error is there and the rest of the line is cut because too long"
-        errorIndex={2} />,
-    <ErrorBox title="Cut the beginning of the text" message="and keep all the end" text="The error is there -> x 234567890 234567890 234567890 234567890"
-        errorIndex={22} lineNumber={0} />,
-    <ErrorBox title="Cut on line breaks" message="both at the beginning and at the end" text={'This is the first line\n| x |\nThis is the third line'}
-        errorIndex={25} lineNumber={2} />,
+    <ErrorBox
+        title="Cut the end of the text"
+        message="and keep all the beginning"
+        text="| x <- the error is there and the rest of the line is cut because too long"
+        errorIndex={2}
+    />,
+    <ErrorBox
+        title="Cut the beginning of the text"
+        message="and keep all the end"
+        text="The error is there -> x 234567890 234567890 234567890 234567890"
+        errorIndex={22} lineNumber={0}
+    />,
+    <ErrorBox
+        title="Cut on line breaks"
+        message="both at the beginning and at the end"
+        text={'This is the first line\n| x |\nThis is the third line'}
+        errorIndex={25} lineNumber={2}
+    />,
     <ErrorBox title="Single character text" message="The text is 1-character long" text="x" errorIndex={0} lineNumber={1.1} />,
 
 ]); /* eslint-enable react/jsx-key */

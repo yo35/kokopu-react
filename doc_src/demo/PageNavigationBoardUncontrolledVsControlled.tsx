@@ -36,7 +36,7 @@ import pgn from './game-3.pgn';
 
 
 interface PageState {
-    nodeId: string;
+    nodeId: string,
 }
 
 
@@ -60,21 +60,23 @@ export default class Page extends React.Component<object, PageState> {
     }
 
     private renderControls() {
-        return (<>
-            <Typography>
-                In uncontrolled mode, the current node ID (aka. the current move) of the <code>NavigationBoard</code> component is managed internally.
-                No additional code is needed to make the navigation buttons work.
-            </Typography>
-            <Typography>
-                In controlled mode, the current node ID is defined by the <code>nodeId</code> attribute, and a callback must be set
-                on the <code>onNodeIdChanged</code> attribute to respond to clicks on the navigation buttons.
-                This mode requires more code, as a state variable holding the current node ID must be explicitely managed out of the component,
-                but it allows to define more complex behaviors (e.g. synchronizing the node ID on the <code>NavigationBoard</code> with another component).
-            </Typography>
-            <Typography>
-                Whether the component is in uncontrolled mode or controlled mode depends on the presence of the <code>nodeId</code> attribute.
-            </Typography>
-        </>);
+        return (
+            <>
+                <Typography>
+                    In uncontrolled mode, the current node ID (aka. the current move) of the <code>NavigationBoard</code> component is managed internally.
+                    No additional code is needed to make the navigation buttons work.
+                </Typography>
+                <Typography>
+                    In controlled mode, the current node ID is defined by the <code>nodeId</code> attribute, and a callback must be set
+                    on the <code>onNodeIdChanged</code> attribute to respond to clicks on the navigation buttons.
+                    This mode requires more code, as a state variable holding the current node ID must be explicitely managed out of the component,
+                    but it allows to define more complex behaviors (e.g. synchronizing the node ID on the <code>NavigationBoard</code> with another component).
+                </Typography>
+                <Typography>
+                    Whether the component is in uncontrolled mode or controlled mode depends on the presence of the <code>nodeId</code> attribute.
+                </Typography>
+            </>
+        );
     }
 
     private renderNavigationBoards() {
@@ -107,8 +109,12 @@ export default class Page extends React.Component<object, PageState> {
         controlledAttributes.push('onNodeIdChanged={nodeId => handleNodeIdChanged(nodeId)}');
 
         const pgnDeclaration = 'const pgn = `\n' + pgn.trim() + '`;\n\n';
-        return <pre className="kokopu-demoCode">{pgnDeclaration + '// Uncontrolled\n' + buildComponentDemoCode('NavigationBoard', uncontrolledAttributes)
-            + '\n\n// Controlled\n' + buildComponentDemoCode('NavigationBoard', controlledAttributes)}</pre>;
+        return (
+            <pre className="kokopu-demoCode">
+                {pgnDeclaration + '// Uncontrolled\n' + buildComponentDemoCode('NavigationBoard', uncontrolledAttributes)
+                + '\n\n// Controlled\n' + buildComponentDemoCode('NavigationBoard', controlledAttributes)}
+            </pre>
+        );
     }
 
 }

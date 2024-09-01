@@ -44,14 +44,14 @@ const COLOR_ICON_SIZE = 16;
 
 
 interface PageState {
-    position: Position;
-    positionAfter: Position | null; // non-null only if a valid move has been played
-    flipped: boolean;
-    moveArrowVisible: boolean;
-    moveArrowColor: AnnotationColor;
-    animated: boolean;
-    editedMove: string;
-    playedMove: string;
+    position: Position,
+    positionAfter: Position | null, // non-null only if a valid move has been played
+    flipped: boolean,
+    moveArrowVisible: boolean,
+    moveArrowColor: AnnotationColor,
+    animated: boolean,
+    editedMove: string,
+    playedMove: string,
 }
 
 
@@ -85,28 +85,33 @@ export default class Page extends React.Component<object, PageState> {
     }
 
     private renderControls() {
-        return (<>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <FormControlLabel label="Flip"
-                    control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
-                />
-                <FormControlLabel label="Animation" disabled={!this.state.positionAfter}
-                    control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
-                />
-                <FormControlLabel label="Show move arrow" disabled={!this.state.positionAfter}
-                    control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.setState({ moveArrowVisible: !this.state.moveArrowVisible })} color="primary" />}
-                />
-                {this.renderColorSelector()}
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <TextField label="Move" variant="standard" value={this.state.editedMove} onChange={evt => this.setState({ editedMove: evt.target.value })} />
-                <Button color="primary" size="small" variant="contained" onClick={() => this.handlePlayClicked()}>Play</Button>
-                <ButtonGroup color="primary" size="small">
-                    <Button onClick={() => this.handlePositionChanged(new Position('empty'))}>Clear</Button>
-                    <Button onClick={() => this.handlePositionChanged(new Position())}>Reset</Button>
-                </ButtonGroup>
-            </Stack>
-        </>);
+        return (
+            <>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <FormControlLabel
+                        label="Flip"
+                        control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Animation" disabled={!this.state.positionAfter}
+                        control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show move arrow" disabled={!this.state.positionAfter}
+                        control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.setState({ moveArrowVisible: !this.state.moveArrowVisible })} color="primary" />}
+                    />
+                    {this.renderColorSelector()}
+                </Stack>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <TextField label="Move" variant="standard" value={this.state.editedMove} onChange={evt => this.setState({ editedMove: evt.target.value })} />
+                    <Button color="primary" size="small" variant="contained" onClick={() => this.handlePlayClicked()}>Play</Button>
+                    <ButtonGroup color="primary" size="small">
+                        <Button onClick={() => this.handlePositionChanged(new Position('empty'))}>Clear</Button>
+                        <Button onClick={() => this.handlePositionChanged(new Position())}>Reset</Button>
+                    </ButtonGroup>
+                </Stack>
+            </>
+        );
     }
 
     private renderColorSelector() {

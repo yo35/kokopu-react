@@ -30,8 +30,8 @@ import './NavigationToolbar.css';
 
 
 interface NavigationToolbarProps {
-    squareSize: number;
-    buttons: NavigationBar;
+    squareSize: number,
+    buttons: NavigationBar,
 }
 
 
@@ -62,13 +62,15 @@ export function NavigationToolbar({ squareSize, buttons }: NavigationToolbarProp
         atLeastOneButtonEncountered = true;
 
         // Enqueue the button node.
-        buttonNodes.push(<NavigationButtonImpl
-            key={buttonNodes.length}
-            tooltip={button.tooltip} iconPath={button.iconPath} enabled={button.enabled} onClick={button.onClick}
-            size={buttonSize}
-            spaceOnLeft={i === 0 || buttons[i - 1] === 'spacer'}
-            spaceOnRight={i === buttons.length - 1 || buttons[i + 1] === 'spacer'}
-        />);
+        buttonNodes.push(
+            <NavigationButtonImpl
+                key={buttonNodes.length}
+                tooltip={button.tooltip} iconPath={button.iconPath} enabled={button.enabled} onClick={button.onClick}
+                size={buttonSize}
+                spaceOnLeft={i === 0 || buttons[i - 1] === 'spacer'}
+                spaceOnRight={i === buttons.length - 1 || buttons[i + 1] === 'spacer'}
+            />,
+        );
     }
 
     return <div className="kokopu-navigationToolbar" style={{ marginTop: computeMarginTop(squareSize) }}>{buttonNodes}</div>;
@@ -76,9 +78,9 @@ export function NavigationToolbar({ squareSize, buttons }: NavigationToolbarProp
 
 
 interface NavigationButtonImplProps extends NavigationButton {
-    size: number;
-    spaceOnLeft: boolean;
-    spaceOnRight: boolean;
+    size: number,
+    spaceOnLeft: boolean,
+    spaceOnRight: boolean,
 }
 
 
@@ -90,7 +92,9 @@ function NavigationButtonImpl({ size, spaceOnLeft, spaceOnRight, iconPath, toolt
     const rightBoundary = spaceOnRight ? 'A 16 16 0 0 0 16 0' : 'L 31 32 L 31 0 L 16 0';
     const actuallyEnabled = enabled ?? true;
     return (
-        <div className={actuallyEnabled ? 'kokopu-enabledNavigationButton' : 'kokopu-disabledNavigationButton'} title={tooltip}
+        <div
+            className={actuallyEnabled ? 'kokopu-enabledNavigationButton' : 'kokopu-disabledNavigationButton'}
+            title={tooltip}
             onClick={actuallyEnabled ? onClick : undefined}
         >
             <svg viewBox="0 0 32 32" width={size} height={size}>

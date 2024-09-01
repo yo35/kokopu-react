@@ -37,12 +37,14 @@ function TestComponent() {
         setClicked(true);
     }
 
-    return (<>
-        <div>
-            <Chessboard position={position} move={move} animated={true} />
-        </div>
-        {clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
-    </>);
+    return (
+        <>
+            <div>
+                <Chessboard position={position} move={move} animated={true} />
+            </div>
+            {clicked ? undefined : <button id="chessboard-action-button" onClick={onClick}>Click here</button>}
+        </>
+    );
 }
 
 

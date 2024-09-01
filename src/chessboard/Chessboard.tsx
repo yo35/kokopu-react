@@ -49,36 +49,36 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
      * [game variant](https://kokopu.yo35.org/docs/current/types/GameVariant.html) supported by Kokopu. For instance:
      * `'chess960:nrkbqrbn/pppppppp/8/8/8/8/PPPPPPPP/NRKBQRBN w KQkq - 0 1'`.
      */
-    position: Position | string;
+    position: Position | string,
 
     /**
      * Displayed move (optional), defined either as a [kokopu.MoveDescriptor](https://kokopu.yo35.org/docs/current/classes/MoveDescriptor.html) object
      * or as a [SAN string](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) (e.g. `'Nf3'`). Use `'--'` for a null-move.
      * In all cases, the move must be a legal move in position defined in attribute `position`.
      */
-    move?: MoveDescriptor | string;
+    move?: MoveDescriptor | string,
 
     /**
      * Square markers, defined as a {@link SquareMarkerSet} (e.g. `{ e4: 'g', d5: 'r' }`) or as a comma-separated CSL string (e.g. `'Rd5,Ge4'`).
      */
-    squareMarkers?: SquareMarkerSet | string;
+    squareMarkers?: SquareMarkerSet | string,
 
     /**
      * Text markers, defined as a {@link TextMarkerSet} (e.g. `{ e4: { symbol: 'A', color: 'g' }, d5: { symbol: 'z', color: 'r' }}`)
      * or as a comma-separated CTL string (e.g. `'Rzd5,GAe4'`).
      */
-    textMarkers?: TextMarkerSet | string;
+    textMarkers?: TextMarkerSet | string,
 
     /**
      * Arrow markers, defined as a {@link ArrowMarkerSet} (e.g. `{ e2e4: 'g', g8f6: 'r', g8h6: 'y' }`)
      * or as a comma-separated CAL string (e.g. `'Ge2e4,Rg8f6,Yg8h6'`).
      */
-    arrowMarkers?: ArrowMarkerSet | string;
+    arrowMarkers?: ArrowMarkerSet | string,
 
     /**
      * Whether the board is flipped (i.e. seen from Black's point of view) or not.
      */
-    flipped: boolean;
+    flipped: boolean,
 
     /**
      * Type of action allowed with the mouse on the chessboard. If undefined, then the user cannot interact with the component.
@@ -93,39 +93,39 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
     /**
      * Color of the edited arrow. Mandatory if `interactionMode === 'editArrows'`, ignored otherwise.
      */
-    editedArrowColor?: AnnotationColor;
+    editedArrowColor?: AnnotationColor,
 
     /**
      * Callback invoked when a piece is moved through drag&drop (only if `interactionMode` is set to `'movePieces'`).
      */
-    onPieceMoved?: (from: Square, to: Square) => void;
+    onPieceMoved?: (from: Square, to: Square) => void,
 
     /**
      * Callback invoked when the user clicks on a square (only if `interactionMode` is set to `'clickSquares'`).
      */
-    onSquareClicked?: (square: Square) => void;
+    onSquareClicked?: (square: Square) => void,
 
     /**
      * Callback invoked when an arrow is dragged (only if `interactionMode` is set to `'editArrows'`).
      */
-    onArrowEdited?: (from: Square, to: Square) => void;
+    onArrowEdited?: (from: Square, to: Square) => void,
 
     /**
      * Callback invoked when a move is played (only if `interactionMode` is set to `'playMoves'`).
      */
-    onMovePlayed?: (move: string) => void;
+    onMovePlayed?: (move: string) => void,
 
     /**
      * Optional component, to be rendered above the chessboard, and customized with the same square-size / coordinate-visible / turn-visible
      * parameter values as actually used for the chessboard (which may be different from what is defined in props because of small-screen limits).
      */
-    topComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element;
+    topComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element,
 
     /**
      * Optional component, to be rendered below the chessboard, and customized with the same square-size / coordinate-visible / turn-visible
      * parameter values as actually used for the chessboard (which may be different from what is defined in props because of small-screen limits).
      */
-    bottomComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element;
+    bottomComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element,
 }
 
 
@@ -136,12 +136,12 @@ type AuxilliaryComponentSizeFunction = (attr: Pick<StaticBoardGraphicProps, 'squ
  * Attributes for method `Chessboard.size()`.
  */
 export interface ChessboardSizeAttr {
-    squareSize?: ChessboardProps['squareSize'];
-    coordinateVisible?: ChessboardProps['coordinateVisible'];
-    turnVisible?: ChessboardProps['turnVisible'];
-    smallScreenLimits?: ChessboardProps['smallScreenLimits'];
-    topComponent?: AuxilliaryComponentSizeFunction;
-    bottomComponent?: AuxilliaryComponentSizeFunction;
+    squareSize?: ChessboardProps['squareSize'],
+    coordinateVisible?: ChessboardProps['coordinateVisible'],
+    turnVisible?: ChessboardProps['turnVisible'],
+    smallScreenLimits?: ChessboardProps['smallScreenLimits'],
+    topComponent?: AuxilliaryComponentSizeFunction,
+    bottomComponent?: AuxilliaryComponentSizeFunction,
 }
 
 
@@ -149,16 +149,16 @@ export interface ChessboardSizeAttr {
  * Attributes for method `Chessboard.adaptSquareSize()`.
  */
 export interface ChessboardAdaptSquareSizeAttr {
-    coordinateVisible?: ChessboardProps['coordinateVisible'];
-    turnVisible?: ChessboardProps['turnVisible'];
-    smallScreenLimits?: ChessboardProps['smallScreenLimits'];
-    topComponent?: AuxilliaryComponentSizeFunction;
-    bottomComponent?: AuxilliaryComponentSizeFunction;
+    coordinateVisible?: ChessboardProps['coordinateVisible'],
+    turnVisible?: ChessboardProps['turnVisible'],
+    smallScreenLimits?: ChessboardProps['smallScreenLimits'],
+    topComponent?: AuxilliaryComponentSizeFunction,
+    bottomComponent?: AuxilliaryComponentSizeFunction,
 }
 
 
 interface ChessboardState {
-    windowWidth: number;
+    windowWidth: number,
 }
 
 
@@ -256,18 +256,21 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
         // (mandatory to ensure that the move animation works properly and that the internal state of the component remains consistent).
         const key = `${position.variant()}|${position.fen()}|${move ? position.notation(move) : ''}`;
 
-        return (<>
-            {this.props.topComponent ? this.props.topComponent(auxilliaryComponentAttr) : undefined}
-            <ChessboardImpl key={key}
-                position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm} flipped={flipped}
-                squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} turnVisible={actualTurnVisible}
-                moveArrowVisible={moveArrowVisible} moveArrowColor={this.props.moveArrowColor} animated={animated}
-                colorset={colorset} pieceset={pieceset}
-                interactionMode={interactionMode} editedArrowColor={this.props.editedArrowColor}
-                onPieceMoved={onPieceMoved} onSquareClicked={onSquareClicked} onArrowEdited={onArrowEdited} onMovePlayed={onMovePlayed}
-            />
-            {this.props.bottomComponent ? this.props.bottomComponent(auxilliaryComponentAttr) : undefined}
-        </>);
+        return (
+            <>
+                {this.props.topComponent ? this.props.topComponent(auxilliaryComponentAttr) : undefined}
+                <ChessboardImpl
+                    key={key}
+                    position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm} flipped={flipped}
+                    squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} turnVisible={actualTurnVisible}
+                    moveArrowVisible={moveArrowVisible} moveArrowColor={this.props.moveArrowColor} animated={animated}
+                    colorset={colorset} pieceset={pieceset}
+                    interactionMode={interactionMode} editedArrowColor={this.props.editedArrowColor}
+                    onPieceMoved={onPieceMoved} onSquareClicked={onSquareClicked} onArrowEdited={onArrowEdited} onMovePlayed={onMovePlayed}
+                />
+                {this.props.bottomComponent ? this.props.bottomComponent(auxilliaryComponentAttr) : undefined}
+            </>
+        );
     }
 
     private getInteractionModeAndValidateEditedArrowColor() {
@@ -294,7 +297,8 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
             () => new IllegalArgument('Chessboard.size()', 'attr'));
 
         // Sanitize the arguments.
-        let actualSquareSize = squareSize === undefined ? DEFAULT_SQUARE_SIZE :
+        let actualSquareSize = squareSize === undefined ?
+            DEFAULT_SQUARE_SIZE :
             sanitizeBoundedInteger(squareSize, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('Chessboard.size()', 'squareSize'));
         let actualCoordinateVisible = coordinateVisible === undefined ? true : sanitizeBoolean(coordinateVisible);
         let actualTurnVisible = turnVisible === undefined ? true : sanitizeBoolean(turnVisible);
@@ -530,7 +534,7 @@ function sanitizeSmallScreenLimits(smallScreenLimits: SmallScreenLimit[] | undef
                 width: sanitizeInteger(smallScreenLimit.width, exceptionBuilder),
                 squareSize: sanitizeOptional(smallScreenLimit.squareSize, val => sanitizeBoundedInteger(val, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, exceptionBuilder)),
                 coordinateVisible: sanitizeOptional(smallScreenLimit.coordinateVisible, sanitizeBoolean),
-                turnVisible: sanitizeOptional(smallScreenLimit.turnVisible, sanitizeBoolean)
+                turnVisible: sanitizeOptional(smallScreenLimit.turnVisible, sanitizeBoolean),
             };
         });
     }

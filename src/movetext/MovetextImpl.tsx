@@ -39,19 +39,19 @@ import './Movetext.css';
 
 interface MovetextImplProps {
 
-    game: Game;
+    game: Game,
 
     diagramOptions: Partial<StaticBoardGraphicProps> & {
         flipped?: boolean,
-    };
-    moveFormatter: (notation: string) => React.ReactNode;
-    diagramVisible: boolean;
-    headerVisible: boolean;
+    },
+    moveFormatter: (notation: string) => React.ReactNode,
+    diagramVisible: boolean,
+    headerVisible: boolean,
 
-    selection?: string;
-    interactionMode?: 'selectMove';
+    selection?: string,
+    interactionMode?: 'selectMove',
 
-    onMoveSelected?: (nodeId: string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'key-exit' | 'click') => void;
+    onMoveSelected?: (nodeId: string | undefined, evtOrigin: 'key-first' | 'key-previous' | 'key-next' | 'key-last' | 'key-exit' | 'click') => void,
 }
 
 
@@ -106,7 +106,8 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
         const titleElement = title === undefined ? undefined : <span className="kokopu-header-playerTitle">{filter(title)}</span>;
         const ratingElement = rating === undefined ? undefined : <span className="kokopu-header-playerRating">{rating}</span>;
         const separator = title === undefined || rating === undefined ? undefined : '\u00a0'; // \u00a0 == &nbsp;
-        const titleRatingGroup = title === undefined && rating === undefined ? undefined :
+        const titleRatingGroup = title === undefined && rating === undefined ?
+            undefined :
             <span className="kokopu-headerGroup-titleRating">{titleElement}{separator}{ratingElement}</span>;
         return <div className={classNames.join(' ')} key={'player-' + color}>{colorTag}{playerNameElement}{titleRatingGroup}</div>;
     }
@@ -155,13 +156,16 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
         if (this.props.interactionMode !== 'selectMove') {
             return undefined;
         }
-        return <NavigationField ref={this.navigationFieldRef}
-            onFirstPressed={() => this.handleNavigationPressed(firstNodeId, 'key-first')}
-            onPreviousPressed={() => this.handleNavigationPressed(previousNodeId, 'key-previous')}
-            onNextPressed={() => this.handleNavigationPressed(nextNodeId, 'key-next')}
-            onLastPressed={() => this.handleNavigationPressed(lastNodeId, 'key-last')}
-            onExitPressed={() => this.handleExitPressed()}
-        />;
+        return (
+            <NavigationField
+                ref={this.navigationFieldRef}
+                onFirstPressed={() => this.handleNavigationPressed(firstNodeId, 'key-first')}
+                onPreviousPressed={() => this.handleNavigationPressed(previousNodeId, 'key-previous')}
+                onNextPressed={() => this.handleNavigationPressed(nextNodeId, 'key-next')}
+                onLastPressed={() => this.handleNavigationPressed(lastNodeId, 'key-last')}
+                onExitPressed={() => this.handleExitPressed()}
+            />
+        );
     }
 
     private renderBody() {
@@ -268,7 +272,7 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
         // Move number
         let moveNumber: React.ReactNode = undefined;
         if (forcePrintMoveNumber || node.moveColor() === 'w') {
-            const moveNumberText  = node.fullMoveNumber() + (node.moveColor() === 'w' ? '.' : '\u2026');
+            const moveNumberText = node.fullMoveNumber() + (node.moveColor() === 'w' ? '.' : '\u2026');
             moveNumber = <span className="kokopu-moveNumber">{moveNumberText}</span>;
         }
 
@@ -313,17 +317,19 @@ export class MovetextImpl extends React.Component<MovetextImplProps> {
             for (let textSegment of comment.split('[#]')) {
                 if (!isFirstTextSegment) {
                     const position = node instanceof Variation ? node.initialPosition() : node.position();
-                    const diagram = <Chessboard
-                        position={position}
-                        squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}
-                        flipped={this.props.diagramOptions.flipped}
-                        squareSize={this.props.diagramOptions.squareSize}
-                        coordinateVisible={this.props.diagramOptions.coordinateVisible}
-                        turnVisible={this.props.diagramOptions.turnVisible}
-                        colorset={this.props.diagramOptions.colorset}
-                        pieceset={this.props.diagramOptions.pieceset}
-                        smallScreenLimits={this.props.diagramOptions.smallScreenLimits}
-                    />;
+                    const diagram = (
+                        <Chessboard
+                            position={position}
+                            squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}
+                            flipped={this.props.diagramOptions.flipped}
+                            squareSize={this.props.diagramOptions.squareSize}
+                            coordinateVisible={this.props.diagramOptions.coordinateVisible}
+                            turnVisible={this.props.diagramOptions.turnVisible}
+                            colorset={this.props.diagramOptions.colorset}
+                            pieceset={this.props.diagramOptions.pieceset}
+                            smallScreenLimits={this.props.diagramOptions.smallScreenLimits}
+                        />
+                    );
                     segmentElements.push(<div className="kokopu-diagram" key={'diagram-' + (diagramIndex++)}>{diagram}</div>);
                 }
                 isFirstTextSegment = false;

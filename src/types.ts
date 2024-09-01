@@ -62,22 +62,22 @@ export function isChessPieceIconType(iconType: unknown): iconType is ChessPieceI
 export type Colorset = {
 
     /** Color of the black squares. */
-    b: string;
+    b: string,
 
     /** Color of the white squares. */
-    w: string;
+    w: string,
 
     /** Color of the blue markers. */
-    cb: string;
+    cb: string,
 
     /** Color of the green markers. */
-    cg: string;
+    cg: string,
 
     /** Color of the red markers. */
-    cr: string;
+    cr: string,
 
     /** Color of the yellow markers. */
-    cy: string;
+    cy: string,
 };
 
 
@@ -89,46 +89,46 @@ export type Colorset = {
 export type Pieceset = {
 
     /** Image for the black bishops. */
-    bb: string;
+    bb: string,
 
     /** Image for the black kings. */
-    bk: string;
+    bk: string,
 
     /** Image for the black knights. */
-    bn: string;
+    bn: string,
 
     /** Image for the black pawns. */
-    bp: string;
+    bp: string,
 
     /** Image for the black queens. */
-    bq: string;
+    bq: string,
 
     /** Image for the black rooks. */
-    br: string;
+    br: string,
 
     /** Image for the black turn flags. */
-    bx: string;
+    bx: string,
 
     /** Image for the white bishops. */
-    wb: string;
+    wb: string,
 
     /** Image for the white kings. */
-    wk: string;
+    wk: string,
 
     /** Image for the white knights. */
-    wn: string;
+    wn: string,
 
     /** Image for the white pawns. */
-    wp: string;
+    wp: string,
 
     /** Image for the white queens. */
-    wq: string;
+    wq: string,
 
     /** Image for the white rooks. */
-    wr: string;
+    wr: string,
 
     /** Image for the white turn flags. */
-    wx: string;
+    wx: string,
 };
 
 
@@ -136,12 +136,12 @@ export type Pieceset = {
  * Set of aliases for chess pieces symbols.
  */
 export type PieceSymbolMapping = {
-    K: string;
-    Q: string;
-    R: string;
-    B: string;
-    N: string;
-    P: string;
+    K: string,
+    Q: string,
+    R: string,
+    B: string,
+    N: string,
+    P: string,
 };
 
 

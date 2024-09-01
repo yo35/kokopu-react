@@ -31,19 +31,19 @@ import './test_app.css';
 // This global variable allows to freeze animations in an intermediate stage.
 declare global {
     interface Window {
-        '__kokopu_debug_freeze_motion': number;
+        __kokopu_debug_freeze_motion: number,
     }
 }
 
 
 interface TestItemContainerProps {
-    index: number;
-    children: React.ReactNode;
+    index: number,
+    children: React.ReactNode,
 }
 
 
 interface TestItemContainerState {
-    hasError: boolean;
+    hasError: boolean,
 }
 
 

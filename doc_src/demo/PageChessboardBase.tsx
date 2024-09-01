@@ -48,14 +48,14 @@ const ARROW_MARKERS = 'Gd3b6,Rf3d6,Yh3f6';
 
 
 interface PageState {
-    position: string;
-    flipped: boolean;
-    squareSize: number;
-    coordinateVisible: boolean;
-    turnVisible: boolean;
-    annotationVisible: boolean;
-    colorset: string;
-    pieceset: string;
+    position: string,
+    flipped: boolean,
+    squareSize: number,
+    coordinateVisible: boolean,
+    turnVisible: boolean,
+    annotationVisible: boolean,
+    colorset: string,
+    pieceset: string,
 }
 
 
@@ -86,49 +86,55 @@ export default class Page extends React.Component<object, PageState> {
     }
 
     private renderControls() {
-        return (<>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <FormControlLabel label="Flip"
-                    control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
-                />
-                <FormControlLabel label="Show coordinates"
-                    control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
-                />
-                <FormControlLabel label="Show turn"
-                    control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
-                />
-                <FormControlLabel label="Show annotations"
-                    control={<Switch checked={this.state.annotationVisible} onChange={() => this.setState({ annotationVisible: !this.state.annotationVisible })} color="primary" />}
-                />
-            </Stack>
-            <Box>
-                <Typography gutterBottom>Square size</Typography>
-                <Slider
-                    value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
-                    min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
-                />
-            </Box>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <FormControl variant="standard">
-                    <InputLabel id="colorset-label">Colorset</InputLabel>
-                    <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
-                        {Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
-                    </Select>
-                </FormControl>
-                <FormControl variant="standard">
-                    <InputLabel id="pieceset-label">Pieceset</InputLabel>
-                    <Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
-                        {Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
-                    </Select>
-                </FormControl>
-                <ButtonGroup color="primary" size="small">
-                    <Button onClick={() => this.setState({ position: 'empty' })}>Clear</Button>
-                    <Button onClick={() => this.setState({ position: 'start' })}>Reset</Button>
-                    <Button onClick={() => this.setState({ position: '8/8/8/8/8/4k3/q7/4K3 b - - 0 1' })}>Set FEN</Button>
-                    <Button onClick={() => this.setState({ position: 'I\'m an invalid FEN string' })}>Set ill-formed FEN</Button>
-                </ButtonGroup>
-            </Stack>
-        </>);
+        return (
+            <>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <FormControlLabel
+                        label="Flip"
+                        control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show coordinates"
+                        control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show turn"
+                        control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show annotations"
+                        control={<Switch checked={this.state.annotationVisible} onChange={() => this.setState({ annotationVisible: !this.state.annotationVisible })} color="primary" />}
+                    />
+                </Stack>
+                <Box>
+                    <Typography gutterBottom>Square size</Typography>
+                    <Slider
+                        value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
+                        min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
+                    />
+                </Box>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <FormControl variant="standard">
+                        <InputLabel id="colorset-label">Colorset</InputLabel>
+                        <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
+                            {Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <FormControl variant="standard">
+                        <InputLabel id="pieceset-label">Pieceset</InputLabel>
+                        <Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
+                            {Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <ButtonGroup color="primary" size="small">
+                        <Button onClick={() => this.setState({ position: 'empty' })}>Clear</Button>
+                        <Button onClick={() => this.setState({ position: 'start' })}>Reset</Button>
+                        <Button onClick={() => this.setState({ position: '8/8/8/8/8/4k3/q7/4K3 b - - 0 1' })}>Set FEN</Button>
+                        <Button onClick={() => this.setState({ position: 'I\'m an invalid FEN string' })}>Set ill-formed FEN</Button>
+                    </ButtonGroup>
+                </Stack>
+            </>
+        );
     }
 
     private renderChessboard() {

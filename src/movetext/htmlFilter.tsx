@@ -72,7 +72,7 @@ export function htmlFilter(type: 'header' | 'comment'): (text: string) => React.
             'ul', 'ol', 'li', // lists
         ]);
         Object.assign(allowedAttributes, {
-            'img': [ 'alt', 'src', 'height', 'width' ],
+            img: [ 'alt', 'src', 'height', 'width' ],
         });
     }
 
@@ -85,8 +85,8 @@ export function htmlFilter(type: 'header' | 'comment'): (text: string) => React.
 
 
 interface HtmlSanitizerProps {
-    allowedTags?: string[];
-    allowedAttributes?: Record<string, string[]>;
+    allowedTags?: string[],
+    allowedAttributes?: Record<string, string[]>,
 }
 
 
@@ -101,7 +101,7 @@ class HtmlSanitizer {
 
     constructor({ allowedTags, allowedAttributes }: HtmlSanitizerProps) {
         this.#allowedTags = allowedTags ? new Set(allowedTags) : new Set();
-        this.#allowedAttributes = allowedAttributes ? new Map(Object.entries(allowedAttributes).map(([k, v]) => [k, new Set(v)])) : new Map();
+        this.#allowedAttributes = allowedAttributes ? new Map(Object.entries(allowedAttributes).map(([ k, v ]) => [ k, new Set(v) ])) : new Map();
     }
 
     /**

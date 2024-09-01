@@ -31,10 +31,10 @@ import { DEFAULT_PIECESET } from './piecesets';
  * Define a limit applicable to the parameters of a {@link Chessboard} on small-screen devices.
  */
 export interface SmallScreenLimit {
-    width: number;
-    squareSize?: number;
-    coordinateVisible?: boolean;
-    turnVisible?: boolean;
+    width: number,
+    squareSize?: number,
+    coordinateVisible?: boolean,
+    turnVisible?: boolean,
 }
 
 
@@ -46,27 +46,27 @@ export interface StaticBoardGraphicProps {
     /**
      * Size of the squares (in pixels). Must be an integer between `Chessboard.minSquareSize()` and `Chessboard.maxSquareSize()`.
      */
-    squareSize: number;
+    squareSize: number,
 
     /**
      * Whether the row and column coordinates are visible or not.
      */
-    coordinateVisible: boolean;
+    coordinateVisible: boolean,
 
     /**
      * Whether the turn flag is visible or not.
      */
-    turnVisible: boolean;
+    turnVisible: boolean,
 
     /**
      * Color theme ID. Must be a property of `Chessboard.colorsets()`.
      */
-    colorset: string;
+    colorset: string,
 
     /**
      * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
      */
-    pieceset: string;
+    pieceset: string,
 
     /**
      * Limits applicable on small-screen devices. For instance, if set to
@@ -81,7 +81,7 @@ export interface StaticBoardGraphicProps {
      * will be limited to 24 and the row and column coordinates will always be hidden (whatever the value of the
      * `coordinateVisible` attribute).
      */
-    smallScreenLimits?: SmallScreenLimit[];
+    smallScreenLimits?: SmallScreenLimit[],
 }
 
 
@@ -93,17 +93,17 @@ export interface DynamicBoardGraphicProps extends StaticBoardGraphicProps {
     /**
      * Whether moves are highlighted with an arrow or not.
      */
-    moveArrowVisible: boolean;
+    moveArrowVisible: boolean,
 
     /**
      * Color of the move arrow.
      */
-    moveArrowColor: AnnotationColor;
+    moveArrowColor: AnnotationColor,
 
     /**
      * Whether moves are animated or not.
      */
-    animated: boolean;
+    animated: boolean,
 }
 
 

@@ -30,11 +30,11 @@ import './NavigationField.css';
 
 
 interface NavigationFieldProps {
-    onFirstPressed?: () => void;
-    onPreviousPressed?: () => void;
-    onNextPressed?: () => void;
-    onLastPressed?: () => void;
-    onExitPressed?: () => void;
+    onFirstPressed?: () => void,
+    onPreviousPressed?: () => void,
+    onNextPressed?: () => void,
+    onLastPressed?: () => void,
+    onExitPressed?: () => void,
 }
 
 
@@ -54,7 +54,7 @@ export class NavigationField extends React.Component<NavigationFieldProps> {
     }
 
     private handleKeyDown(evt: React.KeyboardEvent<HTMLAnchorElement>) {
-        /* eslint-disable no-unused-expressions */
+        /* eslint-disable @typescript-eslint/no-unused-expressions */
         doHandleKeyDown(evt, 'Home', this.props.onFirstPressed) ||
         doHandleKeyDown(evt, 'ArrowLeft', this.props.onPreviousPressed) ||
         doHandleKeyDown(evt, 'ArrowRight', this.props.onNextPressed) ||

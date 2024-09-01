@@ -41,12 +41,12 @@ export interface ArrowMarkerIconProps {
     /**
      * Width and height (in pixels) of the icon.
      */
-    size: number;
+    size: number,
 
     /**
      * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
      */
-    color: string;
+    color: string,
 }
 
 
@@ -75,8 +75,12 @@ export class ArrowMarkerIcon extends React.Component<ArrowMarkerIconProps> {
                 <defs>
                     <ArrowTip id={this.arrowTipId} color={this.props.color} />
                 </defs>
-                <line className="kokopu-arrow" x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2} stroke={color}
-                    strokeWidth={halfThickness * 2} markerEnd={`url(#${this.arrowTipId})`} />
+                <line
+                    className="kokopu-arrow"
+                    x1={halfThickness} y1={size / 2} x2={size - halfThickness * 3} y2={size / 2}
+                    stroke={color} strokeWidth={halfThickness * 2}
+                    markerEnd={`url(#${this.arrowTipId})`}
+                />
             </svg>
         );
     }

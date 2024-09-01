@@ -52,49 +52,49 @@ export interface MovetextProps {
      * a [kokopu.Database](https://kokopu.yo35.org/docs/current/classes/Database.html) object,
      * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation).
      */
-    game: Game | Database | string;
+    game: Game | Database | string,
 
     /**
      * Index of the game to display (only if attribute `game` is a [kokopu.Database](https://kokopu.yo35.org/docs/current/classes/Database.html)
      * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation)): `0` for the first game of the database/PGN, `1` for the second one, etc.
      * If omitted, the first game of the database/PGN is displayed.
      */
-    gameIndex: number;
+    gameIndex: number,
 
     /**
      * Options applicable to the diagrams in the comments. See [Chessboard](#/Components/Chessboard) for more details about each option.
      */
     diagramOptions: Partial<StaticBoardGraphicProps> & {
         flipped?: boolean,
-    };
+    },
 
     /**
      * Symbols to use for the chess pieces. See {@link moveFormatter}.
      */
-    pieceSymbols: 'native' | 'localized' | 'figurines' | PieceSymbolMapping;
+    pieceSymbols: 'native' | 'localized' | 'figurines' | PieceSymbolMapping,
 
     /**
      * Whether the diagrams within the comments (if any) are displayed or not.
      */
-    diagramVisible: boolean;
+    diagramVisible: boolean,
 
     /**
      * Whether the game headers (if any) are displayed or not.
      */
-    headerVisible: boolean;
+    headerVisible: boolean,
 
     /**
      * ID of the selected move (or `'start'`/`'end'` for the beginning/end of the main variation).
      * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/current/classes/Node.html#id) to get the ID of a game move.
      */
-    selection?: string;
+    selection?: string,
 
     /**
      * Type of action allowed with the mouse/keys on the component. If undefined, then the user cannot interact with the component.
      *
      * - `'selectMove'` allows the user to select a move.
      */
-    interactionMode?: 'selectMove';
+    interactionMode?: 'selectMove',
 
     /**
      * Callback invoked when the user selects a move (only if `interactionMode` is set to `'selectMove'`).
@@ -109,7 +109,7 @@ export interface MovetextProps {
      *                    - `'key-exit'`: the event has been triggered by the "unselect-move" key (aka. the escape key),
      *                    - `'click'`: the event has been triggered by a mouse click on a move.
      */
-    onMoveSelected?: (nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) => void;
+    onMoveSelected?: (nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) => void,
 }
 
 
@@ -151,7 +151,8 @@ export class Movetext extends React.Component<MovetextProps> {
         const { onMoveSelected } = this.props;
 
         return (
-            <MovetextImpl ref={this.implRef}
+            <MovetextImpl
+                ref={this.implRef}
                 game={info.game}
                 diagramOptions={this.props.diagramOptions} moveFormatter={formatter} diagramVisible={diagramVisible} headerVisible={headerVisible}
                 selection={selection} interactionMode={interactionMode} onMoveSelected={onMoveSelected}

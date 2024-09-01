@@ -48,16 +48,16 @@ const COLOR_ICON_SIZE = 16;
 
 
 interface PageState {
-    squareSize: number;
-    coordinateVisible: boolean;
-    turnVisible: boolean;
-    colorset: string;
-    pieceset: string;
-    moveArrowVisible: boolean;
-    moveArrowColor: AnnotationColor;
-    animated: boolean;
-    playButtonVisible: boolean;
-    flipButtonVisible: boolean;
+    squareSize: number,
+    coordinateVisible: boolean,
+    turnVisible: boolean,
+    colorset: string,
+    pieceset: string,
+    moveArrowVisible: boolean,
+    moveArrowColor: AnnotationColor,
+    animated: boolean,
+    playButtonVisible: boolean,
+    flipButtonVisible: boolean,
 }
 
 
@@ -90,50 +90,58 @@ export default class Page extends React.Component<object, PageState> {
     }
 
     private renderControls() {
-        return (<>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <FormControlLabel label="Show play/stop button"
-                    control={<Switch checked={this.state.playButtonVisible} onChange={() => this.setState({ playButtonVisible: !this.state.playButtonVisible })} color="primary" />}
-                />
-                <FormControlLabel label="Show flip button"
-                    control={<Switch checked={this.state.flipButtonVisible} onChange={() => this.setState({ flipButtonVisible: !this.state.flipButtonVisible })} color="primary" />}
-                />
-                <FormControlLabel label="Show coordinates"
-                    control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
-                />
-                <FormControlLabel label="Show turn"
-                    control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
-                />
-                <FormControlLabel label="Animated"
-                    control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
-                />
-            </Stack>
-            <Box>
-                <Typography gutterBottom>Square size</Typography>
-                <Slider
-                    value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
-                    min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
-                />
-            </Box>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <FormControl variant="standard">
-                    <InputLabel id="colorset-label">Colorset</InputLabel>
-                    <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
-                        {Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
-                    </Select>
-                </FormControl>
-                <FormControl variant="standard">
-                    <InputLabel id="pieceset-label">Pieceset</InputLabel>
-                    <Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
-                        {Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
-                    </Select>
-                </FormControl>
-                <FormControlLabel label="Show move arrow"
-                    control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.setState({ moveArrowVisible: !this.state.moveArrowVisible })} color="primary" />}
-                />
-                {this.renderMoveArrowColorSelector()}
-            </Stack>
-        </>);
+        return (
+            <>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <FormControlLabel
+                        label="Show play/stop button"
+                        control={<Switch checked={this.state.playButtonVisible} onChange={() => this.setState({ playButtonVisible: !this.state.playButtonVisible })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show flip button"
+                        control={<Switch checked={this.state.flipButtonVisible} onChange={() => this.setState({ flipButtonVisible: !this.state.flipButtonVisible })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show coordinates"
+                        control={<Switch checked={this.state.coordinateVisible} onChange={() => this.setState({ coordinateVisible: !this.state.coordinateVisible })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Show turn"
+                        control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Animated"
+                        control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
+                    />
+                </Stack>
+                <Box>
+                    <Typography gutterBottom>Square size</Typography>
+                    <Slider
+                        value={this.state.squareSize} onChange={(_, newValue) => this.setState({ squareSize: newValue as number })}
+                        min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
+                    />
+                </Box>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <FormControl variant="standard">
+                        <InputLabel id="colorset-label">Colorset</InputLabel>
+                        <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
+                            {Object.keys(Chessboard.colorsets()).sort().map(colorset => <MenuItem key={colorset} value={colorset}>{colorset}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <FormControl variant="standard">
+                        <InputLabel id="pieceset-label">Pieceset</InputLabel>
+                        <Select labelId="pieceset-label" sx={{ width: '8em' }} value={this.state.pieceset} onChange={evt => this.setState({ pieceset: evt.target.value })}>
+                            {Object.keys(Chessboard.piecesets()).sort().map(pieceset => <MenuItem key={pieceset} value={pieceset}>{pieceset}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <FormControlLabel
+                        label="Show move arrow"
+                        control={<Switch checked={this.state.moveArrowVisible} onChange={() => this.setState({ moveArrowVisible: !this.state.moveArrowVisible })} color="primary" />}
+                    />
+                    {this.renderMoveArrowColorSelector()}
+                </Stack>
+            </>
+        );
     }
 
     private renderMoveArrowColorSelector() {

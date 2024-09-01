@@ -44,11 +44,11 @@ import game2 from './game-2.pgn';
 
 
 interface PageState {
-    pgn: string;
-    selection: string;
-    interactionMode: 'none' | 'selectMove';
-    withPopup: boolean;
-    withMove: boolean;
+    pgn: string,
+    selection: string,
+    interactionMode: 'none' | 'selectMove',
+    withPopup: boolean,
+    withMove: boolean,
 }
 
 
@@ -77,21 +77,23 @@ export default class Page extends React.Component<object, PageState> {
     }
 
     private renderControls() {
-        return (<>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <ButtonGroup color="primary" size="small">
-                    <Button onClick={() => this.setState({ pgn: game1, selection: '28b' })}>Game 1</Button>
-                    <Button onClick={() => this.setState({ pgn: game2, selection: '15b' })}>Game 2</Button>
-                </ButtonGroup>
-            </Stack>
-            <Box>
-                <Typography gutterBottom>Interaction mode</Typography>
-                <RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
-                    <FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
-                    <FormControlLabel value="selectMove" control={<Radio color="primary" />} label="Select moves" />
-                </RadioGroup>
-            </Box>
-        </>);
+        return (
+            <>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <ButtonGroup color="primary" size="small">
+                        <Button onClick={() => this.setState({ pgn: game1, selection: '28b' })}>Game 1</Button>
+                        <Button onClick={() => this.setState({ pgn: game2, selection: '15b' })}>Game 2</Button>
+                    </ButtonGroup>
+                </Stack>
+                <Box>
+                    <Typography gutterBottom>Interaction mode</Typography>
+                    <RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
+                        <FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
+                        <FormControlLabel value="selectMove" control={<Radio color="primary" />} label="Select moves" />
+                    </RadioGroup>
+                </Box>
+            </>
+        );
     }
 
     private renderMovetext() {
@@ -166,7 +168,7 @@ export default class Page extends React.Component<object, PageState> {
             const node = game.findById(this.state.selection) as GameNode;
             return {
                 position: this.state.withMove ? node.positionBefore() : node.position(),
-                move:  this.state.withMove ? node.notation() : undefined,
+                move: this.state.withMove ? node.notation() : undefined,
                 csl: node.tag('csl'),
                 cal: node.tag('cal'),
             };

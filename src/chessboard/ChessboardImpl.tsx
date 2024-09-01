@@ -52,44 +52,44 @@ const FILE_LABELS = 'abcdefgh';
 
 interface ChessboardImplProps {
 
-    position: Position;
-    move?: MoveDescriptor;
+    position: Position,
+    move?: MoveDescriptor,
 
-    squareMarkers?: SquareMarkerSet;
-    textMarkers?: TextMarkerSet;
-    arrowMarkers?: ArrowMarkerSet;
+    squareMarkers?: SquareMarkerSet,
+    textMarkers?: TextMarkerSet,
+    arrowMarkers?: ArrowMarkerSet,
 
-    flipped: boolean;
-    squareSize: number;
-    coordinateVisible: boolean;
-    turnVisible: boolean;
-    moveArrowVisible: boolean;
-    moveArrowColor: AnnotationColor;
-    animated: boolean;
-    colorset: Colorset;
-    pieceset: Pieceset;
+    flipped: boolean,
+    squareSize: number,
+    coordinateVisible: boolean,
+    turnVisible: boolean,
+    moveArrowVisible: boolean,
+    moveArrowColor: AnnotationColor,
+    animated: boolean,
+    colorset: Colorset,
+    pieceset: Pieceset,
 
     interactionMode?: 'movePieces' | 'clickSquares' | 'editArrows' | 'playMoves',
-    editedArrowColor?: AnnotationColor; // mandatory if `interactionMode === 'editArrows'`
+    editedArrowColor?: AnnotationColor, // mandatory if `interactionMode === 'editArrows'`
 
-    onPieceMoved?: (from: Square, to: Square) => void;
-    onSquareClicked?: (square: Square) => void;
-    onArrowEdited?: (from: Square, to: Square) => void;
-    onMovePlayed?: (move: string) => void;
+    onPieceMoved?: (from: Square, to: Square) => void,
+    onSquareClicked?: (square: Square) => void,
+    onArrowEdited?: (from: Square, to: Square) => void,
+    onMovePlayed?: (move: string) => void,
 }
 
 
 interface ChessboardImplState {
-    inhibitedSquare?: Square;
-    draggedSquare?: Square;
-    hoveredSquare?: Square;
-    dragPosition?: { x: number, y: number }; // mandatory if `dragged` is defined
-    cursorOffset?: { x: number, y: number }; // mandatory if `dragged` is defined
+    inhibitedSquare?: Square,
+    draggedSquare?: Square,
+    hoveredSquare?: Square,
+    dragPosition?: { x: number, y: number }, // mandatory if `dragged` is defined
+    cursorOffset?: { x: number, y: number }, // mandatory if `dragged` is defined
     promotionDrawer?: {
         origin: Square,
         buttons: Piece[],
         builder: (promotion: Piece) => string,
-    };
+    },
 }
 
 
@@ -309,12 +309,20 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
         });
         return (
             <>
-                <rect className="kokopu-handle" x={0} y={0} width={this.props.squareSize * 8} height={this.props.squareSize * 8}
-                    onClick={() => this.handleDrawerCancelButtonClicked()} />
-                <rect x={x} y={y0} width={this.props.squareSize} height={this.props.squareSize * this.state.promotionDrawer.buttons.length}
-                    fill={this.props.colorset.b} />
-                <rect x={x} y={y0} width={this.props.squareSize} height={this.props.squareSize * this.state.promotionDrawer.buttons.length}
-                    className="kokopu-drawerMask" fill={this.props.colorset.w} />
+                <rect
+                    className="kokopu-handle"
+                    x={0} y={0} width={this.props.squareSize * 8} height={this.props.squareSize * 8}
+                    onClick={() => this.handleDrawerCancelButtonClicked()}
+                />
+                <rect
+                    x={x} y={y0} width={this.props.squareSize} height={this.props.squareSize * this.state.promotionDrawer.buttons.length}
+                    fill={this.props.colorset.b}
+                />
+                <rect
+                    className="kokopu-drawerMask"
+                    x={x} y={y0} width={this.props.squareSize} height={this.props.squareSize * this.state.promotionDrawer.buttons.length}
+                    fill={this.props.colorset.w}
+                />
                 {buttons}
             </>
         );
@@ -329,7 +337,9 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
         if (dragEnabledForMovePieces || dragEnabledForEditArrows || dragEnabledForPlayMoves) {
             return (
                 <Draggable
-                    key={'handle-' + sq} x={x} y={y} width={this.props.squareSize} height={this.props.squareSize} isArrowHandle={dragEnabledForEditArrows}
+                    key={'handle-' + sq}
+                    x={x} y={y} width={this.props.squareSize} height={this.props.squareSize}
+                    isArrowHandle={dragEnabledForEditArrows}
                     onDragStart={(x0, y0) => this.handleDragStart(sq, x0, y0)}
                     onDrag={(dx, dy) => this.handleDrag(sq, dx, dy)}
                     onDragStop={(dx, dy) => this.handleDragStop(sq, dx, dy)}
@@ -340,7 +350,8 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
         else if (this.props.interactionMode === 'clickSquares') {
             return (
                 <rect
-                    key={'handle-' + sq} className="kokopu-handle kokopu-clickable" x={x} y={y} width={this.props.squareSize} height={this.props.squareSize}
+                    key={'handle-' + sq} className="kokopu-handle kokopu-clickable"
+                    x={x} y={y} width={this.props.squareSize} height={this.props.squareSize}
                     onClick={() => this.handleSquareClicked(sq)}
                 />
             );
@@ -357,7 +368,9 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
         return Object.entries(this.props.squareMarkers).map(([ sq, color ]) => {
             const { x, y } = this.getSquareCoordinates(sq as Square);
             return (
-                <rect key={'sqm-' + sq} className="kokopu-annotation" x={x} y={y} width={this.props.squareSize} height={this.props.squareSize}
+                <rect
+                    key={'sqm-' + sq} className="kokopu-annotation"
+                    x={x} y={y} width={this.props.squareSize} height={this.props.squareSize}
                     fill={this.getColorForAnnotation(color)}
                 />
             );
@@ -401,8 +414,10 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
             yTo += Math.sign(yFrom - yTo) * ARROW_TIP_OFFSET_FACTOR * this.props.squareSize;
             return (
                 <line
-                    key={'arm-' + vect} className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={xTo} y2={yTo} strokeWidth={strokeWidth}
-                    stroke={this.getColorForAnnotation(color)} markerEnd={`url(#${this.getArrowTipId(color)})`}
+                    key={'arm-' + vect} className="kokopu-annotation kokopu-arrow"
+                    x1={xFrom} y1={yFrom} x2={xTo} y2={yTo}
+                    strokeWidth={strokeWidth} stroke={this.getColorForAnnotation(color)}
+                    markerEnd={`url(#${this.getArrowTipId(color)})`}
                 />
             );
         });
@@ -425,8 +440,10 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
         const y = yTo * motionCursor + yFrom * (1 - motionCursor);
         return (
             <line
-                className="kokopu-annotation kokopu-arrow" x1={xFrom} y1={yFrom} x2={x} y2={y} strokeWidth={strokeWidth}
-                stroke={this.getColorForAnnotation(this.props.moveArrowColor)} markerEnd={`url(#${this.getArrowTipId(this.props.moveArrowColor)})`}
+                className="kokopu-annotation kokopu-arrow"
+                x1={xFrom} y1={yFrom} x2={x} y2={y}
+                strokeWidth={strokeWidth} stroke={this.getColorForAnnotation(this.props.moveArrowColor)}
+                markerEnd={`url(#${this.getArrowTipId(this.props.moveArrowColor)})`}
             />
         );
     }
@@ -478,7 +495,7 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
     }
 
     private handleDragStop(sq: Square, dx: number, dy: number) {
-        const { x, y } = this.getSquareCoordinates( sq);
+        const { x, y } = this.getSquareCoordinates(sq);
         const targetSq = this.getSquareAt(x + dx + this.state.cursorOffset!.x, y + dy + this.state.cursorOffset!.y);
         this.setState({
             inhibitedSquare: undefined,

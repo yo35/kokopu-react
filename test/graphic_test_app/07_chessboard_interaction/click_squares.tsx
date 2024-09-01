@@ -34,6 +34,8 @@ function onSquareClicked(sq: Square) {
 testApp([ /* eslint-disable react/jsx-key */
     <Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} />,
     <Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} flipped coordinateVisible={false} />,
-    <Chessboard squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} position="empty"
-        squareMarkers="Ga8" arrowMarkers="Ra6d6" textMarkers="YAb4" />,
+    <Chessboard
+        squareSize={50} interactionMode="clickSquares" onSquareClicked={onSquareClicked} position="empty"
+        squareMarkers="Ga8" arrowMarkers="Ra6d6" textMarkers="YAb4"
+    />,
 ]); /* eslint-enable react/jsx-key */

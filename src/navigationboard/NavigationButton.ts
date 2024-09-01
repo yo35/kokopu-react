@@ -33,22 +33,22 @@ export type NavigationButton = {
      *
      * The path is rendered within 32 x 32 viewbox (defined as `viewbox="0 0 32 32"`). It must be be a closed path, and must fit within the viewbox incircle.
      */
-    iconPath: string;
+    iconPath: string,
 
     /**
      * Human-readable tooltip.
      */
-    tooltip?: string;
+    tooltip?: string,
 
     /**
      * Whether or not the button is enabled (true by default).
      */
-    enabled?: boolean;
+    enabled?: boolean,
 
     /**
      * Callback invoked when the user clicks on the button.
      */
-    onClick?: () => void;
+    onClick?: () => void,
 };
 
 

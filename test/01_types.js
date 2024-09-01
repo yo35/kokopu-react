@@ -35,7 +35,7 @@ describe('Is piece symbol mapping', () => {
         });
     }
 
-    itIsPieceSymbolMapping('French localization', { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' } , true);
+    itIsPieceSymbolMapping('French localization', { K: 'R', Q: 'D', R: 'T', B: 'F', N: 'C', P: 'P' }, true);
     itIsPieceSymbolMapping('Additional fields', { K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_', Z: 'whatever', val: 42 }, true);
     itIsPieceSymbolMapping('Missing fields', { K: 'Ki_', Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_' }, false);
     itIsPieceSymbolMapping('Non-string valued fields', { K: 42, Q: 'Qu_', R: 'Rk_', B: 'Bi_', N: 'Kn_', P: 'Pw_' }, false);
@@ -125,46 +125,60 @@ describe('Parse square markers', () => {
 describe('Flatten text markers', () => {
 
     it('RAe4', () => { test.value(flattenTextMarkers({ e4: { symbol: 'A', color: 'r' } })).is('RAe4'); });
-    it('Gzd3,Y1h8', () => { test.value(flattenTextMarkers({
-        h8: { symbol: '1', color: 'y' },
-        d3: { symbol: 'z', color: 'g' },
-    })).is('Gzd3,Y1h8'); });
-    it('G2a1,YMc5,RLd2,Rxh7,Bwh8', () => { test.value(flattenTextMarkers({
-        c5: { symbol: 'M', color: 'y' },
-        h8: { symbol: 'w', color: 'b' },
-        a1: { symbol: '2', color: 'g' },
-        h7: { symbol: 'x', color: 'r' },
-        d2: { symbol: 'L', color: 'r' },
-    })).is('G2a1,YMc5,RLd2,Rxh7,Bwh8'); });
-    it('Multi-character symbols', () => { test.value(flattenTextMarkers({
-        a1: { symbol: 'A', color: 'y' },
-        a7: { symbol: 'plus', color: 'g' },
-        b3: { symbol: 'times', color: 'r' },
-        g5: { symbol: 'dot', color: 'y' },
-        h3: { symbol: 'circle', color: 'g' },
-    })).is('YAa1,G(plus)a7,R(times)b3,Y(dot)g5,G(circle)h3'); });
+    it('Gzd3,Y1h8', () => {
+        test.value(flattenTextMarkers({
+            h8: { symbol: '1', color: 'y' },
+            d3: { symbol: 'z', color: 'g' },
+        })).is('Gzd3,Y1h8');
+    });
+    it('G2a1,YMc5,RLd2,Rxh7,Bwh8', () => {
+        test.value(flattenTextMarkers({
+            c5: { symbol: 'M', color: 'y' },
+            h8: { symbol: 'w', color: 'b' },
+            a1: { symbol: '2', color: 'g' },
+            h7: { symbol: 'x', color: 'r' },
+            d2: { symbol: 'L', color: 'r' },
+        })).is('G2a1,YMc5,RLd2,Rxh7,Bwh8');
+    });
+    it('Multi-character symbols', () => {
+        test.value(flattenTextMarkers({
+            a1: { symbol: 'A', color: 'y' },
+            a7: { symbol: 'plus', color: 'g' },
+            b3: { symbol: 'times', color: 'r' },
+            g5: { symbol: 'dot', color: 'y' },
+            h3: { symbol: 'circle', color: 'g' },
+        })).is('YAa1,G(plus)a7,R(times)b3,Y(dot)g5,G(circle)h3');
+    });
     it('<empty>', () => { test.value(flattenTextMarkers({})).is(''); });
 
-    it('Wrong square', () => { test.value(flattenTextMarkers({
-        e1: { symbol: 'H', color: 'r' },
-        j5: { symbol: 'A', color: 'g' },
-    })).is('RHe1'); });
-    it('Wrong color', () => { test.value(flattenTextMarkers({
-        a2: { symbol: '0', color: 'g' },
-        b5: { symbol: 'A', color: 'R' },
-        h8: { symbol: 'A' },
-    })).is('G0a2'); });
-    it('Wrong symbol', () => { test.value(flattenTextMarkers({
-        a2: { symbol: '0', color: 'g' },
-        b5: { symbol: '', color: 'r' },
-        h8: { color: 'g' },
-        d8: { symbol: '-', color: 'r' },
-        c1: { symbol: 'abcd', color: 'r' },
-    })).is('G0a2'); });
-    it('Wrong multi-character symbol', () => { test.value(flattenTextMarkers({
-        a2: { symbol: '0', color: 'g' },
-        b5: { symbol: 'whatever', color: 'r' },
-    })).is('G0a2'); });
+    it('Wrong square', () => {
+        test.value(flattenTextMarkers({
+            e1: { symbol: 'H', color: 'r' },
+            j5: { symbol: 'A', color: 'g' },
+        })).is('RHe1');
+    });
+    it('Wrong color', () => {
+        test.value(flattenTextMarkers({
+            a2: { symbol: '0', color: 'g' },
+            b5: { symbol: 'A', color: 'R' },
+            h8: { symbol: 'A' },
+        })).is('G0a2');
+    });
+    it('Wrong symbol', () => {
+        test.value(flattenTextMarkers({
+            a2: { symbol: '0', color: 'g' },
+            b5: { symbol: '', color: 'r' },
+            h8: { color: 'g' },
+            d8: { symbol: '-', color: 'r' },
+            c1: { symbol: 'abcd', color: 'r' },
+        })).is('G0a2');
+    });
+    it('Wrong multi-character symbol', () => {
+        test.value(flattenTextMarkers({
+            a2: { symbol: '0', color: 'g' },
+            b5: { symbol: 'whatever', color: 'r' },
+        })).is('G0a2');
+    });
 
     it('Wrong type (not an object)', () => { test.exception(() => flattenTextMarkers('whatever')).isInstanceOf(exception.IllegalArgument); });
     it('Wrong type (null)', () => { test.exception(() => flattenTextMarkers(null)).isInstanceOf(exception.IllegalArgument); });
@@ -175,24 +189,30 @@ describe('Flatten text markers', () => {
 describe('Parse text markers', () => {
 
     it('RAe4', () => { test.value(parseTextMarkers('RAe4')).is({ e4: { symbol: 'A', color: 'r' } }); });
-    it('Gzd3,Y1h8', () => { test.value(parseTextMarkers('Gzd3,Y1h8')).is({
-        h8: { symbol: '1', color: 'y' },
-        d3: { symbol: 'z', color: 'g' },
-    }); });
-    it('G2a1,YMc5,RLd2,Rxh7,Bwh8', () => { test.value(parseTextMarkers(' G2a1, Rxh7  ,YMc5 ,RLd2,Bwh8 ')).is({
-        c5: { symbol: 'M', color: 'y' },
-        h8: { symbol: 'w', color: 'b' },
-        a1: { symbol: '2', color: 'g' },
-        h7: { symbol: 'x', color: 'r' },
-        d2: { symbol: 'L', color: 'r' },
-    }); });
-    it('Multi-character symbols', () => { test.value(parseTextMarkers('YAa1,G(plus)a7, R(times)b3  ,Y(dot)g5,G(circle)h3')).is({
-        a1: { symbol: 'A', color: 'y' },
-        a7: { symbol: 'plus', color: 'g' },
-        b3: { symbol: 'times', color: 'r' },
-        g5: { symbol: 'dot', color: 'y' },
-        h3: { symbol: 'circle', color: 'g' },
-    }); });
+    it('Gzd3,Y1h8', () => {
+        test.value(parseTextMarkers('Gzd3,Y1h8')).is({
+            h8: { symbol: '1', color: 'y' },
+            d3: { symbol: 'z', color: 'g' },
+        });
+    });
+    it('G2a1,YMc5,RLd2,Rxh7,Bwh8', () => {
+        test.value(parseTextMarkers(' G2a1, Rxh7  ,YMc5 ,RLd2,Bwh8 ')).is({
+            c5: { symbol: 'M', color: 'y' },
+            h8: { symbol: 'w', color: 'b' },
+            a1: { symbol: '2', color: 'g' },
+            h7: { symbol: 'x', color: 'r' },
+            d2: { symbol: 'L', color: 'r' },
+        });
+    });
+    it('Multi-character symbols', () => {
+        test.value(parseTextMarkers('YAa1,G(plus)a7, R(times)b3  ,Y(dot)g5,G(circle)h3')).is({
+            a1: { symbol: 'A', color: 'y' },
+            a7: { symbol: 'plus', color: 'g' },
+            b3: { symbol: 'times', color: 'r' },
+            g5: { symbol: 'dot', color: 'y' },
+            h3: { symbol: 'circle', color: 'g' },
+        });
+    });
     it('<empty>', () => { test.value(parseTextMarkers('')).is({}); });
     it('<blank>', () => { test.value(parseTextMarkers(' ')).is({}); });
 
@@ -213,8 +233,9 @@ describe('Flatten arrow markers', () => {
 
     it('Re4d6', () => { test.value(flattenArrowMarkers({ e4d6: 'r' })).is('Re4d6'); });
     it('Gd3b4,Yh8h7', () => { test.value(flattenArrowMarkers({ h8h7: 'y', d3b4: 'g' })).is('Gd3b4,Yh8h7'); });
-    it('Ga1h8,Yc5a1,Rd2d2,Rh7h8,Bh8c5', () => { test.value(flattenArrowMarkers({ c5a1: 'y', h8c5: 'b', a1h8: 'g', h7h8: 'r', d2d2: 'r' }))
-        .is('Ga1h8,Yc5a1,Rd2d2,Rh7h8,Bh8c5'); });
+    it('Ga1h8,Yc5a1,Rd2d2,Rh7h8,Bh8c5', () => {
+        test.value(flattenArrowMarkers({ c5a1: 'y', h8c5: 'b', a1h8: 'g', h7h8: 'r', d2d2: 'r' })).is('Ga1h8,Yc5a1,Rd2d2,Rh7h8,Bh8c5');
+    });
     it('<empty>', () => { test.value(flattenArrowMarkers({})).is(''); });
 
     it('Wrong vector', () => { test.value(flattenArrowMarkers({ e1c2: 'r', a1b9: 'g', c0d2: 'r', i3d4: 'r', f2k3: 'g', whatever: 'y' })).is('Re1c2'); });
@@ -230,8 +251,9 @@ describe('Parse arrow markers', () => {
 
     it('Re4d6', () => { test.value(parseArrowMarkers('Re4d6')).is({ e4d6: 'r' }); });
     it('Gd3b4,Yh8h7', () => { test.value(parseArrowMarkers('Gd3b4,Yh8h7')).is({ h8h7: 'y', d3b4: 'g' }); });
-    it('Ga1h8,Yc5a1,Rd2d2,Rh7h8,Bh8c5', () => { test.value(parseArrowMarkers(' Bh8c5,Ga1h8  , Yc5a1 ,  Rd2d2,Rh7h8  '))
-        .is({ c5a1: 'y', h8c5: 'b', a1h8: 'g', h7h8: 'r', d2d2: 'r' }); });
+    it('Ga1h8,Yc5a1,Rd2d2,Rh7h8,Bh8c5', () => {
+        test.value(parseArrowMarkers(' Bh8c5,Ga1h8  , Yc5a1 ,  Rd2d2,Rh7h8  ')).is({ c5a1: 'y', h8c5: 'b', a1h8: 'g', h7h8: 'r', d2d2: 'r' });
+    });
     it('<empty>', () => { test.value(parseArrowMarkers('')).is({}); });
     it('<blank>', () => { test.value(parseArrowMarkers(' ')).is({}); });
 

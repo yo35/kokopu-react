@@ -27,9 +27,6 @@ import Styled from 'react-styleguidist/lib/client/rsg-components/Styled';
 
 import './theming.css';
 
-
-/* eslint-disable react/prop-types */
-
 const styles = ({ color, fontFamily, fontSize }) => ({
     logo: {
         color: color.base,
@@ -41,12 +38,14 @@ const styles = ({ color, fontFamily, fontSize }) => ({
 });
 
 function LogoRenderer({ classes, children }) {
-    return (<>
-        <div className="kokopu-logo">
-            <img src="kokopu-react-logo.png" />
-        </div>
-        <h1 className={classes.logo}>{children}</h1>
-    </>);
+    return (
+        <>
+            <div className="kokopu-logo">
+                <img src="kokopu-react-logo.png" />
+            </div>
+            <h1 className={classes.logo}>{children}</h1>
+        </>
+    );
 }
 
 export default Styled(styles)(LogoRenderer);

@@ -38,27 +38,27 @@ interface AnnotationSymbolShapeProps {
     /**
      * X-coordinate of the center of the symbol.
      */
-    x: number;
+    x: number,
 
     /**
      * Y-coordinate of the center of the symbol.
      */
-    y: number;
+    y: number,
 
     /**
      * Size of the symbol (i.e. size of square in which the symbol is rendered).
      */
-    size: number;
+    size: number,
 
     /**
      * Symbol code.
      */
-    symbol: AnnotationSymbol;
+    symbol: AnnotationSymbol,
 
     /**
      * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the shape (for example: `'green'`, `'#ff0000'`...).
      */
-    color: string;
+    color: string,
 }
 
 

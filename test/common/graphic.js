@@ -47,8 +47,8 @@ const AUTOPLAY_DELAY = 1000;
 /**
  * Create a Mocha test-suite that runs graphic tests in Dockerized Selenium webbrowser.
  */
-exports.describeWithBrowser = function(suiteLabel, testFactory) {
-    describe(suiteLabel, function() {
+exports.describeWithBrowser = function (suiteLabel, testFactory) {
+    describe(suiteLabel, function () {
 
         // Fetching a new page in the browser may take a while, thus increase the timeout threshold.
         this.timeout(10000);
@@ -147,7 +147,7 @@ async function fetchTestCase(browserContext, testCaseName) {
 /**
  * Wait until the end of the chessboard animations.
  */
-const waitForAnimation = exports.waitForAnimation = async function() {
+const waitForAnimation = exports.waitForAnimation = async function () {
     await new Promise(resolve => setTimeout(resolve, ANIMATION_DELAY));
 };
 
@@ -155,7 +155,7 @@ const waitForAnimation = exports.waitForAnimation = async function() {
 /**
  * Wait until the given number of moves have been auto-played.
  */
-exports.waitForAutoplay = async function(nbMoves) {
+exports.waitForAutoplay = async function (nbMoves) {
     await new Promise(resolve => setTimeout(resolve, (nbMoves + 0.5) * AUTOPLAY_DELAY));
 };
 
@@ -163,7 +163,7 @@ exports.waitForAutoplay = async function(nbMoves) {
 /**
  * Take a screenshot of the element identified by the given CSS target.
  */
-const takeScreenshot = exports.takeScreenshot = async function(browserContext, imageBaseName, element) {
+const takeScreenshot = exports.takeScreenshot = async function (browserContext, imageBaseName, element) {
 
     imageBaseName = imageBaseName.replaceAll(' ', '_').toLowerCase();
     const actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
@@ -178,7 +178,7 @@ const takeScreenshot = exports.takeScreenshot = async function(browserContext, i
 /**
  * Compare a screenshot to its reference.
  */
-const compareScreenshot = exports.compareScreenshot = async function(browserContext, imageBaseName) {
+const compareScreenshot = exports.compareScreenshot = async function (browserContext, imageBaseName) {
 
     imageBaseName = imageBaseName.replaceAll(' ', '_').toLowerCase();
     const actualFilename = `${outputDir}/${browserContext.latestTestCase}/${imageBaseName}.png`;
@@ -198,7 +198,7 @@ const compareScreenshot = exports.compareScreenshot = async function(browserCont
 /**
  * Compare content of the sandbox to the expected text.
  */
-exports.compareSandbox = async function(browserContext, expectedText) {
+exports.compareSandbox = async function (browserContext, expectedText) {
     const actualText = await browserContext.driver.findElement(By.id('sandbox')).getText();
     test.value(actualText).is(expectedText);
 };
@@ -207,7 +207,7 @@ exports.compareSandbox = async function(browserContext, expectedText) {
 /**
  * Set the content of the sandbox to the given value.
  */
-exports.setSandbox = async function(browserContext, value) {
+exports.setSandbox = async function (browserContext, value) {
     if (/[^\w \-=]/.test(value)) {
         throw new Error('Invalid characters found in the sandox message.');
     }
@@ -218,7 +218,7 @@ exports.setSandbox = async function(browserContext, value) {
 /**
  * Set the width of the browser.
  */
-exports.setWindowWidth = async function(browserContext, width) {
+exports.setWindowWidth = async function (browserContext, width) {
     const { height } = await await browserContext.driver.manage().window().getRect();
     await browserContext.driver.manage().window().setRect({ width: width, height: height });
 };
@@ -227,7 +227,7 @@ exports.setWindowWidth = async function(browserContext, width) {
 /**
  * Open the page corresponding to the given test-case, and execute the given scenario.
  */
-const itCustom = exports.itCustom = function(browserContext, testCaseName, itemIndex, itemName, scenario) {
+const itCustom = exports.itCustom = function (browserContext, testCaseName, itemIndex, itemName, scenario) {
     it(`${testCaseName} - ${itemName}`, async () => {
         await fetchTestCase(browserContext, testCaseName);
         const element = await browserContext.driver.findElement(By.id('test-item-' + itemIndex));
@@ -239,7 +239,7 @@ const itCustom = exports.itCustom = function(browserContext, testCaseName, itemI
 /**
  * Open the page corresponding to the given test-case, take a screenshot for each item, and compare them to the reference.
  */
-exports.itChecksScreenshots = function(browserContext, testCaseName, itemNames) {
+exports.itChecksScreenshots = function (browserContext, testCaseName, itemNames) {
     for (let i = 0; i < itemNames.length; ++i) {
         const itemName = itemNames[i];
         itCustom(browserContext, testCaseName, i, itemName, async element => {

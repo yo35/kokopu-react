@@ -49,28 +49,28 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
      * a [kokopu.Database](https://kokopu.yo35.org/docs/current/classes/Database.html) object,
      * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation).
      */
-    game: Game | Database | string;
+    game: Game | Database | string,
 
     /**
      * Index of the game to display (only if attribute `game` is a [kokopu.Database](https://kokopu.yo35.org/docs/current/classes/Database.html)
      * or a [PGN string](https://en.wikipedia.org/wiki/Portable_Game_Notation)): `0` for the first game of the database/PGN, `1` for the second one, etc.
      * If omitted, the first game of the database/PGN is displayed.
      */
-    gameIndex: number;
+    gameIndex: number,
 
     /**
      * ID of the move initially selected (or `'start'`/`'end'` for the beginning/end of the main variation) when the component is uncontrolled.
      * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/current/classes/Node.html#id) to get the ID of a game move.
      * Ignored if the `nodeId` attribute is provided.
      */
-    initialNodeId: string;
+    initialNodeId: string,
 
     /**
      * ID of the selected move (or `'start'`/`'end'` for the beginning/end of the main variation).
      * Use [kokopu.Node#id](https://kokopu.yo35.org/docs/current/classes/Node.html#id) to get the ID of a game move.
      * If provided (i.e. if the component is controlled), the attribute `onNodeIdChanged` must be provided as well.
      */
-    nodeId?: string;
+    nodeId?: string,
 
     /**
      * Callback invoked in controlled-component mode, when the user changes the selected move.
@@ -78,60 +78,60 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
      * @param nodeId - ID of the selected move (as returned by [kokopu.Node#id](https://kokopu.yo35.org/docs/current/classes/Node.html#id)),
      *                 or `'start'` for the beginning of the main variation.
      */
-    onNodeIdChanged?: (nodeId: string) => void;
+    onNodeIdChanged?: (nodeId: string) => void,
 
     /**
      * Whether auto-play is initially enabled or not.
      * Ignored if the `isPlaying` attribute is provided.
      */
-    initialIsPlaying: boolean;
+    initialIsPlaying: boolean,
 
     /**
      * Whether auto-play is enabled or not.
      * If provided (i.e. if the is-playing state is controlled), the attribute `onIsPlayingChanged` must be provided as well.
      */
-    isPlaying?: boolean;
+    isPlaying?: boolean,
 
     /**
      * Callback invoked in controlled-is-playing-state mode, when the user clicks on the play/stop button.
      *
      * @param isPlaying - New is-playing state.
      */
-    onIsPlayingChanged?: (isPlaying: boolean) => void;
+    onIsPlayingChanged?: (isPlaying: boolean) => void,
 
     /**
      * Whether the board is initially flipped (i.e. seen from Black's point of view) or not, when the flip state is uncontrolled.
      * Ignored if the `flipped` attribute is provided.
      */
-    initialFlipped: boolean;
+    initialFlipped: boolean,
 
     /**
      * Whether the board is flipped (i.e. seen from Black's point of view) or not.
      * If provided (i.e. if the flip state is controlled), the attribute `onFlippedChanged` must be provided as well.
      */
-    flipped?: boolean;
+    flipped?: boolean,
 
     /**
      * Callback invoked in controlled-flip-state mode, when the user flips the board.
      *
      * @param flipped - New flip state.
      */
-    onFlippedChanged?: (flipped: boolean) => void;
+    onFlippedChanged?: (flipped: boolean) => void,
 
     /**
      * Whether the play/stop button is visible or not in the toolbar.
      */
-    playButtonVisible: boolean;
+    playButtonVisible: boolean,
 
     /**
      * Whether the flip button is visible or not in the toolbar.
      */
-    flipButtonVisible: boolean;
+    flipButtonVisible: boolean,
 
     /**
      * Additional buttons to be added to the toolbar.
      */
-    additionalButtons: NavigationBar;
+    additionalButtons: NavigationBar,
 }
 
 
@@ -139,13 +139,13 @@ export interface NavigationBoardProps extends DynamicBoardGraphicProps {
  * Attributes for method `NavigationBoard.size()`.
  */
 interface NavigationBoardSizeAttr {
-    squareSize?: NavigationBoardProps['squareSize'];
-    coordinateVisible?: NavigationBoardProps['coordinateVisible'];
-    turnVisible?: NavigationBoardProps['turnVisible'];
-    smallScreenLimits?: NavigationBoardProps['smallScreenLimits'];
-    playButtonVisible?: NavigationBoardProps['playButtonVisible'];
-    flipButtonVisible?: NavigationBoardProps['flipButtonVisible'];
-    additionalButtons?: NavigationBarScheme;
+    squareSize?: NavigationBoardProps['squareSize'],
+    coordinateVisible?: NavigationBoardProps['coordinateVisible'],
+    turnVisible?: NavigationBoardProps['turnVisible'],
+    smallScreenLimits?: NavigationBoardProps['smallScreenLimits'],
+    playButtonVisible?: NavigationBoardProps['playButtonVisible'],
+    flipButtonVisible?: NavigationBoardProps['flipButtonVisible'],
+    additionalButtons?: NavigationBarScheme,
 }
 
 
@@ -153,19 +153,19 @@ interface NavigationBoardSizeAttr {
  * Attributes for method `NavigationBoard.adaptSquareSize()`.
  */
 interface NavigationBoardAdaptSquareSizeAttr {
-    coordinateVisible?: NavigationBoardProps['coordinateVisible'];
-    turnVisible?: NavigationBoardProps['turnVisible'];
-    smallScreenLimits?: NavigationBoardProps['smallScreenLimits'];
-    playButtonVisible?: NavigationBoardProps['playButtonVisible'];
-    flipButtonVisible?: NavigationBoardProps['flipButtonVisible'];
-    additionalButtons?: NavigationBarScheme;
+    coordinateVisible?: NavigationBoardProps['coordinateVisible'],
+    turnVisible?: NavigationBoardProps['turnVisible'],
+    smallScreenLimits?: NavigationBoardProps['smallScreenLimits'],
+    playButtonVisible?: NavigationBoardProps['playButtonVisible'],
+    flipButtonVisible?: NavigationBoardProps['flipButtonVisible'],
+    additionalButtons?: NavigationBarScheme,
 }
 
 
 interface NavigationBoardState {
-    nodeIdAsUncontrolled: string;
-    isPlayingAsUncontrolled: boolean;
-    flippedAsUncontrolled: boolean;
+    nodeIdAsUncontrolled: string,
+    isPlayingAsUncontrolled: boolean,
+    flippedAsUncontrolled: boolean,
 }
 
 
@@ -230,29 +230,34 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
     private renderBoard(game: Game, node: GameNode | Variation, isPlaying: boolean, flipped: boolean) {
         const position = node instanceof GameNode ? node.positionBefore() : node.initialPosition();
         const move = node instanceof GameNode ? node.notation() : undefined;
-        return <Chessboard
-            position={position} move={move} flipped={flipped}
-            squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}
-            squareSize={this.props.squareSize}
-            coordinateVisible={this.props.coordinateVisible}
-            turnVisible={this.props.turnVisible}
-            colorset={this.props.colorset}
-            pieceset={this.props.pieceset}
-            smallScreenLimits={this.props.smallScreenLimits}
-            moveArrowVisible={this.props.moveArrowVisible}
-            moveArrowColor={this.props.moveArrowColor}
-            animated={this.props.animated}
-            bottomComponent={({ squareSize }) => this.renderToolbar(game, node, squareSize, isPlaying)}
-        />;
+        return (
+            <Chessboard
+                position={position} move={move} flipped={flipped}
+                squareMarkers={node.tag('csl')} arrowMarkers={node.tag('cal')} textMarkers={node.tag('ctl')}
+                squareSize={this.props.squareSize}
+                coordinateVisible={this.props.coordinateVisible}
+                turnVisible={this.props.turnVisible}
+                colorset={this.props.colorset}
+                pieceset={this.props.pieceset}
+                smallScreenLimits={this.props.smallScreenLimits}
+                moveArrowVisible={this.props.moveArrowVisible}
+                moveArrowColor={this.props.moveArrowColor}
+                animated={this.props.animated}
+                bottomComponent={({ squareSize }) => this.renderToolbar(game, node, squareSize, isPlaying)}
+            />
+        );
     }
 
     private renderNavigationField(game: Game, currentNodeId: string) {
-        return <NavigationField ref={this.navigationFieldRef}
-            onFirstPressed={() => this.handleNavClicked(firstNodeId(game, currentNodeId))}
-            onPreviousPressed={() => this.handleNavClicked(previousNodeId(game, currentNodeId))}
-            onNextPressed={() => this.handleNavClicked(nextNodeId(game, currentNodeId))}
-            onLastPressed={() => this.handleNavClicked(lastNodeId(game, currentNodeId))}
-        />;
+        return (
+            <NavigationField
+                ref={this.navigationFieldRef}
+                onFirstPressed={() => this.handleNavClicked(firstNodeId(game, currentNodeId))}
+                onPreviousPressed={() => this.handleNavClicked(previousNodeId(game, currentNodeId))}
+                onNextPressed={() => this.handleNavClicked(nextNodeId(game, currentNodeId))}
+                onLastPressed={() => this.handleNavClicked(lastNodeId(game, currentNodeId))}
+            />
+        );
     }
 
     private renderToolbar(game: Game, node: GameNode | Variation, squareSize: number, isPlaying: boolean) {

@@ -52,17 +52,17 @@ const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 
 interface PageState {
-    position: Position;
-    flipped: boolean;
-    interactionMode: 'none' | 'addRemovePieces' | 'movePieces' | 'playMoves' | 'editSquareMarkers' | 'editTextMarkers' | 'editArrowMarkers';
-    pieceEditMode: ColoredPiece;
-    squareMarkerColor: AnnotationColor;
-    textMarkerColor: AnnotationColor;
-    textMarkerSymbol: AnnotationSymbol;
-    arrowMarkerColor: AnnotationColor;
-    squareMarkers: SquareMarkerSet;
-    textMarkers: TextMarkerSet;
-    arrowMarkers: ArrowMarkerSet;
+    position: Position,
+    flipped: boolean,
+    interactionMode: 'none' | 'addRemovePieces' | 'movePieces' | 'playMoves' | 'editSquareMarkers' | 'editTextMarkers' | 'editArrowMarkers',
+    pieceEditMode: ColoredPiece,
+    squareMarkerColor: AnnotationColor,
+    textMarkerColor: AnnotationColor,
+    textMarkerSymbol: AnnotationSymbol,
+    arrowMarkerColor: AnnotationColor,
+    squareMarkers: SquareMarkerSet,
+    textMarkers: TextMarkerSet,
+    arrowMarkers: ArrowMarkerSet,
 }
 
 
@@ -96,53 +96,68 @@ export default class Page extends React.Component<object, PageState> {
     }
 
     private renderControls() {
-        return (<>
-            <Stack direction="row" spacing={2} alignItems="center">
-                <FormControlLabel label="Flip"
-                    control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
-                />
-                <Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(oppositeColor(this.state.position.turn()))}>
-                    Change turn
-                </Button>
-                <ButtonGroup color="primary" size="small">
-                    <Button onClick={() => this.setState({ position: new Position('empty') })}>Clear</Button>
-                    <Button onClick={() => this.setState({ position: new Position() })}>Reset</Button>
-                </ButtonGroup>
-            </Stack>
-            <Box>
-                <Typography gutterBottom>Interaction mode</Typography>
-                <RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
-                    <FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
-                    <FormControlLabel value="addRemovePieces" control={<Radio color="primary" />} label={
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <span>Add/remove pieces</span>
-                            {this.renderPieceSelector()}
-                        </Stack>
-                    } />
-                    <FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
-                    <FormControlLabel value="playMoves" control={<Radio color="primary" />} label="Move pieces (obeying chess rules)" />
-                    <FormControlLabel value="editSquareMarkers" control={<Radio color="primary" />} label={
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <span>Edit square annotations</span>
-                            {this.renderMarkerColorSelector('editSquareMarkers', this.state.squareMarkerColor, newColor => this.handleSquareMarkerColorChanged(newColor))}
-                        </Stack>
-                    } />
-                    <FormControlLabel value="editTextMarkers" control={<Radio color="primary" />} label={
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <span>Edit text annotations</span>
-                            {this.renderMarkerColorSelector('editTextMarkers', this.state.textMarkerColor, newColor => this.handleTextMarkerColorChanged(newColor))}
-                            {this.renderTextMarkerSymbolSelector()}
-                        </Stack>
-                    } />
-                    <FormControlLabel value="editArrowMarkers" control={<Radio color="primary" />} label={
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <span>Edit arrow annotations</span>
-                            {this.renderMarkerColorSelector('editArrowMarkers', this.state.arrowMarkerColor, newColor => this.handleArrowMarkerColorChanged(newColor))}
-                        </Stack>
-                    } />
-                </RadioGroup>
-            </Box>
-        </>);
+        return (
+            <>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <FormControlLabel
+                        label="Flip"
+                        control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
+                    />
+                    <Button color="primary" size="small" variant="contained" onClick={() => this.handleTurnClicked(oppositeColor(this.state.position.turn()))}>
+                        Change turn
+                    </Button>
+                    <ButtonGroup color="primary" size="small">
+                        <Button onClick={() => this.setState({ position: new Position('empty') })}>Clear</Button>
+                        <Button onClick={() => this.setState({ position: new Position() })}>Reset</Button>
+                    </ButtonGroup>
+                </Stack>
+                <Box>
+                    <Typography gutterBottom>Interaction mode</Typography>
+                    <RadioGroup value={this.state.interactionMode} onChange={evt => this.setState({ interactionMode: evt.target.value as PageState['interactionMode'] })}>
+                        <FormControlLabel value="none" control={<Radio color="primary" />} label="None" />
+                        <FormControlLabel
+                            value="addRemovePieces" control={<Radio color="primary" />}
+                            label={(
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <span>Add/remove pieces</span>
+                                    {this.renderPieceSelector()}
+                                </Stack>
+                            )}
+                        />
+                        <FormControlLabel value="movePieces" control={<Radio color="primary" />} label="Move pieces" />
+                        <FormControlLabel value="playMoves" control={<Radio color="primary" />} label="Move pieces (obeying chess rules)" />
+                        <FormControlLabel
+                            value="editSquareMarkers" control={<Radio color="primary" />}
+                            label={(
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <span>Edit square annotations</span>
+                                    {this.renderMarkerColorSelector('editSquareMarkers', this.state.squareMarkerColor, newColor => this.handleSquareMarkerColorChanged(newColor))}
+                                </Stack>
+                            )}
+                        />
+                        <FormControlLabel
+                            value="editTextMarkers" control={<Radio color="primary" />}
+                            label={(
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <span>Edit text annotations</span>
+                                    {this.renderMarkerColorSelector('editTextMarkers', this.state.textMarkerColor, newColor => this.handleTextMarkerColorChanged(newColor))}
+                                    {this.renderTextMarkerSymbolSelector()}
+                                </Stack>
+                            )}
+                        />
+                        <FormControlLabel
+                            value="editArrowMarkers" control={<Radio color="primary" />}
+                            label={(
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <span>Edit arrow annotations</span>
+                                    {this.renderMarkerColorSelector('editArrowMarkers', this.state.arrowMarkerColor, newColor => this.handleArrowMarkerColorChanged(newColor))}
+                                </Stack>
+                            )}
+                        />
+                    </RadioGroup>
+                </Box>
+            </>
+        );
     }
 
     private renderPieceSelector() {
@@ -176,7 +191,7 @@ export default class Page extends React.Component<object, PageState> {
         if (this.state.interactionMode !== 'editTextMarkers') {
             return undefined;
         }
-        const availableSymbols = [ 'plus', 'times', 'dot', 'circle' ].concat([...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
+        const availableSymbols = [ 'plus', 'times', 'dot', 'circle' ].concat([ ...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' ]);
         return (
             <Select variant="standard" value={this.state.textMarkerSymbol} onChange={evt => this.setState({ textMarkerSymbol: evt.target.value as AnnotationSymbol })}>
                 {availableSymbols.map(mode => <MenuItem key={mode} value={mode}>{mode}</MenuItem>)}
@@ -326,7 +341,7 @@ export default class Page extends React.Component<object, PageState> {
         const newArrowMarkers = { ...this.state.arrowMarkers };
         const key = from + to as SquareCouple;
         if (newArrowMarkers[key] === this.state.arrowMarkerColor) {
-            delete newArrowMarkers[key];
+            delete newArrowMarkers[key]; // eslint-disable-line @typescript-eslint/no-dynamic-delete
         }
         else {
             newArrowMarkers[key] = this.state.arrowMarkerColor;
@@ -338,7 +353,7 @@ export default class Page extends React.Component<object, PageState> {
         if (this.state.interactionMode === 'editSquareMarkers') {
             const newSquareMarkers = { ...this.state.squareMarkers };
             if (newSquareMarkers[sq] === this.state.squareMarkerColor) {
-                delete newSquareMarkers[sq];
+                delete newSquareMarkers[sq]; // eslint-disable-line @typescript-eslint/no-dynamic-delete
             }
             else {
                 newSquareMarkers[sq] = this.state.squareMarkerColor;
@@ -348,12 +363,12 @@ export default class Page extends React.Component<object, PageState> {
         else if (this.state.interactionMode === 'editTextMarkers') {
             const newTextMarkers = { ...this.state.textMarkers };
             if (newTextMarkers[sq] && newTextMarkers[sq]!.color === this.state.textMarkerColor && newTextMarkers[sq]!.symbol === this.state.textMarkerSymbol) {
-                delete newTextMarkers[sq];
+                delete newTextMarkers[sq]; // eslint-disable-line @typescript-eslint/no-dynamic-delete
             }
             else {
                 newTextMarkers[sq] = { color: this.state.textMarkerColor, symbol: this.state.textMarkerSymbol };
             }
-            this.setState({ textMarkers:  newTextMarkers });
+            this.setState({ textMarkers: newTextMarkers });
         }
         else if (this.state.interactionMode === 'addRemovePieces') {
             const newPosition = new Position(this.state.position);

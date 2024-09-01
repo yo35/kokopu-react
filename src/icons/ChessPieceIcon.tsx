@@ -35,17 +35,17 @@ export interface ChessPieceIconProps {
     /**
      * Width and height (in pixels) of each chess piece icon.
      */
-    size: number;
+    size: number,
 
     /**
      * Chess piece(s) to display.
      */
-    type: ChessPieceIconType | ChessPieceIconType[];
+    type: ChessPieceIconType | ChessPieceIconType[],
 
     /**
      * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
      */
-    pieceset: string;
+    pieceset: string,
 }
 
 

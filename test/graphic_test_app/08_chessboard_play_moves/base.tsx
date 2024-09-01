@@ -32,10 +32,16 @@ function onMovePlayed(move: string) {
 
 testApp([ /* eslint-disable react/jsx-key */
     <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed} />,
-    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
-        flipped position="rnbqk2r/ppp2ppp/3p1n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 1" move="Bg5" animated={false} moveArrowColor="g" />,
-    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
-        position="rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1" />,
-    <Chessboard squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
-        position="chess960:1r3k1r/pppppppp/8/8/8/8/PPPPPPPP/1R3K1R w BHbh - 0 1" />,
+    <Chessboard
+        squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+        flipped position="rnbqk2r/ppp2ppp/3p1n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 1" move="Bg5" animated={false} moveArrowColor="g"
+    />,
+    <Chessboard
+        squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+        position="rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1"
+    />,
+    <Chessboard
+        squareSize={50} coordinateVisible={false} interactionMode="playMoves" onMovePlayed={onMovePlayed}
+        position="chess960:1r3k1r/pppppppp/8/8/8/8/PPPPPPPP/1R3K1R w BHbh - 0 1"
+    />,
 ]); /* eslint-enable react/jsx-key */

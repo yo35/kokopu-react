@@ -26,8 +26,8 @@ export function generateRandomId() {
     const buffer = new Uint32Array(8);
     crypto.getRandomValues(buffer);
     let result = '';
-    for (let i = 0; i < buffer.length; ++i) {
-        result += buffer[i].toString(16);
+    for (const c of buffer) {
+        result += c.toString(16);
     }
     return result;
 }

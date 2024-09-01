@@ -36,17 +36,17 @@ export interface TextMarkerIconProps {
     /**
      * Width and height (in pixels) of the icon.
      */
-    size: number;
+    size: number,
 
     /**
      * Symbol to represent on the icon.
      */
-    symbol: AnnotationSymbol;
+    symbol: AnnotationSymbol,
 
     /**
      * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
      */
-    color: string;
+    color: string,
 }
 
 

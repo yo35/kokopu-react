@@ -42,7 +42,7 @@ describeWithBrowser('Error box graphic', browserContext => {
     ]);
 
     itChecksScreenshots(browserContext, '03_error_box_graphic/localization', [
-        'default'
+        'default',
     ]);
 
 });

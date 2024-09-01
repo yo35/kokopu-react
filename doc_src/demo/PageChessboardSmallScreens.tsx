@@ -35,9 +35,9 @@ import './demo.css';
 
 
 interface PageState {
-    squareSize: number;
-    windowWidth: number;
-    limits: SmallScreenLimit[];
+    squareSize: number,
+    windowWidth: number,
+    limits: SmallScreenLimit[],
 }
 
 

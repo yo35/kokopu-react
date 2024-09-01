@@ -32,17 +32,17 @@ interface MotionProps {
     /**
      * Duration of the animation. Must be > 0.
      */
-    duration: number;
+    duration: number,
 
     /**
      * Factory for the content being animated. The animation cursor is guaranteed to be valued between 0 and 1 inclusive.
      */
-    children: (cursor: number) => React.ReactNode;
+    children: (cursor: number) => React.ReactNode,
 }
 
 
 interface MotionState {
-    cursor: number;
+    cursor: number,
 }
 
 
@@ -63,7 +63,7 @@ export class Motion extends React.Component<MotionProps, MotionState> {
         this.cursorStop = 1;
 
         // WARNING: this hack exists only for testing purposes. DO NOT USE IT IN PRODUCTION.
-        const debugCursorStop = window[ /* eslint-disable @typescript-eslint/no-explicit-any */ DEBUG_KEY as any /* eslint-enable @typescript-eslint/no-explicit-any */ ];
+        const debugCursorStop = window[/* eslint-disable @typescript-eslint/no-explicit-any */ DEBUG_KEY as any /* eslint-enable */];
         if (typeof debugCursorStop === 'number' && debugCursorStop >= 0 && debugCursorStop <= 1) {
             this.cursorStop = debugCursorStop;
         }
