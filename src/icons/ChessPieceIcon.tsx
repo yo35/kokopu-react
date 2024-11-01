@@ -45,19 +45,14 @@ export interface ChessPieceIconProps {
     /**
      * Piece theme ID. Must be a property of `Chessboard.piecesets()`.
      */
-    pieceset: string,
+    pieceset?: string,
 }
-
-
-const defaultProps: Partial<ChessPieceIconProps> = {
-    pieceset: DEFAULT_PIECESET,
-};
 
 
 /**
  * SVG icon representing a colored chess piece, or a list of colored chess pieces.
  */
-export function ChessPieceIcon({ size, type, pieceset }: ChessPieceIconProps) {
+export function ChessPieceIcon({ size, type, pieceset = DEFAULT_PIECESET }: ChessPieceIconProps) {
 
     // Sanitize the inputs.
     size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ChessPieceIcon', 'size'));
@@ -76,8 +71,6 @@ export function ChessPieceIcon({ size, type, pieceset }: ChessPieceIconProps) {
         </svg>
     );
 }
-
-ChessPieceIcon.defaultProps = defaultProps;
 
 
 /**

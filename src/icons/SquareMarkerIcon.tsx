@@ -41,19 +41,14 @@ export interface SquareMarkerIconProps {
     /**
      * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
      */
-    color: string,
+    color?: string,
 }
-
-
-const defaultProps: Partial<SquareMarkerIconProps> = {
-    color: 'currentcolor',
-};
 
 
 /**
  * SVG icon representing a square marker.
  */
-export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
+export function SquareMarkerIcon({ size, color = 'currentcolor' }: SquareMarkerIconProps) {
 
     // Sanitize the inputs.
     size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('SquareMarkerIcon', 'size'));
@@ -68,5 +63,3 @@ export function SquareMarkerIcon({ size, color }: SquareMarkerIconProps) {
         </svg>
     );
 }
-
-SquareMarkerIcon.defaultProps = defaultProps;

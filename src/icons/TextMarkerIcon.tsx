@@ -46,19 +46,14 @@ export interface TextMarkerIconProps {
     /**
      * [CSS color](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) to use to colorize the icon (for example: `'green'`, `'#ff0000'`...).
      */
-    color: string,
+    color?: string,
 }
-
-
-const defaultProps: Partial<TextMarkerIconProps> = {
-    color: 'currentcolor',
-};
 
 
 /**
  * SVG icon representing a text marker.
  */
-export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
+export function TextMarkerIcon({ size, symbol, color = 'currentcolor' }: TextMarkerIconProps) {
 
     // Sanitize the inputs.
     size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('TextMarkerIcon', 'size'));
@@ -75,5 +70,3 @@ export function TextMarkerIcon({ size, symbol, color }: TextMarkerIconProps) {
         </svg>
     );
 }
-
-TextMarkerIcon.defaultProps = defaultProps;
