@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.3.1 (November 1, 2024)
+------------------------
+* Minor fixes.
+
 3.3.0 (April 23, 2024)
 ----------------------
 * Add methods `NavigationBoard.size()` and `NavigationBoard.adaptSquareSize()`.
