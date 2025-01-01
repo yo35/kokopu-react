@@ -37,7 +37,7 @@
     ],
     "peerDependencies": {
         "kokopu": "^4.9.1",
-        "react": "17.x.x || 18.x.x"
+        "react": "17.x.x || 18.x.x || 19.x.x"
     },
     "dependencies": {
         "htmlparser2": "^9.1.0"
@@ -50,8 +50,8 @@
         "@eslint/js": "^9.17.0",
         "@mui/material": "^6.3.0",
         "@stylistic/eslint-plugin": "^2.12.1",
-        "@types/react": "^18.3.18",
-        "@types/react-dom": "^18.3.5",
+        "@types/react": "^19.0.2",
+        "@types/react-dom": "^19.0.2",
         "babel-loader": "^9.2.1",
         "copy-webpack-plugin": "^12.0.2",
         "copyfiles": "^2.4.1",
@@ -66,9 +66,9 @@
         "mocha": "^11.0.1",
         "null-loader": "^4.0.1",
         "nyc": "^17.1.0",
-        "react": "^18.3.1",
+        "react": "^19.0.0",
         "react-docgen-typescript": "^2.2.2",
-        "react-dom": "^18.3.1",
+        "react-dom": "^19.0.0",
         "react-styleguidist": "^13.1.3",
         "rimraf": "^6.0.1",
         "selenium-webdriver": "^4.27.0",
