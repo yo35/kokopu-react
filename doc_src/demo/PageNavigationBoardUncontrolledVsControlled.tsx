@@ -32,7 +32,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import './demo.css';
-import pgn from './game-3.pgn';
+import pgn from './game-short.pgn';
 
 
 interface PageState {

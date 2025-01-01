@@ -41,7 +41,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 
 import './demo.css';
-import pgn from './game-3.pgn';
+import pgn from './game-short.pgn';
 
 
 const COLOR_ICON_SIZE = 16;

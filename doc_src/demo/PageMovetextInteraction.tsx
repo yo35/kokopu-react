@@ -25,7 +25,7 @@
 import * as React from 'react';
 import { pgnRead, Node as GameNode } from 'kokopu';
 
-import { Chessboard, Movetext, MovetextProps, MoveSelectEventOrigin } from '../../src/index';
+import { Chessboard, Movetext, MovetextProps } from '../../src/index';
 import { buildComponentDemoCode } from './util';
 
 import Box from '@mui/material/Box';
@@ -48,7 +48,6 @@ interface PageState {
     selection: string,
     interactionMode: 'none' | 'selectMove',
     withPopup: boolean,
-    withMove: boolean,
 }
 
 
@@ -61,7 +60,6 @@ export default class Page extends React.Component<object, PageState> {
             selection: '28b',
             interactionMode: 'selectMove',
             withPopup: true,
-            withMove: false,
         };
     }
 
@@ -105,7 +103,7 @@ export default class Page extends React.Component<object, PageState> {
                     pieceSymbols="figurines"
                     diagramVisible={false}
                     interactionMode={this.getMovetextInterationMode()}
-                    onMoveSelected={(nodeId, evtOrigin) => this.handleMoveSelected(nodeId, evtOrigin)}
+                    onMoveSelected={nodeId => this.handleMoveSelected(nodeId)}
                 />
             </Box>
         );
@@ -138,9 +136,9 @@ export default class Page extends React.Component<object, PageState> {
         return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
     }
 
-    private handleMoveSelected(nodeId: string | undefined, evtOrigin: MoveSelectEventOrigin) {
+    private handleMoveSelected(nodeId: string | undefined) {
         if (nodeId) {
-            this.setState({ selection: nodeId, withMove: evtOrigin === 'key-next' });
+            this.setState({ selection: nodeId });
         }
     }
 
@@ -167,8 +165,8 @@ export default class Page extends React.Component<object, PageState> {
         else {
             const node = game.findById(this.state.selection) as GameNode;
             return {
-                position: this.state.withMove ? node.positionBefore() : node.position(),
-                move: this.state.withMove ? node.notation() : undefined,
+                position: node.positionBefore(),
+                move: node.notation(),
                 csl: node.tag('csl'),
                 cal: node.tag('cal'),
             };
