@@ -64,6 +64,7 @@ const demoPages = [
     { id: 'NavigationBoardUncontrolledVsControlled', title: 'NavigationBoard - Uncontrolled vs. controlled' },
     { id: 'MovetextBase', title: 'Movetext - Basic features' },
     { id: 'MovetextInteraction', title: 'Movetext - Interactions' },
+    { id: 'SynchroNavigationBoardMovetext', title: 'Synchronize NavigationBoard and Movetext components' },
 ];
 
 
@@ -137,7 +138,7 @@ module.exports = {
                     type: 'asset/resource',
                 },
                 {
-                    test: /\.pgn$/i,
+                    test: /\.(pgn|txt)$/i,
                     type: 'asset/source',
                 },
             ],

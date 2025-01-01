@@ -1,0 +1,19 @@
+function NavigationBoardWithMoveText({ game }: { game: kokopu.Game }) {
+    const [ nodeId, setNodeId ] = React.useState('start');
+    return (
+        <div>
+            <NavigationBoard animated game={game} nodeId={nodeId} onNodeIdChanged={setNodeId} />
+            <Movetext
+                game={game}
+                diagramOptions={{ squareSize: 28 }}
+                interactionMode="selectMove"
+                selection={nodeId}
+                onMoveSelected={n => {
+                    if (n !== undefined) {
+                        setNodeId(n);
+                    }
+                }}
+            />
+        </div>
+    );
+}
