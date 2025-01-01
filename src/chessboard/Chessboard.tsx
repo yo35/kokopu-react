@@ -119,13 +119,13 @@ export interface ChessboardProps extends DynamicBoardGraphicProps {
      * Optional component, to be rendered above the chessboard, and customized with the same square-size / coordinate-visible / turn-visible
      * parameter values as actually used for the chessboard (which may be different from what is defined in props because of small-screen limits).
      */
-    topComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element,
+    topComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => React.JSX.Element,
 
     /**
      * Optional component, to be rendered below the chessboard, and customized with the same square-size / coordinate-visible / turn-visible
      * parameter values as actually used for the chessboard (which may be different from what is defined in props because of small-screen limits).
      */
-    bottomComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => JSX.Element,
+    bottomComponent?: (attr: Pick<StaticBoardGraphicProps, 'squareSize' | 'coordinateVisible' | 'turnVisible'>) => React.JSX.Element,
 }
 
 

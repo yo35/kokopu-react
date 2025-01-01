@@ -62,7 +62,7 @@ interface MovetextImplProps {
  */
 export class MovetextImpl extends React.Component<MovetextImplProps> {
 
-    private navigationFieldRef: React.RefObject<NavigationField> = React.createRef();
+    private navigationFieldRef = React.createRef<NavigationField>();
 
     render() {
         return (

@@ -36,7 +36,7 @@ import { ErrorBox } from './ErrorBox';
  * Try to interpret the given object as a chess position.
  */
 export function parsePosition(position: Position | string, componentName: string):
-    { error: true, errorBox: JSX.Element } | { error: false, position: Position } {
+    { error: true, errorBox: React.JSX.Element } | { error: false, position: Position } {
 
     if (position instanceof Position) {
         return { error: false, position: position };
@@ -84,7 +84,7 @@ function splitGameVariantAndFEN(position: string): { variant: GameVariant, fen: 
  * Try to interpret the given object `move` as a move descriptor based on the given position.
  */
 export function parseMove(position: Position, move: MoveDescriptor | string | undefined, componentName: string):
-    { error: true, errorBox: JSX.Element } | { error: false, type: 'none' | 'null-move' } | { error: false, type: 'regular', move: MoveDescriptor } {
+    { error: true, errorBox: React.JSX.Element } | { error: false, type: 'none' | 'null-move' } | { error: false, type: 'regular', move: MoveDescriptor } {
 
     if (move === undefined || move === null) {
         return { error: false, type: 'none' };
@@ -126,7 +126,7 @@ export function parseMove(position: Position, move: MoveDescriptor | string | un
  * Try to interpret the given object as a chess game.
  */
 export function parseGame(game: Game | Database | string, gameIndex: number, componentName: string):
-    { error: true, errorBox: JSX.Element } | { error: false, game: Game } {
+    { error: true, errorBox: React.JSX.Element } | { error: false, game: Game } {
 
     if (game instanceof Game) {
         return { error: false, game: game };

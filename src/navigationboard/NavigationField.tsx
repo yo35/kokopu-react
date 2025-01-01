@@ -43,7 +43,7 @@ interface NavigationFieldProps {
  */
 export class NavigationField extends React.Component<NavigationFieldProps> {
 
-    private focusFieldRef: React.RefObject<HTMLAnchorElement> = React.createRef();
+    private focusFieldRef = React.createRef<HTMLAnchorElement>();
 
     render() {
         return (

@@ -127,7 +127,7 @@ export class Movetext extends React.Component<MovetextProps> {
         headerVisible: true,
     };
 
-    private implRef: React.RefObject<MovetextImpl> = React.createRef();
+    private implRef = React.createRef<MovetextImpl>();
 
     render() {
 

@@ -186,7 +186,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
         additionalButtons: [],
     };
 
-    private navigationFieldRef: React.RefObject<NavigationField> = React.createRef();
+    private navigationFieldRef = React.createRef<NavigationField>();
     private timeoutId?: number;
 
     constructor(props: NavigationBoardProps) {

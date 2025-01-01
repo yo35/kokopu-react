@@ -97,7 +97,7 @@ interface ClientCoordinates {
  */
 export class Draggable extends React.Component<DraggableProps> {
 
-    private innerRef: React.RefObject<SVGRectElement> = React.createRef();
+    private innerRef = React.createRef<SVGRectElement>();
     private dragData?: DragData;
 
     private mouseDownListener = (evt: MouseEvent) => this.handleMouseDown(evt);
