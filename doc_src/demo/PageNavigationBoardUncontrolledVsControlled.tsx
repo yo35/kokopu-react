@@ -112,7 +112,7 @@ export default class Page extends React.Component<object, PageState> {
         return (
             <pre className="kokopu-demoCode">
                 {pgnDeclaration + '// Uncontrolled\n' + buildComponentDemoCode('NavigationBoard', uncontrolledAttributes)
-                + '\n\n// Controlled\n' + buildComponentDemoCode('NavigationBoard', controlledAttributes)}
+                    + '\n\n// Controlled\n' + buildComponentDemoCode('NavigationBoard', controlledAttributes)}
             </pre>
         );
     }
