@@ -42,6 +42,7 @@ const UNREACHABLE_TEST_CLIENT_MESSAGE =
 
 const ANIMATION_DELAY = 200;
 const AUTOPLAY_DELAY = 1000;
+const WINDOW_WIDTH_CHANGE_DELAY = 50;
 
 
 /**
@@ -145,10 +146,18 @@ async function fetchTestCase(browserContext, testCaseName) {
 
 
 /**
+ * Wait for a given delay (to be specified in ms).
+ */
+async function waitForDelay(delay) {
+    await new Promise(resolve => setTimeout(resolve, delay));
+}
+
+
+/**
  * Wait until the end of the chessboard animations.
  */
 const waitForAnimation = exports.waitForAnimation = async function () {
-    await new Promise(resolve => setTimeout(resolve, ANIMATION_DELAY));
+    await waitForDelay(ANIMATION_DELAY);
 };
 
 
@@ -156,7 +165,7 @@ const waitForAnimation = exports.waitForAnimation = async function () {
  * Wait until the given number of moves have been auto-played.
  */
 exports.waitForAutoplay = async function (nbMoves) {
-    await new Promise(resolve => setTimeout(resolve, (nbMoves + 0.5) * AUTOPLAY_DELAY));
+    await waitForDelay((nbMoves + 0.5) * AUTOPLAY_DELAY);
 };
 
 
@@ -221,6 +230,7 @@ exports.setSandbox = async function (browserContext, value) {
 exports.setWindowWidth = async function (browserContext, width) {
     const { height } = await await browserContext.driver.manage().window().getRect();
     await browserContext.driver.manage().window().setRect({ width: width, height: height });
+    await waitForDelay(WINDOW_WIDTH_CHANGE_DELAY); // Empirical delay: without it, selenium may not take the width change into account.
 };
 
 
