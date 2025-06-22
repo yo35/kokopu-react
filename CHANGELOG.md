@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.3.3 (June 22, 2025)
+---------------------
+* Minor fixes in dependencies.
+
 3.3.2 (January 1, 2025)
 -----------------------
 * Add support for React 19.
