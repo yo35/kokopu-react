@@ -1,4 +1,4 @@
-name: 'Build'
+name: Build
 
 on:
   push:
@@ -10,16 +10,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: latest
       - run: npm ci
+      - run: npm run build
       - run: docker compose -f scripts/docker-compose.yml up -d
-      - run: npm test
+      - run: npm test --ignore-scripts
       - run: docker compose -f scripts/docker-compose.yml down
         if: ${{ always() }}
-      - uses: coverallsapp/github-action@v2
+      - name: Publish coverage to Coveralls
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: './build/coverage/lcov.info'

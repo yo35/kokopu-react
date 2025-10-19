@@ -83,8 +83,11 @@
     },
     "scripts": {
         "lint": "eslint doc_src src test",
-        "preunit": "npm run build:lib && webpack --config scripts/test-headless.webpack.config.js && webpack --config scripts/test-graphic.webpack.config.js && rimraf build/graphic_output",
-        "unit": "nyc mocha --enable-source-maps --bail --sort",
+        "preunit": "npm run build:lib",
+        "unit": "npm run unit:prepare_headless && npm run unit:prepare_graphic && npm run unit:run",
+        "unit:prepare_headless": "webpack --config scripts/test-headless.webpack.config.js",
+        "unit:prepare_graphic": "webpack --config scripts/test-graphic.webpack.config.js && rimraf build/graphic_output",
+        "unit:run": "nyc mocha --enable-source-maps --bail --sort",
         "test": "npm run lint && npm run unit",
         "test_env:start": "docker compose -p kokopu-react-test-env -f scripts/docker-compose.yml up -d",
         "test_env:stop": "docker compose -p kokopu-react-test-env -f scripts/docker-compose.yml down",
