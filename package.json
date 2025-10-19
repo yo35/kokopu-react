@@ -95,8 +95,6 @@
         "build:doc": "rimraf dist/docs && styleguidist build --config scripts/doc.styleguide.config.js && copyfiles -u 2 'doc_src/theming/*.png' dist/docs",
         "build:lib": "rimraf dist/lib && tsc --outDir dist/lib && copyfiles -u 1 'src/**/*.{css,png,woff,woff2}' dist/lib",
         "start": "styleguidist server --open --config scripts/doc.styleguide.config.js",
-        "clean": "rimraf build dist",
-        "predeploy": "npm run test && npm run build",
-        "deploy": "npm publish && node scripts/deploy.js"
+        "clean": "rimraf build dist"
     }
 }
