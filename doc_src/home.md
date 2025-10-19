@@ -15,7 +15,7 @@ npm install kokopu-react
 ```
 
 If you use [Webpack](https://webpack.js.org/), please look at [webpack configuration](#/Webpack%20configuration)
-to get more information on how to configure it to handle Kokopu-React propertly.
+to get more information on how to configure it to handle Kokopu-React properly.
 
 
 
