@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.3.4 (October 19, 2025)
+-------------------------
+* Automated deployment using GitHub Actions.
+
 3.3.3 (June 22, 2025)
 ---------------------
 * Minor fixes in dependencies.
