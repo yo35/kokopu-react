@@ -3,7 +3,7 @@
  *                                                                            *
  *    Kokopu-React - A React-based library of chess-related components.       *
  *    <https://www.npmjs.com/package/kokopu-react>                            *
- *    Copyright (C) 2021-2025  Yoann Le Montagner <yo35 -at- melix.net>       *
+ *    Copyright (C) 2021-2026  Yoann Le Montagner <yo35 -at- melix.net>       *
  *                                                                            *
  *    Kokopu-React is free software: you can redistribute it and/or           *
  *    modify it under the terms of the GNU Lesser General Public License      *
