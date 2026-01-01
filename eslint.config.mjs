@@ -4,6 +4,7 @@ import globals from 'globals';
 import stylistic from '@stylistic/eslint-plugin';
 import tsPlugin from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 export default defineConfig(
 
@@ -13,6 +14,7 @@ export default defineConfig(
     ...tsPlugin.configs.strict,
     ...tsPlugin.configs.stylistic,
     reactPlugin.configs.flat.recommended,
+    reactHooksPlugin.configs.flat.recommended,
 
     {
         settings: {
