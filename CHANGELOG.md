@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.4.0 (January 11, 2026)
+------------------------
+* Add an optional sound effect when a move is displayed in `Chessboard` or `NavigationBoard`.
+
 3.3.5 (January 1, 2026)
 -----------------------
 * Minor fixes.
