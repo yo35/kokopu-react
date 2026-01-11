@@ -49,7 +49,7 @@ module.exports = {
                 use: 'null-loader',
             },
             {
-                test: /\.(png|woff|woff2)$/i,
+                test: /\.(ogg|png|woff|woff2)$/i,
                 use: 'null-loader',
             },
         ],

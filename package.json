@@ -94,7 +94,7 @@
         "test_env:stop": "docker compose -p kokopu-react-test-env -f scripts/docker-compose.yml down",
         "build": "npm run build:lib && npm run build:doc",
         "build:doc": "rimraf dist/docs && styleguidist build --config scripts/doc.styleguide.config.js && copyfiles -u 2 'doc_src/theming/*.png' dist/docs",
-        "build:lib": "rimraf dist/lib && tsc --outDir dist/lib && copyfiles -u 1 'src/**/*.{css,png,woff,woff2}' dist/lib",
+        "build:lib": "rimraf dist/lib && tsc --outDir dist/lib && copyfiles -u 1 'src/**/*.{css,ogg,png,woff,woff2}' dist/lib",
         "start": "styleguidist server --open --config scripts/doc.styleguide.config.js",
         "clean": "rimraf build dist"
     }

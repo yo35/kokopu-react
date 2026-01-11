@@ -1,5 +1,6 @@
 Kokopu-React is not a "pure" JavaScript/TypeScript library, in that it is shipped with other type of files:
 - `*.css` files (stylesheets),
+- `*.ogg` files (sounds),
 - `*.png` files (images),
 - `*.woff` and `*.woff2` files (fonts).
 
@@ -17,7 +18,7 @@ module.exports = {
                 // ... or any other configuration that loads the matching files as global CSS.
             },
             {
-                test: /\.(png|woff|woff2)$/i,
+                test: /\.(ogg|png|woff|woff2)$/i,
                 type: 'asset/resource',
                 // ... or any other configuration that loads the matching files as resources.
             },
