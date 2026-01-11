@@ -2,7 +2,8 @@ Credits
 =======
 
 Pieceset *CBurnett* has been created by [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett),
-who shares it under the [CC-BY-SA] license on [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces);
+who shares it under the [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/) license
+on [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces);
 user [Antonsusi](https://commons.wikimedia.org/wiki/User:Antonsusi) has also contributed to this work.
 
 Piecesets *Celtic*, *Eyes*, *Fantasy*, *Skulls* and *Spatial* have been created by
