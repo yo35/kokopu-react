@@ -228,6 +228,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
             throw new IllegalArgument('Chessboard', 'moveArrowColor');
         }
         const animated = sanitizeBoolean(this.props.animated);
+        const sound = sanitizeBoolean(this.props.sound);
         const colorset = colorsets[this.props.colorset];
         if (!colorset) {
             throw new IllegalArgument('Chessboard', 'colorset');
@@ -263,7 +264,7 @@ export class Chessboard extends React.Component<ChessboardProps, ChessboardState
                     key={key}
                     position={position} move={move} squareMarkers={sqm} textMarkers={txtm} arrowMarkers={arm} flipped={flipped}
                     squareSize={actualSquareSize} coordinateVisible={actualCoordinateVisible} turnVisible={actualTurnVisible}
-                    moveArrowVisible={moveArrowVisible} moveArrowColor={this.props.moveArrowColor} animated={animated}
+                    moveArrowVisible={moveArrowVisible} moveArrowColor={this.props.moveArrowColor} animated={animated} sound={sound}
                     colorset={colorset} pieceset={pieceset}
                     interactionMode={interactionMode} editedArrowColor={this.props.editedArrowColor}
                     onPieceMoved={onPieceMoved} onSquareClicked={onSquareClicked} onArrowEdited={onArrowEdited} onMovePlayed={onMovePlayed}

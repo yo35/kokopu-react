@@ -242,7 +242,7 @@ export class NavigationBoard extends React.Component<NavigationBoardProps, Navig
                 smallScreenLimits={this.props.smallScreenLimits}
                 moveArrowVisible={this.props.moveArrowVisible}
                 moveArrowColor={this.props.moveArrowColor}
-                animated={this.props.animated}
+                animated={this.props.animated} sound={this.props.sound}
                 bottomComponent={({ squareSize }) => this.renderToolbar(game, node, squareSize, isPlaying)}
             />
         );

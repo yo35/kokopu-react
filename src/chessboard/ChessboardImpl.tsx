@@ -33,6 +33,7 @@ import { AnnotationSymbolShape } from '../icons/AnnotationSymbolShape';
 import { ArrowTip } from '../icons/ArrowTip';
 import { Draggable } from './Draggable';
 import { Motion } from './Motion';
+import { Sound } from './Sound';
 
 import '../icons/arrow.css';
 import './Chessboard.css';
@@ -66,6 +67,7 @@ interface ChessboardImplProps {
     moveArrowVisible: boolean,
     moveArrowColor: AnnotationColor,
     animated: boolean,
+    sound: boolean,
     colorset: Colorset,
     pieceset: Pieceset,
 
@@ -145,6 +147,7 @@ export class ChessboardImpl extends React.Component<ChessboardImplProps, Chessbo
                 {rankCoordinates}
                 {fileCoordinates}
                 {this.renderBoardContent()}
+                {this.props.move && this.props.sound ? <Sound /> : undefined}
             </svg>
         );
     }

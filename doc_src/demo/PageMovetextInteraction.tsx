@@ -131,7 +131,7 @@ export default class Page extends React.Component<object, PageState> {
         const button = <Button size="small" onClick={() => this.setState({ withPopup: !this.state.withPopup })}>{this.state.withPopup ? 'Reduce' : 'Open'}</Button>;
         const { position, move, csl, cal } = this.getCurrentPositionAndAnnotations();
         const content = this.state.withPopup ?
-            <Stack><Chessboard position={position} move={move} squareMarkers={csl} arrowMarkers={cal} animated={true} />{button}</Stack> :
+            <Stack><Chessboard position={position} move={move} squareMarkers={csl} arrowMarkers={cal} animated sound />{button}</Stack> :
             button;
         return <Paper className="kokopu-fixedPopup" elevation={3}>{content}</Paper>;
     }

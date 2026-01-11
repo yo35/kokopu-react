@@ -56,6 +56,7 @@ interface PageState {
     moveArrowVisible: boolean,
     moveArrowColor: AnnotationColor,
     animated: boolean,
+    sound: boolean,
     playButtonVisible: boolean,
     flipButtonVisible: boolean,
 }
@@ -74,6 +75,7 @@ export default class Page extends React.Component<object, PageState> {
             moveArrowVisible: true,
             moveArrowColor: 'b',
             animated: true,
+            sound: true,
             playButtonVisible: true,
             flipButtonVisible: true,
         };
@@ -109,9 +111,15 @@ export default class Page extends React.Component<object, PageState> {
                         label="Show turn"
                         control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
                     />
+                </Stack>
+                <Stack direction="row" spacing={2} alignItems="center">
                     <FormControlLabel
-                        label="Animated"
+                        label="Animation"
                         control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Sound"
+                        control={<Switch checked={this.state.sound} onChange={() => this.setState({ sound: !this.state.sound })} color="primary" />}
                     />
                 </Stack>
                 <Box>
@@ -173,6 +181,7 @@ export default class Page extends React.Component<object, PageState> {
                     moveArrowVisible={this.state.moveArrowVisible}
                     moveArrowColor={this.state.moveArrowColor}
                     animated={this.state.animated}
+                    sound={this.state.sound}
                     playButtonVisible={this.state.playButtonVisible}
                     flipButtonVisible={this.state.flipButtonVisible}
                 />
@@ -194,6 +203,7 @@ export default class Page extends React.Component<object, PageState> {
             attributes.push(`moveArrowColor="${this.state.moveArrowColor}"`);
         }
         attributes.push(`animated={${this.state.animated}}`);
+        attributes.push(`sound={${this.state.sound}}`);
         attributes.push(`playButtonVisible={${this.state.playButtonVisible}}`);
         attributes.push(`flipButtonVisible={${this.state.flipButtonVisible}}`);
         const pgnDeclaration = 'const pgn = `\n' + pgn.trim() + '`;\n\n';

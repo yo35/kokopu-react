@@ -16,4 +16,7 @@ by [Gorgonian](http://omgchess.blogspot.fr/).
 Chess font *Alpha* is a true type Font by [Eric Bentzen](http://www.enpassant.dk/chess/fonteng.htm), who makes it available
 freely for personal non commercial use.
 
+Chess piece move sound has been created by [Alexander Refsum Jensenius](https://osf.io/3z65b/overview),
+who shares it under the [CC-BY](https://creativecommons.org/licenses/by/4.0/) license.
+
 The author would like to thank all these people for their highly valuable work.

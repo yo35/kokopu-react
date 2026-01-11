@@ -1,0 +1,1 @@
+- moveSound: extract start at 2.615 sec, length is 150 ms, gain is -10 dB

@@ -104,6 +104,11 @@ export interface DynamicBoardGraphicProps extends StaticBoardGraphicProps {
      * Whether moves are animated or not.
      */
     animated: boolean,
+
+    /**
+     * Whether sound effects are enabled or not.
+     */
+    sound: boolean,
 }
 
 
@@ -127,5 +132,6 @@ export function defaultDynamicBoardProps(): DynamicBoardGraphicProps {
         moveArrowVisible: true,
         moveArrowColor: 'b',
         animated: false,
+        sound: false,
     };
 }

@@ -50,6 +50,7 @@ interface PageState {
     moveArrowVisible: boolean,
     moveArrowColor: AnnotationColor,
     animated: boolean,
+    sound: boolean,
     editedMove: string,
     playedMove: string,
 }
@@ -69,6 +70,7 @@ export default class Page extends React.Component<object, PageState> {
             moveArrowVisible: true,
             moveArrowColor: 'b',
             animated: true,
+            sound: true,
             editedMove: 'Nf6',
             playedMove: 'e4',
         };
@@ -95,6 +97,10 @@ export default class Page extends React.Component<object, PageState> {
                     <FormControlLabel
                         label="Animation" disabled={!this.state.positionAfter}
                         control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
+                    />
+                    <FormControlLabel
+                        label="Sound" disabled={!this.state.positionAfter}
+                        control={<Switch checked={this.state.sound} onChange={() => this.setState({ sound: !this.state.sound })} color="primary" />}
                     />
                     <FormControlLabel
                         label="Show move arrow" disabled={!this.state.positionAfter}
@@ -139,6 +145,7 @@ export default class Page extends React.Component<object, PageState> {
                     moveArrowVisible={this.state.moveArrowVisible}
                     moveArrowColor={this.state.moveArrowColor}
                     animated={this.state.animated}
+                    sound={this.state.sound}
                 />
             </Box>
         );
@@ -154,6 +161,7 @@ export default class Page extends React.Component<object, PageState> {
             attributes.push('flipped');
         }
         attributes.push(`animated={${this.state.animated}}`);
+        attributes.push(`sound={${this.state.sound}}`);
         attributes.push(`moveArrowVisible={${this.state.moveArrowVisible}}`);
         if (this.state.moveArrowVisible) {
             attributes.push(`moveArrowColor={${this.state.moveArrowColor}}`);

@@ -48,7 +48,7 @@ function NavigationBoardWithMoveText({ game }: { game: Game }) {
     const [ nodeId, setNodeId ] = React.useState('start');
     return (
         <Stack direction="row" spacing={2}>
-            <NavigationBoard animated game={game} nodeId={nodeId} onNodeIdChanged={setNodeId} />
+            <NavigationBoard animated sound game={game} nodeId={nodeId} onNodeIdChanged={setNodeId} />
             <Movetext
                 game={game} diagramOptions={{ squareSize: 28 }} interactionMode="selectMove" selection={nodeId}
                 onMoveSelected={n => {

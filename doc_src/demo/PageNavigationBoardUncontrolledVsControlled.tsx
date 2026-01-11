@@ -83,11 +83,11 @@ export default class Page extends React.Component<object, PageState> {
         return (
             <Box display="flex" alignItems="top" justifyContent="space-around">
                 <Box>
-                    <NavigationBoard game={pgn} animated initialNodeId="9b" />
+                    <NavigationBoard game={pgn} animated sound initialNodeId="9b" />
                     <Typography mt={2} textAlign="center">Uncontrolled</Typography>
                 </Box>
                 <Box>
-                    <NavigationBoard game={pgn} animated nodeId={this.state.nodeId} onNodeIdChanged={nodeId => this.setState({ nodeId: nodeId })} />
+                    <NavigationBoard game={pgn} animated sound nodeId={this.state.nodeId} onNodeIdChanged={nodeId => this.setState({ nodeId: nodeId })} />
                     <Typography mt={2} textAlign="center">Controlled</Typography>
                     <Typography textAlign="center">{`Current node ID: ${this.state.nodeId}`}</Typography>
                 </Box>
@@ -100,11 +100,13 @@ export default class Page extends React.Component<object, PageState> {
         const uncontrolledAttributes: string[] = [];
         uncontrolledAttributes.push('game={pgn}');
         uncontrolledAttributes.push('animated');
+        uncontrolledAttributes.push('sound');
         uncontrolledAttributes.push('initialNodeId="9b"');
 
         const controlledAttributes: string[] = [];
         controlledAttributes.push('game={pgn}');
         controlledAttributes.push('animated');
+        controlledAttributes.push('sound');
         controlledAttributes.push(`nodeId="${this.state.nodeId}"`);
         controlledAttributes.push('onNodeIdChanged={nodeId => handleNodeIdChanged(nodeId)}');
 
