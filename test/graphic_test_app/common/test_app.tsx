@@ -28,12 +28,13 @@ import { createRoot } from 'react-dom/client';
 import './test_app.css';
 
 
-// This global variable allows to freeze animations in an intermediate stage.
+// These global variables are used for testing purposes.
+/* eslint-disable camelcase */
 declare global {
-    interface Window {
-        __kokopu_debug_freeze_motion: number,
-    }
+    var __kokopu_debug_freeze_motion: number;
+    var __kokopu_debug_sound: string;
 }
+/* eslint-enable */
 
 
 interface TestItemContainerProps {

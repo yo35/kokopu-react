@@ -22,7 +22,8 @@
  * -------------------------------------------------------------------------- */
 
 
-const { describeWithBrowser, itChecksScreenshots, itCustom, takeScreenshot, compareScreenshot, waitForAnimation } = require('./common/graphic');
+const { describeWithBrowser, itChecksScreenshots, itCustom, takeScreenshot, compareScreenshot, waitForAnimation,
+    compareGlobalVar } = require('./common/graphic');
 const { By } = require('selenium-webdriver');
 
 
@@ -55,17 +56,34 @@ describeWithBrowser('Chessboard animation', browserContext => {
         'promotion',
     ]);
 
+    async function runSoundTestScenario(element, withMove) {
+
+        // Run the scenario.
+        const actions = browserContext.driver.actions({ async: true });
+        const button = await element.findElement(By.id(`chessboard-actionButton-${withMove ? 'withMove' : 'noMove'}`));
+        await actions.move({ origin: button }).click().perform();
+        await waitForAnimation();
+        await takeScreenshot(browserContext, withMove ? 'with move' : 'without move', element);
+
+        // Validate the scenario.
+        await compareGlobalVar(browserContext, '__kokopu_debug_sound', withMove ? 'sound-done' : '');
+        await compareScreenshot(browserContext, withMove ? 'with move' : 'without move');
+    }
+    itCustom(browserContext, '06_chessboard_animation/sound', 0, 'without move', async element => await runSoundTestScenario(element, false));
+    itCustom(browserContext, '06_chessboard_animation/sound', 1, 'with move', async element => await runSoundTestScenario(element, true));
+
     itCustom(browserContext, '06_chessboard_animation/on_redraw', 0, 'default', async element => {
 
         // Run the scenario.
         await takeScreenshot(browserContext, 'initial state', element);
         const actions = browserContext.driver.actions({ async: true });
-        const button = await element.findElement(By.id('chessboard-action-button'));
+        const button = await element.findElement(By.id('chessboard-actionButton'));
         await actions.move({ origin: button }).click().perform();
         await waitForAnimation();
         await takeScreenshot(browserContext, 'final state', element);
 
-        // Check the screenshots.
+        // Validate the scenario.
+        await compareGlobalVar(browserContext, '__kokopu_debug_sound', 'sound-done');
         await compareScreenshot(browserContext, 'initial state');
         await compareScreenshot(browserContext, 'final state');
     });

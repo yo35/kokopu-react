@@ -42,9 +42,28 @@ export function Sound() {
 }
 
 
+declare global {
+
+    // WARNING: this global variable exists only for testing purposes. DO NOT USE IT IN PRODUCTION.
+    var __kokopu_debug_sound: string; // eslint-disable-line camelcase
+}
+
+
 async function safePlay(audio: HTMLAudioElement) {
     try {
+
+        const debugSound = window.__kokopu_debug_sound === '';
+        // istanbul ignore else
+        if (debugSound) {
+            window['__kokopu_debug_sound'] = 'sound-in-progress';
+        }
+
         await audio.play();
+
+        // istanbul ignore else
+        if (debugSound) {
+            window['__kokopu_debug_sound'] = 'sound-done';
+        }
     }
     catch (e) { // eslint-disable-line @typescript-eslint/no-unused-vars
         // Ignore the errors (can typically happen if the audio is interrupted while fetching the sound file).

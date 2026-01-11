@@ -26,29 +26,27 @@ import * as React from 'react';
 import { testApp } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
-function TestComponent() {
+
+/**
+ * REMARK: do NOT display the chessboards by default, because:
+ * - we want to know which one plays the sound,
+ * - there could be some issues with the auto-play policies of browsers.
+ */
+function TestComponent({ move }: { move?: string }) {
 
     const [ clicked, setClicked ] = React.useState(false);
-    const position = clicked ? 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1' : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    const move = clicked ? 'Nf6' : 'e4';
 
     function onClick() {
-        window['__kokopu_debug_freeze_motion'] = 0.6;
         window['__kokopu_debug_sound'] = '';
         setClicked(true);
     }
 
-    return (
-        <>
-            <div>
-                <Chessboard position={position} move={move} animated sound />
-            </div>
-            {clicked ? undefined : <button id="chessboard-actionButton" onClick={onClick}>Click here</button>}
-        </>
-    );
+    const id = `chessboard-actionButton-${move === undefined ? 'noMove' : 'withMove'}`;
+    return clicked ? <Chessboard move={move} sound /> : <button id={id} onClick={onClick}>Click here</button>;
 }
 
 
 testApp([ /* eslint-disable react/jsx-key */
     <TestComponent />,
+    <TestComponent move="e4" />,
 ]); /* eslint-enable react/jsx-key */

@@ -225,6 +225,15 @@ exports.setSandbox = async function (browserContext, value) {
 
 
 /**
+ * Compare the value of the given global variable to the expected value.
+ */
+exports.compareGlobalVar = async function (browserContext, variableName, expectedValue) {
+    const actualValue = await browserContext.driver.executeScript(`return window["${variableName}"];`);
+    test.value(actualValue).is(expectedValue);
+};
+
+
+/**
  * Set the width of the browser.
  */
 exports.setWindowWidth = async function (browserContext, width) {
