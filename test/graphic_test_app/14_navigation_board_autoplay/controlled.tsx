@@ -85,5 +85,5 @@ testApp([ /* eslint-disable react/jsx-key */
         }}
     />,
     <NavigationBoardWithIsPlayingController />,
-    <NavigationBoard game={pgn} playButtonVisible initialNodeId="20b" isPlaying={true} />,
+    <NavigationBoard game={pgn} playButtonVisible initialNodeId="20b" isPlaying />,
 ]); /* eslint-enable react/jsx-key */

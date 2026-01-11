@@ -29,10 +29,10 @@ import { Chessboard } from '../../../dist/lib/index';
 window['__kokopu_debug_freeze_motion'] = 0.7;
 
 testApp([ /* eslint-disable react/jsx-key */
-    <Chessboard move="e4" animated={true} />,
-    <Chessboard move="Nf3" animated={true} moveArrowVisible={false} />,
-    <Chessboard position="r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2" move="Bxa6" animated={true} flipped turnVisible={false} />,
-    <Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated={true} />,
-    <Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated={true} />,
-    <Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated={true} turnVisible={false} />,
+    <Chessboard move="e4" animated />,
+    <Chessboard move="Nf3" animated moveArrowVisible={false} />,
+    <Chessboard position="r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2" move="Bxa6" animated flipped turnVisible={false} />,
+    <Chessboard position="r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1" move="O-O-O" animated />,
+    <Chessboard position="rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" move="exf6" animated />,
+    <Chessboard position="8/8/8/1K6/8/4k3/1p6/8 b - - 0 1" move="b1=R+" animated turnVisible={false} />,
 ]); /* eslint-enable react/jsx-key */

@@ -28,9 +28,9 @@ import { testApp } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 testApp([ /* eslint-disable react/jsx-key */
-    <Chessboard flipped={true} turnVisible={false} />,
-    <Chessboard flipped={true} position="empty" />,
-    <Chessboard flipped={true} position="something invalid" />,
-    <Chessboard flipped={true} position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
-    <Chessboard flipped={true} position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} turnVisible={true} />,
+    <Chessboard flipped turnVisible={false} />,
+    <Chessboard flipped position="empty" />,
+    <Chessboard flipped position="something invalid" />,
+    <Chessboard flipped position="r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3" />,
+    <Chessboard flipped position={new Position('8/8/1r6/8/5k1K/8/8/8 b - - 0 1')} turnVisible />,
 ]); /* eslint-enable react/jsx-key */
