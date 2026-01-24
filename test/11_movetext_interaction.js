@@ -24,7 +24,7 @@
 
 const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot, itChecksScreenshots } = require('./common/graphic');
 const { By, Key } = require('selenium-webdriver');
-const test = require('unit.js');
+const assert = require('node:assert/strict');
 
 
 describeWithBrowser('Movetext interaction', browserContext => {
@@ -74,15 +74,15 @@ describeWithBrowser('Movetext interaction', browserContext => {
 
             // Handle components for which no interaction is defined.
             if (focusFieldElements.length === 0) {
-                test.value('').is(expectedOnGoFirst);
-                test.value('').is(expectedOnGoPrevious);
-                test.value('').is(expectedOnGoNext);
-                test.value('').is(expectedOnGoLast);
-                test.value('').is(expectedOnExit);
+                assert.deepEqual('', expectedOnGoFirst);
+                assert.deepEqual('', expectedOnGoPrevious);
+                assert.deepEqual('', expectedOnGoNext);
+                assert.deepEqual('', expectedOnGoLast);
+                assert.deepEqual('', expectedOnExit);
                 return;
             }
 
-            test.value(focusFieldElements.length).is(1);
+            assert.deepEqual(focusFieldElements.length, 1);
             const focusFieldElement = focusFieldElements[0];
 
             await setSandbox(browserContext, '');

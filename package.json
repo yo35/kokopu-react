@@ -78,7 +78,6 @@
         "ts-loader": "^9.5.4",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.53.1",
-        "unit.js": "^2.1.1",
         "webpack": "^5.104.1",
         "webpack-cli": "^6.0.1"
     },

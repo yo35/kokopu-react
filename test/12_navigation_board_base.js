@@ -24,7 +24,7 @@
 
 const { describeWithBrowser, itCustom, setSandbox, compareSandbox, takeScreenshot, compareScreenshot, itChecksScreenshots } = require('./common/graphic');
 const { By, Key } = require('selenium-webdriver');
-const test = require('unit.js');
+const assert = require('node:assert/strict');
 
 
 describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext => {
@@ -83,7 +83,7 @@ describeWithBrowser('Navigation board - Uncontrolled behavior', browserContext =
             await setSandbox(browserContext, '');
             const focusFieldElements = await element.findElements(By.className('kokopu-focusField'));
 
-            test.value(focusFieldElements.length).is(1);
+            assert.deepEqual(focusFieldElements.length, 1);
             const focusFieldElement = focusFieldElements[0];
 
             for (let i = 0; i < keys.length; ++i) {

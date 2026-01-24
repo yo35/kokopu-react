@@ -26,7 +26,7 @@ const fs = require('fs');
 const path = require('path');
 const { Builder, By, Capabilities } = require('selenium-webdriver');
 const { imgDiff } = require('img-diff-js');
-const test = require('unit.js');
+const assert = require('node:assert/strict');
 
 const rootDir = __dirname + '/../..';
 const referenceDir = rootDir + '/test/graphic_references';
@@ -200,7 +200,7 @@ const compareScreenshot = exports.compareScreenshot = async function (browserCon
         expectedFilename: expectedFilename,
         diffFilename: differenceFilename,
     });
-    test.object(result).hasProperty('imagesAreSame', true);
+    assert.deepEqual(result.imagesAreSame, true);
 };
 
 
@@ -209,7 +209,7 @@ const compareScreenshot = exports.compareScreenshot = async function (browserCon
  */
 exports.compareSandbox = async function (browserContext, expectedText) {
     const actualText = await browserContext.driver.findElement(By.id('sandbox')).getText();
-    test.value(actualText).is(expectedText);
+    assert.deepEqual(actualText, expectedText);
 };
 
 
@@ -229,7 +229,7 @@ exports.setSandbox = async function (browserContext, value) {
  */
 exports.compareGlobalVar = async function (browserContext, variableName, expectedValue) {
     const actualValue = await browserContext.driver.executeScript(`return window["${variableName}"];`);
-    test.value(actualValue).is(expectedValue);
+    assert.deepEqual(actualValue, expectedValue);
 };
 
 

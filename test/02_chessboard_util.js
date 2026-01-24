@@ -23,11 +23,11 @@
 
 
 const { exception, Chessboard, NavigationBoard } = require('../build/test_headless/index');
-const test = require('unit.js');
+const assert = require('node:assert/strict');
 
 
 function itInvalidArgument(label, action) {
-    it(label, () => { test.exception(action).isInstanceOf(exception.IllegalArgument); });
+    it(label, () => { assert.throws(action, exception.IllegalArgument); });
 }
 
 
@@ -35,7 +35,7 @@ describe('Chessboard.size()', () => {
 
     function itChessboardSize(label, expectedWidth, expectedHeight, attr) {
         it(label, () => {
-            test.value(Chessboard.size(attr)).is({ width: expectedWidth, height: expectedHeight });
+            assert.deepEqual(Chessboard.size(attr), { width: expectedWidth, height: expectedHeight });
         });
     }
 
@@ -74,7 +74,7 @@ describe('NavigationBoard.size()', () => {
 
     function itNavigationBoardSize(label, expectedWidth, expectedHeight, attr) {
         it(label, () => {
-            test.value(NavigationBoard.size(attr)).is({ width: expectedWidth, height: expectedHeight });
+            assert.deepEqual(NavigationBoard.size(attr), { width: expectedWidth, height: expectedHeight });
         });
     }
 
@@ -104,11 +104,11 @@ describe('NavigationBoard.size()', () => {
 
 function testAdaptSquareSize(expectedSquareSize, width, height, coordinateVisible, turnVisible, smallScreenLimits) {
 
-    test.value(Chessboard.adaptSquareSize(width, height, {
+    assert.deepEqual(Chessboard.adaptSquareSize(width, height, {
         coordinateVisible: coordinateVisible,
         turnVisible: turnVisible,
         smallScreenLimits: smallScreenLimits,
-    })).is(expectedSquareSize);
+    }), expectedSquareSize);
 
     const actualSize = Chessboard.size({
         squareSize: expectedSquareSize,
@@ -116,7 +116,7 @@ function testAdaptSquareSize(expectedSquareSize, width, height, coordinateVisibl
         turnVisible: turnVisible,
         smallScreenLimits: smallScreenLimits,
     });
-    test.value(actualSize.width <= width && actualSize.height <= height).isTrue();
+    assert(actualSize.width <= width && actualSize.height <= height);
 }
 
 
@@ -129,14 +129,14 @@ function testAdaptSquareSizeWithIncrement(expectedSquareSize, width, height, coo
         turnVisible: turnVisible,
         smallScreenLimits: smallScreenLimits,
     });
-    test.value(actualSizeIncremented.width > width || actualSizeIncremented.height > height).isTrue();
+    assert(actualSizeIncremented.width > width || actualSizeIncremented.height > height);
 }
 
 
 describe('Adapt square-size', () => {
 
-    it('Very small', () => { test.value(Chessboard.adaptSquareSize(10, 10, { coordinateVisible: false, turnVisible: false })).is(Chessboard.minSquareSize()); });
-    it('Very large', () => { test.value(Chessboard.adaptSquareSize(9999, 9999)).is(Chessboard.maxSquareSize()); });
+    it('Very small', () => { assert.deepEqual(Chessboard.adaptSquareSize(10, 10, { coordinateVisible: false, turnVisible: false }), Chessboard.minSquareSize()); });
+    it('Very large', () => { assert.deepEqual(Chessboard.adaptSquareSize(9999, 9999), Chessboard.maxSquareSize()); });
 
     it('Size 185x300 with coordinates & turn', () => testAdaptSquareSizeWithIncrement(19, 185, 300, true, true));
     it('Size 185x300 without coordinates', () => testAdaptSquareSizeWithIncrement(20, 185, 300, false, true));
@@ -171,13 +171,13 @@ describe('Adapt square-size (NavigationBoard)', () => {
 
     function itAdaptSquareSize(label, width, height, attributes, expectedSquareSize) {
         it(label, () => {
-            test.value(NavigationBoard.adaptSquareSize(width, height, attributes)).is(expectedSquareSize);
+            assert.deepEqual(NavigationBoard.adaptSquareSize(width, height, attributes), expectedSquareSize);
 
             const actualSizeIncremented = NavigationBoard.size({
                 ...attributes,
                 squareSize: expectedSquareSize + 1,
             });
-            test.value(actualSizeIncremented.width > width || actualSizeIncremented.height > height).isTrue();
+            assert(actualSizeIncremented.width > width || actualSizeIncremented.height > height);
         });
     }
 
