@@ -55,7 +55,7 @@ export interface ChessPieceIconProps {
 export function ChessPieceIcon({ size, type, pieceset = DEFAULT_PIECESET }: ChessPieceIconProps) {
 
     // Sanitize the inputs.
-    size = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ChessPieceIcon', 'size'));
+    const localSize = sanitizeBoundedInteger(size, MIN_SQUARE_SIZE, MAX_SQUARE_SIZE, () => new IllegalArgument('ChessPieceIcon', 'size'));
     const types = sanitizeChessPieceIconType(type, () => new IllegalArgument('ChessPieceIcon', 'type'));
     const piecesetData = piecesets[pieceset];
     if (!piecesetData) {
@@ -63,11 +63,11 @@ export function ChessPieceIcon({ size, type, pieceset = DEFAULT_PIECESET }: Ches
     }
 
     // Render the component.
-    const width = size * types.length;
-    const viewBox = `0 0 ${width} ${size}`;
+    const width = localSize * types.length;
+    const viewBox = `0 0 ${width} ${localSize}`;
     return (
-        <svg className="kokopu-chessPieceIcon" viewBox={viewBox} width={width} height={size}>
-            {types.map((t, i) => <image key={i} x={i * size} y={0} width={size} height={size} href={piecesetData[t]} />)}
+        <svg className="kokopu-chessPieceIcon" viewBox={viewBox} width={width} height={localSize}>
+            {types.map((t, i) => <image key={i} x={i * localSize} y={0} width={localSize} height={localSize} href={piecesetData[t]} />)}
         </svg>
     );
 }
