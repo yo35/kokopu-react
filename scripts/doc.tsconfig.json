@@ -2,6 +2,7 @@
     "extends": "../tsconfig.json",
     "include": [ "../doc_src/demo/**/*", "../src/**/*" ],
     "compilerOptions": {
+        "rootDir": "..",
         "declaration": false
     }
 }

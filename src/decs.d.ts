@@ -22,6 +22,8 @@
  * -------------------------------------------------------------------------- */
 
 
+declare module '*.css' {}
+
 declare module '*.ogg' {
     const path: string;
     export default path;

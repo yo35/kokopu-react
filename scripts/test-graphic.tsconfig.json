@@ -2,6 +2,7 @@
     "extends": "../tsconfig.json",
     "include": [ "../test/graphic_test_app/**/*" ],
     "compilerOptions": {
+        "rootDir": "..",
         "declaration": false
     }
 }

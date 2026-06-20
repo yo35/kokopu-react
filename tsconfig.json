@@ -1,6 +1,7 @@
 {
     "include": [ "./src/**/*" ],
     "compilerOptions": {
+        "rootDir": "./src",
         "sourceMap": true,
         "declaration": true,
         "module": "es2020",
@@ -8,8 +9,6 @@
         "jsx": "react",
         "types": [],
         "allowJs": false,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node"
+        "strict": true
     }
 }

@@ -22,6 +22,8 @@
  * -------------------------------------------------------------------------- */
 
 
+declare module '*.css' {}
+
 declare module '*.pgn' {
     const pgnText: string;
     export default pgnText;
