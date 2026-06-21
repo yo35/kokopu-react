@@ -51,7 +51,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderNavigationBoards()}
                 {this.renderCode()}
@@ -81,17 +81,17 @@ export default class Page extends React.Component<object, PageState> {
 
     private renderNavigationBoards() {
         return (
-            <Box display="flex" alignItems="top" justifyContent="space-around">
+            <Stack direction="row" sx={{ alignItems: 'top', justifyContent: 'space-around' }}>
                 <Box>
                     <NavigationBoard game={pgn} animated sound initialNodeId="9b" />
-                    <Typography mt={2} textAlign="center">Uncontrolled</Typography>
+                    <Typography sx={{ mt: 2, textAlign: 'center' }}>Uncontrolled</Typography>
                 </Box>
                 <Box>
                     <NavigationBoard game={pgn} animated sound nodeId={this.state.nodeId} onNodeIdChanged={nodeId => this.setState({ nodeId: nodeId })} />
-                    <Typography mt={2} textAlign="center">Controlled</Typography>
-                    <Typography textAlign="center">{`Current node ID: ${this.state.nodeId}`}</Typography>
+                    <Typography sx={{ mt: 2, textAlign: 'center' }}>Controlled</Typography>
+                    <Typography sx={{ textAlign: 'center' }}>{`Current node ID: ${this.state.nodeId}`}</Typography>
                 </Box>
-            </Box>
+            </Stack>
         );
     }
 

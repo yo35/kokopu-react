@@ -75,7 +75,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderChessboard()}
                 {this.renderCode()}

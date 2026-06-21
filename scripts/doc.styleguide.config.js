@@ -112,13 +112,16 @@ module.exports = {
         module: {
             rules: [
                 {
-                    test: /\.js$/i,
+                    test: /\.m?js$/i,
                     use: {
                         loader: 'babel-loader',
                         options: {
                             presets: [ '@babel/preset-env', '@babel/preset-react' ],
                         },
-                    }
+                    },
+                    resolve: {
+                        fullySpecified: false,
+                    },
                 },
                 {
                     test: /\.tsx?$/i,

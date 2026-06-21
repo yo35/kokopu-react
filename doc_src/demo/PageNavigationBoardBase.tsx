@@ -83,7 +83,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderNavigationBoard()}
                 {this.renderCode()}
@@ -94,7 +94,7 @@ export default class Page extends React.Component<object, PageState> {
     private renderControls() {
         return (
             <>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                         label="Show play/stop button"
                         control={<Switch checked={this.state.playButtonVisible} onChange={() => this.setState({ playButtonVisible: !this.state.playButtonVisible })} color="primary" />}
@@ -112,7 +112,7 @@ export default class Page extends React.Component<object, PageState> {
                         control={<Switch checked={this.state.turnVisible} onChange={() => this.setState({ turnVisible: !this.state.turnVisible })} color="primary" />}
                     />
                 </Stack>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                         label="Animation"
                         control={<Switch checked={this.state.animated} onChange={() => this.setState({ animated: !this.state.animated })} color="primary" />}
@@ -129,7 +129,7 @@ export default class Page extends React.Component<object, PageState> {
                         min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
                     />
                 </Box>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControl variant="standard">
                         <InputLabel id="colorset-label">Colorset</InputLabel>
                         <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>

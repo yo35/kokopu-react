@@ -87,7 +87,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderMovetext()}
                 {this.renderCode()}
@@ -99,7 +99,7 @@ export default class Page extends React.Component<object, PageState> {
         const opts = this.state.diagramOptions;
         return (
             <>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <ButtonGroup color="primary" size="small">
                         <Button onClick={() => this.setState({ pgn: game1 })}>Game 1</Button>
                         <Button onClick={() => this.setState({ pgn: game2 })}>Game 2</Button>
@@ -114,7 +114,7 @@ export default class Page extends React.Component<object, PageState> {
                         control={<Switch checked={this.state.diagramVisible} onChange={() => this.setState({ diagramVisible: !this.state.diagramVisible })} color="primary" />}
                     />
                 </Stack>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControl variant="standard">
                         <InputLabel id="piecesymbols-label">Piece symbols</InputLabel>
                         <Select
@@ -128,7 +128,7 @@ export default class Page extends React.Component<object, PageState> {
                     </FormControl>
                     {this.renderCustomSymbolSelector()}
                 </Stack>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                         label="Flip diagram(s)"
                         control={<Switch checked={opts.flipped} onChange={() => this.setDiagramOption({ flipped: !opts.flipped })} color="primary" />}
@@ -142,7 +142,7 @@ export default class Page extends React.Component<object, PageState> {
                         control={<Switch checked={opts.turnVisible} onChange={() => this.setDiagramOption({ turnVisible: !opts.turnVisible })} color="primary" />}
                     />
                 </Stack>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControl variant="standard">
                         <InputLabel id="colorset-label">Colorset</InputLabel>
                         <Select labelId="colorset-label" sx={{ width: '8em' }} value={opts.colorset} onChange={evt => this.setDiagramOption({ colorset: evt.target.value })}>

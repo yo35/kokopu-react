@@ -74,7 +74,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderNavigationBoardWithMovetext()}
                 {this.renderCode()}
@@ -84,7 +84,7 @@ export default class Page extends React.Component<object, PageState> {
 
     private renderControls() {
         return (
-            <Stack direction="row" spacing={2} alignItems="center">
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                 <ButtonGroup color="primary" size="small">
                     <Button onClick={() => this.setState({ componentKey: 'game1', pgn: game1 })}>Game 1</Button>
                     <Button onClick={() => this.setState({ componentKey: 'game2', pgn: game2 })}>Game 2</Button>

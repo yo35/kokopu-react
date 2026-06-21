@@ -87,7 +87,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderChessboard()}
                 {this.renderCode()}
@@ -98,7 +98,7 @@ export default class Page extends React.Component<object, PageState> {
     private renderControls() {
         return (
             <>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                         label="Flip"
                         control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
@@ -118,7 +118,7 @@ export default class Page extends React.Component<object, PageState> {
                         <FormControlLabel
                             value="addRemovePieces" control={<Radio color="primary" />}
                             label={(
-                                <Stack direction="row" spacing={2} alignItems="center">
+                                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                                     <span>Add/remove pieces</span>
                                     {this.renderPieceSelector()}
                                 </Stack>
@@ -129,7 +129,7 @@ export default class Page extends React.Component<object, PageState> {
                         <FormControlLabel
                             value="editSquareMarkers" control={<Radio color="primary" />}
                             label={(
-                                <Stack direction="row" spacing={2} alignItems="center">
+                                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                                     <span>Edit square annotations</span>
                                     {this.renderMarkerColorSelector('editSquareMarkers', this.state.squareMarkerColor, newColor => this.handleSquareMarkerColorChanged(newColor))}
                                 </Stack>
@@ -138,7 +138,7 @@ export default class Page extends React.Component<object, PageState> {
                         <FormControlLabel
                             value="editTextMarkers" control={<Radio color="primary" />}
                             label={(
-                                <Stack direction="row" spacing={2} alignItems="center">
+                                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                                     <span>Edit text annotations</span>
                                     {this.renderMarkerColorSelector('editTextMarkers', this.state.textMarkerColor, newColor => this.handleTextMarkerColorChanged(newColor))}
                                     {this.renderTextMarkerSymbolSelector()}
@@ -148,7 +148,7 @@ export default class Page extends React.Component<object, PageState> {
                         <FormControlLabel
                             value="editArrowMarkers" control={<Radio color="primary" />}
                             label={(
-                                <Stack direction="row" spacing={2} alignItems="center">
+                                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                                     <span>Edit arrow annotations</span>
                                     {this.renderMarkerColorSelector('editArrowMarkers', this.state.arrowMarkerColor, newColor => this.handleArrowMarkerColorChanged(newColor))}
                                 </Stack>

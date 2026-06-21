@@ -78,7 +78,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderChessboard()}
                 {this.renderCode()}
@@ -89,7 +89,7 @@ export default class Page extends React.Component<object, PageState> {
     private renderControls() {
         return (
             <>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                         label="Flip"
                         control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
@@ -108,7 +108,7 @@ export default class Page extends React.Component<object, PageState> {
                     />
                     {this.renderColorSelector()}
                 </Stack>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <TextField label="Move" variant="standard" value={this.state.editedMove} onChange={evt => this.setState({ editedMove: evt.target.value })} />
                     <Button color="primary" size="small" variant="contained" onClick={() => this.handlePlayClicked()}>Play</Button>
                     <ButtonGroup color="primary" size="small">

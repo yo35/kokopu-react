@@ -77,7 +77,7 @@ export default class Page extends React.Component<object, PageState> {
 
     render() {
         return (
-            <Stack spacing={2} mt={2}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
                 {this.renderControls()}
                 {this.renderChessboard()}
                 {this.renderCode()}
@@ -88,7 +88,7 @@ export default class Page extends React.Component<object, PageState> {
     private renderControls() {
         return (
             <>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                         label="Flip"
                         control={<Switch checked={this.state.flipped} onChange={() => this.setState({ flipped: !this.state.flipped })} color="primary" />}
@@ -113,7 +113,7 @@ export default class Page extends React.Component<object, PageState> {
                         min={Chessboard.minSquareSize()} max={Chessboard.maxSquareSize()} step={1} valueLabelDisplay="on" color="primary"
                     />
                 </Box>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                     <FormControl variant="standard">
                         <InputLabel id="colorset-label">Colorset</InputLabel>
                         <Select labelId="colorset-label" sx={{ width: '8em' }} value={this.state.colorset} onChange={evt => this.setState({ colorset: evt.target.value })}>
