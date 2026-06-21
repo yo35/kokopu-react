@@ -128,7 +128,7 @@ module.exports = {
                     use: {
                         loader: 'ts-loader',
                         options: {
-                            configFile: path.resolve(__dirname, 'doc.tsconfig.json'),
+                            configFile: path.resolve(__dirname, `${docSrcDir}/demo/tsconfig.json`),
                         },
                     },
                 },

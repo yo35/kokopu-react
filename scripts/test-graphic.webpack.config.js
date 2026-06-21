@@ -75,7 +75,7 @@ module.exports = {
                     {
                         loader: 'ts-loader',
                         options: {
-                            configFile: path.resolve(__dirname, 'test-graphic.tsconfig.json'),
+                            configFile: path.resolve(__dirname, '../test/graphic_test_app/tsconfig.json'),
                         },
                     },
                 ],
