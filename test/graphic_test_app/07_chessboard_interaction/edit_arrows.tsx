@@ -24,7 +24,7 @@
 
 import * as React from 'react';
 import { Square } from 'kokopu';
-import { testApp, setSandbox } from '../common/test_app';
+import { testApp, setSandbox, IframePortal } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 function onArrowEdited(from: Square, to: Square) {
@@ -37,4 +37,7 @@ testApp([ /* eslint-disable react/jsx-key */
         squareSize={50} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="r" flipped
         squareMarkers="Gc5" arrowMarkers="Yh3f6"
     />,
+    <IframePortal>
+        <Chessboard squareSize={40} coordinateVisible={false} interactionMode="editArrows" onArrowEdited={onArrowEdited} editedArrowColor="b" />
+    </IframePortal>,
 ]); /* eslint-enable react/jsx-key */

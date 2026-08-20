@@ -56,3 +56,10 @@ body {
 .width-600 .test-item {
     width: 600px;
 }
+
+.test-item iframe {
+    width: 500px;
+    height: 400px;
+    margin: 5px;
+    border: none;
+}

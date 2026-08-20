@@ -24,7 +24,7 @@
 
 import * as React from 'react';
 import { Square } from 'kokopu';
-import { testApp, setSandbox } from '../common/test_app';
+import { testApp, setSandbox, IframePortal } from '../common/test_app';
 import { Chessboard } from '../../../dist/lib/index';
 
 function onPieceMoved(from: Square, to: Square) {
@@ -38,4 +38,7 @@ testApp([ /* eslint-disable react/jsx-key */
         squareMarkers="Gc4" textMarkers="BAh3" arrowMarkers="Gc8a4" moveArrowColor="r"
     />,
     <Chessboard squareSize={50} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} move="e4" animated={false} />,
+    <IframePortal>
+        <Chessboard squareSize={40} coordinateVisible={false} interactionMode="movePieces" onPieceMoved={onPieceMoved} />
+    </IframePortal>,
 ]); /* eslint-enable react/jsx-key */

@@ -72,6 +72,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
     itCheckMovePiece(1, 'over text marker', 225, 25, 10, 135, 'piece moved: d1 -> h3');
     itCheckMovePiece(1, 'over arrow marker', 325, 25, 315, 260, 'piece moved: b1 -> b6');
     itCheckMovePiece(2, 'after move', 225, 225, 75, 260, 'piece moved: e4 -> b3');
+    itCheckMovePiece(3, 'in iframe', 105, 25, 185, 225, 'piece moved: c8 -> e3');
 
     function itCheckNonMovePiece(itemIndex, label, xFrom, yFrom, xTo, yTo) {
         itCustom(browserContext, '07_chessboard_interaction/move_pieces', itemIndex, label, async element => {
@@ -106,6 +107,7 @@ describeWithBrowser('Chessboard interaction', browserContext => {
     itCheckEditArrow(0, 'base 2', 260, 10, 175, 375, 'arrow edited: f8 -> d1');
     itCheckEditArrow(1, 'over square marker', 275, 125, 275, 230, 'arrow edited: c3 -> c5');
     itCheckEditArrow(1, 'over arrow marker', 40, 110, 125, 290, 'arrow edited: h3 -> f6');
+    itCheckEditArrow(2, 'in iframe', 65, 305, 145, 185, 'arrow edited: b1 -> d4');
 
     function itCheckNonEditArrow(itemIndex, label, xFrom, yFrom, xTo, yTo) {
         itCustom(browserContext, '07_chessboard_interaction/edit_arrows', itemIndex, label, async element => {

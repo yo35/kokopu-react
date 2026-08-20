@@ -100,6 +100,12 @@ export class Draggable extends React.Component<DraggableProps> {
     private innerRef = React.createRef<SVGRectElement>();
     private dragData?: DragData;
 
+    // The window owning the handle element, i.e. the window in which mousemove/mouseup/touch* events actually occur.
+    // This may differ from the global `window` when the component is rendered within an iframe (see #35),
+    // in which case listeners must be attached to the iframe's window instead of the top-level one
+    // (otherwise the corresponding events are never received).
+    private dragWindow?: Window;
+
     private mouseDownListener = (evt: MouseEvent) => this.handleMouseDown(evt);
     private mouseMoveListener = (evt: MouseEvent) => this.handleMouseMove(evt);
     private mouseUpListener = (evt: MouseEvent) => this.handleMouseUp(evt);
@@ -109,23 +115,24 @@ export class Draggable extends React.Component<DraggableProps> {
     private touchCancelListener = (evt: TouchEvent) => this.handleTouchCancel(evt);
 
     componentDidMount() {
+        this.dragWindow = this.innerRef.current!.ownerDocument.defaultView ?? window;
         this.innerRef.current!.addEventListener('mousedown', this.mouseDownListener);
-        window.addEventListener('mousemove', this.mouseMoveListener);
-        window.addEventListener('mouseup', this.mouseUpListener);
+        this.dragWindow.addEventListener('mousemove', this.mouseMoveListener);
+        this.dragWindow.addEventListener('mouseup', this.mouseUpListener);
         this.innerRef.current!.addEventListener('touchstart', this.touchStartListener, { passive: false });
-        window.addEventListener('touchmove', this.touchMoveListener, { passive: false });
-        window.addEventListener('touchend', this.touchEndListener);
-        window.addEventListener('touchcancel', this.touchCancelListener);
+        this.dragWindow.addEventListener('touchmove', this.touchMoveListener, { passive: false });
+        this.dragWindow.addEventListener('touchend', this.touchEndListener);
+        this.dragWindow.addEventListener('touchcancel', this.touchCancelListener);
     }
 
     componentWillUnmount() {
         this.innerRef.current!.removeEventListener('mousedown', this.mouseDownListener);
-        window.removeEventListener('mousemove', this.mouseMoveListener);
-        window.removeEventListener('mouseup', this.mouseUpListener);
+        this.dragWindow!.removeEventListener('mousemove', this.mouseMoveListener);
+        this.dragWindow!.removeEventListener('mouseup', this.mouseUpListener);
         this.innerRef.current!.removeEventListener('touchstart', this.touchStartListener);
-        window.removeEventListener('touchmove', this.touchMoveListener);
-        window.removeEventListener('touchend', this.touchEndListener);
-        window.removeEventListener('touchcancel', this.touchCancelListener);
+        this.dragWindow!.removeEventListener('touchmove', this.touchMoveListener);
+        this.dragWindow!.removeEventListener('touchend', this.touchEndListener);
+        this.dragWindow!.removeEventListener('touchcancel', this.touchCancelListener);
     }
 
     render() {

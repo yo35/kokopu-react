@@ -23,6 +23,7 @@
 
 
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
 import './test_app.css';
@@ -113,4 +114,48 @@ export function setSandbox(text: string) {
         throw new Error('Cannot locate the sandbox...');
     }
     sandbox.innerText = text;
+}
+
+
+/**
+ * Renders `children` into an `<iframe>` through a React portal, without loading any separate script into that iframe.
+ *
+ * This reproduces the way the WordPress block editor renders block content since WP 7.1: a single React root running
+ * in the top window uses `ReactDOM.createPortal` to paint a subtree into the iframe's document, so the corresponding
+ * component instances (and everything they close over) keep executing in the top window's JS realm, even though the
+ * DOM nodes they produce live in the iframe's document.
+ *
+ * See issue #35.
+ */
+export function IframePortal({ children }: { children: React.ReactNode }) {
+
+    const [ iframeBody, setIframeBody ] = React.useState<HTMLElement | null>(null);
+
+    const handleRef = React.useCallback((iframe: HTMLIFrameElement | null) => {
+        if (!iframe) {
+            return;
+        }
+
+        function attach() {
+            const iframeDocument = iframe!.contentDocument!;
+            // Copy the stylesheets over, otherwise the chessboard rendered in the iframe would be unstyled.
+            document.head.querySelectorAll('style, link[rel="stylesheet"]').forEach(styleNode => iframeDocument.head.appendChild(styleNode.cloneNode(true)));
+            setIframeBody(iframeDocument.body);
+        }
+
+        // Depending on unpredicatable browser behavior, the iframe's `load` event may have already fired by the time this callback runs,
+        // or it may not have fired yet. In the former case, we can attach immediately; in the latter case, we must wait for `load`.
+        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+            attach();
+        }
+        else {
+            iframe.addEventListener('load', attach, { once: true });
+        }
+    }, []);
+
+    return (
+        <iframe ref={handleRef}>
+            {iframeBody ? createPortal(children, iframeBody) : undefined}
+        </iframe>
+    );
 }
