@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+3.4.3 (August 20, 2026)
+-----------------------
+* Fix drag-drop issue (see [#35](https://github.com/yo35/kokopu-react/issues/35)).
+
 3.4.2 (July 18, 2026)
 ---------------------
 * Minor fixes.
